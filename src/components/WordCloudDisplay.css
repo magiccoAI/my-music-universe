@@ -1,0 +1,96 @@
+/* WordCloudDisplay.css */
+
+/* 优化：容器实现暗色毛玻璃效果 */
+.wordcloud-display {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* 暗色半透明背景 */
+  background-color: rgba(255, 255, 255, 0.05); 
+  /* 毛玻璃效果 */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* 兼容 Safari */
+  border-radius: 20px;
+  /* 细微边框增加质感 */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden; /* 保证 SVG 不会溢出圆角 */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* SVG 本身透明，以显示毛玻璃背景 */
+.wordcloud-svg {
+  display: block;
+  background-color: transparent;
+}
+
+/* 优化：Loading 状态适应暗色背景 */
+.wordcloud-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 400px; /* 确保 loading 有个默认高度 */
+  /* 应用与主容器一致的毛玻璃效果 */
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+  /* 优化：加载环高亮色改为白色 */
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* 优化：加载文本改为浅色 */
+.loading-text {
+  margin-top: 16px;
+  font-size: 1rem;
+  color: #e0e0e0;
+  font-weight: 300;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 优化：Tooltip 适应暗色背景 */
+.wordcloud-tooltip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 16px;
+  /* 深色背景 */
+  background-color: rgba(0, 0, 0, 0.85);
+  /* 浅色文字 */
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  pointer-events: none; /* 确保 tooltip 不会干扰鼠标事件 */
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  animation: fadeIn 0.2s forwards;
+}
+
+.wordcloud-tooltip strong {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -45%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
