@@ -55,7 +55,7 @@ const MusicUniverse = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowHint(false);
-    }, 5000); // Hide hint after 5 seconds
+    }, 10000); // Hide hint after 10 seconds
 
     const handleUserInteraction = () => {
       setShowHint(false);
@@ -77,116 +77,7 @@ const MusicUniverse = () => {
   };
 
 
-  const InfoCard = ({ music, position, onCardClose }) => { 
-    const { camera } = useThree(); 
-    const cardRef = useRef(); 
- 
-    // Dynamic card positioning 
-    const [cardPosition, setCardPosition] = useState([0, 0, 0]); 
- 
-    useFrame(() => { 
-      if (cardRef.current && music) {
-        console.log("InfoCard: music prop:", music);
-        console.log("InfoCard: music.position:", music.position);
-        // Get the cover's world position
-        const coverWorldPosition = new THREE.Vector3(...music.position);
- 
-        // Get camera's forward vector 
-        const cameraForward = new THREE.Vector3(); 
-        camera.getWorldDirection(cameraForward); 
- 
-        // Calculate a position slightly in front of the cover along the camera's view direction 
-        // Adjust this offset as needed to ensure it's always visible and not too close/far 
-        const offsetDistance = 1.5; // Distance in front of the cover 
-        const newCardPosition = new THREE.Vector3() 
-          .copy(coverWorldPosition) 
-          .add(cameraForward.multiplyScalar(-offsetDistance)); // Negative because cameraForward points away from camera 
- 
-        // Add a slight vertical offset for better placement 
-        newCardPosition.y += 0.7; // Adjust vertical offset 
- 
-        setCardPosition([newCardPosition.x, newCardPosition.y, newCardPosition.z]); 
-      } 
-    }); 
-  
-   // 2. 增加对外部链接的鲁棒性检查 
-   const isValidUrl = music.url && (music.url.startsWith('http://') || music.url.startsWith('https://')); 
-    
-   // 3. 增强：增加 ESC 键关闭卡片的功能 
-   useEffect(() => {
-     const handleKeyDown = (event) => {
-       if (event.key === 'Escape') {
-         onCardClose();
-       }
-     };
-     window.addEventListener('keydown', handleKeyDown);
-     return () => window.removeEventListener('keydown', handleKeyDown);
-   }, [onCardClose]); 
-  
-   return ( 
-     <Html position={cardPosition} transform ref={cardRef} onClick={onCardClose}> 
-       <div  
-         className="bg-white/90 p-3 rounded-xl shadow-2xl backdrop-blur-sm max-w-[200px] text-gray-800 text-sm border border-gray-100"  
-         onClick={(e) => e.stopPropagation()} // Prevent clicks inside the card from closing it immediately
-       > 
-          
-         {/* ... (内部结构保持上次优化后的样式) ... */} 
-          
-         {/* 1. 歌曲信息组 (主信息) */} 
-         <div className="mb-2"> 
-           <h3 className="font-extrabold text-xl text-indigo-800 leading-snug">{music.music}</h3> 
-         </div> 
-          
-         <div className="space-y-1 text-base"> 
-             <p> 
-                 <span className="text-gray-500 mr-1">艺术家:</span>  
-                 <strong className="font-semibold text-gray-900">{music.artist}</strong> 
-             </p> 
-             <p> 
-                 <span className="text-gray-500 mr-1">专辑:</span>  
-                 <span className="text-gray-700">{music.album}</span> 
-             </p> 
-         </div> 
-  
-         <div className="border-b border-gray-200 my-2"></div> 
-  
-         {/* 2. 推文信息组 (次要信息) */} 
-         <div className="text-xs space-y-1"> 
-             <p> 
-                 <span className="text-gray-500 mr-1">推文:</span>  
-                 <span className="text-gray-600">{music.title}</span> 
-             </p> 
-             <p> 
-                 <span className="text-gray-500 mr-1">分享日期:</span>  
-                 <span className="text-gray-600">{music.date}</span> 
-             </p> 
-             {music.note &&  
-                 <p> 
-                     <span className="text-gray-500 mr-1">备注:</span>  
-                     <span className="italic text-gray-600">{music.note}</span> 
-                 </p> 
-             } 
-         </div> 
-  
-         {/* 3. 行动召唤 (链接) - 增加鲁棒性判断和外部链接图标 */} 
-         {isValidUrl ? ( 
-           <a  
-              href={music.url}  
-              target="_blank"  
-              rel="noopener noreferrer" 
-              className="text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 mt-3 block text-center rounded text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-1" 
-           > 
-              <span>查看原文</span>  
-              {/* 外部链接图标 */} 
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> 
-           </a> 
-         ) : music.url && ( 
-             <p className="text-red-500 text-xs mt-3">链接地址无效</p> 
-         )} 
-       </div> 
-     </Html> 
-   ); 
- };
+
 
   const CameraSetup = () => {
     const { camera } = useThree();
@@ -287,7 +178,7 @@ const MusicUniverse = () => {
       </div>
       {showHint && (
         <div className="absolute bottom-4 left-4 z-10 p-3 bg-gray-800 text-white rounded-lg shadow-lg text-sm opacity-90">
-          提示：您可以通过键盘方向键或鼠标移动来浏览音乐专辑。
+          提示：您可以通过键盘方向键⬅️⬆️➡️⬇️或鼠标移动来浏览音乐专辑。
         </div>
       )}
     </div>

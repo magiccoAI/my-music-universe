@@ -6,7 +6,6 @@ import HomePage from './pages/HomePage';
 import ArchivePage from './pages/ArchivePage';
 import ConnectionsPage from './pages/ConnectionsPage';
 import SearchPage from './pages/SearchPage';
-// import WordCloudDisplayContainer from './components/WordCloudDisplayContainer';
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
           <Route path="/music-universe/connections" element={<ConnectionsPage />} />
           <Route path="/music-universe/search" element={<SearchPage />} />
           <Route path="/archive" element={<ArchivePage />} />
-          {/* <Route path="/music-wordcloud" element={<WordCloudDisplayContainer />} /> */}
         </Routes>
       </div>
     </UniverseProvider>

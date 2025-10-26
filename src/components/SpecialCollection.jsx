@@ -4,18 +4,33 @@ import SpecialCollectionCSS from './SpecialCollection.css';
 function SpecialCollection() {
   const [activeTab, setActiveTab] = useState('featured');
   const [hoveredItem, setHoveredItem] = useState(null);
-  const colors = [
-    'rgba(255, 87, 51, 0.15)',   // 红色半透明
-    'rgba(51, 255, 87, 0.15)',   // 绿色半透明
-    'rgba(51, 87, 255, 0.15)',   // 蓝色半透明
-    'rgba(255, 51, 246, 0.15)',  // 粉色半透明
-    'rgba(246, 255, 51, 0.15)',  // 黄色半透明
-    'rgba(51, 246, 255, 0.15)'   // 青色半透明
-  ];
+  const [currentSlide, setCurrentSlide] = useState(0);
   
+  const colors = [
+    'rgba(255, 87, 51, 0.15)',
+    'rgba(51, 255, 87, 0.15)',
+    'rgba(51, 87, 255, 0.15)',
+    'rgba(255, 51, 246, 0.15)',
+    'rgba(246, 255, 51, 0.15)',
+    'rgba(51, 246, 255, 0.15)'
+  ];
+
   const borderColors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F6', '#F6FF33', '#33F6FF'];
   
+  // 音乐报告图片数据
+  const musicReports = [
+    { id: 1, name: "音乐报告1" },
+    { id: 2, name: "音乐报告2" },
+    { id: 3, name: "音乐报告3" },
+    { id: 4, name: "音乐报告4" },
+    { id: 5, name: "音乐报告5" },
+    { id: 6, name: "音乐报告6" },
+    { id: 7, name: "音乐报告7" },
+    { id: 8, name: "音乐报告8" }
+  ];
+
   const [featuredAlbums, setFeaturedAlbums] = useState([
+    // ... 您原有的专辑数据保持不变
     {
       id: 140,
       music: "Se É Pra Vir Que Venha(让它来吧)",
@@ -50,7 +65,7 @@ function SpecialCollection() {
       album: "Mozart L'opera Rock (Complete Recording)(音乐剧《摇滚莫扎特》原声带)",
       cover: "covers/210.png",
       isPlaying: false,
-      url: "https://www.bilibili.com/video/BV15t411P7cU/?share_source=copy_web&vd_source=499d608de8bb4da3f1598fd3fcc23cca", // 将跳转到B站的音乐剧片段链接：【摇滚莫扎特】《纵情生活/Vivre à en crever》<mcreference link="https://www.bilibili.com/video/BV15t411P7cU/?share_source=copy_web&vd_source=499d608de8bb4da3f1598fd3fcc23cca" index="0">0</mcreference>
+      url: "https://www.bilibili.com/video/BV15t411P7cU/?share_source=copy_web&vd_source=499d608de8bb4da3f1598fd3fcc23cca",
     },
     {
       id: 5,
@@ -112,6 +127,19 @@ function SpecialCollection() {
     );
   };
 
+  // 幻灯片控制函数
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % musicReports.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + musicReports.length) % musicReports.length);
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
   return (
     <div className="special-collection" style={{
       background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
@@ -120,7 +148,7 @@ function SpecialCollection() {
       color: '#e6e6e6'
     }}>
       
-      {/* 黑胶展示区 */}
+      {/* 黑胶展示区 - 保持不变 */}
       <div className="vinyl-showcase" style={{
         background: 'rgba(255, 255, 255, 0.05)',
         borderRadius: '20px',
@@ -150,7 +178,7 @@ function SpecialCollection() {
               transition: 'transform 0.3s ease'
             }}>
               <div 
-                className={`vinyl-disc ${album.isPlaying ? 'playing' : ''}`} 
+                className={`vinyl-disc ${album.isPlaying ? 'playing' : ''} ${hoveredItem === album.id ? 'spinning' : ''}`} 
                 onClick={() => playAlbum(album)}
                 onMouseEnter={() => setHoveredItem(album.id)}
                 onMouseLeave={() => setHoveredItem(null)}
@@ -229,30 +257,177 @@ function SpecialCollection() {
         </div>
       </div>
 
-      {/* 收藏画廊 */}
-      <div className="collection-gallery" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '20px',
-        marginBottom: '30px'
+      {/* 新增：音乐报告幻灯片查看器 */}
+      <div className="music-report-slider" style={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '20px',
+        padding: '30px',
+        marginBottom: '30px',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
       }}>
-        {/* 这里保留原有的卡片内容，但添加新的样式 */}
-        {activeTab === 'fav' && (
-          <div className="collection-card" data-type="fav" style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            borderRadius: '15px',
-            padding: '20px',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            transition: 'all 0.3s ease'
+        <h3 style={{
+          color: '#ffffff',
+          marginBottom: '25px',
+          textAlign: 'center',
+          fontSize: '1.5rem',
+          fontWeight: '600',
+          textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+        }}>📊 music report</h3>
+        
+        <div className="slider-container" style={{
+          position: 'relative',
+          maxWidth: '900px',
+          margin: '0 auto',
+          overflow: 'hidden',
+          borderRadius: '15px',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
+        }}>
+          {/* 幻灯片轨道 */}
+          <div className="slides-track" style={{
+            display: 'flex',
+            transition: 'transform 0.5s ease-in-out',
+            transform: `translateX(-${currentSlide * 100}%)`
           }}>
-            {/* 卡片内容 */}
+            {musicReports.map((report, index) => (
+              <div 
+                key={report.id}
+                className="slide"
+                style={{
+                  minWidth: '100%',
+                  height: '500px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  background: 'rgba(0, 0, 0, 0.3)'
+                }}
+              >
+                <img 
+                  src={`/images/music-report-spcl-1026/music-report-for-spcllection1026-${report.id}.png`}
+                  alt={report.name}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    borderRadius: '8px'
+                  }}
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/800x600/1a1a2e/ffffff?text=音乐报告图片加载中';
+                  }}
+                />
+              </div>
+            ))}
           </div>
-        )}
-        {/* 其他卡片类似 */}
+
+          {/* 导航按钮 */}
+          <button 
+            onClick={prevSlide}
+            className="slider-nav prev"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '15px',
+              transform: 'translateY(-50%)',
+              background: 'rgba(178, 204, 244, 0.2)',
+              border: 'none',
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              color: 'white',
+              fontSize: '20px',
+              cursor: 'pointer',
+              backdropFilter: 'blur(10px)',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+              e.target.style.transform = 'translateY(-50%) scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.target.style.transform = 'translateY(-50%) scale(1)';
+            }}
+          >
+            ‹
+          </button>
+          
+          <button 
+            onClick={nextSlide}
+            className="slider-nav next"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '15px',
+              transform: 'translateY(-50%)',
+              background: 'rgba(143, 187, 243, 0.44)',
+              border: 'none',
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              color: 'white',
+              fontSize: '20px',
+              cursor: 'pointer',
+              backdropFilter: 'blur(10px)',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(197, 216, 243, 0.3)';
+              e.target.style.transform = 'translateY(-50%) scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(158, 232, 250, 0.2)';
+              e.target.style.transform = 'translateY(-50%) scale(1)';
+            }}
+          >
+            ›
+          </button>
+
+          {/* 指示器点 */}
+          <div className="slider-dots" style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '10px'
+          }}>
+            {musicReports.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  border: 'none',
+                  background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.65)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* 幻灯片信息 */}
+        <div style={{
+          textAlign: 'center',
+          marginTop: '20px',
+          color: '#cccccc',
+          fontSize: '0.9rem'
+        }}>
+          第 {currentSlide + 1} / {musicReports.length} 张 - {musicReports[currentSlide].name}
+        </div>
       </div>
 
-      {/* 最爱收藏列表 */}
+      {/* 最爱收藏列表 - 保持不变 */}
       <div className="all-collections-list" style={{
         background: 'rgba(255, 255, 255, 0.05)',
         borderRadius: '15px',
@@ -325,7 +500,7 @@ function SpecialCollection() {
                     marginTop: '5px',
                     fontWeight: 'bold'
                   }}>
-
+                    Fav
                   </span>
                 )}
               </div>

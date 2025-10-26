@@ -150,9 +150,11 @@ return sortedData.map(d => ({
       .attr('height', dimensions.height);
     svg.selectAll('*').remove();
 
-    // 优化：移除 D3 生成的渐变背景
-    // const defs = svg.append('defs'); // Defs 移到 filter 前
-    // ... [移除 gradient 和 rect 绘制代码] ...
+    // 添加透明毛玻璃背景
+    svg.append('rect')
+      .attr('width', dimensions.width)
+      .attr('height', dimensions.height)
+      .attr('class', 'wordcloud-background');
 
     const g = svg.append('g');
 

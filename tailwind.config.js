@@ -10,12 +10,22 @@ module.exports = {
       },
       keyframes: {
         'text-glow': {
-          '0%, 100%': { textShadow: '0 0 80px rgba(128, 0, 128, 0.8), 0 0 30px rgba(255, 0, 255, 0.6)' },
-          '50%': { textShadow: '0 0 90px rgba(0, 128, 128, 0.9), 0 0 40px rgba(0, 255, 255, 0.7)' },
-        }
+          '0%, 100%': { filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))' },
+          '50%': { filter: 'drop-shadow(0 0 24px rgba(255, 255, 255, 0.8))' },
+        },
+        'spin-slow': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
+        'spin-slower': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(-360deg)' },
+        },
       },
       animation: {
         'text-glow': 'text-glow 3s ease-in-out infinite',
+        'spin-slow': 'spin-slow 6s linear infinite',
+        'spin-slower': 'spin-slower 9s linear infinite',
       }
     },
   },

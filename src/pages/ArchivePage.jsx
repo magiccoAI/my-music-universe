@@ -3,22 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import WordCloudDisplay from '../components/WordCloudDisplay';
 
-//import MusicMoodMap from '../components/MusicMoodMap';
 import SpecialCollection from '../components/SpecialCollection';
 import MusicSlotMachine from '../components/MusicSlotMachine';
 import MouseParticleEffect from '../components/MouseParticleEffect';
+import UniverseNavigation from '../components/UniverseNavigation';
 
 import './ArchivePage.css';
 
 const parseDate = (dateString) => {
-  const [datePart, timePart] = dateString.split(' ');
-  const match = datePart.match(/(\d{4})年(\d{2})月(\d{2})日/);
+  const match = dateString.match(/(\d{4})年(\d{2})月(\d{2})日 (\d{2}):(\d{2})/);
   if (!match) {
     console.error("日期格式不匹配:", dateString);
     return new Date(); // 返回一个默认日期，避免程序崩溃
   }
-  const [year, month, day] = match.slice(1);
-  const [hour, minute] = timePart.split(':');
+  const [year, month, day, hour, minute] = match.slice(1);
   return new Date(year, month - 1, day, hour, minute);
 };
 
@@ -164,31 +162,7 @@ const ArchivePage = () => {
       <div className="gradient-overlay"></div>
       
       {/* 导航栏 */}
-      <nav className="main-nav">
-        <div className="nav-content">
-          <Link 
-            to="/" 
-            className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
-          >
-            <span className="nav-icon">🏠</span>
-            首页
-          </Link>
-          <Link 
-            to="/music-universe" 
-            className={`nav-link ${location.pathname === '/music-universe' ? 'active' : ''}`}
-          >
-            <span className="nav-icon">🌌</span>
-            音乐封面宇宙
-          </Link>
-          <Link 
-            to="/archive" 
-            className={`nav-link ${location.pathname === '/archive' ? 'active' : ''}`}
-          >
-            <span className="nav-icon">🎵</span>
-            我的音乐时光机
-          </Link>
-        </div>
-      </nav>
+      <UniverseNavigation />
 
       {/* 英雄区域 */}
       <section className="hero-section">

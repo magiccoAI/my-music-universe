@@ -135,7 +135,7 @@
 }
 
 .title-accent {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(237, 163, 34, 0.548); /* 略带金色的色调 */
   font-size: 0.7em;
   font-weight: 300;
 }
@@ -150,12 +150,12 @@
 .title-sub {
   font-size: 0.6em;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 215, 0, 0.7); /* 略带金色的色调 */
 }
 
 .hero-subtitle {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 215, 0, 0.8); /* 略带金色的色调 */
   font-weight: 300;
   margin-bottom: 3rem;
 }

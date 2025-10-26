@@ -108,8 +108,6 @@ const ConnectionsPage = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-gradient-to-b from-cyan-500/10 to-transparent" />
       </div>
       
-      {/* 鼠标粒子效果 */}
-      {/* <MouseParticleEffect /> */}
 
       {/* 导航栏 */}
       <UniverseNavigation className="fixed top-0 left-0 right-0 z-20 bg-slate-950/90 backdrop-blur-xl border-b border-slate-700/50" />

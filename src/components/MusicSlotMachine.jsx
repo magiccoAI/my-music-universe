@@ -121,7 +121,7 @@ const MusicSlotMachine = () => {
         }
         
         // 设置初始位置
-        const albumItemHeight = 300; // 每个专辑项的高度
+        const albumItemHeight = 310; // 每个专辑项的高度
         // 计算目标位置，使 finalAlbumIndexInReel 处的专辑显示在顶部
         const targetPosition = -(finalAlbumIndexInReel * albumItemHeight);
 
