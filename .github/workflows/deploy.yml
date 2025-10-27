@@ -44,6 +44,7 @@ jobs:
         npm run build
       env:
         CI: false
+        PUBLIC_URL: /my-music-universe
     
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
