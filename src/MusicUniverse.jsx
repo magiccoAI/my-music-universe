@@ -89,24 +89,25 @@ const MusicUniverse = () => {
     }
   }, [musicData]);
 
-  const timer = setTimeout(() => {
-    setShowHint(false);
-  }, 15000); // Hide hint after 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowHint(false);
+    }, 15000); // Hide hint after 10 seconds
 
-  const handleUserInteraction = () => {
-    setShowHint(false);
-    clearTimeout(timer);
-  };
+    const handleUserInteraction = () => {
+      setShowHint(false);
+      clearTimeout(timer);
+    };
 
-  window.addEventListener('keydown', handleUserInteraction);
-  window.addEventListener('mousemove', handleUserInteraction);
+    window.addEventListener('keydown', handleUserInteraction);
+    window.addEventListener('mousemove', handleUserInteraction);
 
-  return () => {
-    clearTimeout(timer);
-    window.removeEventListener('keydown', handleUserInteraction);
-    window.removeEventListener('mousemove', handleUserInteraction);
-  };
-}, []);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('keydown', handleUserInteraction);
+      window.removeEventListener('mousemove', handleUserInteraction);
+    };
+  }, []);
 
   const handleCoverClick = (data, albumPosition) => {
     setHoveredMusic({ data, position: albumPosition });
