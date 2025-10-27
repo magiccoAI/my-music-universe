@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
 import Stars from './components/StarsOnly';
 
@@ -12,6 +12,9 @@ import InfoCard from './components/InfoCard';
 
 const MusicUniverse = () => {
   const [musicData, setMusicData] = useState([]);
+  const [textures, setTextures] = useState({});
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [allTexturesLoaded, setAllTexturesLoaded] = useState(false);
   const [selectedMusic, setSelectedMusic] = useState(null);
   const [hoveredMusic, setHoveredMusic] = useState(null);
   const [currentTheme, setCurrentTheme] = useState('night'); // Default theme
@@ -53,24 +56,57 @@ const MusicUniverse = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowHint(false);
-    }, 15000); // Hide hint after 10 seconds
+    if (musicData.length > 0) {
+      const loader = new THREE.TextureLoader();
+      let loadedCount = 0;
+      const totalTextures = musicData.length;
+      const newTextures = {};
 
-    const handleUserInteraction = () => {
-      setShowHint(false);
-      clearTimeout(timer);
-    };
+      musicData.forEach((item) => {
+        loader.load(
+          `${process.env.PUBLIC_URL}/${item.cover}`,
+          (texture) => {
+            newTextures[item.id] = texture;
+            loadedCount++;
+            setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
+            if (loadedCount === totalTextures) {
+              setTextures(newTextures);
+              setAllTexturesLoaded(true);
+            }
+          },
+          undefined,
+          (error) => {
+            console.error('Error loading texture:', item.cover, error);
+            loadedCount++; // Still increment to avoid infinite loading state
+            setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
+            if (loadedCount === totalTextures) {
+              setTextures(newTextures);
+              setAllTexturesLoaded(true);
+            }
+          }
+        );
+      });
+    }
+  }, [musicData]);
 
-    window.addEventListener('keydown', handleUserInteraction);
-    window.addEventListener('mousemove', handleUserInteraction);
+  const timer = setTimeout(() => {
+    setShowHint(false);
+  }, 15000); // Hide hint after 10 seconds
 
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('keydown', handleUserInteraction);
-      window.removeEventListener('mousemove', handleUserInteraction);
-    };
-  }, []);
+  const handleUserInteraction = () => {
+    setShowHint(false);
+    clearTimeout(timer);
+  };
+
+  window.addEventListener('keydown', handleUserInteraction);
+  window.addEventListener('mousemove', handleUserInteraction);
+
+  return () => {
+    clearTimeout(timer);
+    window.removeEventListener('keydown', handleUserInteraction);
+    window.removeEventListener('mousemove', handleUserInteraction);
+  };
+}, []);
 
   const handleCoverClick = (data, albumPosition) => {
     setHoveredMusic({ data, position: albumPosition });
@@ -132,30 +168,46 @@ const MusicUniverse = () => {
 
   return (
     <div className={`w-screen h-screen ${themes[currentTheme] || themes.default}`}>
+      {!allTexturesLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center text-white text-2xl">
+          加载资源中... {loadingProgress}%
+        </div>
+      )}
       <UniverseNavigation />
-      <Canvas style={{ width: '100%', height: '100%' }} camera={{ fov: 75, near: 0.1, far: 1000 }} className={isConnectionsPageActive ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}>
-        <CameraSetup />
-        <KeyboardControls />
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        {currentTheme === 'night' && <Stars />}
+      {allTexturesLoaded && (
+        <Canvas
+          style={{ width: '100%', height: '100%' }}
+          camera={{ fov: 75, near: 0.1, far: 1000 }}
+          className={isConnectionsPageActive ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
+          dpr={[1, 2]} // Set device pixel ratio to improve performance on high-res screens
+          onContextLost={(event) => {
+            event.preventDefault();
+            console.warn('WebGL Context Lost. Attempting to restore...');
+          }}
+          onContextRestored={() => {
+            console.log('WebGL Context Restored!');
+          }}
+        >
+          <CameraSetup />
+          <KeyboardControls />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
+          {currentTheme === 'night' && <Stars />}
 
-
-        {/* <OrbitControls /> */}
-
-        {musicData.map((data) => (
-          <Cover
-            key={data.id}
-            data={data}
-            position={data.position}
-            rotation={data.rotation}
-            scale={data.scale}
-            onClick={handleCoverClick}
-          />
-        ))}
-        {hoveredMusic && <InfoCard music={hoveredMusic.data} position={hoveredMusic.position} onCardClose={() => setHoveredMusic(null)} />}
-        {/* {selectedMusic && <InfoCard music={selectedMusic} />} */}
-      </Canvas>
+          {musicData.map((data) => (
+            <Cover
+              key={data.id}
+              data={data}
+              position={data.position}
+              rotation={data.rotation}
+              scale={data.scale}
+              onClick={handleCoverClick}
+              texture={textures[data.id]} // Pass the preloaded texture
+            />
+          ))}
+          {hoveredMusic && <InfoCard music={hoveredMusic.data} position={hoveredMusic.position} onCardClose={() => setHoveredMusic(null)} />}
+        </Canvas>
+      )}
       <div className="absolute bottom-4 right-4 z-10 flex space-x-2">
         <button
           className={`px-4 py-2 rounded-full text-white font-bold ${currentTheme === 'day' ? 'bg-blue-500' : 'bg-gray-700 hover:bg-blue-500'}`}

@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Plane } from '@react-three/drei';
-import * as THREE from 'three';
+// import * as THREE from 'three'; // No longer needed here
 
-import { useTexture } from '@react-three/drei';
+// import { useTexture } from '@react-three/drei'; // No longer needed here
 
-const Cover = ({ data, position, rotation, scale, onClick, frustum }) => {
-  const texture = useTexture(`${process.env.PUBLIC_URL}/${data.cover}`);
+const Cover = ({ data, position, rotation, scale, onClick, texture }) => {
+  // const texture = useTexture(`${process.env.PUBLIC_URL}/${data.cover}`); // Removed
   const meshRef = useRef();
   const { camera } = useThree();
 
