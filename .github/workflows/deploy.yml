@@ -1,50 +1,64 @@
-name: Deploy to GitHub Pages
+# .github/workflows/deploy.yml
+name: Deploy React App to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
+  
+  # 允许手动触发
+  workflow_dispatch:
+
+# 设置 GITHUB_TOKEN 的权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 只允许一个并发部署
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-    
-    strategy:
-      matrix:
-        node-version: [18.x]  # 使用更稳定的Node 18
     
     steps:
     - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      uses: actions/checkout@v4
     
-    - name: Setup Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '18'
         cache: 'npm'
     
-    - name: Install dependencies
-      run: |
-        npm ci
-        # 如果ci失败，回退到install
-        # npm install
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
     
-    - name: Run lint
-      run: npm run lint --if-present
+    - name: Install dependencies
+      run: npm ci
     
     - name: Build
       run: |
-        npm run build --if-present
+        npm run build
       env:
-        CI: false  # 重要：禁用CI严格模式
-        NODE_OPTIONS: "--max_old_space_size=4096"  # 增加内存限制
+        CI: false
     
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+        path: ./build
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
