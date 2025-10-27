@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 
 import UniverseNavigation from '../components/UniverseNavigation';
 import { motion } from 'framer-motion'; // Add this import
@@ -13,7 +13,7 @@ const SearchPage = () => {
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
   useEffect(() => {
-    fetch('/data/data.json')
+    fetch(process.env.PUBLIC_URL + '/data/data.json')
       .then((res) => res.json())
       .then((data) => setMusicData(data))
       .catch((err) => console.error('Failed to load data.json', err));
@@ -84,7 +84,7 @@ const SearchPage = () => {
       {musicData.slice(0, 10).map((item, i) => ( // Use a subset of musicData
         <motion.img
           key={item.id}
-          src={`/covers/${item.cover.split('/').pop()}`}
+          src={`${process.env.PUBLIC_URL}/covers/${item.cover.split('/').pop()}`}
           alt={item.album}
           className="absolute w-24 h-24 object-cover rounded-lg blur-sm" // Blurred and small
           style={{
@@ -154,7 +154,7 @@ const SearchPage = () => {
                     onClick={() => setSelected(item)}
                   >
                     <img
-                      src={`/covers/${item.cover.split('/').pop()}`}
+                      src={`${process.env.PUBLIC_URL}/covers/${item.cover.split('/').pop()}`}
                       alt={item.album}
                       loading="lazy"
                       className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
@@ -177,7 +177,7 @@ const SearchPage = () => {
                 <button className="px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-600" onClick={() => setSelected(null)}>关闭</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                <img src={`/covers/${selected.cover.split('/').pop()}`} alt={selected.album} className="w-full rounded-md shadow" />
+                <img src={`${process.env.PUBLIC_URL}/covers/${selected.cover.split('/').pop()}`} alt={selected.album} className="w-full rounded-md shadow" />
                 <div className="md:col-span-2 text-sm">
                   <p><strong>歌曲:</strong> {selected.music}</p>
                   <p><strong>艺术家:</strong> {selected.artist}</p>

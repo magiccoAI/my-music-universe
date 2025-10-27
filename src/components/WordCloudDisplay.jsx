@@ -42,7 +42,7 @@ window.removeEventListener('resize', updateDimensions);
 
     const fetchData = async () => {
       try {
-        const response = await fetch('/data/data.json', { signal });
+        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json', { signal });
         const jsonData = await response.json();
         setData(jsonData);
       } catch (error) {
@@ -255,7 +255,7 @@ setIsLoading(false);
     <div className="wordcloud-display" ref={containerRef}>
       {type === 'style' ? (
         <img 
-          src="/images/music_style_wordcloud.png" 
+          src={`${process.env.PUBLIC_URL}/images/musicstyle-cloud2.png`} 
           alt="Music Style Word Cloud" 
           style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
         />

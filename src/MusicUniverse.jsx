@@ -28,7 +28,7 @@ const MusicUniverse = () => {
   };
 
   useEffect(() => {
-    fetch('/data/data.json')
+    fetch(process.env.PUBLIC_URL + '/data/data.json')
       .then((res) => res.json())
       .then((data) => {
         const processedData = data.map((item, index) => {
@@ -55,7 +55,7 @@ const MusicUniverse = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowHint(false);
-    }, 10000); // Hide hint after 10 seconds
+    }, 15000); // Hide hint after 10 seconds
 
     const handleUserInteraction = () => {
       setShowHint(false);

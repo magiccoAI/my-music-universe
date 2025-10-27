@@ -9,7 +9,8 @@ export const UniverseProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/data/data.json');
+        // 使用相对路径，避免GitHub Pages路径问题
+        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

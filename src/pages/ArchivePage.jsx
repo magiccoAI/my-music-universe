@@ -37,8 +37,8 @@ const ArchivePage = () => {
     const fetchData = async () => {
       try {
         const [musicResponse, aggregatedResponse] = await Promise.all([
-          fetch('/data/data.json'),
-          fetch('/data/aggregated_data.json')
+          fetch(process.env.PUBLIC_URL + '/data/data.json'),
+      fetch(process.env.PUBLIC_URL + '/data/data.json')
         ]);
 
         if (!musicResponse.ok || !aggregatedResponse.ok) {

@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x]  # 使用更稳定的Node 18
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm ci
+        # 如果ci失败，回退到install
+        # npm install
+    
+    - name: Run lint
+      run: npm run lint --if-present
+    
+    - name: Build
+      run: |
+        npm run build --if-present
+      env:
+        CI: false  # 重要：禁用CI严格模式
+        NODE_OPTIONS: "--max_old_space_size=4096"  # 增加内存限制
+    
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build

@@ -39,7 +39,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    
+    "fix-deps": "node scripts/fix-dependencies.js",
+    "reset": "npm run clean-install && npm run build",
+    "clean-install": "rm -rf node_modules && rm package-lock.json && npm install",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
@@ -69,3 +71,5 @@
     "gh-pages": "^6.3.0"
   }
 }
+
+

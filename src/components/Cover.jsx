@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import { useTexture } from '@react-three/drei';
 
 const Cover = ({ data, position, rotation, scale, onClick, frustum }) => {
-  const texture = useTexture(`/${data.cover}`);
+  const texture = useTexture(`${process.env.PUBLIC_URL}/${data.cover}`);
   const meshRef = useRef();
   const { camera } = useThree();
 

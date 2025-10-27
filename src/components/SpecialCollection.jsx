@@ -88,7 +88,7 @@ function SpecialCollection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/data/data.json');
+        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -200,7 +200,7 @@ function SpecialCollection() {
                   border: '3px solid rgba(255, 255, 255, 0.2)'
                 }}>
                   <img 
-                    src={album.cover} 
+                    src={`${process.env.PUBLIC_URL}/${album.cover}`} 
                     alt={album.title} 
                     style={{
                       width: '100%',
@@ -304,7 +304,7 @@ function SpecialCollection() {
                 }}
               >
                 <img 
-                  src={`/images/music-report-spcl-1026/music-report-for-spcllection1026-${report.id}.png`}
+                  src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-for-spcllection1026-${report.id}.png`}
                   alt={report.name}
                   style={{
                     maxWidth: '100%',
@@ -500,7 +500,7 @@ function SpecialCollection() {
                     marginTop: '5px',
                     fontWeight: 'bold'
                   }}>
-                    Fav
+                    
                   </span>
                 )}
               </div>

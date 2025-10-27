@@ -15,7 +15,7 @@ const MusicSlotMachine = () => {
   useEffect(() => {
     const loadAlbums = async () => {
       try {
-        const response = await fetch('/data/data.json');
+        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json');
         const data = await response.json();
         const validAlbums = data.filter(album => album !== null && album !== undefined);
         const formattedAlbums = validAlbums.map(album => ({
@@ -51,7 +51,7 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${randomAlbum.cover}" alt="${randomAlbum.title}" class="album-cover" onerror="console.error('Image failed to load:', this.src)" onload="console.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/${randomAlbum.cover}" alt="${randomAlbum.title}" class="album-cover" onerror="console.error('Image failed to load:', this.src)" onload="console.log('Image loaded:', this.src)">
             <div class="album-info">
              
               <div class="album-artist">${randomAlbum.artist}</div>
@@ -111,7 +111,7 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${albumToDisplay.cover}" alt="${albumToDisplay.title}" class="album-cover" onerror="console.error('Image failed to load:', this.src)" onLoad="console.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/${albumToDisplay.cover}" alt="${albumToDisplay.title}" class="album-cover" onerror="console.error('Image failed to load:', this.src)" onLoad="console.log('Image loaded:', this.src)">
             <div class="album-info">
               <div class="album-title" title="${albumToDisplay.music}">${albumToDisplay.music}</div>
               <div class="album-artist">${albumToDisplay.artist}</div>
@@ -206,7 +206,7 @@ const MusicSlotMachine = () => {
           <div className="result-albums">
             {selectedAlbums.map((album, index) => (
               <div key={index} className="result-album">
-                <img src={`${album.cover}`} alt={album.title} onError={(e) => console.error('Image failed to load:', e.target.src)} onLoad={(e) => console.log('Image loaded:', e.target.src)} />
+                <img src={`${process.env.PUBLIC_URL}/${album.cover}`} alt={album.title} onError={(e) => console.error('Image failed to load:', e.target.src)} onLoad={(e) => console.log('Image loaded:', e.target.src)} />
                 <div className="album-title">{album.title}</div>
                 <div className="album-artist">{album.artist}</div>
               </div>

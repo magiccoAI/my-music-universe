@@ -24,26 +24,31 @@ const ConnectionsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const pianoSoundFiles = useMemo(() => [
-    '/audio/a6-82015.mp3',
-    '/audio/b6-82017.mp3',
-    '/audio/c6-102822.mp3',
-    '/audio/d6-82018.mp3',
-    '/audio/e6-82016.mp3',
-    '/audio/f6-102819.mp3',
-    '/audio/g6-82013.mp3',
-    '/audio/do-80236.mp3',
-    '/audio/re-78500.mp3',
-    '/audio/fa-78409.mp3',
-    '/audio/sol-101774.mp3',
-    '/audio/si-80238.mp3',
-    '/audio/piano-g-6200.mp3',
+    process.env.PUBLIC_URL + '/audio/a6-82015.mp3',
+    process.env.PUBLIC_URL + '/audio/b6-82017.mp3',
+    process.env.PUBLIC_URL + '/audio/c6-102822.mp3',
+    process.env.PUBLIC_URL + '/audio/d6-82018.mp3',
+    process.env.PUBLIC_URL + '/audio/e6-82016.mp3',
+    process.env.PUBLIC_URL + '/audio/f6-102819.mp3',
+    process.env.PUBLIC_URL + '/audio/g6-82013.mp3',
+    process.env.PUBLIC_URL + '/audio/do-80236.mp3',
+    process.env.PUBLIC_URL + '/audio/re-78500.mp3',
+    process.env.PUBLIC_URL + '/audio/fa-78409.mp3',
+    process.env.PUBLIC_URL + '/audio/sol-101774.mp3',
+    process.env.PUBLIC_URL + '/audio/si-80238.mp3',
+    process.env.PUBLIC_URL + '/audio/piano-g-6200.mp3',
   ], []);
 
   const pianoSounds = useRef({});
 
   useEffect(() => {
     pianoSoundFiles.forEach(file => {
-      pianoSounds.current[file] = new Audio(file);
+      const audio = new Audio(file);
+      audio.load(); // Explicitly load the audio
+      audio.addEventListener('canplaythrough', () => {
+        console.log('Audio ready to play:', file);
+      });
+      pianoSounds.current[file] = audio;
     });
   }, [pianoSoundFiles]);
 
@@ -51,7 +56,13 @@ const ConnectionsPage = () => {
     const soundFile = pianoSoundFiles[index % pianoSoundFiles.length];
     if (pianoSounds.current[soundFile]) {
       pianoSounds.current[soundFile].currentTime = 0; // Reset to start
-      pianoSounds.current[soundFile].play();
+        pianoSounds.current[soundFile].volume = 1;
+        console.log(`Attempting to play: ${soundFile}`);
+        pianoSounds.current[soundFile].play().then(() => {
+          console.log(`Successfully played: ${soundFile}`);
+        }).catch(e => {
+          console.error(`Error playing sound ${soundFile}:`, e);
+        });
     }
   }, [pianoSoundFiles]);
 
@@ -62,7 +73,7 @@ const ConnectionsPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch('/data/data.json')
+    fetch(process.env.PUBLIC_URL + '/data/data.json')
       .then((res) => res.json())
       .then((data) => {
         setMusicData(data);
@@ -151,7 +162,9 @@ const ConnectionsPage = () => {
                       backdrop-blur-sm
                       shadow-lg hover:shadow-cyan-500/20
                     `}
-                    onMouseEnter={() => playPianoSound(index)}
+                    onMouseEnter={() => {
+                      playPianoSound(index);
+                    }}
                     onClick={() => {
                       setSelectedTag(tag);
                     }}
@@ -221,7 +234,7 @@ const ConnectionsPage = () => {
                   {/* 专辑封面容器 */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={`/covers/${item.cover.split('/').pop()}`}
+                      src={`${process.env.PUBLIC_URL}/covers/${item.cover.split('/').pop()}`}
                       alt={item.album}
                       className="w-full aspect-square object-cover transform group-hover:scale-110 transition-transform duration-700"
                     />
