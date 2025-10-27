@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/my-music-universe/static/css/main.e39b0b35.css",
+    "main.js": "/my-music-universe/static/js/main.343cedb4.js",
+    "static/js/206.b8dac9c4.chunk.js": "/my-music-universe/static/js/206.b8dac9c4.chunk.js",
+    "static/media/netcloud-icon.png": "/my-music-universe/static/media/netcloud-icon.53edeb519485d596d73e.png",
+    "static/media/wechat-icon.png": "/my-music-universe/static/media/wechat-icon.09c4bed5837bc449927e.png",
+    "index.html": "/my-music-universe/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.e39b0b35.css",
+    "static/js/main.343cedb4.js"
+  ]
+}
