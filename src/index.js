@@ -9,7 +9,7 @@ import App from './App'; // Import App
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/my-music-universe">
       <App /> {/* Render App */}
     </BrowserRouter>
   </React.StrictMode>
