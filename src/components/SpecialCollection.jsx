@@ -199,14 +199,18 @@ function SpecialCollection() {
                   boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)',
                   border: '3px solid rgba(255, 255, 255, 0.2)'
                 }}>
-                  <img 
-                    src={`${process.env.PUBLIC_URL}/${album.cover}`} 
-                    alt={album.title} 
+                  <img
+                    src={`${process.env.PUBLIC_URL}/optimized-images/${album.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp`}
+                    alt={album.title}
                     style={{
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
                       transition: 'transform 0.3s ease'
+                    }}
+                    onError={(e) => {
+                      e.target.onerror = null; // Prevent infinite loop if fallback also fails
+                      e.target.src = `${process.env.PUBLIC_URL}/${album.cover}`;
                     }}
                   />
                 </div>
