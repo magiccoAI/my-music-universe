@@ -114,12 +114,9 @@ const MusicUniverse = () => {
     if (musicData.length > 0) {
       const loader = new THREE.TextureLoader();
       let loadedCount = 0;
-      const totalTextures = musicData.length;
-      const newTextures = {};
+      const totalTextures = musicData.length; // 移除移动端图片加载数量限制
       
-      const optimizedMusicData = isMobile 
-        ? musicData.slice(0, Math.min(15, musicData.length))
-        : musicData;
+      const newTextures = {};
       
       const getOptimizedImageUrl = (originalCoverPath) => {
         if (!originalCoverPath) return null;
@@ -140,7 +137,7 @@ const MusicUniverse = () => {
             newTextures[item.id] = texture;
             loadedCount++;
             setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-            if (loadedCount === optimizedMusicData.length) {
+            if (loadedCount === musicData.length) { // 修正加载进度计算
               setTextures(newTextures);
               setAllTexturesLoaded(true);
             }
@@ -154,7 +151,7 @@ const MusicUniverse = () => {
             } else {
               loadedCount++;
               setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-              if (loadedCount === optimizedMusicData.length) {
+              if (loadedCount === musicData.length) { // 修正加载进度计算
                 setTextures(newTextures);
                 setAllTexturesLoaded(true);
               }
@@ -163,7 +160,7 @@ const MusicUniverse = () => {
         );
       };
       
-      optimizedMusicData.forEach(item => loadTexture(item));
+      musicData.forEach(item => loadTexture(item)); // 直接使用 musicData
     }
   }, [musicData, isMobile]);
 
@@ -247,72 +244,7 @@ const MusicUniverse = () => {
     return null;
   };
 
-  // 移动设备触摸控制组件
-  const TouchControls = () => {
-    const { camera } = useThree();
-    const touchStartRef = useRef(null);
-    const lastTouchRef = useRef(null);
-
-    useEffect(() => {
-      if (!isMobile) return;
-
-      const handleTouchStart = (e) => {
-        if (e.touches.length === 1) {
-          touchStartRef.current = {
-            x: e.touches[0].clientX,
-            y: e.touches[0].clientY,
-            cameraX: camera.position.x,
-            cameraZ: camera.position.z,
-          };
-          lastTouchRef.current = {
-            x: e.touches[0].clientX,
-            y: e.touches[0].clientY,
-          };
-        }
-      };
-
-      const handleTouchMove = (e) => {
-        if (e.touches.length === 1 && touchStartRef.current) {
-          e.preventDefault();
-          
-          const touch = e.touches[0];
-          const deltaX = touch.clientX - lastTouchRef.current.x;
-          const deltaY = touch.clientY - lastTouchRef.current.y;
-          
-          // 移动相机（反转方向以获得更自然的控制）
-          camera.position.x -= deltaX * 0.01;
-          camera.position.z -= deltaY * 0.01;
-          
-          lastTouchRef.current = {
-            x: touch.clientX,
-            y: touch.clientY,
-          };
-        }
-      };
-
-      const handleTouchEnd = () => {
-        touchStartRef.current = null;
-        lastTouchRef.current = null;
-      };
-
-      const canvas = document.querySelector('canvas');
-      if (canvas) {
-        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-        canvas.addEventListener('touchend', handleTouchEnd);
-      }
-
-      return () => {
-        if (canvas) {
-          canvas.removeEventListener('touchstart', handleTouchStart);
-          canvas.removeEventListener('touchmove', handleTouchMove);
-          canvas.removeEventListener('touchend', handleTouchEnd);
-        }
-      };
-    }, [camera, isMobile]);
-
-    return null;
-  };
+  // 移动设备触摸控制组件 (已移除)
 
   const WebGLContextHandler = () => {
     const { gl } = useThree();
@@ -362,11 +294,11 @@ const MusicUniverse = () => {
           <WebGLContextHandler />
           <CameraSetup />
           <KeyboardControls />
-          <TouchControls /> {/* 添加触摸控制 */}
+          {/* <TouchControls /> */} {/* 移除触摸控制 */}
           <OrbitControls 
-            enableRotate={!isMobile} // 移动设备上禁用旋转，使用触摸拖动
+            enableRotate={true} // 移动设备上启用旋转
             enableZoom={true} 
-            enablePan={!isMobile} // 移动设备上禁用默认平移，使用自定义触摸控制
+            enablePan={true} // 移动设备上启用平移
           />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
