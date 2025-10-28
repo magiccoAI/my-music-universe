@@ -86,7 +86,7 @@ const MusicUniverse = () => {
       const loadTexture = (item, retryCount = 0) => {
         const maxRetries = 2;
         const textureUrl = isMobile && item.coverMobile 
-          ? `${process.env.PUBLIC_URL}/${item.coverMobile}` // 使用移动端优化图片（如果有）
+          ? `${process.env.PUBLIC_URL}/optimized-images/${path.parse(item.cover).name}.webp` // 优先使用优化后的 WebP 图片
           : `${process.env.PUBLIC_URL}/${item.cover}`;
           
         loader.load(
