@@ -234,7 +234,7 @@ const ConnectionsPage = () => {
                   {/* 专辑封面容器 */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={`${process.env.PUBLIC_URL}/optimized-images/${item.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt={item.album}
+                      src={`${process.env.PUBLIC_URL}/optimized-images/${item.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp`} alt={item.album}
                       className="w-full aspect-square object-cover transform group-hover:scale-110 transition-transform duration-700"
                       onError="this.onerror=null;this.src='${process.env.PUBLIC_URL}/${item.cover}';console.error('Image failed to load:', this.src)"
                     />
