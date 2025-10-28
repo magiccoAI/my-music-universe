@@ -3,7 +3,6 @@ import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
 import Stars from './components/StarsOnly';
 
-
 import UniverseNavigation from './components/UniverseNavigation';
 import * as THREE from 'three';
 import { UniverseContext } from './UniverseContext';
@@ -17,17 +16,20 @@ const MusicUniverse = () => {
   const [allTexturesLoaded, setAllTexturesLoaded] = useState(false);
   const [selectedMusic, setSelectedMusic] = useState(null);
   const [hoveredMusic, setHoveredMusic] = useState(null);
-  const [currentTheme, setCurrentTheme] = useState('night'); // Default theme
+  const [currentTheme, setCurrentTheme] = useState('night');
   const { isConnectionsPageActive } = useContext(UniverseContext);
-  const [showHint, setShowHint] = useState(true); // State for showing the hint
+  const [showHint, setShowHint] = useState(true);
   
+  // 检测是否为移动设备
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const themes = {
-    day: "bg-gradient-to-b from-blue-900 via-blue-600 to-blue-300", // 白天：飞机上看到的深蓝到浅蓝渐变
-    // 替换您当前的傍晚渐变代码
-    evening: "evening-symmetric", // 傍晚：日落海面多色渐变
-    night: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800", // 夜晚：银河星系的深色弥散渐变
-    default: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800", // Add a default theme
+    day: "bg-gradient-to-b from-blue-900 via-blue-600 to-blue-300",
+    evening: "evening-symmetric",
+    night: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800",
+    default: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800",
   };
 
   useEffect(() => {
@@ -35,13 +37,13 @@ const MusicUniverse = () => {
       .then((res) => res.json())
       .then((data) => {
         const processedData = data.map((item, index) => {
-          const randomOffsetX = (Math.random() - 0.5) * 25; // Larger spread
+          const randomOffsetX = (Math.random() - 0.5) * 25;
           const randomOffsetY = (Math.random() - 0.5) * 25;
           const randomOffsetZ = (Math.random() - 0.5) * 25;
-          const rotationX = (Math.random() - 0.5) * Math.PI * 0.4; // Max 72 degrees
+          const rotationX = (Math.random() - 0.5) * Math.PI * 0.4;
           const rotationY = (Math.random() - 0.5) * Math.PI * 0.4;
           const rotationZ = (Math.random() - 0.5) * Math.PI * 0.4;
-          const scale = 0.8 + (Math.random() * 0.4); // 0.8 to 1.2
+          const scale = 0.8 + (Math.random() * 0.4);
 
           return {
             ...item,
@@ -55,9 +57,7 @@ const MusicUniverse = () => {
       .catch((error) => console.error('Error loading music data:', error));
   }, []);
 
-  // 检测是否为移动设备
-  const [isMobile, setIsMobile] = useState(false);
-  
+  // 检测移动设备
   useEffect(() => {
     const checkMobile = () => {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -70,6 +70,46 @@ const MusicUniverse = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // 触摸事件处理
+  const handleTouchStart = (e) => {
+    if (!isMobile) return;
+    setTouchStart({
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    });
+    setIsDragging(false); // 重置拖动状态
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isMobile || !touchStart) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - touchStart.x;
+    const deltaY = touch.clientY - touchStart.y;
+    
+    // 如果移动距离超过阈值，认为是拖动而非点击
+    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (!isMobile || !touchStart) return;
+    
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStart.x;
+    const deltaY = touch.clientY - touchStart.y;
+    
+    // 如果是点击（移动距离很小），不是拖动
+    if (Math.abs(deltaX) < 5 && Math.abs(deltaY) < 5) {
+      // 这里可以处理点击逻辑，比如选择专辑等
+      console.log('Touch click detected');
+    }
+    
+    setTouchStart(null);
+    setIsDragging(false);
+  };
+
   useEffect(() => {
     if (musicData.length > 0) {
       const loader = new THREE.TextureLoader();
@@ -77,12 +117,10 @@ const MusicUniverse = () => {
       const totalTextures = musicData.length;
       const newTextures = {};
       
-      // 移动端优化：减少同时加载的纹理数量，使用低分辨率图片
       const optimizedMusicData = isMobile 
-        ? musicData.slice(0, Math.min(15, musicData.length)) // 移动端限制加载数量
+        ? musicData.slice(0, Math.min(15, musicData.length))
         : musicData;
       
-      // 设置加载优先级和错误重试
       const getOptimizedImageUrl = (originalCoverPath) => {
         if (!originalCoverPath) return null;
         const fileName = originalCoverPath.split('/').pop().split('.')[0];
@@ -98,8 +136,7 @@ const MusicUniverse = () => {
         loader.load(
           textureUrl,
           (texture) => {
-            // 成功加载
-            texture.minFilter = THREE.LinearFilter; // 优化渲染性能
+            texture.minFilter = THREE.LinearFilter;
             newTextures[item.id] = texture;
             loadedCount++;
             setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
@@ -111,12 +148,10 @@ const MusicUniverse = () => {
           undefined,
           (error) => {
             console.error('Error loading texture:', item.cover, error);
-            // 尝试重试加载
             if (retryCount < maxRetries) {
               console.log(`Retrying texture load (${retryCount + 1}/${maxRetries}):`, item.cover);
-              setTimeout(() => loadTexture(item, retryCount + 1), 1000); // 延迟1秒后重试
+              setTimeout(() => loadTexture(item, retryCount + 1), 1000);
             } else {
-              // 重试失败，继续加载其他纹理
               loadedCount++;
               setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
               if (loadedCount === optimizedMusicData.length) {
@@ -128,7 +163,6 @@ const MusicUniverse = () => {
         );
       };
       
-      // 开始加载纹理
       optimizedMusicData.forEach(item => loadTexture(item));
     }
   }, [musicData, isMobile]);
@@ -136,7 +170,7 @@ const MusicUniverse = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowHint(false);
-    }, 15000); // Hide hint after 10 seconds
+    }, 15000);
 
     const handleUserInteraction = () => {
       setShowHint(false);
@@ -145,20 +179,20 @@ const MusicUniverse = () => {
 
     window.addEventListener('keydown', handleUserInteraction);
     window.addEventListener('mousemove', handleUserInteraction);
+    // 添加触摸事件监听
+    window.addEventListener('touchstart', handleUserInteraction);
 
     return () => {
       clearTimeout(timer);
       window.removeEventListener('keydown', handleUserInteraction);
       window.removeEventListener('mousemove', handleUserInteraction);
+      window.removeEventListener('touchstart', handleUserInteraction);
     };
   }, []);
 
   const handleCoverClick = (data, albumPosition) => {
     setHoveredMusic({ data, position: albumPosition });
   };
-
-
-
 
   const CameraSetup = () => {
     const { camera } = useThree();
@@ -171,18 +205,20 @@ const MusicUniverse = () => {
     }, [camera]);
 
     useFrame(() => {
-      // This will make sure the cameraRef is always up-to-date
       cameraRef.current = camera;
     });
 
     return null;
   };
 
+  // 键盘控制组件（仅电脑端）
   const KeyboardControls = () => {
     const { camera } = useThree();
-    const speed = 0.5; // Adjust camera movement speed
+    const speed = 0.5;
 
     useEffect(() => {
+      if (isMobile) return; // 移动设备上禁用键盘控制
+
       const handleKeyDown = (event) => {
         switch (event.key) {
           case 'ArrowLeft':
@@ -206,7 +242,74 @@ const MusicUniverse = () => {
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       };
-    }, [camera, speed]);
+    }, [camera, speed, isMobile]); // 添加 isMobile 依赖
+
+    return null;
+  };
+
+  // 移动设备触摸控制组件
+  const TouchControls = () => {
+    const { camera } = useThree();
+    const touchStartRef = useRef(null);
+    const lastTouchRef = useRef(null);
+
+    useEffect(() => {
+      if (!isMobile) return;
+
+      const handleTouchStart = (e) => {
+        if (e.touches.length === 1) {
+          touchStartRef.current = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY,
+            cameraX: camera.position.x,
+            cameraZ: camera.position.z,
+          };
+          lastTouchRef.current = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY,
+          };
+        }
+      };
+
+      const handleTouchMove = (e) => {
+        if (e.touches.length === 1 && touchStartRef.current) {
+          e.preventDefault();
+          
+          const touch = e.touches[0];
+          const deltaX = touch.clientX - lastTouchRef.current.x;
+          const deltaY = touch.clientY - lastTouchRef.current.y;
+          
+          // 移动相机（反转方向以获得更自然的控制）
+          camera.position.x -= deltaX * 0.01;
+          camera.position.z -= deltaY * 0.01;
+          
+          lastTouchRef.current = {
+            x: touch.clientX,
+            y: touch.clientY,
+          };
+        }
+      };
+
+      const handleTouchEnd = () => {
+        touchStartRef.current = null;
+        lastTouchRef.current = null;
+      };
+
+      const canvas = document.querySelector('canvas');
+      if (canvas) {
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchend', handleTouchEnd);
+      }
+
+      return () => {
+        if (canvas) {
+          canvas.removeEventListener('touchstart', handleTouchStart);
+          canvas.removeEventListener('touchmove', handleTouchMove);
+          canvas.removeEventListener('touchend', handleTouchEnd);
+        }
+      };
+    }, [camera, isMobile]);
 
     return null;
   };
@@ -237,7 +340,12 @@ const MusicUniverse = () => {
   };
 
   return (
-    <div className={`w-screen h-screen ${themes[currentTheme] || themes.default}`}>
+    <div 
+      className={`w-screen h-screen ${themes[currentTheme] || themes.default}`}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {!allTexturesLoaded && (
         <div className="absolute inset-0 flex items-center justify-center text-white text-2xl">
           加载资源中... {loadingProgress}%
@@ -246,14 +354,20 @@ const MusicUniverse = () => {
       <UniverseNavigation />
       {allTexturesLoaded && (
         <Canvas
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
           camera={{ fov: 75, near: 0.1, far: 1000 }}
           className={isConnectionsPageActive ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
-          dpr={[1, 2]} // Set device pixel ratio to improve performance on high-res screens
+          dpr={[1, 2]}
         >
           <WebGLContextHandler />
           <CameraSetup />
           <KeyboardControls />
+          <TouchControls /> {/* 添加触摸控制 */}
+          <OrbitControls 
+            enableRotate={!isMobile} // 移动设备上禁用旋转，使用触摸拖动
+            enableZoom={true} 
+            enablePan={!isMobile} // 移动设备上禁用默认平移，使用自定义触摸控制
+          />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           {currentTheme === 'night' && <Stars />}
@@ -266,7 +380,8 @@ const MusicUniverse = () => {
               rotation={data.rotation}
               scale={data.scale}
               onClick={handleCoverClick}
-              texture={textures[data.id]} // Pass the preloaded texture
+              texture={textures[data.id]}
+              isMobile={isMobile} // 传递移动设备状态给Cover组件
             />
           ))}
           {hoveredMusic && <InfoCard music={hoveredMusic.data} position={hoveredMusic.position} onCardClose={() => setHoveredMusic(null)} />}
@@ -294,7 +409,9 @@ const MusicUniverse = () => {
       </div>
       {showHint && (
         <div className="absolute bottom-4 left-4 z-10 p-3 bg-gray-800 text-white rounded-lg shadow-lg text-sm opacity-90">
-          提示：您可以通过键盘方向键⬅️⬆️➡️⬇️或鼠标移动来浏览音乐专辑。
+          {isMobile ? 
+            "提示：您可以通过单指拖动来浏览音乐专辑，双指捏合来缩放。" : 
+            "提示：您可以通过键盘方向键⬅️⬆️➡️⬇️或鼠标移动来浏览音乐专辑。"}
         </div>
       )}
     </div>
