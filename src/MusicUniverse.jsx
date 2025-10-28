@@ -85,7 +85,7 @@ const MusicUniverse = () => {
       // 设置加载优先级和错误重试
       const getOptimizedImageUrl = (originalCoverPath) => {
         if (!originalCoverPath) return null;
-        const fileName = path.parse(originalCoverPath).name;
+        const fileName = originalCoverPath.split('/').pop().split('.')[0];
         return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
       };
 
@@ -254,6 +254,7 @@ const MusicUniverse = () => {
           <WebGLContextHandler />
           <CameraSetup />
           <KeyboardControls />
+          <OrbitControls enableRotate={false} enableZoom={false} enablePan={true} />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           {currentTheme === 'night' && <Stars />}
