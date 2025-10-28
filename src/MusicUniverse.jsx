@@ -83,11 +83,17 @@ const MusicUniverse = () => {
         : musicData;
       
       // 设置加载优先级和错误重试
+      const getOptimizedImageUrl = (originalCoverPath) => {
+        if (!originalCoverPath) return null;
+        const fileName = path.parse(originalCoverPath).name;
+        return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
+      };
+
       const loadTexture = (item, retryCount = 0) => {
         const maxRetries = 2;
-        const textureUrl = isMobile && item.coverMobile 
-          ? `${process.env.PUBLIC_URL}/optimized-images/${path.parse(item.cover).name}.webp` // 优先使用优化后的 WebP 图片
-          : `${process.env.PUBLIC_URL}/${item.cover}`;
+        const textureUrl = isMobile && item.coverMobile
+          ? getOptimizedImageUrl(item.coverMobile) || `${process.env.PUBLIC_URL}/${item.coverMobile}`
+          : getOptimizedImageUrl(item.cover) || `${process.env.PUBLIC_URL}/${item.cover}`;
           
         loader.load(
           textureUrl,
