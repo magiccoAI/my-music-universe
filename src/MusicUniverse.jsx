@@ -254,7 +254,6 @@ const MusicUniverse = () => {
           <WebGLContextHandler />
           <CameraSetup />
           <KeyboardControls />
-          <OrbitControls enableRotate={false} enableZoom={false} enablePan={true} />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           {currentTheme === 'night' && <Stars />}
