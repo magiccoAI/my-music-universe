@@ -11,9 +11,13 @@ import UniverseNavigation from '../components/UniverseNavigation';
 import './ArchivePage.css';
 
 const parseDate = (dateString) => {
+  if (typeof dateString !== 'string' || !dateString) {
+    console.error("日期格式不匹配：传入的日期字符串无效或为空", dateString);
+    return new Date(); // 返回一个默认日期，避免程序崩溃
+  }
   const match = dateString.match(/(\d{4})年(\d{2})月(\d{2})日 (\d{2}):(\d{2})/);
   if (!match) {
-    console.error("日期格式不匹配:", dateString);
+    console.error("日期格式不匹配，原始字符串:", dateString);
     return new Date(); // 返回一个默认日期，避免程序崩溃
   }
   const [year, month, day, hour, minute] = match.slice(1);
@@ -55,9 +59,9 @@ const ArchivePage = () => {
         // 计算音乐旅程天数
         if (musicJson.length > 0) {
           const firstMusicDate = musicJson.reduce((minDate, currentMusic) => {
-            const currentDate = parseDate(currentMusic.date);
+            const currentDate = currentMusic.date ? parseDate(currentMusic.date) : new Date(); // 确保 currentMusic.date 存在
             return currentDate < minDate ? currentDate : minDate;
-          }, parseDate(musicJson[0].date)); // 初始化为第一个音乐的日期
+          }, musicJson[0].date ? parseDate(musicJson[0].date) : new Date()); // 初始化为第一个音乐的日期，并处理可能为空的情况
 
           const today = new Date();
           const diffTime = Math.abs(today.getTime() - firstMusicDate.getTime());

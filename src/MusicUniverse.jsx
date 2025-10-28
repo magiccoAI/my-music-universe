@@ -55,21 +55,49 @@ const MusicUniverse = () => {
       .catch((error) => console.error('Error loading music data:', error));
   }, []);
 
+  // 检测是否为移动设备
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+      setIsMobile(mobileRegex.test(userAgent));
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     if (musicData.length > 0) {
       const loader = new THREE.TextureLoader();
       let loadedCount = 0;
       const totalTextures = musicData.length;
       const newTextures = {};
-
-      musicData.forEach((item) => {
+      
+      // 移动端优化：减少同时加载的纹理数量，使用低分辨率图片
+      const optimizedMusicData = isMobile 
+        ? musicData.slice(0, Math.min(15, musicData.length)) // 移动端限制加载数量
+        : musicData;
+      
+      // 设置加载优先级和错误重试
+      const loadTexture = (item, retryCount = 0) => {
+        const maxRetries = 2;
+        const textureUrl = isMobile && item.coverMobile 
+          ? `${process.env.PUBLIC_URL}/${item.coverMobile}` // 使用移动端优化图片（如果有）
+          : `${process.env.PUBLIC_URL}/${item.cover}`;
+          
         loader.load(
-          `${process.env.PUBLIC_URL}/${item.cover}`,
+          textureUrl,
           (texture) => {
+            // 成功加载
+            texture.minFilter = THREE.LinearFilter; // 优化渲染性能
             newTextures[item.id] = texture;
             loadedCount++;
             setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-            if (loadedCount === totalTextures) {
+            if (loadedCount === optimizedMusicData.length) {
               setTextures(newTextures);
               setAllTexturesLoaded(true);
             }
@@ -77,17 +105,27 @@ const MusicUniverse = () => {
           undefined,
           (error) => {
             console.error('Error loading texture:', item.cover, error);
-            loadedCount++; // Still increment to avoid infinite loading state
-            setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-            if (loadedCount === totalTextures) {
-              setTextures(newTextures);
-              setAllTexturesLoaded(true);
+            // 尝试重试加载
+            if (retryCount < maxRetries) {
+              console.log(`Retrying texture load (${retryCount + 1}/${maxRetries}):`, item.cover);
+              setTimeout(() => loadTexture(item, retryCount + 1), 1000); // 延迟1秒后重试
+            } else {
+              // 重试失败，继续加载其他纹理
+              loadedCount++;
+              setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
+              if (loadedCount === optimizedMusicData.length) {
+                setTextures(newTextures);
+                setAllTexturesLoaded(true);
+              }
             }
           }
         );
-      });
+      };
+      
+      // 开始加载纹理
+      optimizedMusicData.forEach(item => loadTexture(item));
     }
-  }, [musicData]);
+  }, [musicData, isMobile]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -167,6 +205,31 @@ const MusicUniverse = () => {
     return null;
   };
 
+  const WebGLContextHandler = () => {
+    const { gl } = useThree();
+
+    useEffect(() => {
+      const handleContextLost = (event) => {
+        event.preventDefault();
+        console.warn('WebGL Context Lost. Attempting to restore...');
+      };
+
+      const handleContextRestored = () => {
+        console.log('WebGL Context Restored!');
+      };
+
+      gl.domElement.addEventListener('webglcontextlost', handleContextLost, false);
+      gl.domElement.addEventListener('webglcontextrestored', handleContextRestored, false);
+
+      return () => {
+        gl.domElement.removeEventListener('webglcontextlost', handleContextLost);
+        gl.domElement.removeEventListener('webglcontextrestored', handleContextRestored);
+      };
+    }, [gl]);
+
+    return null;
+  };
+
   return (
     <div className={`w-screen h-screen ${themes[currentTheme] || themes.default}`}>
       {!allTexturesLoaded && (
@@ -181,14 +244,8 @@ const MusicUniverse = () => {
           camera={{ fov: 75, near: 0.1, far: 1000 }}
           className={isConnectionsPageActive ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
           dpr={[1, 2]} // Set device pixel ratio to improve performance on high-res screens
-          onContextLost={(event) => {
-            event.preventDefault();
-            console.warn('WebGL Context Lost. Attempting to restore...');
-          }}
-          onContextRestored={() => {
-            console.log('WebGL Context Restored!');
-          }}
         >
+          <WebGLContextHandler />
           <CameraSetup />
           <KeyboardControls />
           <ambientLight intensity={0.5} />
