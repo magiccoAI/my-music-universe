@@ -211,35 +211,64 @@ const MusicUniverse = () => {
   // 键盘控制组件（仅电脑端）
   const KeyboardControls = () => {
     const { camera } = useThree();
-    const speed = 0.5;
+    const moveSpeed = 0.8;
+    const orbitRadius = useRef(10);
+    const orbitAngle = useRef(0);
 
     useEffect(() => {
-      if (isMobile) return; // 移动设备上禁用键盘控制
+      if (isMobile) return;
+
+      const updateCameraPosition = () => {
+        camera.position.x = Math.sin(orbitAngle.current) * orbitRadius.current;
+        camera.position.z = Math.cos(orbitAngle.current) * orbitRadius.current;
+        camera.lookAt(0, 0, 0);
+      };
 
       const handleKeyDown = (event) => {
         switch (event.key) {
           case 'ArrowLeft':
-            camera.position.x -= speed;
+            // 向左环绕
+            orbitAngle.current += 0.1;
+            updateCameraPosition();
             break;
           case 'ArrowRight':
-            camera.position.x += speed;
+            // 向右环绕
+            orbitAngle.current -= 0.1;
+            updateCameraPosition();
             break;
           case 'ArrowUp':
-            camera.position.z -= speed;
+            // 拉近
+            // if (orbitRadius.current > 3) { // 移除限制，允许穿透
+              orbitRadius.current -= moveSpeed;
+              updateCameraPosition();
+            // }
             break;
           case 'ArrowDown':
-            camera.position.z += speed;
+            // 拉远
+            if (orbitRadius.current < 25) {
+              orbitRadius.current += moveSpeed;
+              updateCameraPosition();
+            }
+            break;
+          case ' ':
+            // 重置
+            orbitRadius.current = 10;
+            orbitAngle.current = 0;
+            updateCameraPosition();
             break;
           default:
             break;
         }
       };
 
+      // 初始化相机位置
+      updateCameraPosition();
+
       window.addEventListener('keydown', handleKeyDown);
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       };
-    }, [camera, speed, isMobile]); // 添加 isMobile 依赖
+    }, [camera, isMobile]);
 
     return null;
   };

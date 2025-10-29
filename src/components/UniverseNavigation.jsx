@@ -21,7 +21,7 @@ const UniverseNavigation = () => {
 
   // 移动端导航
   const MobileNavigation = () => (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-50 backdrop-filter backdrop-blur-lg p-4">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-50 backdrop-filter backdrop-blur-xl p-4">
       <div className="flex justify-between items-center">
         <span className="text-white text-lg font-bold">音乐宇宙</span>
         <button 
@@ -36,35 +36,35 @@ const UniverseNavigation = () => {
         <div className="mt-4 pb-2 flex flex-col space-y-4">
           <Link
             to="/"
-            className={`${isActive('/') ? 'text-blue-400' : 'text-white'} px-2 py-3`}
+            className={`${isActive('/') ? 'text-blue-400' : 'text-white'} px-2 py-3 hover:text-blue-300 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300`}
             onClick={() => setMenuOpen(false)}
           >
             首页
           </Link>
           <Link
             to="/music-universe"
-            className={`${isActive('/music-universe') ? 'text-blue-400' : 'text-white'} px-2 py-3`}
+            className={`${isActive('/music-universe') ? 'text-blue-400' : 'text-white'} px-2 py-3 hover:text-blue-300 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300`}
             onClick={() => setMenuOpen(false)}
           >
             音乐封面宇宙
           </Link>
           <Link
             to="/music-universe/connections"
-            className={`${isActive('/music-universe/connections') ? 'text-blue-400' : 'text-white'} px-2 py-3`}
+            className={`${isActive('/music-universe/connections') ? 'text-blue-400' : 'text-white'} px-2 py-3 hover:text-blue-300 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300`}
             onClick={() => setMenuOpen(false)}
           >
             音乐风格
           </Link>
           <Link
             to="/music-universe/search"
-            className={`${isActive('/music-universe/search') ? 'text-blue-400' : 'text-white'} px-2 py-3`}
+            className={`${isActive('/music-universe/search') ? 'text-blue-400' : 'text-white'} px-2 py-3 hover:text-blue-300 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300`}
             onClick={() => setMenuOpen(false)}
           >
             搜索
           </Link>
           <Link
             to="/archive"
-            className={`${isActive('/archive') ? 'text-blue-400' : 'text-white'} px-2 py-3`}
+            className={`${isActive('/archive') ? 'text-blue-400' : 'text-white'} px-2 py-3 hover:text-blue-300 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300`}
             onClick={() => setMenuOpen(false)}
           >
             我的音乐时光机
@@ -76,7 +76,7 @@ const UniverseNavigation = () => {
 
   // 桌面端导航
   const DesktopNavigation = () => (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-20 backdrop-filter backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-center h-16 space-x-8">
           <Link
