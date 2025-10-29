@@ -6,6 +6,7 @@ import WordCloudDisplay from '../components/WordCloudDisplay';
 import SpecialCollection from '../components/SpecialCollection';
 import MusicSlotMachine from '../components/MusicSlotMachine';
 import MouseParticleEffect from '../components/MouseParticleEffect';
+import StarBackground from '../components/StarBackground';
 import UniverseNavigation from '../components/UniverseNavigation';
 
 import './ArchivePage.css';
@@ -164,7 +165,7 @@ const ArchivePage = () => {
       {/* 背景星空效果 */}
       <div className="stars-background"></div>
       <div className="gradient-overlay"></div>
-      
+
       {/* 导航栏 */}
       <UniverseNavigation />
 
@@ -172,14 +173,13 @@ const ArchivePage = () => {
       <section className="hero-section">
         <div className="hero-content">
           <div className="hero-titles">
-            <h1 className="hero-title">
-              <span className="title-accent">2022-2023</span>
-              <span className="title-main">音乐时光机</span>
-              <span className="title-sub">· 轨迹 ·</span>
-            </h1>
-            <h2 className="hero-subtitle">
+            <div className="hero-title">
+              <h2 className="title-main">音乐时光机</h2>
+              <span className="title-sub"> 2022-2023·轨迹 </span>
+            </div>
+            <span className="hero-subtitle">
               个人公众号：「D小调片段记录」的音乐分享歌单
-            </h2>
+            </span>
           </div>
           
           <div className="stats-grid">
@@ -222,7 +222,7 @@ const ArchivePage = () => {
         <div className="section-header">
           <div className="section-icon">🌠</div>
           <h2 className="section-title">音乐词云星系</h2>
-          <p className="section-subtitle">点击探索你的音乐宇宙</p>
+         
         </div>
         
         <div className="galaxy-controls">
@@ -266,7 +266,7 @@ const ArchivePage = () => {
             />
           )}
         </div>
-        <div className="section-glow"></div>
+
       </section>
 
     
@@ -286,7 +286,7 @@ const ArchivePage = () => {
         <div className="special-collection-container">
           <SpecialCollection musicData={musicData} />
         </div>
-        <div className="section-glow"></div>
+
       </section>
 
 

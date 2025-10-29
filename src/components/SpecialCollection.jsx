@@ -83,7 +83,39 @@ function SpecialCollection() {
   
   const [favMusicList, setFavMusicList] = useState([]);
   const [showAllCollections, setShowAllCollections] = useState(false);
+  const [showMusicReport, setShowMusicReport] = useState(true); // 新增状态变量
   const [allMusicData, setAllMusicData] = useState([]);
+  const [showModal, setShowModal] = useState(false); // 控制模态框显示
+  const [selectedImage, setSelectedImage] = useState(''); // 存储选中的图片URL
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // 存储选中图片的索引
+
+  const handleImageClick = (imageUrl, index) => {
+    setSelectedImage(imageUrl);
+    setShowModal(true);
+    setSelectedImageIndex(index);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedImage('');
+    setSelectedImageIndex(null);
+  };
+
+  const goToNextImage = () => {
+    if (selectedImageIndex !== null && musicReports.length > 0) {
+      const nextIndex = (selectedImageIndex + 1) % musicReports.length;
+      setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[nextIndex].id}.png`);
+      setSelectedImageIndex(nextIndex);
+    }
+  };
+
+  const goToPreviousImage = () => {
+    if (selectedImageIndex !== null && musicReports.length > 0) {
+      const prevIndex = (selectedImageIndex - 1 + musicReports.length) % musicReports.length;
+      setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[prevIndex].id}.png`);
+      setSelectedImageIndex(prevIndex);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,7 +174,7 @@ function SpecialCollection() {
 
   return (
     <div className="special-collection" style={{
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+      background: 'radial-gradient(circle at top left, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 50%), radial-gradient(circle at bottom right, rgba(100, 100, 255, 0.05) 0%, rgba(100, 100, 255, 0) 50%)',
       minHeight: '100vh',
       padding: '20px',
       color: '#e6e6e6'
@@ -261,176 +293,6 @@ function SpecialCollection() {
         </div>
       </div>
 
-      {/* 新增：音乐报告幻灯片查看器 */}
-      <div className="music-report-slider" style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: '20px',
-        padding: '30px',
-        marginBottom: '30px',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-      }}>
-        <h3 style={{
-          color: '#ffffff',
-          marginBottom: '25px',
-          textAlign: 'center',
-          fontSize: '1.5rem',
-          fontWeight: '600',
-          textShadow: '0 2px 4px rgba(0,0,0,0.5)'
-        }}>📊 music report</h3>
-        
-        <div className="slider-container" style={{
-          position: 'relative',
-          maxWidth: '900px',
-          margin: '0 auto',
-          overflow: 'hidden',
-          borderRadius: '15px',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
-        }}>
-          {/* 幻灯片轨道 */}
-          <div className="slides-track" style={{
-            display: 'flex',
-            transition: 'transform 0.5s ease-in-out',
-            transform: `translateX(-${currentSlide * 100}%)`
-          }}>
-            {musicReports.map((report, index) => (
-              <div 
-                key={report.id}
-                className="slide"
-                style={{
-                  minWidth: '100%',
-                  height: '500px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  background: 'rgba(0, 0, 0, 0.3)'
-                }}
-              >
-                <img 
-                  src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-for-spcllection1026-${report.id}.png`}
-                  alt={report.name}
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain',
-                    borderRadius: '8px'
-                  }}
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/800x600/1a1a2e/ffffff?text=音乐报告图片加载中';
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* 导航按钮 */}
-          <button 
-            onClick={prevSlide}
-            className="slider-nav prev"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '15px',
-              transform: 'translateY(-50%)',
-              background: 'rgba(178, 204, 244, 0.2)',
-              border: 'none',
-              width: '50px',
-              height: '50px',
-              borderRadius: '50%',
-              color: 'white',
-              fontSize: '20px',
-              cursor: 'pointer',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.3)';
-              e.target.style.transform = 'translateY(-50%) scale(1.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-              e.target.style.transform = 'translateY(-50%) scale(1)';
-            }}
-          >
-            ‹
-          </button>
-          
-          <button 
-            onClick={nextSlide}
-            className="slider-nav next"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              right: '15px',
-              transform: 'translateY(-50%)',
-              background: 'rgba(143, 187, 243, 0.44)',
-              border: 'none',
-              width: '50px',
-              height: '50px',
-              borderRadius: '50%',
-              color: 'white',
-              fontSize: '20px',
-              cursor: 'pointer',
-              backdropFilter: 'blur(10px)',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(197, 216, 243, 0.3)';
-              e.target.style.transform = 'translateY(-50%) scale(1.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(158, 232, 250, 0.2)';
-              e.target.style.transform = 'translateY(-50%) scale(1)';
-            }}
-          >
-            ›
-          </button>
-
-          {/* 指示器点 */}
-          <div className="slider-dots" style={{
-            position: 'absolute',
-            bottom: '20px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: '10px'
-          }}>
-            {musicReports.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  borderRadius: '50%',
-                  border: 'none',
-                  background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.65)',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* 幻灯片信息 */}
-        <div style={{
-          textAlign: 'center',
-          marginTop: '20px',
-          color: '#cccccc',
-          fontSize: '0.9rem'
-        }}>
-          第 {currentSlide + 1} / {musicReports.length} 张 - {musicReports[currentSlide].name}
-        </div>
-      </div>
-
       {/* 最爱收藏列表 - 保持不变 */}
       <div className="all-collections-list" style={{
         background: 'rgba(255, 255, 255, 0.05)',
@@ -440,9 +302,9 @@ function SpecialCollection() {
         border: '1px solid rgba(255, 255, 255, 0.1)',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
       }}>
-        <h3 
-          onClick={() => setShowAllCollections(!showAllCollections)} 
-          style={{ 
+        <h3
+          onClick={() => setShowAllCollections(!showAllCollections)}
+          style={{
             cursor: 'pointer',
             color: '#ffffff',
             marginBottom: '15px',
@@ -450,11 +312,12 @@ function SpecialCollection() {
             alignItems: 'center',
             gap: '10px',
             fontSize: '1.3rem',
-            fontWeight: '600'
+            fontWeight: '600',
+            justifyContent: 'space-between' // 确保左对齐和箭头右侧
           }}
         >
           <span>📜 🌟最爱收藏 列表（{favMusicList.length}首）</span>
-          <span style={{ fontSize: '1rem' }}>{showAllCollections ? '▲' : '▼'}</span>
+          <span style={{ fontSize: '1.5rem' }}>{showAllCollections ? '▲' : '▼'}</span>
         </h3>
         
         {showAllCollections && (
@@ -512,6 +375,230 @@ function SpecialCollection() {
           </div>
         )}
       </div>
+      {/* 新增：音乐报告幻灯片查看器 */}
+      <div className="music-report-slider" style={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '20px',
+        padding: '30px',
+        marginBottom: '30px',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+      }}>
+        <h3 
+          onClick={() => setShowMusicReport(!showMusicReport)} // 添加点击事件
+          style={{
+            cursor: 'pointer',
+            color: '#ffffff',
+            marginBottom: '15px',
+            fontSize: '1.3rem',
+            fontWeight: '600',
+            textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+            display: 'flex', // 使内容居中
+            alignItems: 'center', // 垂直居中
+            justifyContent: 'space-between', // 确保左对齐和箭头右侧
+            gap: '10px' // 标题和箭头之间的间距
+          }}
+        >
+          <span>🎵 music report</span>
+          <span style={{ fontSize: '1.5rem' }}>{showMusicReport ? '▲' : '▼'}</span> {/* 添加折叠/展开指示 */}
+        </h3>
+        
+        {showMusicReport && ( // 根据状态变量条件渲染
+          <>
+            <div className="slider-container" style={{
+              position: 'relative',
+              maxWidth: '900px',
+              margin: '0 auto',
+              overflow: 'hidden',
+              borderRadius: '15px',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
+            }}>
+              {/* 幻灯片轨道 */}
+              <div className="slides-track" style={{
+                display: 'flex',
+                transition: 'transform 0.5s ease-in-out',
+                transform: `translateX(-${currentSlide * 100}%)`
+              }}>
+                {musicReports.map((report, index) => (
+                  <div 
+                    key={report.id}
+                    className="slide"
+                    style={{
+                      minWidth: '100%',
+                      height: 'auto',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      background: 'rgba(0, 0, 0, 0.3)'
+                    }}
+                  >
+                    <img 
+                      src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`}
+                      alt={report.name}
+                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`, index)}
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                        objectFit: 'contain',
+                        borderRadius: '8px',
+                        cursor: 'pointer' // 添加手型光标表示可点击
+                      }}
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/800x600/1a1a2e/ffffff?text=音乐报告图片加载中';
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* 导航按钮 */}
+              <button 
+                onClick={prevSlide}
+                className="slider-nav prev"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '15px',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(178, 204, 244, 0.2)',
+                  border: 'none',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  color: 'white',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+                  e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                  e.target.style.transform = 'translateY(-50%) scale(1)';
+                }}
+              >
+                ‹
+              </button>
+              
+              <button 
+                onClick={nextSlide}
+                className="slider-nav next"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '15px',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(143, 187, 243, 0.44)',
+                  border: 'none',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  color: 'white',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(197, 216, 243, 0.3)';
+                  e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(158, 232, 250, 0.2)';
+                  e.target.style.transform = 'translateY(-50%) scale(1)';
+                }}
+              >
+                ›
+              </button>
+
+              {/* 指示器点 */}
+              <div className="slider-dots" style={{
+                position: 'absolute',
+                bottom: '20px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                display: 'flex',
+                gap: '10px'
+              }}>
+                {musicReports.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      border: 'none',
+                      background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.65)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* 幻灯片信息 */}
+            <div style={{
+              textAlign: 'center',
+              marginTop: '20px',
+              color: '#cccccc',
+              fontSize: '0.9rem'
+            }}>
+              第 {currentSlide + 1} / {musicReports.length} 张 - {musicReports[currentSlide].name}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* 图片放大模态框 */}
+      {showModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[1000] p-4"
+          onClick={closeModal} // 点击背景关闭模态框
+        >
+          <div 
+            className="relative max-w-full max-h-full"
+            onClick={(e) => e.stopPropagation()} // 阻止点击图片时关闭模态框
+          >
+            <img 
+              src={selectedImage}
+              alt="Enlarged Music Report"
+              className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+            />
+            {/* 上一张按钮 */}
+            <button
+              onClick={goToPreviousImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl font-bold rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 bg-gradient-to-r from-orange-500 to-pink-600 shadow-lg shadow-pink-500/50 hover:-translate-y-1"
+            >
+              &lt;
+            </button>
+            {/* 下一张按钮 */}
+            <button
+              onClick={goToNextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl font-bold rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 bg-gradient-to-r from-orange-500 to-pink-600 shadow-lg shadow-pink-500/50 hover:-translate-y-1"
+            >
+              &gt;
+            </button>
+            <button 
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-white text-3xl font-bold bg-gray-800 bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-75 transition-all duration-200"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

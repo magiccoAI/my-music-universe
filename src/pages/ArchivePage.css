@@ -126,7 +126,6 @@
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   margin-bottom: 1rem;
   display: flex;
@@ -135,7 +134,7 @@
 }
 
 .title-accent {
-  color: rgba(237, 163, 34, 0.548); /* 略带金色的色调 */
+  color: rgba(237, 162, 34, 0); /* 略带金色的色调 */
   font-size: 0.7em;
   font-weight: 300;
 }
@@ -145,17 +144,18 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-size: 3rem; /* Increased font size with rem */
 }
 
 .title-sub {
-  font-size: 0.6em;
+  font-size: 1rem; /* Decreased font size with rem */
   font-weight: 300;
-  color: rgba(255, 215, 0, 0.7); /* 略带金色的色调 */
+  color: rgba(255, 255, 255, 0.7); 
 }
 
-.hero-subtitle {
+.subtitle-update {
   font-size: 1.2rem;
-  color: rgba(255, 215, 0, 0.8); /* 略带金色的色调 */
+  color: rgba(255, 217, 0, 0); /* 略带金色的色调 */
   font-weight: 300;
   margin-bottom: 3rem;
 }
@@ -172,8 +172,8 @@
 
 .stat-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  /* background: rgba(255, 255, 255, 0.05); */
+  /* backdrop-filter: blur(10px); */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 2rem 1.5rem;
@@ -191,6 +191,18 @@
   
   .hero-title {
     flex-direction: column;
+  }
+
+  .title-main {
+    font-size: 2rem;
+  }
+
+  .title-sub {
+    font-size: 0.8rem;
+  }
+
+  .subtitle-update {
+    font-size: 0.7rem;
   }
   
   .stats-grid {
@@ -342,27 +354,9 @@
   transition: all 0.3s ease;
 }
 
-.section-container[data-hovered="true"] {
-  transform: translateY(-5px);
-}
 
-.section-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: -1;
-}
 
-.section-container:hover .section-glow {
-  opacity: 1;
-}
+
 
 .section-header {
   text-align: center;
@@ -556,7 +550,7 @@
 /* 页脚优化 */
 .page-footer {
   position: relative;
-  background: rgba(12, 12, 43, 0.8);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 50%, rgba(137, 247, 254, 0.5) 100%);
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 3rem 2rem;
