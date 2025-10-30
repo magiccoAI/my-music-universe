@@ -3,7 +3,7 @@ name: Deploy React App to GitHub Pages
 
 on:
   push:
-    branches: ["main", "mobile-optimize"]
+    branches: ["main", "mobile-optimize", "feature/1029-mobile-cover-optimization"]
   
   # 允许手动触发
   workflow_dispatch:
