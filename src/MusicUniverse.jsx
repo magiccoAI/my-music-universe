@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext, useCallback } from 'react';
+import useMusicData from './hooks/useMusicData';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
 import Stars from './components/StarsOnly';
@@ -10,117 +11,92 @@ import Cover from './components/Cover';
 import InfoCard from './components/InfoCard';
 
 const MusicUniverse = () => {
-  const [musicData, setMusicData] = useState([]);
+  const { musicData, loading, error } = useMusicData();
+  const { isConnectionsPageActive } = useContext(UniverseContext);
   const [textures, setTextures] = useState({});
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [allTexturesLoaded, setAllTexturesLoaded] = useState(false);
-  const [selectedMusic, setSelectedMusic] = useState(null);
-  const [hoveredMusic, setHoveredMusic] = useState(null);
-  const [currentTheme, setCurrentTheme] = useState('night');
-  const { isConnectionsPageActive } = useContext(UniverseContext);
+  const [additionalTextures, setAdditionalTextures] = useState({});
+  const [currentTheme, setCurrentTheme] = useState('night'); // 默认主题设置为night
   const [showHint, setShowHint] = useState(true);
-  
-  // 检测是否为移动设备
-  const [isMobile, setIsMobile] = useState(false);
-  const [touchStart, setTouchStart] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const [hoveredMusic, setHoveredMusic] = useState(null);
+  const [positionedMusicData, setPositionedMusicData] = useState([]);
 
   const themes = {
-    day: "bg-gradient-to-b from-blue-900 via-blue-600 to-blue-300",
-    evening: "evening-symmetric",
-    night: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800",
-    default: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800",
+    day: "bg-gradient-to-b from-blue-900 via-blue-600 to-blue-300", // 白天：飞机上看到的深蓝到浅蓝渐变
+    // 替换您当前的傍晚渐变代码
+    evening: "evening-symmetric", // 傍晚：日落海面多色渐变
+    night: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800", // 夜晚：银河星系的深色弥散渐变
+    default: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800", // Add a default theme
   };
 
-  useEffect(() => {
-    fetch(process.env.PUBLIC_URL + '/data/data.json')
-      .then((res) => res.json())
-      .then((data) => {
-        const processedData = data.map((item, index) => {
-          const randomOffsetX = (Math.random() - 0.5) * 25;
-          const randomOffsetY = (Math.random() - 0.5) * 25;
-          const randomOffsetZ = (Math.random() - 0.5) * 25;
-          const rotationX = (Math.random() - 0.5) * Math.PI * 0.4;
-          const rotationY = (Math.random() - 0.5) * Math.PI * 0.4;
-          const rotationZ = (Math.random() - 0.5) * Math.PI * 0.4;
-          const scale = 0.8 + (Math.random() * 0.4);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-          return {
-            ...item,
-            position: [randomOffsetX, randomOffsetY, randomOffsetZ],
-            rotation: [rotationX, rotationY, rotationZ],
-            scale: scale,
-          };
-        });
-        setMusicData(processedData);
-      })
-      .catch((error) => console.error('Error loading music data:', error));
-  }, []);
-
-  // 检测移动设备
   useEffect(() => {
-    const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-      setIsMobile(mobileRegex.test(userAgent));
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
     };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
-  // 触摸事件处理
-  const handleTouchStart = (e) => {
-    if (!isMobile) return;
-    setTouchStart({
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    });
-    setIsDragging(false); // 重置拖动状态
-  };
+  const handleCoverVisible = useCallback((id) => {
+    if (isMobile && !textures[id] && !additionalTextures[id]) {
+      const itemToLoad = musicData.find(item => item.id === id);
+      if (itemToLoad) {
+        const loader = new THREE.TextureLoader();
+        const getOptimizedImageUrl = (originalCoverPath) => {
+          const fileName = originalCoverPath.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '');
+          return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
+        };
 
-  const handleTouchMove = (e) => {
-    if (!isMobile || !touchStart) return;
-    
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - touchStart.x;
-    const deltaY = touch.clientY - touchStart.y;
-    
-    // 如果移动距离超过阈值，认为是拖动而非点击
-    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-      setIsDragging(true);
+        loader.load(
+          getOptimizedImageUrl(itemToLoad.cover),
+          (texture) => {
+            setAdditionalTextures(prev => ({ ...prev, [id]: texture }));
+          },
+          undefined,
+          (error) => {
+            console.error('Error loading additional texture:', itemToLoad.cover, error);
+          }
+        );
+      }
     }
-  };
+  }, [isMobile, textures, musicData, additionalTextures]);
 
-  const handleTouchEnd = (e) => {
-    if (!isMobile || !touchStart) return;
-    
-    const touch = e.changedTouches[0];
-    const deltaX = touch.clientX - touchStart.x;
-    const deltaY = touch.clientY - touchStart.y;
-    
-    // 如果是点击（移动距离很小），不是拖动
-    if (Math.abs(deltaX) < 5 && Math.abs(deltaY) < 5) {
-      // 这里可以处理点击逻辑，比如选择专辑等
-      console.log('Touch click detected');
+  useEffect(() => {
+    if (musicData.length > 0 && positionedMusicData.length === 0) {
+      const newPositionedData = musicData.map(item => {
+        if (!item.position) {
+          // Generate random positions for items without a defined position
+          const x = (Math.random() - 0.5) * 20; // -10 to 10
+          const y = (Math.random() - 0.5) * 20; // -10 to 10
+          const z = (Math.random() - 0.5) * 20; // -10 to 10
+          return { ...item, position: [x, y, z] };
+        }
+        return item;
+      });
+      setPositionedMusicData(newPositionedData);
     }
-    
-    setTouchStart(null);
-    setIsDragging(false);
-  };
+  }, [musicData, positionedMusicData]);
 
   useEffect(() => {
     if (musicData.length > 0) {
       const loader = new THREE.TextureLoader();
       let loadedCount = 0;
-      const totalTextures = musicData.length; // 移除移动端图片加载数量限制
+      const totalTextures = musicData.length;
       
       const newTextures = {};
       
       const getOptimizedImageUrl = (originalCoverPath) => {
         if (!originalCoverPath) return null;
-        const fileName = originalCoverPath.split('/').pop().split('.')[0];
+        const parts = originalCoverPath.split('/');
+        const baseNameWithExtension = parts[parts.length - 1];
+        const lastDotIndex = baseNameWithExtension.lastIndexOf('.');
+        const fileName = lastDotIndex !== -1 ? baseNameWithExtension.substring(0, lastDotIndex) : baseNameWithExtension;
         return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
       };
 
@@ -137,7 +113,7 @@ const MusicUniverse = () => {
             newTextures[item.id] = texture;
             loadedCount++;
             setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-            if (loadedCount === musicData.length) { // 修正加载进度计算
+            if (loadedCount === totalTextures) { // 修正加载进度计算
               setTextures(newTextures);
               setAllTexturesLoaded(true);
             }
@@ -151,7 +127,7 @@ const MusicUniverse = () => {
             } else {
               loadedCount++;
               setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-              if (loadedCount === musicData.length) { // 修正加载进度计算
+              if (loadedCount === totalTextures) { // 修正加载进度计算
                 setTextures(newTextures);
                 setAllTexturesLoaded(true);
               }
@@ -160,7 +136,8 @@ const MusicUniverse = () => {
         );
       };
       
-      musicData.forEach(item => loadTexture(item)); // 直接使用 musicData
+      const itemsToLoad = musicData;
+      itemsToLoad.forEach(item => loadTexture(item));
     }
   }, [musicData, isMobile]);
 
@@ -303,9 +280,6 @@ const MusicUniverse = () => {
   return (
     <div 
       className={`w-screen h-screen ${themes[currentTheme] || themes.default}`}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     >
       {!allTexturesLoaded && (
         <div className="absolute inset-0 flex items-center justify-center text-white text-2xl">
@@ -333,7 +307,7 @@ const MusicUniverse = () => {
           <pointLight position={[10, 10, 10]} />
           {currentTheme === 'night' && <Stars />}
 
-          {musicData.map((data) => (
+          {positionedMusicData.map((data) => (
             <Cover
               key={data.id}
               data={data}
@@ -341,8 +315,9 @@ const MusicUniverse = () => {
               rotation={data.rotation}
               scale={data.scale}
               onClick={handleCoverClick}
-              texture={textures[data.id]}
-              isMobile={isMobile} // 传递移动设备状态给Cover组件
+              texture={textures[data.id] || additionalTextures[data.id]}
+              onVisible={handleCoverVisible}
+              isMobile={isMobile}
             />
           ))}
           {hoveredMusic && <InfoCard music={hoveredMusic.data} position={hoveredMusic.position} onCardClose={() => setHoveredMusic(null)} />}

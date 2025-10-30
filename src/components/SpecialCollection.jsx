@@ -234,6 +234,7 @@ function SpecialCollection() {
                   <img
                     src={`${process.env.PUBLIC_URL}/optimized-images/${album.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp`}
                     alt={album.title}
+                    loading="lazy" // Add lazy loading
                     style={{
                       width: '100%',
                       height: '100%',
@@ -242,7 +243,7 @@ function SpecialCollection() {
                     }}
                     onError={(e) => {
                       e.target.onerror = null; // Prevent infinite loop if fallback also fails
-                      e.target.src = `${process.env.PUBLIC_URL}/${album.cover}`;
+                       e.target.src = `${process.env.PUBLIC_URL}/${album.cover}`;
                     }}
                   />
                 </div>
@@ -400,7 +401,7 @@ function SpecialCollection() {
             gap: '10px' // 标题和箭头之间的间距
           }}
         >
-          <span>🎵 music report</span>
+          <span>🎵 歌词图景 music report</span>
           <span style={{ fontSize: '1.5rem' }}>{showMusicReport ? '▲' : '▼'}</span> {/* 添加折叠/展开指示 */}
         </h3>
         
@@ -436,6 +437,7 @@ function SpecialCollection() {
                     <img 
                       src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`}
                       alt={report.name}
+                      loading="lazy" // Add lazy loading
                       onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`, index)}
                       style={{
                         maxWidth: '100%',
