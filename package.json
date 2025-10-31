@@ -3,6 +3,7 @@
   "homepage": "https://magiccoAI.github.io/my-music-universe",
   "version": "0.1.0",
   "private": true,
+ 
   "dependencies": {
     "@p5-wrapper/react": "^4.4.1",
     "@react-spring/core": "^10.0.3",

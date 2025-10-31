@@ -307,17 +307,24 @@ const ArchivePage = () => {
       </section>
 
       {/* 页脚 */}
-      <footer className="page-footer">
-        <div className="footer-content">
-          <p className="footer-text">
-            <span className="footer-icon">🎵</span>
+      <div class="footer"> 
+        <div class="footer-content"> 
+          <p><strong>🎵 Music Universe</strong></p> 
+          <p>© 2025 音乐歌单可视化探索</p> 
+          <p>网站设计、代码实现与用户体验由「D小调片段记录」公众号作者与AI技术共同打造</p> 
+          <p class="disclaimer"> 
+            所有音乐专辑封面、艺术家名称及相关内容版权归其合法所有者所有<br /> 
+            本项目仅用于音乐发现与可视化体验，非商业用途 
+          </p> 
+           <p class="footer-text">
+            <span class="footer-icon">🎵</span>
             音乐让时光有了温度
-            <span className="footer-icon">🎵</span>
+            <span class="footer-icon">🎵</span>
           </p>
-          <div className="footer-decoration">✦ ✦ ✦</div>
-          <div className="footer-subtext">感谢每一段旋律的陪伴</div>
-        </div>
-      </footer>
+          <div class="footer-decoration">✦ ✦ ✦</div>
+          <div class="footer-text">感谢每一段旋律的陪伴</div>
+        </div> 
+      </div>
     </div>
     
   );

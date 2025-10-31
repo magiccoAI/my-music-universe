@@ -1,13 +1,71 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Plane } from '@react-three/drei';
 import * as THREE from 'three'; // Import THREE
 
-const Cover = ({ data, position, rotation, scale, onClick, texture, onVisible, isMobile }) => {
+const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
+  if (!originalCoverPath) return null;
+
+  if (!isMobile) {
+    // For desktop, return the original path for higher quality
+    return `${process.env.PUBLIC_URL}/${originalCoverPath}`;
+  }
+
+  // For mobile, return the optimized WebP path
+  const parts = originalCoverPath.split('/');
+  const baseNameWithExtension = parts[parts.length - 1];
+  const lastDotIndex = baseNameWithExtension.lastIndexOf('.');
+  const fileName = lastDotIndex !== -1 ? baseNameWithExtension.substring(0, lastDotIndex) : baseNameWithExtension;
+  return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
+};
+
+const Cover = ({ data, position, rotation, scale, onClick, onVisible, isMobile }) => {
   const meshRef = useRef();
   const { camera } = useThree();
   const frustum = new THREE.Frustum();
   const box = new THREE.Box3();
+
+  const [loadedTexture, setLoadedTexture] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadTexture = useCallback((item, retryCount = 0) => {
+    setIsLoading(true);
+    const maxRetries = 2;
+    const textureUrl = isMobile && item.coverMobile
+      ? getOptimizedImageUrl(item.coverMobile, isMobile) || `${process.env.PUBLIC_URL}/${item.coverMobile}`
+      : getOptimizedImageUrl(item.cover, isMobile) || `${process.env.PUBLIC_URL}/${item.cover}`;
+      
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      textureUrl,
+      (texture) => {
+        texture.minFilter = THREE.LinearFilter;
+        setLoadedTexture(texture);
+        setIsLoading(false);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading texture:', item.cover, error);
+        if (retryCount < maxRetries) {
+          console.log(`Retrying texture load (${retryCount + 1}/${maxRetries}):`, item.cover);
+          setTimeout(() => loadTexture(item, retryCount + 1), 1000);
+        } else {
+          setIsLoading(false);
+        }
+      }
+    );
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (!data || isLoading || loadedTexture) return;
+
+    // For desktop or if onVisible is not provided, load immediately
+    // For mobile, we rely on onVisible to trigger loading
+    // The actual loading will be triggered by the useFrame's frustum culling
+    if (!isMobile || !onVisible) {
+      loadTexture(data);
+    }
+  }, [data, isMobile, isLoading, loadedTexture, onVisible, loadTexture]);
 
   useFrame(({ clock }) => {
     // Subtle floating animation
@@ -16,14 +74,15 @@ const Cover = ({ data, position, rotation, scale, onClick, texture, onVisible, i
       meshRef.current.lookAt(camera.position);
 
       // Frustum culling for lazy loading
-      if (onVisible && isMobile) { // Only for mobile and if onVisible callback is provided
+      if (!loadedTexture && !isLoading) {
         camera.updateMatrixWorld();
         camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
         frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
 
         box.setFromObject(meshRef.current);
         if (frustum.intersectsBox(box)) {
-          onVisible(data.id); // Notify parent component that this cover is visible
+          // Trigger loading when visible
+          loadTexture(data);
         }
       }
     }
@@ -34,8 +93,20 @@ const Cover = ({ data, position, rotation, scale, onClick, texture, onVisible, i
     onClick(data, position);
   };
 
-  if (!texture) {
-    return null; // Don't render if texture is not loaded
+  if (!loadedTexture) {
+    // Render a placeholder or nothing if texture is not loaded
+    return (
+      <Plane
+        args={[1, 1]}
+        ref={meshRef}
+        position={position}
+        rotation={rotation}
+        scale={scale}
+        onClick={handleClick}
+      >
+        <meshBasicMaterial attach="material" color="#808080" /> {/* Default gray color */}
+      </Plane>
+    );
   }
 
   return (
@@ -48,7 +119,7 @@ const Cover = ({ data, position, rotation, scale, onClick, texture, onVisible, i
         scale={scale}
         onClick={handleClick}
       >
-        <meshBasicMaterial attach="material" map={texture} transparent />
+        <meshBasicMaterial attach="material" map={loadedTexture} transparent />
       </Plane>
     </>
   );

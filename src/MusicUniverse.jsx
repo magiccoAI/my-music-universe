@@ -13,10 +13,6 @@ import InfoCard from './components/InfoCard';
 const MusicUniverse = () => {
   const { musicData, loading, error } = useMusicData();
   const { isConnectionsPageActive } = useContext(UniverseContext);
-  const [textures, setTextures] = useState({});
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const [allTexturesLoaded, setAllTexturesLoaded] = useState(false);
-  const [additionalTextures, setAdditionalTextures] = useState({});
   const [currentTheme, setCurrentTheme] = useState('night'); // 默认主题设置为night
   const [showHint, setShowHint] = useState(true);
   const [hoveredMusic, setHoveredMusic] = useState(null);
@@ -43,29 +39,7 @@ const MusicUniverse = () => {
     };
   }, []);
 
-  const handleCoverVisible = useCallback((id) => {
-    if (isMobile && !textures[id] && !additionalTextures[id]) {
-      const itemToLoad = musicData.find(item => item.id === id);
-      if (itemToLoad) {
-        const loader = new THREE.TextureLoader();
-        const getOptimizedImageUrl = (originalCoverPath) => {
-          const fileName = originalCoverPath.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '');
-          return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
-        };
 
-        loader.load(
-          getOptimizedImageUrl(itemToLoad.cover),
-          (texture) => {
-            setAdditionalTextures(prev => ({ ...prev, [id]: texture }));
-          },
-          undefined,
-          (error) => {
-            console.error('Error loading additional texture:', itemToLoad.cover, error);
-          }
-        );
-      }
-    }
-  }, [isMobile, textures, musicData, additionalTextures]);
 
   useEffect(() => {
     if (musicData.length > 0 && positionedMusicData.length === 0) {
@@ -83,63 +57,7 @@ const MusicUniverse = () => {
     }
   }, [musicData, positionedMusicData]);
 
-  useEffect(() => {
-    if (musicData.length > 0) {
-      const loader = new THREE.TextureLoader();
-      let loadedCount = 0;
-      const totalTextures = musicData.length;
-      
-      const newTextures = {};
-      
-      const getOptimizedImageUrl = (originalCoverPath) => {
-        if (!originalCoverPath) return null;
-        const parts = originalCoverPath.split('/');
-        const baseNameWithExtension = parts[parts.length - 1];
-        const lastDotIndex = baseNameWithExtension.lastIndexOf('.');
-        const fileName = lastDotIndex !== -1 ? baseNameWithExtension.substring(0, lastDotIndex) : baseNameWithExtension;
-        return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
-      };
 
-      const loadTexture = (item, retryCount = 0) => {
-        const maxRetries = 2;
-        const textureUrl = isMobile && item.coverMobile
-          ? getOptimizedImageUrl(item.coverMobile) || `${process.env.PUBLIC_URL}/${item.coverMobile}`
-          : getOptimizedImageUrl(item.cover) || `${process.env.PUBLIC_URL}/${item.cover}`;
-          
-        loader.load(
-          textureUrl,
-          (texture) => {
-            texture.minFilter = THREE.LinearFilter;
-            newTextures[item.id] = texture;
-            loadedCount++;
-            setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-            if (loadedCount === totalTextures) { // 修正加载进度计算
-              setTextures(newTextures);
-              setAllTexturesLoaded(true);
-            }
-          },
-          undefined,
-          (error) => {
-            console.error('Error loading texture:', item.cover, error);
-            if (retryCount < maxRetries) {
-              console.log(`Retrying texture load (${retryCount + 1}/${maxRetries}):`, item.cover);
-              setTimeout(() => loadTexture(item, retryCount + 1), 1000);
-            } else {
-              loadedCount++;
-              setLoadingProgress(Math.round((loadedCount / totalTextures) * 100));
-              if (loadedCount === totalTextures) { // 修正加载进度计算
-                setTextures(newTextures);
-                setAllTexturesLoaded(true);
-              }
-            }
-          }
-        );
-      };
-      
-      const itemsToLoad = musicData;
-      itemsToLoad.forEach(item => loadTexture(item));
-    }
-  }, [musicData, isMobile]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -281,13 +199,9 @@ const MusicUniverse = () => {
     <div 
       className={`w-screen h-screen ${themes[currentTheme] || themes.default}`}
     >
-      {!allTexturesLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center text-white text-2xl">
-          加载资源中... {loadingProgress}%
-        </div>
-      )}
+
       <UniverseNavigation />
-      {allTexturesLoaded && (
+      {musicData.length > 0 && positionedMusicData.length > 0 && (
         <Canvas
           style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
           camera={{ fov: 75, near: 0.1, far: 1000 }}
@@ -315,8 +229,6 @@ const MusicUniverse = () => {
               rotation={data.rotation}
               scale={data.scale}
               onClick={handleCoverClick}
-              texture={textures[data.id] || additionalTextures[data.id]}
-              onVisible={handleCoverVisible}
               isMobile={isMobile}
             />
           ))}

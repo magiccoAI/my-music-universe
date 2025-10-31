@@ -61,8 +61,8 @@ const HomePage = () => {
           这里是公众号「D小调片段记录」的音乐歌单可视化空间。每一首歌像一颗星，映照着某一时刻的心绪和记忆。
         </p>
         <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-6">
-          你可以按风格穿行；可以沿年份追溯；也可以随意漫游。
-          音乐的轨迹会带你回到时间深处。
+          你可以按风格穿行；可以沿年份追溯；也可以随意漫游，
+          让音乐轨迹引领记忆旅程。
         </p>
         <div className="w-40 h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent opacity-60 mb-8" />
 
@@ -82,9 +82,7 @@ const HomePage = () => {
           </Link>
         </div>
 
-        <p className="text-gray-400 italic text-xs md:text-sm">
-          我把旋律当作生命的注脚，它们在此轻轻停驻。
-        </p>
+       
       </header>
 
       {/* external links */}
@@ -93,7 +91,7 @@ const HomePage = () => {
           href="https://music.163.com/playlist?id=14356909162&uct2=U2FsdGVkX1/gFqE4/o/Ao72aJFZQeOfU4v1DPeNGiAE="
           target="_blank"
           rel="noopener noreferrer"
-          title="歌单合集"
+          title="「D小调片段记录」过往公众号推文歌单合集"
           className="hover:opacity-80 transition"
         >
           <img src={NetEaseCloudMusicIcon} alt="网易云" className="w-8 h-8" />

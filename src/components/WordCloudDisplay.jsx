@@ -255,7 +255,7 @@ setIsLoading(false);
     <div className="wordcloud-display" ref={containerRef}>
       {type === 'style' ? (
         <img 
-          src={`${process.env.PUBLIC_URL}/images/musicstyle-cloud2.png`} 
+          src={`${process.env.PUBLIC_URL}/optimized-images/musicstyle-cloud2.webp`} 
           alt="Music Style Word Cloud" 
           style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
         />
