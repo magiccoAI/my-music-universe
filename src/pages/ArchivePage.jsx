@@ -85,7 +85,7 @@ const ArchivePage = () => {
     const fetchData = async () => {
       try {
         const [musicResponse, aggregatedResponse] = await Promise.all([
-          fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json'),
+          fetch(process.env.PUBLIC_URL + '/data/data.json'),
       fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json')
         ]);
 
@@ -97,6 +97,9 @@ const ArchivePage = () => {
           musicResponse.json(),
           aggregatedResponse.json()
         ]);
+
+        console.log("Fetched musicJson:", musicJson);
+        console.log("Fetched aggregatedJson:", aggregatedJson);
 
         setMusicData(musicJson);
 
@@ -370,7 +373,6 @@ const ArchivePage = () => {
           <div className="footer-section">    
           </div>
           <div className="footer-section">
-            <p>声明与版权</p>
             <p className="disclaimer">
               所有音乐专辑封面、艺术家名称及相关内容版权归其合法所有者所有<br />
               本项目仅用于音乐发现与可视化体验，非商业用途

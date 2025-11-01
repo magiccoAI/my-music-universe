@@ -111,13 +111,13 @@
 /* 英雄区域优化 */
 .hero-section {
   position: relative;
-  min-height: 100vh;
+  min-height: auto; /* Changed from 100vh to auto */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* Removed justify-content and align-items */
   text-align: center;
   padding: 8rem 2rem 4rem;
+  padding-bottom: 8rem; /* Added padding-bottom to ensure stats-grid is not cut off */
   z-index: 1;
 }
 
