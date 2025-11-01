@@ -12,6 +12,11 @@ const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
   }
 
   // For mobile, return the optimized WebP path
+  // Check if the path is already a webp image
+  if (originalCoverPath.endsWith('.webp')) {
+    return `${process.env.PUBLIC_URL}/${originalCoverPath}`;
+  }
+
   const parts = originalCoverPath.split('/');
   const baseNameWithExtension = parts[parts.length - 1];
   const lastDotIndex = baseNameWithExtension.lastIndexOf('.');
@@ -31,9 +36,16 @@ const Cover = ({ data, position, rotation, scale, onClick, onVisible, isMobile }
   const loadTexture = useCallback((item, retryCount = 0) => {
     setIsLoading(true);
     const maxRetries = 2;
-    const textureUrl = isMobile && item.coverMobile
-      ? getOptimizedImageUrl(item.coverMobile, isMobile) || `${process.env.PUBLIC_URL}/${item.coverMobile}`
-      : getOptimizedImageUrl(item.cover, isMobile) || `${process.env.PUBLIC_URL}/${item.cover}`;
+
+    let baseCoverPath = item.cover; // Default to item.cover
+
+    if (isMobile) {
+      if (item.coverMobile) {
+        baseCoverPath = item.coverMobile;
+      }
+    }
+
+    const textureUrl = getOptimizedImageUrl(baseCoverPath, isMobile);
       
     const loader = new THREE.TextureLoader();
     loader.load(
@@ -62,7 +74,7 @@ const Cover = ({ data, position, rotation, scale, onClick, onVisible, isMobile }
     // For desktop or if onVisible is not provided, load immediately
     // For mobile, we rely on onVisible to trigger loading
     // The actual loading will be triggered by the useFrame's frustum culling
-    if (!isMobile || !onVisible) {
+    if (!isMobile) {
       loadTexture(data);
     }
   }, [data, isMobile, isLoading, loadedTexture, onVisible, loadTexture]);
@@ -73,8 +85,8 @@ const Cover = ({ data, position, rotation, scale, onClick, onVisible, isMobile }
       meshRef.current.position.y = position[1] + Math.sin(clock.getElapsedTime() * 0.5 + data.id) * 0.1;
       meshRef.current.lookAt(camera.position);
 
-      // Frustum culling for lazy loading
-      if (!loadedTexture && !isLoading) {
+      // Frustum culling for lazy loading, only for desktop
+      if (!isMobile && !loadedTexture && !isLoading) {
         camera.updateMatrixWorld();
         camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
         frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));

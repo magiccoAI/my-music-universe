@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 import WordCloudDisplay from '../components/WordCloudDisplay';
@@ -8,6 +8,7 @@ import MusicSlotMachine from '../components/MusicSlotMachine';
 import MouseParticleEffect from '../components/MouseParticleEffect';
 import StarBackground from '../components/StarBackground';
 import UniverseNavigation from '../components/UniverseNavigation';
+import MusicPlayer from '../components/MusicPlayer'; // Import MusicPlayer
 
 import './ArchivePage.css';
 
@@ -38,12 +39,54 @@ const ArchivePage = () => {
   const [uniqueArtistsCount, setUniqueArtistsCount] = useState(0);
   const location = useLocation();
 
+  const [isPlaying, setIsPlaying] = useState(false); // New state for music playback
+  const audioRef = useRef(null); // Ref for the audio element
+  const [showBackToTopButton, setShowBackToTopButton] = useState(false); // State for back to top button visibility
+
+  // Effect to play/pause music when isPlaying changes
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Error playing audio:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  const togglePlayPause = () => {
+    setIsPlaying(prev => !prev);
+  };
+
+  // Effect to handle scroll for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 300) { // Show button after scrolling down 300px
+        setShowBackToTopButton(true);
+      } else {
+        setShowBackToTopButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [musicResponse, aggregatedResponse] = await Promise.all([
-          fetch(process.env.PUBLIC_URL + '/data/data.json'),
-      fetch(process.env.PUBLIC_URL + '/data/data.json')
+          fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json'),
+      fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json')
         ]);
 
         if (!musicResponse.ok || !aggregatedResponse.ok) {
@@ -166,8 +209,19 @@ const ArchivePage = () => {
       <div className="stars-background"></div>
       <div className="gradient-overlay"></div>
 
+      
+
       {/* 导航栏 */}
       <UniverseNavigation />
+
+      {/* Music Player */}
+      <audio ref={audioRef} src="/audio/Preview_Yotto_-_Lone_Machine_(mp3.pm).mp3" loop />
+      <MusicPlayer
+        isPlaying={isPlaying}
+        onTogglePlayPause={togglePlayPause}
+        songTitle="Lone Machine"
+        artistName="Yotto (Preview)"
+      />
 
       {/* 英雄区域 */}
       <section className="hero-section">
@@ -183,13 +237,13 @@ const ArchivePage = () => {
           </div>
           
           <div className="stats-grid">
-            {statsData.map((stat, index) => (
+            {statsData.map((stat) => (
               <div 
-                key={index}
+                key={stat.label}
                 className="stat-card"
-                onMouseEnter={() => handleSectionHover(`stat-${index}`)}
+                onMouseEnter={() => handleSectionHover(`stat-${stat.label}`)}
                 onMouseLeave={handleSectionLeave}
-                data-hovered={hoveredSection === `stat-${index}`}
+                data-hovered={hoveredSection === `stat-${stat.label}`}
               >
                 <div 
                   className="stat-icon"
@@ -307,26 +361,32 @@ const ArchivePage = () => {
       </section>
 
       {/* 页脚 */}
-      <div class="footer"> 
-        <div class="footer-content"> 
-          <p><strong>🎵 Music Universe</strong></p> 
-          <p>© 2025 音乐歌单可视化探索</p> 
-          <p>网站设计、代码实现与用户体验由「D小调片段记录」公众号作者与AI技术共同打造</p> 
-          <p class="disclaimer"> 
-            所有音乐专辑封面、艺术家名称及相关内容版权归其合法所有者所有<br /> 
-            本项目仅用于音乐发现与可视化体验，非商业用途 
-          </p> 
-           <p class="footer-text">
-            <span class="footer-icon">🎵</span>
-            音乐让时光有了温度
-            <span class="footer-icon">🎵</span>
-          </p>
-          <div class="footer-decoration">✦ ✦ ✦</div>
-          <div class="footer-text">感谢每一段旋律的陪伴</div>
+      <div className="footer"> 
+        <div className="footer-content"> 
+          <div className="footer-section">
+            <p><strong>🎵 Music Universe</strong></p>
+            <p>网站设计、代码实现与用户体验由「D小调片段记录」公众号作者与AI技术共同打造</p>
+          </div>
+          <div className="footer-section">    
+          </div>
+          <div className="footer-section">
+            <p>声明与版权</p>
+            <p className="disclaimer">
+              所有音乐专辑封面、艺术家名称及相关内容版权归其合法所有者所有<br />
+              本项目仅用于音乐发现与可视化体验，非商业用途
+            </p>
+            <p>感谢每一段旋律的陪伴</p>
+            <p>© 2025 音乐歌单可视化探索</p>
+          </div>
         </div> 
       </div>
+
+      {showBackToTopButton && (
+        <button className={`back-to-top-btn ${showBackToTopButton ? 'show' : ''}`} onClick={scrollToTop}>
+            ↑返回顶部
+          </button>
+      )}
     </div>
-    
   );
 };
 

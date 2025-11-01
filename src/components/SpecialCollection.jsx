@@ -104,7 +104,7 @@ function SpecialCollection() {
   const goToNextImage = () => {
     if (selectedImageIndex !== null && musicReports.length > 0) {
       const nextIndex = (selectedImageIndex + 1) % musicReports.length;
-      setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[nextIndex].id}.png`);
+      setSelectedImage(`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${musicReports[nextIndex].id}.webp`);
       setSelectedImageIndex(nextIndex);
     }
   };
@@ -112,7 +112,7 @@ function SpecialCollection() {
   const goToPreviousImage = () => {
     if (selectedImageIndex !== null && musicReports.length > 0) {
       const prevIndex = (selectedImageIndex - 1 + musicReports.length) % musicReports.length;
-      setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[prevIndex].id}.png`);
+      setSelectedImage(`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${musicReports[prevIndex].id}.webp`);
       setSelectedImageIndex(prevIndex);
     }
   };
@@ -435,10 +435,10 @@ function SpecialCollection() {
                     }}
                   >
                     <img 
-                      src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`}
+                      src={`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${report.id}.webp`}
                       alt={report.name}
                       loading="lazy" // Add lazy loading
-                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`, index)}
+                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${report.id}.webp`, index)}
                       style={{
                         maxWidth: '100%',
                         maxHeight: '100%',
@@ -447,7 +447,7 @@ function SpecialCollection() {
                         cursor: 'pointer' // 添加手型光标表示可点击
                       }}
                       onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/800x600/1a1a2e/ffffff?text=音乐报告图片加载中';
+                        e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`;
                       }}
                     />
                   </div>
@@ -488,10 +488,9 @@ function SpecialCollection() {
               >
                 ‹
               </button>
-              
-              <button 
-                onClick={nextSlide}
-                className="slider-nav next"
+              {/* 下一张按钮 */}
+              <button
+                onClick={goToNextImage}
                 style={{
                   position: 'absolute',
                   top: '50%',
@@ -520,7 +519,7 @@ function SpecialCollection() {
                   e.target.style.transform = 'translateY(-50%) scale(1)';
                 }}
               >
-                ›
+                &gt;
               </button>
 
               {/* 指示器点 */}
@@ -577,18 +576,79 @@ function SpecialCollection() {
               src={selectedImage}
               alt="Enlarged Music Report"
               className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+              onError={(e) => {
+                const match = e.target.src.match(/\/optimized-images\/music-report-spcl-1029-(\d+)\.webp/);
+                if (match && match[1]) {
+                  const reportId = match[1];
+                  e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${reportId}.png`;
+                } else {
+                  e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-placeholder.png`;
+                }
+              }}
             />
             {/* 上一张按钮 */}
             <button
               onClick={goToPreviousImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl font-bold rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 bg-gradient-to-r from-orange-500 to-pink-600 shadow-lg shadow-pink-500/50 hover:-translate-y-1"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '15px',
+                transform: 'translateY(-50%)',
+                background: 'rgba(178, 204, 244, 0.2)',
+                border: 'none',
+                width: '50px',
+                height: '50px',
+                borderRadius: '50%',
+                color: 'white',
+                fontSize: '20px',
+                cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+                e.target.style.transform = 'translateY(-50%) scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                e.target.style.transform = 'translateY(-50%) scale(1)';
+              }}
             >
               &lt;
             </button>
             {/* 下一张按钮 */}
             <button
               onClick={goToNextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl font-bold rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 bg-gradient-to-r from-orange-500 to-pink-600 shadow-lg shadow-pink-500/50 hover:-translate-y-1"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '15px',
+                transform: 'translateY(-50%)',
+                background: 'rgba(143, 187, 243, 0.44)',
+                border: 'none',
+                width: '50px',
+                height: '50px',
+                borderRadius: '50%',
+                color: 'white',
+                fontSize: '20px',
+                cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(197, 216, 243, 0.3)';
+                e.target.style.transform = 'translateY(-50%) scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(158, 232, 250, 0.2)';
+                e.target.style.transform = 'translateY(-50%) scale(1)';
+              }}
             >
               &gt;
             </button>
