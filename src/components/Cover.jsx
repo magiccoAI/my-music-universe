@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback, memo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Plane } from '@react-three/drei';
 import * as THREE from 'three'; // Import THREE
@@ -24,7 +24,7 @@ const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
   return `${process.env.PUBLIC_URL}/optimized-images/${fileName}.webp`;
 };
 
-const Cover = ({ data, position, rotation, scale, onClick, onVisible, isMobile }) => {
+const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile }) => {
   const meshRef = useRef();
   const { camera } = useThree();
   const frustum = new THREE.Frustum();
@@ -135,6 +135,6 @@ const Cover = ({ data, position, rotation, scale, onClick, onVisible, isMobile }
       </Plane>
     </>
   );
-};
+});
 
 export default Cover;

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const MouseParticleEffect = () => {
   const [particles, setParticles] = useState([]);
   const noteEmojis = ['⭐', '✨', '🎵', '🎶'];
+  const particleIdCounter = useRef(0);
 
   // 创建粒子函数
   const createParticle = ({ x, y, vx = 0, vy = 0, type, life, size }) => ({
-    id: Date.now() + Math.random(),
+    id: particleIdCounter.current++,
     x, y, vx, vy, type, life, size
   });
 

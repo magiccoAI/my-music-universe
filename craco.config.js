@@ -19,7 +19,7 @@ module.exports = function ({ env }) {
       plugins,
     },
     devServer: {
-      port: 3002,
+      port: process.env.PORT || 3002,
       open: false, // 禁用自动打开浏览器
     },
     eslint: null,

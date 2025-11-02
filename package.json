@@ -40,7 +40,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cross-env PUBLIC_URL=./ npx craco start",
+    "start": "cross-env PUBLIC_URL=./ PORT=3004 npx craco start",
     "fix-deps": "node scripts/fix-dependencies.js",
     "reset": "npm run clean-install && npm run build",
     "clean-install": "rm -rf node_modules && rm package-lock.json && npm install",
