@@ -70,11 +70,14 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
 
   useEffect(() => {
     if (!data || isLoading || loadedTexture) return;
-
+  
     // For desktop or if onVisible is not provided, load immediately
     // For mobile, we rely on onVisible to trigger loading
     // The actual loading will be triggered by the useFrame's frustum culling
     if (!isMobile) {
+      loadTexture(data);
+    } else {
+      // 为移动设备添加立即加载逻辑
       loadTexture(data);
     }
   }, [data, isMobile, isLoading, loadedTexture, onVisible, loadTexture]);
