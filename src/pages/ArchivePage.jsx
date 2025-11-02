@@ -218,7 +218,7 @@ const ArchivePage = () => {
       <UniverseNavigation />
 
       {/* Music Player */}
-      <audio ref={audioRef} src="/audio/Preview_Yotto_-_Lone_Machine_(mp3.pm).mp3" loop />
+      <audio ref={audioRef} src={process.env.PUBLIC_URL + "/audio/Preview_Yotto_-_Lone_Machine_(mp3.pm).mp3"} loop />
       <MusicPlayer
         isPlaying={isPlaying}
         onTogglePlayPause={togglePlayPause}
@@ -326,7 +326,6 @@ const ArchivePage = () => {
 
       </section>
 
-    
 
       {/* 特别收藏 */}
       <section 

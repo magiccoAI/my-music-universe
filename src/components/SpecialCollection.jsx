@@ -441,7 +441,7 @@ function SpecialCollection() {
                     }}
                   >
                     <img 
-                      src={`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${report.id}.webp`}
+                      src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`}
                       alt={report.name}
                       loading="lazy" // Add lazy loading
                       onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`, index)}
