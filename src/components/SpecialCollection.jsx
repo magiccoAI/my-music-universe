@@ -93,27 +93,33 @@ function SpecialCollection() {
     setSelectedImage(imageUrl);
     setShowModal(true);
     setSelectedImageIndex(index);
+    console.log('handleImageClick: Setting selectedImage to', imageUrl, 'and selectedImageIndex to', index);
   };
 
   const closeModal = () => {
     setShowModal(false);
     setSelectedImage('');
-    setSelectedImageIndex(null);
   };
 
   const goToNextImage = () => {
-    if (selectedImageIndex !== null && musicReports.length > 0) {
+    console.log('goToNextImage called. Current selectedImageIndex:', selectedImageIndex, 'musicReports:', musicReports);
+    if (selectedImageIndex !== null) {
       const nextIndex = (selectedImageIndex + 1) % musicReports.length;
-      setSelectedImage(`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${musicReports[nextIndex].id}.webp`);
+      const newImageUrl = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[nextIndex].id}.png`;
+      setSelectedImage(newImageUrl);
       setSelectedImageIndex(nextIndex);
+      console.log('goToNextImage: Setting next image to', newImageUrl, 'with index', nextIndex);
     }
   };
 
   const goToPreviousImage = () => {
-    if (selectedImageIndex !== null && musicReports.length > 0) {
+    console.log('goToPreviousImage called. Current selectedImageIndex:', selectedImageIndex, 'musicReports:', musicReports);
+    if (selectedImageIndex !== null) {
       const prevIndex = (selectedImageIndex - 1 + musicReports.length) % musicReports.length;
-      setSelectedImage(`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${musicReports[prevIndex].id}.webp`);
+      const newImageUrl = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[prevIndex].id}.png`;
+      setSelectedImage(newImageUrl);
       setSelectedImageIndex(prevIndex);
+      console.log('goToPreviousImage: Setting previous image to', newImageUrl, 'with index', prevIndex);
     }
   };
 
@@ -438,7 +444,7 @@ function SpecialCollection() {
                       src={`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${report.id}.webp`}
                       alt={report.name}
                       loading="lazy" // Add lazy loading
-                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${report.id}.webp`, index)}
+                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`, index)}
                       style={{
                         maxWidth: '100%',
                         maxHeight: '100%',
@@ -490,7 +496,7 @@ function SpecialCollection() {
               </button>
               {/* 下一张按钮 */}
               <button
-                onClick={goToNextImage}
+                onClick={nextSlide}
                 style={{
                   position: 'absolute',
                   top: '50%',
@@ -577,12 +583,13 @@ function SpecialCollection() {
               alt="Enlarged Music Report"
               className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
               onError={(e) => {
-                const match = e.target.src.match(/\/optimized-images\/music-report-spcl-1029-(\d+)\.webp/);
-                if (match && match[1]) {
-                  const reportId = match[1];
-                  e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${reportId}.png`;
+                console.log('Image onError triggered for src:', e.target.src);
+                if (selectedImageIndex !== null && musicReports[selectedImageIndex]) {
+                  e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[selectedImageIndex].id}.png`;
+                  console.log('Image onError: Fallback to', e.target.src);
                 } else {
                   e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-placeholder.png`;
+                  console.log('Image onError: Fallback to placeholder', e.target.src);
                 }
               }}
             />
