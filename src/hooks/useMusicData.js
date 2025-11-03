@@ -16,8 +16,8 @@ const useMusicData = () => {
       setFetchState(prev => ({ ...prev, loading: true, error: null }));
 
       const [musicResponse, aggregatedResponse] = await Promise.all([
-        fetch(process.env.PUBLIC_URL + '/data/data.json', { signal, cache: 'no-store' }),
-        fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json', { signal, cache: 'no-store' })
+        fetch(process.env.PUBLIC_URL + '/data/data.json', { signal }),
+        fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json', { signal })
       ]);
 
       if (!musicResponse.ok || !aggregatedResponse.ok) {

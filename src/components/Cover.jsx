@@ -10,16 +10,18 @@ const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
   const filename = parts[parts.length - 1];
   const [name, ext] = filename.split('.');
 
+  const publicUrl = process.env.PUBLIC_URL || '';
+
   // For mobile, always try to load optimized webp images
   if (isMobile) {
-    return `/optimized-images/${name}.webp`;
+    return `${publicUrl}/optimized-images/${name}.webp`;
   }
 
   // For desktop, if the original is already webp, use it. Otherwise, use optimized webp.
   if (ext === 'webp') {
     return originalCoverPath;
   } else {
-    return `/optimized-images/${name}.webp`;
+    return `${publicUrl}/optimized-images/${name}.webp`;
   }
 };
 
@@ -83,6 +85,7 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
     }
       
     const loader = new THREE.TextureLoader();
+    loader.crossOrigin = 'anonymous';
     loader.load(
       textureUrl,
       (texture) => {
@@ -122,14 +125,17 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
     }
   }, [data, isMobile, isLoading, loadedTexture, onVisible, loadTexture]);
 
+  const frameCounter = useRef(0);
+
   useFrame(({ clock }) => {
     // Subtle floating animation
     if (meshRef.current) {
       meshRef.current.position.y = position[1] + Math.sin(clock.getElapsedTime() * 0.5 + data.id) * 0.1;
       meshRef.current.lookAt(camera.position);
 
-      // Frustum culling for lazy loading
-      if (!loadedTexture && !isLoading) {
+      // Frustum culling for lazy loading, throttled to run every 30 frames
+      frameCounter.current++;
+      if (frameCounter.current % 30 === 0 && !loadedTexture && !isLoading) {
         camera.updateMatrixWorld();
         camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
         frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
