@@ -13,7 +13,7 @@ export const useMusicSearch = () => {
     const fetchMusicData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json');
+        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json', { cache: 'no-store' });
         if (!response.ok) throw new Error('数据加载失败');
         const data = await response.json();
         setMusicData(data);

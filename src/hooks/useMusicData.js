@@ -10,14 +10,14 @@ const useMusicData = () => {
     retryCount: 0,
   });
 
-  const fetchData = useCallback(async () => { // Removed signal parameter temporarily
+  const fetchData = useCallback(async (signal) => {
     console.log('Fetching data...');
     try {
       setFetchState(prev => ({ ...prev, loading: true, error: null }));
 
       const [musicResponse, aggregatedResponse] = await Promise.all([
-        fetch(process.env.PUBLIC_URL + '/data/data.json'), // Removed { signal }
-    fetch(process.env.PUBLIC_URL + '/data/data.json') // Removed { signal }
+        fetch(process.env.PUBLIC_URL + '/data/data.json', { signal, cache: 'no-store' }),
+        fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json', { signal, cache: 'no-store' })
       ]);
 
       if (!musicResponse.ok || !aggregatedResponse.ok) {
@@ -42,22 +42,28 @@ const useMusicData = () => {
       setFetchState(prev => ({ ...prev, loading: false, error: null }));
 
     } catch (err) {
-      console.error("Failed to fetch data:", err);
-      setFetchState(prev => ({
-        ...prev,
-        error: err.message,
-        retryCount: prev.retryCount + 1,
-        loading: false,
-      }));
+      if (err.name === 'AbortError') {
+        console.log('Fetch aborted:', err.message);
+      } else {
+        console.error("Failed to fetch data:", err);
+        setFetchState(prev => ({
+          ...prev,
+          error: err.message,
+          retryCount: prev.retryCount + 1,
+          loading: false,
+        }));
+      }
     }
   }, []);
 
   useEffect(() => {
-    // const controller = new AbortController(); // Temporarily commented out
-    fetchData(); // Removed controller.signal
+    const controller = new AbortController();
+    fetchData(controller.signal);
 
-    // return () => controller.abort(); // Temporarily commented out
-  }, [fetchData]);
+    return () => {
+      controller.abort();
+    };
+  }, []); // Empty dependency array to run once on mount
 
   return {
     musicData: musicData || [],
