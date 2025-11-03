@@ -68,7 +68,7 @@ const ConnectionsPage = () => {
       };
       
       const onError = (error) => {
-        console.error('Failed to load audio:', soundFile, error);
+        console.error('Failed to load audio:', soundFile, error, 'MediaError:', audio.error);
         delete audioLoadPromises.current[soundFile];
         reject(error);
       };
