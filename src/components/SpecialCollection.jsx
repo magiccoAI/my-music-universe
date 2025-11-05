@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SpecialCollectionCSS from './SpecialCollection.css';
+import { motion, AnimatePresence } from 'framer-motion';
+import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import useIsMobile from '../hooks/useIsMobile';
 
 function SpecialCollection() {
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState('featured');
   const [hoveredItem, setHoveredItem] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -105,7 +109,8 @@ function SpecialCollection() {
     console.log('goToNextImage called. Current selectedImageIndex:', selectedImageIndex, 'musicReports:', musicReports);
     if (selectedImageIndex !== null) {
       const nextIndex = (selectedImageIndex + 1) % musicReports.length;
-      const newImageUrl = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[nextIndex].id}.png`;
+      const imageId = musicReports[nextIndex].id;
+      const newImageUrl = `${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${imageId}${isMobile ? '-mobile' : ''}.webp`;
       setSelectedImage(newImageUrl);
       setSelectedImageIndex(nextIndex);
       console.log('goToNextImage: Setting next image to', newImageUrl, 'with index', nextIndex);
@@ -116,7 +121,8 @@ function SpecialCollection() {
     console.log('goToPreviousImage called. Current selectedImageIndex:', selectedImageIndex, 'musicReports:', musicReports);
     if (selectedImageIndex !== null) {
       const prevIndex = (selectedImageIndex - 1 + musicReports.length) % musicReports.length;
-      const newImageUrl = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[prevIndex].id}.png`;
+      const imageId = musicReports[prevIndex].id;
+      const newImageUrl = `${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${imageId}${isMobile ? '-mobile' : ''}.webp`;
       setSelectedImage(newImageUrl);
       setSelectedImageIndex(prevIndex);
       console.log('goToPreviousImage: Setting previous image to', newImageUrl, 'with index', prevIndex);

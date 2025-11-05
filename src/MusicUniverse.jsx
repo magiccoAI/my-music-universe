@@ -3,8 +3,8 @@ import useMusicData from './hooks/useMusicData';
 import useIsMobile from './hooks/useIsMobile';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
-import Stars from './components/StarsOnly';
-
+// import Stars from './components/StarsOnly';
+const Stars = React.lazy(() => import('./components/StarsOnly'));
 import UniverseNavigation from './components/UniverseNavigation';
 import * as THREE from 'three';
 import { UniverseContext } from './UniverseContext';
@@ -124,8 +124,21 @@ const MusicUniverse = () => {
   const [currentTheme, setCurrentTheme] = useState('night'); // 默认主题设置为night
   const [showHint, setShowHint] = useState(true);
   const [hoveredMusic, setHoveredMusic] = useState(null);
-  const [positionedMusicData, setPositionedMusicData] = useState([]);
+  // const [positionedMusicData, setPositionedMusicData] = useState([]);
   const isMobile = useIsMobile();
+
+  const positionedMusicData = React.useMemo(() => {
+    if (musicData.length === 0) return [];
+    return musicData.map(item => {
+      if (!item.position) {
+        const x = (Math.random() - 0.5) * 20;
+        const y = (Math.random() - 0.5) * 20;
+        const z = (Math.random() - 0.5) * 20;
+        return { ...item, position: [x, y, z] };
+      }
+      return item;
+    });
+  }, [musicData]);
 
   const themes = {
     day: "bg-gradient-to-b from-blue-900 via-blue-600 to-blue-300", // 白天：飞机上看到的深蓝到浅蓝渐变
@@ -197,11 +210,11 @@ const MusicUniverse = () => {
           style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
           camera={{ fov: 75, near: 0.1, far: 1000 }}
           className={isConnectionsPageActive ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
-          dpr={[1, 2]}
+          dpr={isMobile ? [1, 1] : [1, 2]}
         >
           <WebGLContextHandler />
           <CameraSetup />
-          <KeyboardControls isMobile={isMobile} />
+          {!isMobile && <KeyboardControls isMobile={isMobile} />}
           {/* <TouchControls /> */} {/* 移除触摸控制 */}
           <OrbitControls 
             enableRotate={true} // 移动设备上启用旋转
@@ -210,24 +223,29 @@ const MusicUniverse = () => {
           />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
-          {currentTheme === 'night' && <Stars />}
+          {currentTheme === 'night' && (
+            <React.Suspense fallback={null}>
+              <Stars />
+            </React.Suspense>
+          )}
 
           {positionedMusicData.map((data) => (
-            <Cover
-              key={data.id}
-              data={data}
-              position={data.position}
-              rotation={data.rotation}
-              scale={data.scale}
-              onClick={handleCoverClick}
-              isMobile={isMobile}
-            />
+              <Cover
+                key={data.id}
+                data={data}
+                position={data.position}
+                rotation={data.rotation}
+                scale={data.scale}
+                onClick={handleCoverClick}
+                isMobile={isMobile}
+              />
           ))}
           {hoveredMusic && <InfoCard data={hoveredMusic.data} position={hoveredMusic.position} onClose={() => setHoveredMusic(null)} isMobile={isMobile} />}
         </Canvas>
       )}
       <div className="absolute bottom-4 right-4 z-10 flex space-x-2">
         <button
+          key="day-theme-button"
           className={`px-4 py-2 rounded-full text-white font-bold ${currentTheme === 'day' ? 'bg-blue-500' : 'bg-gray-700 hover:bg-blue-500'}`}
           onClick={() => setCurrentTheme('day')}
           aria-pressed={currentTheme === 'day'}
@@ -236,6 +254,7 @@ const MusicUniverse = () => {
           白天
         </button>
         <button
+          key="evening-theme-button"
           className={`px-4 py-2 rounded-full text-white font-bold ${currentTheme === 'evening' ? 'bg-orange-500' : 'bg-gray-700 hover:bg-orange-500'}`}
           onClick={() => setCurrentTheme('evening')}
           aria-pressed={currentTheme === 'evening'}
@@ -244,6 +263,7 @@ const MusicUniverse = () => {
           傍晚
         </button>
         <button
+          key="night-theme-button"
           className={`px-4 py-2 rounded-full text-white font-bold ${currentTheme === 'night' ? 'bg-purple-800' : 'bg-gray-700 hover:bg-purple-800'}`}
           onClick={() => setCurrentTheme('night')}
           aria-pressed={currentTheme === 'night'}

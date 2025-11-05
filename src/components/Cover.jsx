@@ -130,7 +130,10 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
   useFrame(({ clock }) => {
     // Subtle floating animation
     if (meshRef.current) {
-      meshRef.current.position.y = position[1] + Math.sin(clock.getElapsedTime() * 0.5 + data.id) * 0.1;
+      // Only apply animation if not on mobile
+      if (!isMobile) {
+        meshRef.current.position.y = position[1] + Math.sin(clock.getElapsedTime() * 0.5 + data.id) * 0.1;
+      }
       meshRef.current.lookAt(camera.position);
 
       // Frustum culling for lazy loading, throttled to run every 30 frames

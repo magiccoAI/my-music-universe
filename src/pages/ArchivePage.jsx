@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import useIsMobile from '../hooks/useIsMobile';
 
 import { Link, useLocation } from 'react-router-dom';
 import WordCloudDisplay from '../components/WordCloudDisplay';
@@ -38,6 +39,7 @@ const ArchivePage = () => {
   const [uniqueStylesCount, setUniqueStylesCount] = useState(0);
   const [uniqueArtistsCount, setUniqueArtistsCount] = useState(0);
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const [isPlaying, setIsPlaying] = useState(false); // New state for music playback
   const audioRef = useRef(null); // Ref for the audio element
@@ -218,7 +220,7 @@ const ArchivePage = () => {
       <UniverseNavigation />
 
       {/* Music Player */}
-      <audio ref={audioRef} src={process.env.PUBLIC_URL + "/audio/Preview_Yotto_-_Lone_Machine_(mp3.pm).mp3"} loop />
+      <audio ref={audioRef} src={process.env.PUBLIC_URL + "/audio/Preview_Yotto_-_Lone_Machine.mp3"} loop />
       <MusicPlayer
         isPlaying={isPlaying}
         onTogglePlayPause={togglePlayPause}
