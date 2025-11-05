@@ -17,10 +17,23 @@ module.exports = function ({ env }) {
   return {
     webpack: {
       plugins,
+      cache: {
+        type: 'filesystem',
+        buildDependencies: {
+          config: [__filename],
+        },
+      },
     },
     devServer: {
       port: process.env.PORT || 3002,
       open: false, // 禁用自动打开浏览器
+      headers: { 'Cache-Control': 'max-age=31536000' }, // Set a long cache lifetime for static assets
+      onBeforeSetupMiddleware: undefined,
+      onAfterSetupMiddleware: undefined,
+      setupMiddlewares: (middlewares, devServer) => {
+        // You can add custom middlewares here if needed
+        return middlewares;
+      },
     },
     eslint: null,
   };

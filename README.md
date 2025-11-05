@@ -1,16 +1,36 @@
 # Music Universe
 
 ## 项目简介
-Music Universe 是一个旨在可视化和探索音乐收藏的 Web 应用程序。它利用各种现代 Web 技术提供交互式和引人入胜的用户体验，包括3D专辑封面展示、音乐报告图片轮播以及用户友好的导航提示。
+Music Universe 是一个旨在可视化和探索音乐收藏的 Web 应用程序。它利用各种现代 Web 技术提供交互式和引人入胜的用户体验，包括3D专辑封面展示、以及用户友好的导航提示。
+
+## 功能
+- **3D 专辑封面展示**: 沉浸式的 3D 专辑封面浏览体验。
+- **音乐报告图片轮播**: 展示音乐收藏的统计和报告。
+- **音乐播放器**: 内置音乐播放功能。
+- **搜索功能**: 快速查找音乐和艺术家。
+- **响应式设计**: 适配移动设备的界面。
+- **可视化效果**: 流星轨迹、粒子系统和音乐音符等动态视觉效果。
+- **数据可视化**: 使用 D3.js 和 ECharts 进行数据分析和展示，例如艺术家和音乐风格词云。
+- **多页面应用**: 包含主页、搜索页、档案页和连接页。
 
 ## 使用的技术
-- React: 用于构建用户界面的 JavaScript 库。
-- Three.js: 用于在浏览器中显示 3D 图形的 JavaScript 3D 库。
-- D3.js: 用于根据数据操作文档的 JavaScript 库。
-- ECharts: 一个功能强大、交互式的图表和可视化库。
-- Tailwind CSS: 一个实用程序优先的 CSS 框架，用于快速构建自定义设计。
-- Framer Motion: 一个用于 React 的生产就绪的动画库。
-- p5.js: 一个用于创意编码的 JavaScript 库，专注于让艺术家、设计师、教育工作者、初学者以及其他任何人都能轻松进行编码！
+- **React**: 用于构建用户界面的 JavaScript 库。
+- **Three.js**: 用于在浏览器中显示 3D 图形的 JavaScript 3D 库。
+- **D3.js**: 用于根据数据操作文档的 JavaScript 库，用于数据驱动的文档。
+- **ECharts**: 一个功能强大、交互式的图表和可视化库，用于丰富的数据可视化。
+- **Tailwind CSS**: 一个实用程序优先的 CSS 框架，用于快速构建自定义设计和响应式布局。
+- **Framer Motion**: 一个用于 React 的生产就绪的动画库，用于流畅的 UI 动画。
+- **Craco**: 用于配置 Create React App。
+
+## 项目结构
+- `public/`: 静态资源，包括音频、数据、图片和优化后的图片。
+- `src/`: 应用程序的源代码。
+    - `assets/`: 静态资源，如图标。
+    - `components/`: 可重用的 UI 组件，如 `Cover`, `InfoCard`, `MusicPlayer` 等。
+    - `hooks/`: 自定义 React Hooks，用于封装可重用逻辑，如 `useIsMobile`, `useMusicData` 等。
+    - `pages/`: 应用程序的各个页面，如 `HomePage`, `SearchPage`, `ArchivePage`, `ConnectionsPage`。
+    - `utils/`: 实用工具函数，如 `dataTransformUtils.js`。
+    
 
 ## 安装
 要开始使用 Music Universe 项目，请按照以下步骤操作：

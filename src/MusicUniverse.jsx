@@ -244,7 +244,7 @@ const MusicUniverse = () => {
           傍晚
         </button>
         <button
-          className={`px-4 py-2 rounded-full text-white font-bold ${currentTheme === 'night' ? 'bg-purple-500' : 'bg-gray-700 hover:bg-purple-500'}`}
+          className={`px-4 py-2 rounded-full text-white font-bold ${currentTheme === 'night' ? 'bg-purple-800' : 'bg-gray-700 hover:bg-purple-800'}`}
           onClick={() => setCurrentTheme('night')}
           aria-pressed={currentTheme === 'night'}
           aria-label="切换到夜晚主题"

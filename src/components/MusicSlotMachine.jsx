@@ -129,8 +129,7 @@ const MusicSlotMachine = () => {
         reel.style.transition = 'none';
         reel.style.transform = 'translateY(0)';
 
-        // 强制重绘
-        void reel.offsetWidth;
+
 
         // 开始动画
         setTimeout(() => {
