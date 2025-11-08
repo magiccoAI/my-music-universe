@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useIsMobile from '../hooks/useIsMobile';
+import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
 
 import { Link, useLocation } from 'react-router-dom';
 import WordCloudDisplay from '../components/WordCloudDisplay';
@@ -28,10 +29,7 @@ const parseDate = (dateString) => {
 };
 
 const ArchivePage = () => {
-  const [musicData, setMusicData] = useState([]);
-  const [aggregatedData, setAggregatedData] = useState({ artist_counts: {}, style_counts: {} });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { musicData, aggregatedData, loading, error } = useMusicData(); // Use the custom hook
   const [activeGalaxy, setActiveGalaxy] = useState('artist');
   const [hoveredSection, setHoveredSection] = useState(null);
   const [musicJourneyDays, setMusicJourneyDays] = useState(0);
@@ -84,71 +82,26 @@ const ArchivePage = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [musicResponse, aggregatedResponse] = await Promise.all([
-          fetch(process.env.PUBLIC_URL + '/data/data.json'),
-      fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json')
-        ]);
+    if (musicData.length > 0) {
+      const firstMusicDate = musicData.reduce((minDate, currentMusic) => {
+        const currentDate = currentMusic.date ? parseDate(currentMusic.date) : new Date();
+        return currentDate < minDate ? currentDate : minDate;
+      }, musicData[0].date ? parseDate(musicData[0].date) : new Date());
 
-        if (!musicResponse.ok || !aggregatedResponse.ok) {
-          throw new Error(`数据加载失败: ${musicResponse.status} ${aggregatedResponse.status}`);
-        }
+      const today = new Date();
+      const diffTime = Math.abs(today.getTime() - firstMusicDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      setMusicJourneyDays(diffDays);
+      setTotalMusicCount(musicData.length);
 
-        const [musicJson, aggregatedJson] = await Promise.all([
-          musicResponse.json(),
-          aggregatedResponse.json()
-        ]);
+      const uniqueStyles = new Set(musicData.map(music => music.note).filter(note => note));
+      setUniqueStylesCount(uniqueStyles.size);
 
-        console.log("Fetched musicJson:", musicJson);
-        console.log("Fetched aggregatedJson:", aggregatedJson);
-
-        setMusicData(musicJson);
-
-        // 计算音乐旅程天数
-        if (musicJson.length > 0) {
-          const firstMusicDate = musicJson.reduce((minDate, currentMusic) => {
-            const currentDate = currentMusic.date ? parseDate(currentMusic.date) : new Date(); // 确保 currentMusic.date 存在
-            return currentDate < minDate ? currentDate : minDate;
-          }, musicJson[0].date ? parseDate(musicJson[0].date) : new Date()); // 初始化为第一个音乐的日期，并处理可能为空的情况
-
-          const today = new Date();
-          const diffTime = Math.abs(today.getTime() - firstMusicDate.getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          
-          setMusicJourneyDays(diffDays);
-
-          // 计算总音乐收藏数
-          setTotalMusicCount(musicJson.length);
-
-          // 计算唯一音乐风格数
-          const uniqueStyles = new Set(musicJson.map(music => music.note).filter(note => note));
-          setUniqueStylesCount(uniqueStyles.size);
-
-          // 计算唯一艺术家数
-          const uniqueArtists = new Set(musicJson.map(music => music.artist).filter(artist => artist));
-          setUniqueArtistsCount(uniqueArtists.size);
-        }
-
-        // 合并标签
-        const mergedStyle = { ...aggregatedJson.style_counts };
-        if (mergedStyle['graphic background music']) {
-          mergedStyle['motion'] = (mergedStyle['motion'] || 0) + mergedStyle['graphic background music'];
-          delete mergedStyle['graphic background music'];
-        }
-        aggregatedJson.style_counts = mergedStyle;
-        setAggregatedData(aggregatedJson);
-
-      } catch (err) {
-        console.error("Failed to fetch data:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+      const uniqueArtists = new Set(musicData.map(music => music.artist).filter(artist => artist));
+      setUniqueArtistsCount(uniqueArtists.size);
+    }
+  }, [musicData]);
 
   // 鼠标悬置处理函数
   const handleSectionHover = (section) => {
@@ -302,7 +255,6 @@ const ArchivePage = () => {
           <button
             className={`galaxy-btn ${activeGalaxy === 'style' ? 'active' : ''}`}
             onClick={() => setActiveGalaxy('style')}
-            onMouseEnter={(e) => e.currentTarget.classList.add('hover')}
             onMouseLeave={(e) => e.currentTarget.classList.remove('hover')}
           >
             <span className="btn-icon">🎼</span>
