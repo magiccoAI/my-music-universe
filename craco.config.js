@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-// const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = function ({ env }) {
   const isProductionBuild = process.env.NODE_ENV === "production";
@@ -12,13 +11,12 @@ module.exports = function ({ env }) {
   if (isProductionBuild) {
     plugins.push(new BundleAnalyzerPlugin({ analyzerMode }));
   }
-  // plugins.push(new ESLintPlugin({ extensions: ['js', 'jsx', 'ts', 'tsx'], eslintPath: require.resolve('eslint') }));
 
   return {
     webpack: {
-      plugins,
+      plugins: plugins,
       cache: {
-        type: 'filesystem',
+        type: 'memory', // Disable filesystem cache to resolve stuck compilation
         buildDependencies: {
           config: [__filename],
         },
@@ -28,8 +26,6 @@ module.exports = function ({ env }) {
       port: process.env.PORT || 3002,
       open: false, // 禁用自动打开浏览器
       headers: { 'Cache-Control': 'max-age=31536000' }, // Set a long cache lifetime for static assets
-      onBeforeSetupMiddleware: undefined,
-      onAfterSetupMiddleware: undefined,
       setupMiddlewares: (middlewares, devServer) => {
         // You can add custom middlewares here if needed
         return middlewares;

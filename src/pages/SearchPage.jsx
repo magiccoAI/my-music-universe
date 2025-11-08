@@ -31,6 +31,7 @@ const SearchPage = () => {
   const [focusedSuggestionIndex, setFocusedSuggestionIndex] = useState(-1);
   const suggestionsRef = useRef(null);
   const searchInputRef = useRef(null);
+  const backgroundCoverRefs = useRef([]);
 
   // 使用 IntersectionObserver 监控背景图片
   useEffect(() => {
@@ -45,13 +46,21 @@ const SearchPage = () => {
       { threshold: 0.1 }
     );
 
-    const elements = document.querySelectorAll('.background-cover');
-    elements.forEach(el => observer.observe(el));
+    // 确保在观察之前元素已经存在
+    backgroundCoverRefs.current.forEach(el => {
+      if (el) {
+        observer.observe(el);
+      }
+    });
 
     return () => {
-      elements.forEach(el => observer.unobserve(el));
+      backgroundCoverRefs.current.forEach(el => {
+        if (el) {
+          observer.unobserve(el);
+        }
+      });
     };
-  }, [results]);
+  }, [results]); // 依赖 results，当 results 变化时重新观察
 
   // 搜索建议
   useEffect(() => {
