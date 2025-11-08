@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import useIsMobile from '../hooks/useIsMobile';
 
 import { Link, useLocation } from 'react-router-dom';
 import WordCloudDisplay from '../components/WordCloudDisplay';
@@ -6,14 +7,20 @@ import WordCloudDisplay from '../components/WordCloudDisplay';
 import SpecialCollection from '../components/SpecialCollection';
 import MusicSlotMachine from '../components/MusicSlotMachine';
 import MouseParticleEffect from '../components/MouseParticleEffect';
+import StarBackground from '../components/StarBackground';
 import UniverseNavigation from '../components/UniverseNavigation';
+import MusicPlayer from '../components/MusicPlayer'; // Import MusicPlayer
 
 import './ArchivePage.css';
 
 const parseDate = (dateString) => {
+  if (typeof dateString !== 'string' || !dateString) {
+    console.error("日期格式不匹配：传入的日期字符串无效或为空", dateString);
+    return new Date(); // 返回一个默认日期，避免程序崩溃
+  }
   const match = dateString.match(/(\d{4})年(\d{2})月(\d{2})日 (\d{2}):(\d{2})/);
   if (!match) {
-    console.error("日期格式不匹配:", dateString);
+    console.error("日期格式不匹配，原始字符串:", dateString);
     return new Date(); // 返回一个默认日期，避免程序崩溃
   }
   const [year, month, day, hour, minute] = match.slice(1);
@@ -32,13 +39,56 @@ const ArchivePage = () => {
   const [uniqueStylesCount, setUniqueStylesCount] = useState(0);
   const [uniqueArtistsCount, setUniqueArtistsCount] = useState(0);
   const location = useLocation();
+  const isMobile = useIsMobile();
+
+  const [isPlaying, setIsPlaying] = useState(false); // New state for music playback
+  const audioRef = useRef(null); // Ref for the audio element
+  const [showBackToTopButton, setShowBackToTopButton] = useState(false); // State for back to top button visibility
+
+  // Effect to play/pause music when isPlaying changes
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Error playing audio:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  const togglePlayPause = () => {
+    setIsPlaying(prev => !prev);
+  };
+
+  // Effect to handle scroll for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 300) { // Show button after scrolling down 300px
+        setShowBackToTopButton(true);
+      } else {
+        setShowBackToTopButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [musicResponse, aggregatedResponse] = await Promise.all([
           fetch(process.env.PUBLIC_URL + '/data/data.json'),
-      fetch(process.env.PUBLIC_URL + '/data/data.json')
+      fetch(process.env.PUBLIC_URL + '/data/aggregated_data.json')
         ]);
 
         if (!musicResponse.ok || !aggregatedResponse.ok) {
@@ -50,14 +100,17 @@ const ArchivePage = () => {
           aggregatedResponse.json()
         ]);
 
+        console.log("Fetched musicJson:", musicJson);
+        console.log("Fetched aggregatedJson:", aggregatedJson);
+
         setMusicData(musicJson);
 
         // 计算音乐旅程天数
         if (musicJson.length > 0) {
           const firstMusicDate = musicJson.reduce((minDate, currentMusic) => {
-            const currentDate = parseDate(currentMusic.date);
+            const currentDate = currentMusic.date ? parseDate(currentMusic.date) : new Date(); // 确保 currentMusic.date 存在
             return currentDate < minDate ? currentDate : minDate;
-          }, parseDate(musicJson[0].date)); // 初始化为第一个音乐的日期
+          }, musicJson[0].date ? parseDate(musicJson[0].date) : new Date()); // 初始化为第一个音乐的日期，并处理可能为空的情况
 
           const today = new Date();
           const diffTime = Math.abs(today.getTime() - firstMusicDate.getTime());
@@ -160,32 +213,42 @@ const ArchivePage = () => {
       {/* 背景星空效果 */}
       <div className="stars-background"></div>
       <div className="gradient-overlay"></div>
+
       
+
       {/* 导航栏 */}
       <UniverseNavigation />
+
+      {/* Music Player */}
+      <audio ref={audioRef} src={process.env.PUBLIC_URL + "/audio/Preview_Yotto_-_Lone_Machine.mp3"} loop />
+      <MusicPlayer
+        isPlaying={isPlaying}
+        onTogglePlayPause={togglePlayPause}
+        songTitle="Lone Machine"
+        artistName="Yotto (Preview)"
+      />
 
       {/* 英雄区域 */}
       <section className="hero-section">
         <div className="hero-content">
           <div className="hero-titles">
-            <h1 className="hero-title">
-              <span className="title-accent">2022-2023</span>
-              <span className="title-main">音乐时光机</span>
-              <span className="title-sub">· 轨迹 ·</span>
-            </h1>
-            <h2 className="hero-subtitle">
+            <div className="hero-title">
+              <h2 className="title-main">音乐时光机</h2>
+              <span className="title-sub"> 2022-2023·轨迹 </span>
+            </div>
+            <span className="hero-subtitle">
               个人公众号：「D小调片段记录」的音乐分享歌单
-            </h2>
+            </span>
           </div>
           
           <div className="stats-grid">
-            {statsData.map((stat, index) => (
+            {statsData.map((stat) => (
               <div 
-                key={index}
+                key={stat.label}
                 className="stat-card"
-                onMouseEnter={() => handleSectionHover(`stat-${index}`)}
+                onMouseEnter={() => handleSectionHover(`stat-${stat.label}`)}
                 onMouseLeave={handleSectionLeave}
-                data-hovered={hoveredSection === `stat-${index}`}
+                data-hovered={hoveredSection === `stat-${stat.label}`}
               >
                 <div 
                   className="stat-icon"
@@ -218,7 +281,7 @@ const ArchivePage = () => {
         <div className="section-header">
           <div className="section-icon">🌠</div>
           <h2 className="section-title">音乐词云星系</h2>
-          <p className="section-subtitle">点击探索你的音乐宇宙</p>
+         
         </div>
         
         <div className="galaxy-controls">
@@ -262,10 +325,9 @@ const ArchivePage = () => {
             />
           )}
         </div>
-        <div className="section-glow"></div>
+
       </section>
 
-    
 
       {/* 特别收藏 */}
       <section 
@@ -282,7 +344,7 @@ const ArchivePage = () => {
         <div className="special-collection-container">
           <SpecialCollection musicData={musicData} />
         </div>
-        <div className="section-glow"></div>
+
       </section>
 
 
@@ -303,19 +365,31 @@ const ArchivePage = () => {
       </section>
 
       {/* 页脚 */}
-      <footer className="page-footer">
-        <div className="footer-content">
-          <p className="footer-text">
-            <span className="footer-icon">🎵</span>
-            音乐让时光有了温度
-            <span className="footer-icon">🎵</span>
-          </p>
-          <div className="footer-decoration">✦ ✦ ✦</div>
-          <div className="footer-subtext">感谢每一段旋律的陪伴</div>
-        </div>
-      </footer>
+      <div className="footer"> 
+        <div className="footer-content"> 
+          <div className="footer-section">
+            <p><strong>🎵 Music Universe</strong></p>
+            <p>网站设计、代码实现与用户体验由「D小调片段记录」公众号作者与AI技术共同打造</p>
+          </div>
+          <div className="footer-section">    
+          </div>
+          <div className="footer-section">
+            <p className="disclaimer">
+              所有音乐专辑封面、艺术家名称及相关内容版权归其合法所有者所有<br />
+              本项目仅用于音乐发现与可视化体验，非商业用途
+            </p>
+            <p>感谢每一段旋律的陪伴</p>
+            <p>© 2025 音乐歌单可视化探索</p>
+          </div>
+        </div> 
+      </div>
+
+      {showBackToTopButton && (
+        <button className={`back-to-top-btn ${showBackToTopButton ? 'show' : ''}`} onClick={scrollToTop}>
+            ↑返回顶部
+          </button>
+      )}
     </div>
-    
   );
 };
 

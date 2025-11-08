@@ -51,7 +51,7 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${process.env.PUBLIC_URL}/${randomAlbum.cover}" alt="${randomAlbum.title}" class="album-cover" onerror="console.error('Image failed to load:', this.src)" onload="console.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/optimized-images/${randomAlbum.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${randomAlbum.title}" class="album-cover" onerror="this.onerror=null;this.src='${process.env.PUBLIC_URL}/${randomAlbum.cover}';console.error('Image failed to load:', this.src)" onload="console.log('Image loaded:', this.src)">
             <div class="album-info">
              
               <div class="album-artist">${randomAlbum.artist}</div>
@@ -111,7 +111,7 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${process.env.PUBLIC_URL}/${albumToDisplay.cover}" alt="${albumToDisplay.title}" class="album-cover" onerror="console.error('Image failed to load:', this.src)" onLoad="console.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/optimized-images/${albumToDisplay.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${albumToDisplay.title}" class="album-cover" onerror="this.onerror=null;this.src='${process.env.PUBLIC_URL}/${albumToDisplay.cover}';console.error('Image failed to load:', this.src)" onLoad="console.log('Image loaded:', this.src)">
             <div class="album-info">
               <div class="album-title" title="${albumToDisplay.music}">${albumToDisplay.music}</div>
               <div class="album-artist">${albumToDisplay.artist}</div>
@@ -129,8 +129,7 @@ const MusicSlotMachine = () => {
         reel.style.transition = 'none';
         reel.style.transform = 'translateY(0)';
 
-        // 强制重绘
-        void reel.offsetWidth;
+
 
         // 开始动画
         setTimeout(() => {

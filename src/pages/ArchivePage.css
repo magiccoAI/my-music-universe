@@ -111,13 +111,13 @@
 /* 英雄区域优化 */
 .hero-section {
   position: relative;
-  min-height: 100vh;
+  min-height: auto; /* Changed from 100vh to auto */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* Removed justify-content and align-items */
   text-align: center;
   padding: 8rem 2rem 4rem;
+  padding-bottom: 8rem; /* Added padding-bottom to ensure stats-grid is not cut off */
   z-index: 1;
 }
 
@@ -126,7 +126,6 @@
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   margin-bottom: 1rem;
   display: flex;
@@ -135,7 +134,7 @@
 }
 
 .title-accent {
-  color: rgba(237, 163, 34, 0.548); /* 略带金色的色调 */
+  color: rgba(237, 162, 34, 0); /* 略带金色的色调 */
   font-size: 0.7em;
   font-weight: 300;
 }
@@ -145,17 +144,18 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-size: 3rem; /* Increased font size with rem */
 }
 
 .title-sub {
-  font-size: 0.6em;
+  font-size: 1rem; /* Decreased font size with rem */
   font-weight: 300;
-  color: rgba(255, 215, 0, 0.7); /* 略带金色的色调 */
+  color: rgba(255, 255, 255, 0.7); 
 }
 
-.hero-subtitle {
+.subtitle-update {
   font-size: 1.2rem;
-  color: rgba(255, 215, 0, 0.8); /* 略带金色的色调 */
+  color: rgba(255, 217, 0, 0); /* 略带金色的色调 */
   font-weight: 300;
   margin-bottom: 3rem;
 }
@@ -172,8 +172,8 @@
 
 .stat-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  /* background: rgba(255, 255, 255, 0.05); */
+  /* backdrop-filter: blur(10px); */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 2rem 1.5rem;
@@ -191,6 +191,18 @@
   
   .hero-title {
     flex-direction: column;
+  }
+
+  .title-main {
+    font-size: 2rem;
+  }
+
+  .title-sub {
+    font-size: 0.8rem;
+  }
+
+  .subtitle-update {
+    font-size: 0.7rem;
   }
   
   .stats-grid {
@@ -342,27 +354,9 @@
   transition: all 0.3s ease;
 }
 
-.section-container[data-hovered="true"] {
-  transform: translateY(-5px);
-}
 
-.section-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: -1;
-}
 
-.section-container:hover .section-glow {
-  opacity: 1;
-}
+
 
 .section-header {
   text-align: center;
@@ -554,85 +548,101 @@
 }
 
 /* 页脚优化 */
-.page-footer {
+.footer {
   position: relative;
-  background: rgba(12, 12, 43, 0.8);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 50%, rgba(137, 247, 254, 0.5) 100%);
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 3rem 2rem;
   text-align: center;
   z-index: 1;
+  color: white;
 }
 
 .footer-content {
-  max-width: 600px;
+  max-width: 600px; /* Limit footer width */
   margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* Single column layout */
+  gap: 1rem; /* Adjusted gap */
+  text-align: center; /* Center text */
+  padding: 0 1rem; /* Add horizontal padding */
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.footer-section h4 {
+  font-size: 1.1rem;
+  color: #89F7FE;
+  margin-bottom: 1rem;
+}
+
+.footer-section p,
+.footer-section a {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+  color: #66A6FF;
+}
+
+.footer-section strong {
+  font-size: 1rem;
+  color: #89F7FE;
+}
+
+.footer-section .disclaimer {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 1rem;
 }
 
 .footer-text {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.footer-icon {
-  animation: float 3s ease-in-out infinite;
-}
-
-.footer-icon:nth-child(2) {
-  animation-delay: 0.5s;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #89F7FE 0%, #66A6FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .footer-decoration {
-  font-size: 1.5rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 1rem;
-  letter-spacing: 1rem;
+  font-size: 0.7rem;
 }
 
 .footer-subtext {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.9rem;
-  font-weight: 300;
+  font-size: 0.7rem;
+  background: linear-gradient(135deg, #89F7FE 0%, #66A6FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* 响应式设计 */
 @media (max-width: 768px) {
-  .nav-content {
-    gap: 1rem;
-    padding: 1rem;
+  /* Removed specific footer-content media queries as it's now single column by default */
+  .footer-section h4 {
+    margin-bottom: 0.5rem;
   }
-  
-  .hero-title {
-    flex-direction: column;
+
+  .footer-section p,
+  .footer-section a {
+    font-size: 0.8rem;
   }
-  
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+
+  .footer-section strong {
+    font-size: 0.9rem;
   }
-  
-  .galaxy-controls {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .section-container {
-    padding: 4rem 1rem;
-  }
-  
-  .footer-text {
-    flex-direction: column;
-    gap: 0.5rem;
+
+  .footer-section .disclaimer {
+    font-size: 0.5rem;
   }
 }
 
@@ -652,4 +662,40 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+  .back-to-top-btn {
+    position: fixed;
+    bottom: 60px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background */
+    color: #cccccc;
+    border: none;
+    border-radius: 4px; /* Rounded corners */
+    padding: 6px 10px; /* Padding around text */
+    cursor: pointer;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 20;
+    font-size: 14px;
+    width: auto; /* Adjust width based on content */
+    height: auto; /* Adjust height based on content */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+  }
+
+.back-to-top-btn.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top-btn:hover {
+  background-color: rgba(120, 120, 120, 0.9);
+}
+
+.back-to-top-btn:active {
+  background-color: #667eea;
+  transform: translateY(1px);
 }

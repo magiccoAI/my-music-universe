@@ -40,36 +40,99 @@ const ConnectionsPage = () => {
   ], []);
 
   const pianoSounds = useRef({});
+  const audioLoadPromises = useRef({});
 
-  useEffect(() => {
-    pianoSoundFiles.forEach(file => {
-      const audio = new Audio(file);
-      audio.load(); // Explicitly load the audio
-      audio.addEventListener('canplaythrough', () => {
-        console.log('Audio ready to play:', file);
-      });
-      pianoSounds.current[file] = audio;
-    });
-  }, [pianoSoundFiles]);
-
-  const playPianoSound = useCallback((index) => {
+  const loadAudioOnDemand = useCallback(async (index) => {
     const soundFile = pianoSoundFiles[index % pianoSoundFiles.length];
+    // console.log('Attempting to load audio from:', soundFile);
+    
+    // 如果音频已经加载，直接返回
     if (pianoSounds.current[soundFile]) {
-      pianoSounds.current[soundFile].currentTime = 0; // Reset to start
-        pianoSounds.current[soundFile].volume = 1;
-        console.log(`Attempting to play: ${soundFile}`);
-        pianoSounds.current[soundFile].play().then(() => {
-          console.log(`Successfully played: ${soundFile}`);
-        }).catch(e => {
-          console.error(`Error playing sound ${soundFile}:`, e);
-        });
+      return pianoSounds.current[soundFile];
     }
+    
+    // 如果正在加载中，返回加载promise
+    if (audioLoadPromises.current[soundFile]) {
+      return audioLoadPromises.current[soundFile];
+    }
+    
+    // 创建新的音频加载promise
+    audioLoadPromises.current[soundFile] = new Promise((resolve, reject) => {
+      const audio = new Audio(soundFile);
+      
+      const onCanPlayThrough = () => {
+        console.log('Audio loaded and ready:', soundFile);
+        pianoSounds.current[soundFile] = audio;
+        delete audioLoadPromises.current[soundFile];
+        resolve(audio);
+      };
+      
+      const onError = (error) => {
+        console.error('Failed to load audio:', soundFile, error, 'MediaError:', audio.error);
+        delete audioLoadPromises.current[soundFile];
+        reject(error);
+      };
+      
+      audio.addEventListener('canplaythrough', onCanPlayThrough, { once: true });
+      audio.addEventListener('error', onError, { once: true });
+      
+      // 开始加载音频
+      audio.load();
+    });
+    
+    return audioLoadPromises.current[soundFile];
   }, [pianoSoundFiles]);
+
+  const playPianoSound = useCallback(async (index) => {
+    try {
+      const soundFile = pianoSoundFiles[index % pianoSoundFiles.length];
+      
+      // 按需加载音频
+      const audio = await loadAudioOnDemand(index);
+      
+      if (audio) {
+        audio.currentTime = 0; // Reset to start
+        audio.volume = 1;
+        console.log(`Attempting to play: ${soundFile}`);
+        
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log(`Successfully played: ${soundFile}`);
+            })
+            .catch(e => {
+              console.error(`Error playing sound ${soundFile}:`, e);
+            });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to play piano sound:', error);
+    }
+  }, [pianoSoundFiles, loadAudioOnDemand]);
 
   useEffect(() => {
     setIsConnectionsPageActive(true);
     return () => setIsConnectionsPageActive(false);
   }, [setIsConnectionsPageActive]);
+
+
+
+  // 音频资源清理
+  useEffect(() => {
+    return () => {
+      // 清理所有音频资源
+      Object.values(pianoSounds.current).forEach(audio => {
+        if (audio) {
+          audio.pause();
+          audio.src = '';
+          audio.load();
+        }
+      });
+      pianoSounds.current = {};
+      audioLoadPromises.current = {};
+    };
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -168,6 +231,7 @@ const ConnectionsPage = () => {
                     onClick={() => {
                       setSelectedTag(tag);
                     }}
+                    aria-label={`筛选标签: ${tag}，包含 ${count} 首音乐`}
                   >
                     {/* 悬停光效 */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
@@ -209,6 +273,7 @@ const ConnectionsPage = () => {
                   min-w-[140px] justify-center
                 "
                 onClick={() => setSelectedTag('')}
+                aria-label="返回标签探索页面"
               >
                 <span>←</span>
                 返回探索
@@ -230,13 +295,28 @@ const ConnectionsPage = () => {
                   "
                   onMouseEnter={() => setHovered(item.id)}
                   onMouseLeave={() => setHovered(null)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${item.music} - ${item.artist}，专辑：${item.album}`}
+                  onClick={() => { /* handle click if needed */ }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      // Simulate click for keyboard activation
+                      e.currentTarget.click();
+                    }
+                  }}
                 >
                   {/* 专辑封面容器 */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={`${process.env.PUBLIC_URL}/covers/${item.cover.split('/').pop()}`}
-                      alt={item.album}
+                      src={`${process.env.PUBLIC_URL}/optimized-images/${item.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp`}
+                      alt={`${item.album} - ${item.artist}`}
                       className="w-full aspect-square object-cover transform group-hover:scale-110 transition-transform duration-700"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `${process.env.PUBLIC_URL}/${item.cover}`;
+                        console.error('Optimized image failed to load, falling back to original:', e.target.src);
+                      }}
                     />
                     
                     {/* 顶部渐变遮罩 - 确保标题在任何背景下都清晰 */}

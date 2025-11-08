@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, memo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 
-const InfoCard = ({ music, onCardClose }) => {
+const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
   const { camera } = useThree();
   const cardRef = useRef();
   const [cardPosition, setCardPosition] = useState([0, 0, 0]);
@@ -24,7 +24,6 @@ const InfoCard = ({ music, onCardClose }) => {
     }
   });
 
-  // ESC key to close card
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
@@ -52,7 +51,7 @@ const InfoCard = ({ music, onCardClose }) => {
   if (!music) return null;
 
   return (
-    <Html position={cardPosition} transform ref={cardRef}>
+    <Html position={cardPosition} transform sprite ref={cardRef}>
       <div
         className="bg-white/90 p-3 rounded-xl shadow-2xl backdrop-blur-sm max-w-[200px] text-gray-800 text-sm border border-gray-100"
         onClick={(e) => e.stopPropagation()}
@@ -110,6 +109,6 @@ const InfoCard = ({ music, onCardClose }) => {
       </div>
     </Html>
   );
-};
+});
 
 export default InfoCard;

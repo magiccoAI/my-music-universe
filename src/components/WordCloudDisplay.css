@@ -19,6 +19,18 @@
   transform: translate(-50%, -100%); /* Adjust to position above cursor */
 }
 
+@media (max-width: 768px) {
+  .wordcloud-display {
+    overflow-x: auto;
+  }
+  .wordcloud-tooltip {
+    font-size: 8px;
+    transform: translate(0%, 0%);
+    bottom: 5px;
+    left: 5px;
+  }
+}
+
 .wordcloud-loading {
   display: flex;
   flex-direction: column;
