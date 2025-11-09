@@ -245,7 +245,7 @@ function SpecialCollection() {
                 }}>
                   <img
                     src={`${process.env.PUBLIC_URL}/optimized-images/${album.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp`}
-                    alt={album.title}
+                    alt={album.music}
                     loading="lazy" // Add lazy loading
                     style={{
                       width: '100%',
@@ -470,6 +470,7 @@ function SpecialCollection() {
               <button 
                 onClick={prevSlide}
                 className="slider-nav prev"
+                aria-label="上一张"
                 style={{
                   position: 'absolute',
                   top: '50%',
@@ -503,6 +504,7 @@ function SpecialCollection() {
               {/* 下一张按钮 */}
               <button
                 onClick={nextSlide}
+                aria-label="下一张"
                 style={{
                   position: 'absolute',
                   top: '50%',
@@ -547,6 +549,7 @@ function SpecialCollection() {
                   <button
                     key={index}
                     onClick={() => goToSlide(index)}
+                    aria-label={`前往幻灯片 ${index + 1}`}
                     style={{
                       width: '12px',
                       height: '12px',
@@ -586,7 +589,7 @@ function SpecialCollection() {
           >
             <img 
               src={selectedImage}
-              alt="Enlarged Music Report"
+              alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
               className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
               onError={(e) => {
                 console.log('Image onError triggered for src:', e.target.src);

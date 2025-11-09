@@ -21,13 +21,24 @@ module.exports = function ({ env }) {
           config: [__filename],
         },
       },
+      configure: (webpackConfig, { env, paths }) => {
+        webpackConfig.module.rules.push({
+          test: /\.ogg$/,
+          type: 'asset/resource',
+        });
+        return webpackConfig;
+      },
     },
     devServer: {
       port: process.env.PORT || 3002,
       open: false, // 禁用自动打开浏览器
       headers: { 'Cache-Control': 'max-age=31536000' }, // Set a long cache lifetime for static assets
       setupMiddlewares: (middlewares, devServer) => {
-        // You can add custom middlewares here if needed
+        devServer.app.get('*.ogg', (req, res, next) => {
+
+          res.set('Content-Type', 'audio/ogg');
+          next();
+        });
         return middlewares;
       },
     },

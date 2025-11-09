@@ -39,7 +39,7 @@ const ArchivePage = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
 
-  const [isPlaying, setIsPlaying] = useState(false); // New state for music playback
+  const [isPlaying, setIsPlaying] = useState(true); // New state for music playback
   const audioRef = useRef(null); // Ref for the audio element
   const [showBackToTopButton, setShowBackToTopButton] = useState(false); // State for back to top button visibility
 
@@ -47,10 +47,10 @@ const ArchivePage = () => {
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.play().catch(e => console.error("Error playing audio:", e));
-      } else {
-        audioRef.current.pause();
-      }
+          audioRef.current.play().catch(e => console.error("Error playing audio:", e));
+        } else {
+          audioRef.current.pause();
+        }
     }
   }, [isPlaying]);
 
@@ -174,9 +174,7 @@ const ArchivePage = () => {
 
       {/* Music Player */}
       <audio ref={audioRef} loop preload="auto">
-        <source src={process.env.PUBLIC_URL + '/audio/Mindful_Motion.mp3'} type="audio/mpeg" />
-        {/* <source src={process.env.PUBLIC_URL + '/audio/Preview_Yotto_-_Lone_Machine__mp3.pm_-_1_.ogg'} type="audio/ogg" /> */}
-        {/* <source src={process.env.PUBLIC_URL + '/audio/Preview_Yotto_-_Lone_Machine_(mp3.pm) (1).mp3'} type="audio/mpeg" /> */}
+        <source src={process.env.PUBLIC_URL + "/audio/Preview_Yotto-_Lone_Machine.ogg"} type="audio/ogg" />
         您的浏览器不支持音频播放。
       </audio>
       <MusicPlayer
@@ -342,7 +340,7 @@ const ArchivePage = () => {
       </div>
 
       {showBackToTopButton && (
-        <button className={`back-to-top-btn ${showBackToTopButton ? 'show' : ''}`} onClick={scrollToTop}>
+        <button className={`back-to-top-btn ${showBackToTopButton ? 'show' : ''}`} onClick={scrollToTop} aria-label="返回顶部">
             ↑返回顶部
           </button>
       )}

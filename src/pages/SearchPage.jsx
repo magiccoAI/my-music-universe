@@ -232,10 +232,11 @@ const SearchPage = () => {
               onKeyDown={handleSearchKeyDown}
               placeholder="输入歌手/专辑/歌曲名或音乐风格"
               className="w-full px-3 py-2 rounded-md bg-white/80 text-gray-800 placeholder-gray-600 focus:outline-none"
-              role="searchbox"
+              role="combobox"
               aria-label="搜索音乐"
               aria-expanded={showSuggestions}
               aria-controls="search-suggestions"
+              aria-haspopup="listbox"
               aria-activedescendant={
                 focusedSuggestionIndex >= 0 
                   ? `suggestion-${focusedSuggestionIndex}` 
@@ -349,23 +350,24 @@ const SearchPage = () => {
                     </span>
                   )}
                 </h3>
-                <div 
+                <div
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
                   role="grid"
                   aria-label="音乐列表"
                 >
                   {results.map((item, index) => (
-                    <motion.div
-                      key={item.id}
-                      className="relative group overflow-hidden rounded-lg shadow-md bg-white/10 cursor-pointer"
-                      onClick={() => setSelected(item)}
-                      onKeyDown={(e) => handleResultKeyDown(e, item)}
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
-                      role="gridcell"
-                      tabIndex={0}
-                      aria-label={`${item.music} - ${item.artist}`}
-                    >
+                    <div role="row" key={`row-${item.id}`}>
+                      <motion.div
+                        key={item.id}
+                        className="relative group overflow-hidden rounded-lg shadow-md bg-white/10 cursor-pointer"
+                        onClick={() => setSelected(item)}
+                        onKeyDown={(e) => handleResultKeyDown(e, item)}
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                        role="gridcell"
+                        tabIndex={0}
+                        aria-label={`${item.music} - ${item.artist}`}
+                      >
                       <img
                         src={getOptimizedImagePath(item.cover)}
                         alt={`${item.album}的封面`}
@@ -383,6 +385,7 @@ const SearchPage = () => {
                         <div>{item.artist}</div>
                       </div>
                     </motion.div>
+                    </div>
                   ))}
                 </div>
               </motion.div>
