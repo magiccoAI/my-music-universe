@@ -47,6 +47,37 @@ function App() {
     [HomePage, MusicUniverse, ArchivePage, ConnectionsPage, SearchPage].forEach(
       component => component.preload?.()
     );
-    // Trigger a new deployment after workflow fix
-    
+  }, []);
 
+  return (
+    <UniverseProvider>
+      {/* 全局渐变背景层 */}
+      <div className="global-background"></div>
+      
+      <div className="App">
+        <Suspense fallback={<LoadingScreen />}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              variants={pageVariants}
+              initial="initial"
+              animate="in"
+              exit="out"
+              className="page-content"
+            >
+              <Routes location={location}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/music-universe" element={<MusicUniverse />} />
+                <Route path="/music-universe/connections" element={<ConnectionsPage />} />
+                <Route path="/music-universe/search" element={<SearchPage />} />
+                <Route path="/archive" element={<ArchivePage />} />
+              </Routes>
+            </motion.div>
+          </AnimatePresence>
+        </Suspense>
+      </div>
+    </UniverseProvider>
+  );
+}
+
+export default App;
