@@ -1,0 +1,86 @@
+/* transitions.css */ 
+
+/* 全局渐变背景 - 消除白屏 */ 
+.global-background { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: linear-gradient( 
+    135deg, 
+    #1e1b4b 0%, 
+    #3b0764 30%, 
+    #1e3a8a 70%, 
+    #0c4a6e 100% 
+  ); 
+  z-index: -1; 
+  pointer-events: none; 
+} 
+
+/* 添加微妙的星空纹理 */ 
+.global-background::before { 
+  content: ''; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.1) 2px, transparent 0), 
+    radial-gradient(circle at 75% 75%, rgba(255, 119, 198, 0.08) 1px, transparent 0), 
+    radial-gradient(circle at 50% 50%, rgba(119, 198, 255, 0.05) 1px, transparent 0); 
+  background-size: 50px 50px, 30px 30px, 40px 40px; 
+  animation: subtleTwinkle 8s ease-in-out infinite; 
+} 
+
+@keyframes subtleTwinkle { 
+  0%, 100% { opacity: 0.3; } 
+  50% { opacity: 0.6; } 
+} 
+
+.App { 
+  position: relative; 
+  min-height: 100vh; 
+} 
+
+.page-content { 
+  position: relative; 
+  min-height: 100vh; 
+  background: transparent; /* 确保内容背景透明 */ 
+} 
+
+/* 为 AnimatePresence 的等待状态添加样式 */ 
+.AnimatePresence { 
+  position: relative; 
+} 
+
+/* 可选：添加加载状态指示器 */ 
+.route-loading-indicator { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 3px; 
+  background: linear-gradient(90deg, #06b6d4, #8b5cf6, #06b6d4); 
+  background-size: 200% 100%; 
+  animation: loadingShimmer 1.5s infinite; 
+  z-index: 1000; 
+  transform-origin: left; 
+  transform: scaleX(0); 
+  transition: transform 0.3s ease; 
+} 
+
+.route-loading-indicator.loading { 
+  transform: scaleX(0.3); 
+} 
+
+.route-loading-indicator.complete { 
+  transform: scaleX(1); 
+  transition: transform 0.5s ease; 
+} 
+
+@keyframes loadingShimmer { 
+  0% { background-position: -200% 0; } 
+  100% { background-position: 200% 0; } 
+}

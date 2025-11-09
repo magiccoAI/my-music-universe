@@ -38,7 +38,8 @@
     "three": "0.180.0",
     "three-mesh-bvh": "0.8.0",
     "tippy.js": "^6.3.7",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "react-transition-group": "^4.4.5"
   },
   "scripts": {
     "start": "cross-env PUBLIC_URL=/my-music-universe PORT=3002 npx craco start",

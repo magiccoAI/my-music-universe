@@ -26,15 +26,70 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <!-- 多语言链接声明 -->
-    <link rel="alternate" hreflang="en" href="https://magiccoai.github.io/my-music-universe/" />
-    <link rel="alternate" hreflang="zh-CN" href="https://magiccoai.github.io/my-music-universe/" />
-    <link rel="alternate" hreflang="ja" href="https://magiccoai.github.io/my-music-universe/" />
-    <title>React App</title>
+    <!-- 预加载关键资源 -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" crossorigin="use-credentials" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+    <link rel="stylesheet" href="%PUBLIC_URL%/index.css" />
+  
+    <title>Music Universe - 探索音乐封面宇宙</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div
+        id="initial-loading-screen"
+        class="absolute inset-0 flex flex-col items-center justify-center  
+          bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800  
+          z-50 transition-opacity duration-1000 opacity-100"
+      >
+        <div class="absolute inset-0">
+          <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+          <div class="absolute top-1/3 right-1/3 w-1 h-1 bg-yellow-300 rounded-full animate-pulse" style="animation-delay: '0.5s'"></div>
+          <div class="absolute bottom-1/4 left-1/3 w-1 h-1 bg-purple-400 rounded-full animate-pulse" style="animation-delay: '1s'"></div>
+        </div>
+
+        <div class="relative flex flex-col items-center justify-center">
+          <div class="relative w-48 h-48 mb-8">
+            <div class="absolute inset-0 rounded-full border-2 border-indigo-300/30 animate-spin-slow"></div>
+            <div class="absolute inset-6 rounded-full border-2 border-purple-400/50 animate-spin-slower reverse-spin"></div>
+            <div class="absolute inset-12 rounded-full border-1 border-cyan-300/70 animate-spin-normal">  
+              <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full"></div>
+              <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full"></div>
+            </div>
+            <div  
+              class="absolute inset-16 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 shadow-lg"
+              style="transform: scale(1); transition: 'transform 1.5s ease-in-out'; box-shadow: '0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(34, 211, 238, 0.3)'"
+            ></div>
+          </div>
+
+          <div class="text-center space-y-4">
+            <h2 class="text-white text-2xl font-bold tracking-widest mb-2 cosmic-text">
+              CREATING YOUR MUSIC UNIVERSE
+            </h2>
+            
+            <div class="flex justify-center space-x-2">
+              <div class="w-2 h-2 rounded-full transition-all duration-300 bg-cyan-400 scale-125"></div>
+              <div class="w-2 h-2 rounded-full transition-all duration-300 bg-purple-400 scale-100"></div>
+              <div class="w-2 h-2 rounded-full transition-all duration-300 bg-purple-400 scale-100"></div>
+            </div>
+
+            <p class="text-cyan-200 text-sm font-light mt-4 min-h-[20px] tip-transition">
+              正在调取银河系音乐数据...
+            </p>
+            
+          
+          </div>
+        </div>
+
+        <div class="absolute bottom-8 text-center">
+          <p class="text-gray-400 text-xs font-light">
+            请耐心等待，正在为您构建独特的音乐宇宙...
+          </p>
+        </div>
+      </div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -45,5 +100,67 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <!-- 添加性能监控 -->
+    <script> 
+      // 增强的性能监控和加载控制 
+      (function() { 
+        // 性能监控 
+        const startTime = performance.now(); 
+        
+        window.addEventListener('load', function() { 
+          const loadTime = performance.now() - startTime; 
+          const totalLoadTime = performance.timing.loadEventEnd - performance.timing.navigationStart; 
+          
+          console.log('Music Universe - 加载统计:', { 
+            '白屏时间': `${loadTime.toFixed(2)}ms`, 
+            '总加载时间': `${totalLoadTime}ms`, 
+            '用户代理': navigator.userAgent 
+          }); 
+  
+          // 确保加载屏幕至少显示1秒（避免闪烁） 
+          const minDisplayTime = 1000; 
+          const elapsed = performance.now() - startTime; 
+          const remainingTime = Math.max(0, minDisplayTime - elapsed); 
+  
+          setTimeout(function() { 
+            const loadingScreen = document.getElementById('initial-loading-screen'); 
+            if (loadingScreen) { 
+              loadingScreen.classList.add('fade-out'); 
+              setTimeout(function() { 
+                loadingScreen.style.display = 'none'; 
+                // 触发自定义事件，通知React应用加载完成 
+                window.dispatchEvent(new Event('loading-complete')); 
+              }, 500); 
+            } 
+          }, remainingTime); 
+        }); 
+  
+        // 错误处理 
+        window.addEventListener('error', function(e) { 
+          console.error('加载遇到问题:', e.error); 
+          const loadingScreen = document.getElementById('initial-loading-screen'); 
+          if (loadingScreen) { 
+            loadingScreen.innerHTML = ` 
+              <div class="text-center text-white"> 
+                <h2 class="text-xl mb-4">加载遇到问题</h2> 
+                <p class="text-sm opacity-80">请刷新页面重试</p> 
+                <button onclick="window.location.reload()" class="mt-4 px-4 py-2 bg-cyan-500 rounded-lg"> 
+                  重新加载 
+                </button> 
+              </div> 
+            `; 
+          } 
+        }); 
+  
+        // 网络状态监控 
+        window.addEventListener('online', function() { 
+          console.log('网络连接恢复'); 
+        }); 
+  
+        window.addEventListener('offline', function() { 
+          console.warn('网络连接断开'); 
+        }); 
+      })(); 
+    </script>
   </body>
 </html>
