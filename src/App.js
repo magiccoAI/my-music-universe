@@ -3,14 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { UniverseProvider } from './UniverseContext';
 import LoadingScreen from './components/LoadingScreen';
 import { motion, AnimatePresence } from 'framer-motion';
-import './transitions.css'; // 我们将在这里添加样式
-// import MusicUniverse from './MusicUniverse';
-// import HomePage from './pages/HomePage';
-// import ArchivePage from './pages/ArchivePage';
-// import ConnectionsPage from './pages/ConnectionsPage';
-// import SearchPage from './pages/SearchPage';
-// import { TransitionGroup, CSSTransition } from 'react-transition-group';
-// import './transitions.css';
+import './transitions.css';
 
 const MusicUniverse = lazy(() => import('./MusicUniverse'));
 MusicUniverse.preload = () => import('./MusicUniverse');
