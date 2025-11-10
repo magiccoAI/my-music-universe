@@ -30,13 +30,15 @@ const ConnectionsPage = () => {
     process.env.PUBLIC_URL + '/audio/d6-82018.mp3',
     process.env.PUBLIC_URL + '/audio/e6-82016.mp3',
     process.env.PUBLIC_URL + '/audio/f6-102819.mp3',
-    process.env.PUBLIC_URL + '/audio/g6-82013.mp3',
-    process.env.PUBLIC_URL + '/audio/do-80236.mp3',
+    process.env.PUBLIC_URL + '/audio/g6-82013.mp3',   
     process.env.PUBLIC_URL + '/audio/re-78500.mp3',
     process.env.PUBLIC_URL + '/audio/fa-78409.mp3',
     process.env.PUBLIC_URL + '/audio/sol-101774.mp3',
     process.env.PUBLIC_URL + '/audio/si-80238.mp3',
-    process.env.PUBLIC_URL + '/audio/piano-g-6200.mp3',
+    process.env.PUBLIC_URL + '/audio/2-notes-octave-guitar-83275.mp3',
+    process.env.PUBLIC_URL + '/audio/bass-guitar-three-notes-43765.mp3',
+    process.env.PUBLIC_URL + '/audio/sfx-piano-bar2.mp3',
+    process.env.PUBLIC_URL + '/audio/sfx-piano-effect9.mp3',
   ], []);
 
   const pianoSounds = useRef({});
