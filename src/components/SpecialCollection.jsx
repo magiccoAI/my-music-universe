@@ -551,8 +551,8 @@ function SpecialCollection() {
                     onClick={() => goToSlide(index)}
                     aria-label={`前往幻灯片 ${index + 1}`}
                     style={{
-                      width: '12px',
-                      height: '12px',
+                      width: '14px',
+                      height: '14px',
                       borderRadius: '50%',
                       border: 'none',
                       background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.65)',

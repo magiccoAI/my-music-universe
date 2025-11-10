@@ -12,10 +12,11 @@ const MusicPlayer = ({ isPlaying, onTogglePlayPause, songTitle, artistName }) =>
         </div>
       )}
       <button
+        aria-label={isPlaying ? '暂停' : '播放'}
         onClick={onTogglePlayPause}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative w-12 h-12 rounded-full flex items-center justify-center
+        className="relative w-11 h-11 rounded-full flex items-center justify-center
                    bg-gradient-to-r from-indigo-500 to-sky-500 text-white shadow-lg
                    hover:from-indigo-600 hover:to-sky-600 transition-all duration-300 focus:outline-none"
       >
