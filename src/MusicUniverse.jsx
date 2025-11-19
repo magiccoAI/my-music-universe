@@ -148,21 +148,7 @@ const MusicUniverse = () => {
     default: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800", // Add a default theme
   };
 
-  useEffect(() => {
-    if (musicData.length > 0 && positionedMusicData.length === 0) {
-      const newPositionedData = musicData.map(item => {
-        if (!item.position) {
-          // Generate random positions for items without a defined position
-          const x = (Math.random() - 0.5) * 20; // -10 to 10
-          const y = (Math.random() - 0.5) * 20; // -10 to 10
-          const z = (Math.random() - 0.5) * 20; // -10 to 10
-          return { ...item, position: [x, y, z] };
-        }
-        return item;
-      });
-      setPositionedMusicData(newPositionedData);
-    }
-  }, [musicData, positionedMusicData]);
+  
 
 
 

@@ -1,6 +1,6 @@
 {
   "name": "music-universe",
-  "homepage": "https://magiccoAI.github.io/my-music-universe",
+  "homepage": "/my-music-universe",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -48,7 +48,7 @@
     "clean-install": "rm -rf node_modules && rm package-lock.json && npm install",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "build": "craco build",
+    "build": "cross-env PUBLIC_URL='' craco build",
     "analyze": "npx cross-env REACT_APP_INTERACTIVE_ANALYZE=1 npm run build"
   },
   "eslintConfig": {

@@ -19,6 +19,12 @@
   );
 }
 
+.loading-spinnera_inner-glow {
+  transform: scale(1);
+  transition: transform 1.5s easea_in-out;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(34, 211, 238, 0.3);
+}
+
 .cloud-layer {
   position: absolute;
   top: 0;

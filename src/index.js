@@ -8,11 +8,9 @@ import App from './App'; // Import App
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
     <HashRouter>
       <App /> {/* Render App */}
     </HashRouter>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
