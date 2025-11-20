@@ -17,7 +17,7 @@ const useMusicData = () => {
       const base = process.env.PUBLIC_URL || '';
       const musicCandidates = [
         `${base}/data/data.json`,
-        `/data/data.json`
+        `${base}/data/aggregated_data.json`
       ];
       const aggregatedCandidates = [
         `${base}/data/aggregated_data.json`,
@@ -29,24 +29,14 @@ const useMusicData = () => {
           try {
             console.log(`Attempting to fetch from: ${url}`);
             const res = await fetch(url);
-            if (!res.ok) {
-              const errorText = await res.text(); // Get text even on error
-              console.warn(`Fetch failed for ${url} with status: ${res.status}. Response text: ${errorText.substring(0, 200)}`);
-              continue;
-            }
             const ct = res.headers.get('content-type') || '';
-            console.log(`Content-Type for ${url}: ${ct}`);
-            if (ct.includes('application/json')) {
-              return await res.json();
-            }
-            const text = await res.text();
-            console.warn(`Expected JSON but received Content-Type: ${ct}. Response text: ${text.substring(0, 200)}. Attempting to parse as JSON.`);
-            try {
-              return JSON.parse(text);
-            } catch (parseError) {
-              console.error(`Failed to parse text from ${url} as JSON:`, parseError);
+            if (!res.ok || !ct.includes('application/json')) {
+              const errorText = await res.text(); // Get text even on error
+              console.warn(`Fetch failed for ${url} with status: ${res.status} and Content-Type: ${ct}. Response text: ${errorText.substring(0, 200)}`);
               continue;
             }
+            console.log(`Content-Type for ${url}: ${ct}`);
+            return await res.json();
           } catch (fetchError) {
             console.error(`Fetch error for ${url}:`, fetchError);
             continue;

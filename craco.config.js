@@ -16,20 +16,13 @@ module.exports = function ({ env }) {
   return {
     webpack: {
       plugins: plugins,
-      cache: {
-        type: 'memory', // Disable filesystem cache to resolve stuck compilation
-        buildDependencies: {
-          config: [__filename],
-        },
-      },
+      
       configure: (webpackConfig, { env, paths }) => {
         webpackConfig.module.rules.push({
               test: /\.ogg$/,
               type: 'asset/resource',
             });
-            if (process.env.PUBLIC_URL === '') {
-              webpackConfig.output.publicPath = '/';
-            }
+            webpackConfig.output.publicPath = process.env.PUBLIC_URL + '/';
             return webpackConfig;
       },
     },
