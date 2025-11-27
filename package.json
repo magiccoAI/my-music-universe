@@ -23,16 +23,16 @@
     "echarts-wordcloud": "^2.1.0",
     "framer-motion": "^12.23.24",
     "http-server": "^14.1.1",
-    "lucide-react": "^0.545.0",
     "p5": "^2.0.5",
     "p5.sound": "^0.2.0",
+    "postcss-preset-env": "^10.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-p5-wrapper": "^4.1.2",
     "react-router-dom": "^6.22.3",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "5.0.1",
     "react-transition-group": "^4.4.5",
-    "react-window": "^2.2.1",
+    "react-window": "^2.2.3",
     "react-zoom-pan-pinch": "^3.7.0",
     "sharp": "^0.34.4",
     "styled-jsx": "^5.1.7",
@@ -43,14 +43,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cross-env PUBLIC_URL=/my-music-universe PORT=3002 npx craco start",
+    "start": "cross-env PUBLIC_URL=/my-music-universe PORT=3011 NODE_OPTIONS=--max_old_space_size=4096 craco start",
     "fix-deps": "node scripts/fix-dependencies.js",
     "reset": "npm run clean-install && npm run build",
     "clean-install": "rd /s /q node_modules && del package-lock.json && npm install",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "build": "cross-env PUBLIC_URL=/my-music-universe craco build",
-    "analyze": "npx cross-env REACT_APP_INTERACTIVE_ANALYZE=1 npm run build",
+    "build": "cross-env NODE_ENV=production PUBLIC_URL=/my-music-universe craco build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
@@ -74,11 +73,10 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
-    "cra-bundle-analyzer": "^0.1.1",
     "cross-env": "^10.1.0",
-    "eslint-webpack-plugin": "^5.0.2",
+    "eslint-webpack-plugin": "^4.0.0",
     "gh-pages": "^6.3.0",
-    "source-map-explorer": "^2.5.3",
-    "webpack-bundle-analyzer": "^4.10.2"
+    "source-map-explorer": "^2.5.3"
+
   }
 }

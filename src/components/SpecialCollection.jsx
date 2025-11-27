@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import SpecialCollectionCSS from './SpecialCollection.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import useIsMobile from '../hooks/useIsMobile';
+import useMusicData from '../hooks/useMusicData';
 
 function SpecialCollection() {
+  const { musicData: allMusicData, loading: isLoading, error } = useMusicData();
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState('featured');
   const [hoveredItem, setHoveredItem] = useState(null);
@@ -85,73 +87,42 @@ function SpecialCollection() {
     }
   ]);
   
-  const [favMusicList, setFavMusicList] = useState([]);
+  const favMusicList = useMemo(() => {
+    return allMusicData.filter(item => item.note && item.note.includes('Fav'));
+  }, [allMusicData]);
   const [showAllCollections, setShowAllCollections] = useState(false);
   const [showMusicReport, setShowMusicReport] = useState(true); // 新增状态变量
-  const [allMusicData, setAllMusicData] = useState([]);
-  const [showModal, setShowModal] = useState(false); // 控制模态框显示
-  const [selectedImage, setSelectedImage] = useState(''); // 存储选中的图片URL
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // 存储选中图片的索引
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-  const handleImageClick = (imageUrl, index) => {
-    setSelectedImage(imageUrl);
-    setShowModal(true);
+  const handleImageClick = (imageSrc, index) => {
+    setSelectedImage(imageSrc);
     setSelectedImageIndex(index);
-    console.log('handleImageClick: Setting selectedImage to', imageUrl, 'and selectedImageIndex to', index);
+    setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
-    setSelectedImage('');
+    setSelectedImage(null);
+    setSelectedImageIndex(null);
   };
 
-  const goToNextImage = () => {
-    console.log('goToNextImage called. Current selectedImageIndex:', selectedImageIndex, 'musicReports:', musicReports);
-    if (selectedImageIndex !== null) {
-      const nextIndex = (selectedImageIndex + 1) % musicReports.length;
-      const imageId = musicReports[nextIndex].id;
-      const newImageUrl = `${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${imageId}${isMobile ? '-mobile' : ''}.webp`;
-      setSelectedImage(newImageUrl);
-      setSelectedImageIndex(nextIndex);
-      console.log('goToNextImage: Setting next image to', newImageUrl, 'with index', nextIndex);
-    }
+  const goToNextImage = (e) => {
+    e.stopPropagation();
+    if (selectedImageIndex === null) return;
+    const nextIndex = (selectedImageIndex + 1) % musicReports.length;
+    setSelectedImageIndex(nextIndex);
+    setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[nextIndex].id}.png`);
   };
 
-  const goToPreviousImage = () => {
-    console.log('goToPreviousImage called. Current selectedImageIndex:', selectedImageIndex, 'musicReports:', musicReports);
-    if (selectedImageIndex !== null) {
-      const prevIndex = (selectedImageIndex - 1 + musicReports.length) % musicReports.length;
-      const imageId = musicReports[prevIndex].id;
-      const newImageUrl = `${process.env.PUBLIC_URL}/optimized-images/music-report-spcl-1029-${imageId}${isMobile ? '-mobile' : ''}.webp`;
-      setSelectedImage(newImageUrl);
-      setSelectedImageIndex(prevIndex);
-      console.log('goToPreviousImage: Setting previous image to', newImageUrl, 'with index', prevIndex);
-    }
+  const goToPreviousImage = (e) => {
+    e.stopPropagation();
+    if (selectedImageIndex === null) return;
+    const prevIndex = (selectedImageIndex - 1 + musicReports.length) % musicReports.length;
+    setSelectedImageIndex(prevIndex);
+    setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[prevIndex].id}.png`);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setAllMusicData(data);
-      } catch (error) {
-        console.error("Error fetching music data in SpecialCollection:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (allMusicData.length > 0) {
-      const filteredFavMusic = allMusicData.filter(item => item.note && item.note.includes('Fav'));
-      setFavMusicList(filteredFavMusic);
-    }
-  }, [allMusicData]);
 
   const handleTabClick = (tab) => {
     if (tab === 'fav') {

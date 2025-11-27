@@ -4,14 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import MouseParticleEffect from '../components/MouseParticleEffect';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useMusicSearch } from '../hooks/useMusicSearch';
+import { getOptimizedImagePath } from '../utils/imageUtils';
+import useMusicData from '../hooks/useMusicData';
 
-// 图片加载优化的工具函数
-const getOptimizedImagePath = (cover) => {
-  const filename = cover.split('/').pop().replace(/\.[^/.]+$/, '');
-  return `${process.env.PUBLIC_URL}/optimized-images/${filename}.webp`;
-};
+
 
 const SearchPage = () => {
+  const { musicData, loading: musicDataLoading, error: musicDataError } = useMusicData();
   const {
     isLoading,
     error,
@@ -22,7 +21,7 @@ const SearchPage = () => {
     results,
     artists,
     resetSearch
-  } = useMusicSearch();
+  } = useMusicSearch(musicData);
 
   const [selected, setSelected] = useState(null);
   const [visibleBackgroundImages, setVisibleBackgroundImages] = useState(new Set());
@@ -172,7 +171,7 @@ const SearchPage = () => {
 
   return (
     <div 
-      className="min-h-screen w-screen bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 text-white relative overflow-hidden"
+      className="min-h-screen w-screen bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 text-white relative"
       role="main"
       aria-label="音乐搜索页面"
     >

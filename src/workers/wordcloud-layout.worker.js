@@ -1,16 +1,16 @@
-import * as d3 from 'd3';
+import { forceSimulation, forceManyBody, forceCenter, forceCollide, forceX, forceY } from 'd3-force';
 
 self.onmessage = (e) => {
   const { data, dimensions } = e.data;
   const centerX = dimensions.width / 2;
   const centerY = dimensions.height / 2;
 
-  const simulation = d3.forceSimulation(data)
-    .force('charge', d3.forceManyBody().strength(20))
-    .force('center', d3.forceCenter(centerX, centerY))
-    .force('collision', d3.forceCollide().radius(d => d.size * 1.8))
-    .force('x', d3.forceX(centerX).strength(0.3))
-    .force('y', d3.forceY(centerY).strength(0.3))
+  const simulation = forceSimulation(data)
+    .force('charge', forceManyBody().strength(20))
+    .force('center', forceCenter(centerX, centerY))
+    .force('collision', forceCollide().radius(d => d.size * 1.8))
+    .force('x', forceX(centerX).strength(0.3))
+    .force('y', forceY(centerY).strength(0.3))
     .stop();
 
   for (let i = 0; i < 200; ++i) simulation.tick();

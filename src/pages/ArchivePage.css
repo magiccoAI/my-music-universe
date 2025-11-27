@@ -111,7 +111,7 @@
 /* 英雄区域优化 */
 .hero-section {
   position: relative;
-  min-height: auto; /* Changed from 100vh to auto */
+  min-height: 0; /* Changed from 100vh to auto, then to 0 for broader compatibility */
   display: flex;
   flex-direction: column;
   /* Removed justify-content and align-items */
@@ -646,23 +646,7 @@
   }
 }
 
-/* 滚动条优化 */
-::-webkit-scrollbar {
-  width: 8px;
-}
 
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-}
 
   .back-to-top-btn {
     position: fixed;

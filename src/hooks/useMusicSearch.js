@@ -1,33 +1,13 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
-export const useMusicSearch = () => {
-  const [musicData, setMusicData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+export const useMusicSearch = (musicData = []) => {
+  const [isLoading, setIsLoading] = useState(!musicData || musicData.length === 0);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
   const [artistFilter, setArtistFilter] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  // 数据加载
-  useEffect(() => {
-    const fetchMusicData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('数据加载失败');
-        const data = await response.json();
-        setMusicData(data);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to load data.json', err);
-        setError('数据加载出错，请刷新页面重试');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMusicData();
-  }, []);
+  
 
   // 搜索防抖
   useEffect(() => {

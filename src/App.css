@@ -54,7 +54,7 @@
   backdrop-filter: blur(10px); /* Glass effect */
   -webkit-backdrop-filter: blur(10px); /* For Safari */
   position: relative; /* For positioning pseudo-elements */
-  overflow: hidden; /* Hide overflowing waves */
+
 }
 
 .App-link {

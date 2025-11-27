@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './MusicSlotMachine.css';
-
+import useMusicData from '../hooks/useMusicData';
 
 const MusicSlotMachine = () => {
-  const [albums, setAlbums] = useState([]);
+  const { musicData: albums, loading: isLoading, error } = useMusicData();
   // const [selectedAlbums, setSelectedAlbums] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
   // const [showResult, setShowResult] = useState(false);
@@ -11,32 +11,7 @@ const MusicSlotMachine = () => {
   const spinTimeoutRef = useRef(null);
    const initialized = useRef(false);
 
-  // 加载音乐数据
-  useEffect(() => {
-    const loadAlbums = async () => {
-      try {
-        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json');
-        const data = await response.json();
-        const validAlbums = data.filter(album => album !== null && album !== undefined);
-        const formattedAlbums = validAlbums.map(album => ({
-          ...album,
-          cover: album.cover
-        }));
-        setAlbums(formattedAlbums || []);
-        
-        // 初始化显示三个随机专辑
-        // const initialAlbums = [];
-        // for (let i = 0; i < 3; i++) {
-        //   initialAlbums.push(data[Math.floor(Math.random() * data.length)]);
-        // }
-        // setSelectedAlbums(initialAlbums);
-      } catch (error) {
-        console.error('加载音乐数据失败:', error);
-      }
-    };
-
-    loadAlbums();
-  }, []);
+  
 
   // 初始化卷轴
   const initializeReels = useCallback(() => {

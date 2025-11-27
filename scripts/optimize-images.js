@@ -33,7 +33,7 @@ async function optimizeImages() {
                         // Standard WebP version
                         const standardOutputFile = path.join(outputDir, `${baseName}.webp`);
                         await sharp(inputFile)
-                            .webp({ quality: 80 }) // 转换为 WebP 格式，质量为 80
+                            .webp({ quality: 75 }) // 转换为 WebP 格式，质量为 80
                             .toFile(standardOutputFile);
                         console.log(`Optimized ${file} to ${path.basename(standardOutputFile)}`);
 

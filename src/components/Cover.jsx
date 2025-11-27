@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback, memo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Plane } from '@react-three/drei';
-import * as THREE from 'three'; // Import THREE
+import { Frustum, Box3, TextureLoader, LinearFilter, Matrix4 } from 'three'; // Import THREE
 
 const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
   if (!originalCoverPath) return null; // Handle null or undefined paths
@@ -53,8 +53,8 @@ const getColorFromId = (id) => {
 const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile }) => {
   const meshRef = useRef();
   const { camera } = useThree();
-  const frustum = new THREE.Frustum();
-  const box = new THREE.Box3();
+  const frustum = new Frustum();
+  const box = new Box3();
 
   const [loadedTexture, setLoadedTexture] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,12 +84,12 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
       return;
     }
       
-    const loader = new THREE.TextureLoader();
+    const loader = new TextureLoader();
     loader.crossOrigin = 'anonymous';
     loader.load(
       textureUrl,
       (texture) => {
-        texture.minFilter = THREE.LinearFilter;
+        texture.minFilter = LinearFilter;
         setLoadedTexture(texture);
         setIsLoading(false);
       },
@@ -141,7 +141,7 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
       if (frameCounter.current % 30 === 0 && !loadedTexture && !isLoading) {
         camera.updateMatrixWorld();
         camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
-        frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+        frustum.setFromProjectionMatrix(new Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
 
         box.setFromObject(meshRef.current);
         if (frustum.intersectsBox(box)) {

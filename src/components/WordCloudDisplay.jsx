@@ -1,137 +1,135 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import * as d3 from 'd3';
-import './WordCloudDisplay.css'; // 依赖更新后的 CSS
+import * as PropTypes from 'prop-types';
+import { select } from 'd3-selection';
+import 'd3-transition';
 
-// 创建词云布局 Worker
-const cloudWorker = new Worker(new URL('../workers/wordcloud-layout.js', import.meta.url));
+
+import { scaleOrdinal, scaleLinear } from 'd3-scale';
+import { schemeTableau10, schemeSet3 } from 'd3-scale-chromatic';
+import { extent } from 'd3-array';
+import { color } from 'd3-color';
+
+
+import './WordCloudDisplay.css';
 
 const WordCloudDisplay = ({
   type = 'artist',
-  maxWords = 100, // 优化：根据需求将默认值从 60 调整为 100
+  maxWords = 100,
   onWordClick,
   width = 800,
   height = 400
 }) => {
   const svgRef = useRef(null);
   const containerRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
+  
+  // 状态管理
+  const [isLoading, setIsLoading] = useState(type !== 'style'); // 如果是图片模式，初始不需要 loading
   const [dimensions, setDimensions] = useState({ width, height });
   const [data, setData] = useState([]);
-  const [hoveredWord, setHoveredWord] = useState(null);
   const [layoutData, setLayoutData] = useState([]);
+  const [hoveredWord, setHoveredWord] = useState(null);
+  
+  // 用于防抖的 ref
   const resizeTimeoutRef = useRef();
 
-  // 防抖的尺寸调整
+  // 1. 处理容器尺寸响应式 (通用)
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
+        // 保持一定比例，但限制最大高度
         setDimensions({
           width: containerWidth,
-          height: Math.min(containerWidth * 0.6, 500)
+          height: Math.min(containerWidth * 0.6, 600) 
         });
       }
     };
 
     const handleResize = () => {
-      if (resizeTimeoutRef.current) {
-        clearTimeout(resizeTimeoutRef.current);
-      }
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
       resizeTimeoutRef.current = setTimeout(updateDimensions, 150);
     };
 
-    updateDimensions(); // Initial call
+    // 初始化尺寸
+    updateDimensions();
     window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (resizeTimeoutRef.current) {
-        clearTimeout(resizeTimeoutRef.current);
-      }
-      // 清理 D3 引用
-      if (svgRef.current) {
-        d3.select(svgRef.current).selectAll('*').remove();
-      }
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
     };
   }, []);
 
-  // 动态加载数据 (无变动)
+  // 2. 获取数据 (仅在非 style 模式下运行)
   useEffect(() => {
+    if (type === 'style') return; // 优化：样式模式显示图片，无需请求数据
+
     const abortController = new AbortController();
     const signal = abortController.signal;
 
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch(process.env.PUBLIC_URL + '/data/data.json', { signal });
+        const response = await fetch(`${process.env.PUBLIC_URL}/data/aggregated_data.json`, { signal });
+        if (!response.ok) throw new Error('Network response was not ok');
         const jsonData = await response.json();
+        console.log('Fetched data:', jsonData);
         setData(jsonData);
       } catch (error) {
-        if (error.name === 'AbortError') {
-          console.log('Fetch aborted');
-        } else {
+        if (error.name !== 'AbortError') {
           console.error('加载数据失败:', error);
+          setIsLoading(false);
         }
-      } finally {
-        // setIsLoading(false); // 移动到词云渲染完成后
       }
     };
 
     fetchData();
 
-    return () => {
-      abortController.abort();
-    };
-  }, []);
+    return () => abortController.abort();
+  }, [type]);
 
-  // 处理词云数据 (优化字号)
+  // 3. 数据清洗与处理 (Memoized)
   const processData = useCallback(() => {
-    if (!data || !Array.isArray(data)) return [];
+    console.log('Entering processData: data =', data, 'type =', type);
+    if (!data || typeof data !== 'object' || Object.keys(data).length === 0) return [];
 
-    // 统计词频
-    const wordCount = {};
-    data.forEach(item => {
-      let text;
-      if (type === 'artist') {
-        text = item.artist.split('/')[0]
-          .replace(/[()（）]/g, '')
-          .replace(/\s+/g, ' ')
-          .trim();
-      } else {
-        text = item.note
-          .replace(/[,，、]/g, ' ')
-          .split(/\s+/)
-          .filter(tag => tag.length > 1)[0] || '';
-      }
+    let relevantCounts = {};
+    if (type === 'artist') {
+      relevantCounts = data.artist_counts || {};
+    } else if (type === 'style') {
+      relevantCounts = data.style_counts || {};
+    }
 
-      if (text) {
-        wordCount[text] = (wordCount[text] || 0) + 1;
-      }
-    });
+    if (Object.keys(relevantCounts).length === 0) return [];
 
-    // 排序并限制数量
-    const sortedData = Object.entries(wordCount)
+    // 排序并截取
+    const sortedData = Object.entries(relevantCounts)
       .sort(([, a], [, b]) => b - a)
       .slice(0, maxWords)
       .map(([text, value]) => ({ text, value }));
 
-    // 计算字体大小范围 - 增加大小差异对比度
+    if (sortedData.length === 0) return [];
+
+    // 字号计算
     const values = sortedData.map(d => d.value);
     const minValue = Math.min(...values);
     const maxValue = Math.max(...values);
-
-    // 优化：根据需求调整字号范围
+    
     const minSize = 16;
-    const maxSize = 60; // 统一最大字号为 60
+    const maxSize = 60;
 
     return sortedData.map(d => ({
       ...d,
-      size: minSize + ((d.value - minValue) / (maxValue - minValue)) * (maxSize - minSize)
+      size: minValue === maxValue 
+        ? (minSize + maxSize) / 2 
+        : minSize + ((d.value - minValue) / (maxValue - minValue)) * (maxSize - minSize)
     }));
   }, [data, maxWords, type]);
 
-  // 使用 Web Worker 进行布局计算
+  // 4. Worker 布局计算 (修复核心：Worker 在 Effect 内部实例化)
   useEffect(() => {
-    if (!data.length) return;
+    if (type === 'style') return;
+    if (data.length === 0) return;
 
     const processedData = processData();
     if (processedData.length === 0) {
@@ -140,47 +138,73 @@ const WordCloudDisplay = ({
     }
 
     setIsLoading(true);
-    cloudWorker.postMessage({ data: processedData, dimensions });
 
-    cloudWorker.onmessage = (e) => {
-      setLayoutData(e.data);
-      setIsLoading(false);
-    };
+    // FIX: 在此处实例化 Worker，避免顶层调用的 undefined 错误
+    const worker = new Worker(new URL('../workers/wordcloud-layout.worker.js', import.meta.url));
 
+    console.log('Sending data to worker: processedData length =', processedData.length, 'dimensions =', dimensions);
+    worker.postMessage({ 
+      data: processedData, 
+      dimensions: { width: dimensions.width, height: dimensions.height } 
+    });
+
+    worker.onmessage = (e) => {
+        console.log('Data received from worker:', e.data);
+        setLayoutData(e.data);
+        setIsLoading(false);
+      };
+
+    worker.onerror = (e) => {
+        console.error('WordCloud Worker Error:', e);
+        setIsLoading(false);
+      };
+
+    // 清理函数：组件卸载或依赖变化时终止 worker
     return () => {
-      cloudWorker.onmessage = null;
+      worker.terminate();
     };
-  }, [data, dimensions, processData]);
+  }, [data, dimensions, processData, type]);
 
-  // 生成词云 (优化背景)
+  // 5. D3 渲染逻辑
   useEffect(() => {
-    if (!svgRef.current || !layoutData.length) return;
+    if (type === 'style' || !svgRef.current || layoutData.length === 0) return;
 
-    const svg = d3.select(svgRef.current)
-      .attr('width', dimensions.width)
-      .attr('height', dimensions.height);
+    const svg = select(svgRef.current);
+    
+    // 清理旧内容
     svg.selectAll('*').remove();
 
-    // 添加透明毛玻璃背景
+    // 背景层
     svg.append('rect')
       .attr('width', dimensions.width)
       .attr('height', dimensions.height)
-      .attr('class', 'wordcloud-background');
+      .attr('class', 'wordcloud-background')
+      .style('fill', 'rgba(255,255,255,0.01)'); // 确保有鼠标事件响应区域
+
+    // 定义滤镜
+    const defs = svg.append('defs');
+    const filter = defs.append('filter')
+      .attr('id', 'glow')
+      .attr('x', '-50%').attr('y', '-50%')
+      .attr('width', '200%').attr('height', '200%');
+    
+    filter.append('feGaussianBlur')
+      .attr('stdDeviation', '3.5')
+      .attr('result', 'coloredBlur');
+    
+    const feMerge = filter.append('feMerge');
+    feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    // 颜色比例尺
+    const colorSchemes = { artist: schemeTableau10, style: schemeSet3 };
+    const colorScale = scaleOrdinal(colorSchemes[type] || schemeTableau10);
+    
+    const maxVal = Math.max(...layoutData.map(d => d.value));
+    const brightnessScale = scaleLinear().domain([0, maxVal]).range([0.6, 1.2]);
 
     const g = svg.append('g');
 
-    // 颜色方案 - 更丰富的色彩 (无变动)
-    const colorSchemes = {
-      artist: d3.schemeTableau10,
-      style: d3.schemeSet3
-    };
-    const colorScale = d3.scaleOrdinal(colorSchemes[type]);
-    const brightnessScale = d3.scaleLinear()
-      .domain(d3.extent(layoutData, d => d.value))
-      .range([0.6, 1.2]);
-    // 根据频率调整亮度
-
-    // 绘制词云 (交互无变动)
     const texts = g.selectAll('text')
       .data(layoutData)
       .enter()
@@ -190,112 +214,110 @@ const WordCloudDisplay = ({
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .attr('font-size', d => `${d.size}px`)
-      .attr('fill', d => {
-        const baseColor = colorScale(d.text);
-        return d3.color(baseColor).brighter(brightnessScale(d.value));
-      })
-      .attr('transform', d => `rotate(${d.rotation}, ${d.x}, ${d.y})`) // rotation 已在 layout 中设为 0
-      .style('font-weight', d => 400 + (d.value / Math.max(...layoutData.map(w => w.value))) * 400)
-      .style('cursor', 'pointer')
-      .style('opacity', d => d.opacity)
       .style('font-family', "'Segoe UI', 'Microsoft YaHei', sans-serif")
-      .style('text-shadow', '1px 1px 2px rgba(0,0,0,0.1)')
-      .attr('tabindex', 0) // 添加 tabindex
-      .attr('role', 'button') // 添加 role
-      .attr('aria-label', (d, i) => `${d.text}，出现${d.value}次`) // 添加 aria-label
-      .attr('aria-describedby', (d, i) => `desc-${i}`) // 添加 aria-describedby
-      .text(d => d.text)
-      .each(function(d, i) { // 为每个 text 元素添加 title
-        d3.select(this).append('title').attr('id', `desc-${i}`).text('按回车键或空格键选择此词汇');
+      .style('font-weight', d => 400 + (d.value / maxVal) * 400)
+      .style('fill', d => {
+         const c = color(colorScale(d.text));
+         return c ? c.brighter(brightnessScale(d.value)).toString() : '#333';
       })
+      .attr('transform', d => `rotate(${d.rotation || 0}, ${d.x}, ${d.y})`)
+      .style('cursor', 'pointer')
+      .style('opacity', 0) // 初始透明，用于动画
+      // 交互属性
+      .attr('tabindex', 0)
+      .attr('role', 'button')
+      .attr('aria-label', d => `${d.text}，出现${d.value}次`)
+      .text(d => d.text);
+
+    // 事件绑定
+    texts
       .on('mouseover', function(event, d) {
-        setHoveredWord(d);
-        d3.select(this)
-          .transition()
-          .duration(200)
+        // D3 v6+ event 是第一个参数
+        select(this)
+          .transition().duration(200)
           .style('filter', 'url(#glow)')
+          .attr('font-size', `${d.size * 1.1}px`) // 微微放大
           .style('z-index', 100);
+        
+        setHoveredWord(d);
       })
       .on('mouseout', function(event, d) {
-        d3.select(this)
-          .transition()
-          .duration(200)
+        select(this)
+          .transition().duration(200)
           .style('filter', 'none')
+          .attr('font-size', `${d.size}px`)
           .style('z-index', 1);
+        
+        setHoveredWord(null);
       })
       .on('click', (event, d) => {
         if (onWordClick) onWordClick(d.text);
       })
-      .on('keydown', function(event, d) { // 添加键盘事件处理
+      .on('keydown', (event, d) => {
         if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
           if (onWordClick) onWordClick(d.text);
         }
       });
 
-    // 优化：在需要时才创建 defs
-    const defs = svg.append('defs');
+    // 入场动画
+    texts.transition()
+      .duration(800)
+      .delay((d, i) => i * 15)
+      .style('opacity', d => d.opacity || 1);
 
-    // 添加发光效果滤镜 (无变动)
-    const filter = defs.append('filter')
-      .attr('id', 'glow')
-      .attr('x', '-50%')
-      .attr('y', '-50%')
-      .attr('width', '200%')
-      .attr('height', '200%');
-    filter.append('feGaussianBlur')
-      .attr('stdDeviation', '3.5')
-      .attr('result', 'coloredBlur');
-
-    const feMerge = filter.append('feMerge');
-    feMerge.append('feMergeNode').attr('in', 'coloredBlur');
-    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
-
-    // 添加动画效果 (无变动)
-    texts
-      .style('opacity', 0)
-      .transition()
-      .duration(1000)
-      .delay((d, i) => i * 20)
-      .style('opacity', d => d.opacity);
   }, [layoutData, dimensions, type, onWordClick]);
 
-  if (isLoading) {
-    return (
-      <div className="wordcloud-loading" ref={containerRef}>
-        <div className="loading-spinner"></div>
-        <div className="loading-text">正在生成词云星系...</div>
-      </div>
-    );
-  }
-
+  // 渲染逻辑
   return (
-    <div className="wordcloud-display" ref={containerRef}>
+    <div className="wordcloud-display" ref={containerRef} style={{ position: 'relative', width: '100%', minHeight: '300px' }}>
+      
+      {/* Loading 状态 */}
+      {isLoading && type !== 'style' && (
+        <div className="wordcloud-loading">
+          <div className="loading-spinner"></div>
+          <div className="loading-text">正在生成词云星系...</div>
+        </div>
+      )}
+
+      {/* 主要内容区 */}
       {type === 'style' ? (
         <img 
           src={`${process.env.PUBLIC_URL}/optimized-images/musicstyle-cloud2.webp`} 
           alt="Music Style Word Cloud" 
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+          style={{ width: '100%', height: 'auto', maxHeight: '600px', objectFit: 'contain' }} 
         />
       ) : (
-        <svg
-          ref={svgRef}
-          className="wordcloud-svg"
-          width={dimensions.width}
-          height={dimensions.height}
-          role="img"
-          aria-label={`${type}词云，包含${layoutData.length}个词汇`}
-          aria-describedby="wordcloud-desc"
-        >
-          <title id="wordcloud-desc">
-            交互式词云图，点击词汇可以执行相关操作
-          </title>
-        </svg>
+        !isLoading && (
+          <svg
+            ref={svgRef}
+            className="wordcloud-svg"
+            width={dimensions.width}
+            height={dimensions.height}
+            style={{ overflow: 'visible' }} // 防止放大时被裁剪
+          />
+        )
       )}
-      {hoveredWord && (
-        <div className="wordcloud-tooltip">
+
+      {/* Tooltip (绝对定位) */}
+      {hoveredWord && type !== 'style' && (
+        <div 
+          className="wordcloud-tooltip"
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px', // 固定在右上角，或者你可以根据鼠标位置计算
+            pointerEvents: 'none', // 避免遮挡鼠标事件
+            zIndex: 10,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: '#fff',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            backdropFilter: 'blur(4px)'
+          }}
+        >
           <strong>{hoveredWord.text}</strong>
-          <br />
-          出现次数: {hoveredWord.value}
+          <div style={{ fontSize: '0.85em', opacity: 0.8 }}>出现次数: {hoveredWord.value}</div>
         </div>
       )}
     </div>
@@ -309,4 +331,5 @@ WordCloudDisplay.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number
 };
+
 export default WordCloudDisplay;

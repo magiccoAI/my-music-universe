@@ -6,7 +6,7 @@ import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
 // import Stars from './components/StarsOnly';
 const Stars = React.lazy(() => import('./components/StarsOnly'));
 import UniverseNavigation from './components/UniverseNavigation';
-import * as THREE from 'three';
+
 import { UniverseContext } from './UniverseContext';
 import Cover from './components/Cover';
 import InfoCard from './components/InfoCard';

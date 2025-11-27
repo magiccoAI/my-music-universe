@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, memo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import * as THREE from 'three';
+import { Vector3 } from 'three/src/math/Vector3';
 
 const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
   const { camera } = useThree();
@@ -10,12 +10,12 @@ const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
 
   useFrame(() => {
     if (cardRef.current && music) {
-      const coverWorldPosition = new THREE.Vector3(...music.position);
-      const cameraForward = new THREE.Vector3();
+      const coverWorldPosition = new Vector3(...music.position);
+      const cameraForward = new Vector3();
       camera.getWorldDirection(cameraForward);
 
       const offsetDistance = 1.5;
-      const newCardPosition = new THREE.Vector3()
+      const newCardPosition = new Vector3()
         .copy(coverWorldPosition)
         .add(cameraForward.multiplyScalar(-offsetDistance));
 

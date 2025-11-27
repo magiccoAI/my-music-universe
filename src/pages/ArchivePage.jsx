@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
 import useIsMobile from '../hooks/useIsMobile';
 import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
+import WordCloudDisplay from '../components/WordCloudDisplay';
 
 import { Link, useLocation } from 'react-router-dom';
-import WordCloudDisplay from '../components/WordCloudDisplay';
+
 
 import SpecialCollection from '../components/SpecialCollection';
 import MusicSlotMachine from '../components/MusicSlotMachine';
@@ -80,6 +81,13 @@ const ArchivePage = () => {
       behavior: 'smooth'
     });
   };
+
+  useEffect(() => {
+    document.documentElement.classList.add('custom-scrollbar-page-active');
+    return () => {
+      document.documentElement.classList.remove('custom-scrollbar-page-active');
+    };
+  }, []);
 
   useEffect(() => {
     if (musicData.length > 0) {
@@ -264,20 +272,24 @@ const ArchivePage = () => {
 
         <div className="wordcloud-container">
           {activeGalaxy === 'artist' && (
-            <WordCloudDisplay 
-              data={aggregatedData.artist_counts} 
-              type="artist"
-              maxWords={50}
-              onWordClick={handleArtistClick}
-            />
+            <Suspense fallback={<div>加载词云中...</div>}>
+              <WordCloudDisplay 
+                data={aggregatedData.artist_counts} 
+                type="artist"
+                maxWords={50}
+                onWordClick={handleArtistClick}
+              />
+            </Suspense>
           )}
           {activeGalaxy === 'style' && (
-            <WordCloudDisplay 
-              data={aggregatedData.style_counts} 
-              type="style"
-              maxWords={50}
-              onWordClick={handleStyleClick}
-            />
+            <Suspense fallback={<div>加载词云中...</div>}>
+              <WordCloudDisplay 
+                data={aggregatedData.style_counts} 
+                type="style"
+                maxWords={50}
+                onWordClick={handleStyleClick}
+              />
+            </Suspense>
           )}
         </div>
 

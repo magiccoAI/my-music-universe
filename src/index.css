@@ -2,6 +2,109 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────
+ * 🚀 宇宙乐章 · 星云轨道滚动条 - 优化版
+ * ─────────────────────────────────────────────*/
+
+/* WebKit 基础 */
+::-webkit-scrollbar {
+  /* 滚动条宽度，略微变窄，更精致 */
+  width: 10px;
+  height: 10px;
+}
+
+/* 轨道 (Track): 深色背景 + 缓慢流动的星点 */
+::-webkit-scrollbar-track {
+  /* 保持原有的星云流动背景 */
+  background: radial-gradient(
+      circle at 30% 20%,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(0, 0, 0, 0) 45%
+    ),
+    radial-gradient(
+      circle at 70% 80%,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(0, 0, 0, 0) 55%
+    ),
+    linear-gradient(
+      to bottom,
+      #0f172a, /* 基础深蓝色 */
+      #1e1b4b 35%, /* 深紫蓝色 */
+      #312e81 65%, /* 亮紫蓝色 */
+      #0f172a 100%
+    );
+  background-size: 200% 200%;
+  animation: nebulaFlow 12s ease-in-out infinite;
+  border-radius: 10px;
+  /* 移除边框，让轨道更融入背景 */
+  /* border: 1px solid rgba(255, 255, 255, 0.08); */
+}
+
+/* 滑块 (Thumb): 聚焦蓝紫渐变，增强科技光晕 */
+::-webkit-scrollbar-thumb {
+  /* 统一为深空蓝紫渐变，与背景色调更一致 */
+  background: linear-gradient(
+    90deg,
+    #7c3aed 0%, /* 亮紫色 */
+    #4f46e5 50%, /* 靛蓝色 */
+    #2563eb 100% /* 亮蓝色 */
+  ) !important;
+  border-radius: 10px;
+  /* 略微减小边框宽度 */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* 调整阴影，更聚焦于蓝紫光晕 */
+  box-shadow:
+    0 0 8px rgba(124, 58, 237, 0.7),
+    0 0 16px rgba(37, 99, 235, 0.5);
+  transition: all 0.3s ease; /* 延长过渡时间，更平滑 */
+}
+
+/* 滑块 hover 时的律动脉冲效果 */
+::-webkit-scrollbar-thumb:hover {
+  transform: scale(1.05); /* 缩放幅度减小，更稳定 */
+  box-shadow:
+    0 0 12px rgba(124, 58, 237, 0.9),
+    0 0 24px rgba(37, 99, 235, 0.7),
+    inset 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+/* 滑块点击时 · 节奏收缩 */
+::-webkit-scrollbar-thumb:active {
+  transform: scale(0.95); /* 缩放幅度减小 */
+  box-shadow:
+    0 0 4px rgba(124, 58, 237, 0.5),
+    0 0 10px rgba(37, 99, 235, 0.4),
+    inset 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+/* 角落 */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4f46e5 #1e1b4b; /* 滑块颜色 轨道颜色 */
+}
+
+/* 星云流动动画保持不变 */
+@keyframes nebulaFlow {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/* 移除冗余的自定义滚动条和 archive-page 样式 */
+/* .custom-scrollbar, .custom-scrollbar-track, .custom-scrollbar-thumb, .archive-page 相关样式已移除 */
+
+/* 保持你原有的其他样式不变 */
 .evening-symmetric {
   background: linear-gradient(to bottom,
     #1e3a8a 0%,
@@ -19,9 +122,9 @@
   );
 }
 
-.loading-spinnera_inner-glow {
+.loading-spinner-inner-glow {
   transform: scale(1);
-  transition: transform 1.5s easea_in-out;
+  transition: transform 1.5s ease-in-out;
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(34, 211, 238, 0.3);
 }
 
@@ -29,16 +132,16 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 300%; /* Make it wider to allow for continuous scrolling */
+  width: 300%;
   height: 100%;
   background-repeat: repeat-x;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  pointer-events: none; /* Allow interaction with elements behind the clouds */
+  pointer-events: none;
 }
 
 .cloud-layer-1 {
-  background-image: url('https://www.transparentpng.com/thumb/cloud/transparent-cloud-png-1.png'); /* Placeholder */
+  background-image: url('https://www.transparentpng.com/thumb/cloud/transparent-cloud-png-1.png');
   animation-name: animateClouds1;
   animation-duration: 60s;
   opacity: 0.8;
@@ -46,7 +149,7 @@
 }
 
 .cloud-layer-2 {
-  background-image: url('https://www.transparentpng.com/thumb/cloud/transparent-cloud-png-2.png'); /* Placeholder */
+  background-image: url('https://www.transparentpng.com/thumb/cloud/transparent-cloud-png-2.png');
   animation-name: animateClouds2;
   animation-duration: 90s;
   opacity: 0.6;
@@ -54,7 +157,7 @@
 }
 
 .cloud-layer-3 {
-  background-image: url('https://www.transparentpng.com/thumb/cloud/transparent-cloud-png-3.png'); /* Placeholder */
+  background-image: url('https://www.transparentpng.com/thumb/cloud/transparent-cloud-png-3.png');
   animation-name: animateClouds3;
   animation-duration: 120s;
   opacity: 0.4;
