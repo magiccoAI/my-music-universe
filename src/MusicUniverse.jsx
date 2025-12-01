@@ -118,7 +118,7 @@ const WebGLContextHandler = memo(() => {
   return null;
 });
 
-const MusicUniverse = () => {
+const MusicUniverse = ({ isInteractive = true, showNavigation = true }) => {
   const { musicData, loading, error } = useMusicData();
   const { isConnectionsPageActive } = useContext(UniverseContext);
   const [currentTheme, setCurrentTheme] = useState('night'); // 默认主题设置为night
@@ -190,7 +190,7 @@ const MusicUniverse = () => {
         <p>这是一个三维音乐专辑浏览界面。使用键盘方向键可以环绕浏览，空格键重置视角。</p>
       </div>
 
-      <UniverseNavigation />
+      {showNavigation && <UniverseNavigation />}
       {musicData.length > 0 && positionedMusicData.length > 0 && (
         <Canvas
           style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
@@ -203,6 +203,7 @@ const MusicUniverse = () => {
           {!isMobile && <KeyboardControls isMobile={isMobile} />}
           {/* <TouchControls /> */} {/* 移除触摸控制 */}
           <OrbitControls 
+            enabled={isInteractive}
             enableRotate={true} // 移动设备上启用旋转
             enableZoom={true} 
             enablePan={true} // 移动设备上启用平移

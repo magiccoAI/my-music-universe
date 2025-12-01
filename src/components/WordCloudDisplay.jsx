@@ -305,8 +305,8 @@ const WordCloudDisplay = ({
           className="wordcloud-tooltip"
           style={{
             position: 'absolute',
-            top: '10px',
-            right: '10px', // 固定在右上角，或者你可以根据鼠标位置计算
+            bottom: '10px',
+            left: '10px',
             pointerEvents: 'none', // 避免遮挡鼠标事件
             zIndex: 10,
             backgroundColor: 'rgba(0, 0, 0, 0.8)',

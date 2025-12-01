@@ -20,14 +20,31 @@ module.exports = function ({ env }) {
         });
 
         // Set public path
-        webpackConfig.output.publicPath = publicUrl.endsWith('/') 
-          ? publicUrl 
-          : publicUrl + '/';
+        // webpackConfig.output.publicPath = publicUrl.endsWith('/') 
+        //   ? publicUrl 
+        //   : publicUrl + '/';
 
         return webpackConfig;
       },
     },
 
     eslint: null,
+    devServer: (devServerConfig, { env, paths, proxy, allowedHost }) => {
+      devServerConfig.port = 3012;
+      devServerConfig.open = true;
+
+      devServerConfig.setupMiddlewares = (middlewares, devServer) => {
+        if (!devServer) {
+          throw new Error('webpack-dev-server is not defined');
+        }
+        return middlewares;
+      };
+
+      // Keep these deletions to align with modern craco/webpack-dev-server versions
+      delete devServerConfig.onBeforeSetupMiddleware;
+      delete devServerConfig.onAfterSetupMiddleware;
+
+      return devServerConfig;
+    },
   };
 };

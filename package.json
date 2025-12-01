@@ -43,13 +43,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cross-env PUBLIC_URL=/my-music-universe PORT=3011 NODE_OPTIONS=--max_old_space_size=4096 craco start",
+    "start": "cross-env PORT=3012 NODE_OPTIONS=--max_old_space_size=4096 craco start",
     "fix-deps": "node scripts/fix-dependencies.js",
     "reset": "npm run clean-install && npm run build",
     "clean-install": "rd /s /q node_modules && del package-lock.json && npm install",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "build": "cross-env NODE_ENV=production PUBLIC_URL=/my-music-universe craco build",
+    "build": "cross-env NODE_ENV=production craco build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },

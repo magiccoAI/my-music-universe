@@ -2,52 +2,70 @@
 import { useCallback, useRef, useMemo } from 'react';
 
 const usePianoSounds = () => {
-  const pianoSoundFiles = useMemo(() => [
+  const majoritySoundFiles = useMemo(() => [
     `${process.env.PUBLIC_URL}/audio/a6-82015.mp3`,
     `${process.env.PUBLIC_URL}/audio/b6-82017.mp3`,
     `${process.env.PUBLIC_URL}/audio/c6-102822.mp3`,
     `${process.env.PUBLIC_URL}/audio/d6-82018.mp3`,
     `${process.env.PUBLIC_URL}/audio/e6-82016.mp3`,
     `${process.env.PUBLIC_URL}/audio/f6-102819.mp3`,
-    `${process.env.PUBLIC_URL}/audio/g6-82013.mp3`,   
+    `${process.env.PUBLIC_URL}/audio/g6-82013.mp3`,
     `${process.env.PUBLIC_URL}/audio/re-78500.mp3`,
     `${process.env.PUBLIC_URL}/audio/fa-78409.mp3`,
     `${process.env.PUBLIC_URL}/audio/sol-101774.mp3`,
     `${process.env.PUBLIC_URL}/audio/si-80238.mp3`,
+  ], []);
+
+  const minoritySoundFiles = useMemo(() => [
     `${process.env.PUBLIC_URL}/audio/2-notes-octave-guitar-83275.mp3`,
     `${process.env.PUBLIC_URL}/audio/bass-guitar-three-notes-43765.mp3`,
     `${process.env.PUBLIC_URL}/audio/sfx-piano-bar2.mp3`,
     `${process.env.PUBLIC_URL}/audio/sfx-piano-effect9.mp3`,
   ], []);
 
+  // For loading and direct indexing, we still need a combined list.
+  const pianoSoundFiles = useMemo(() => [...majoritySoundFiles, ...minoritySoundFiles], [majoritySoundFiles, minoritySoundFiles]);
+
   const audioContextRef = useRef(null);
   const audioBuffers = useRef({});
 
-  const loadAudioOnDemand = useCallback(async (index) => {
+  const loadAudioOnDemand = useCallback(async (soundFile) => {
     if (!audioContextRef.current) {
-      try {
-        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-      } catch (e) {
-        console.error("AudioContext is not supported on this browser.", e);
-        return;
-      }
+      console.error("AudioContext not initialized. Cannot load audio.");
+      return null;
     }
 
-    const soundFile = pianoSoundFiles[index % pianoSoundFiles.length];
+    // If the audio is already buffered, return it.
     if (audioBuffers.current[soundFile]) {
       return audioBuffers.current[soundFile];
     }
 
+    // Otherwise, fetch, decode, and buffer it.
     try {
       const response = await fetch(soundFile);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
-      audioBuffers.current[soundFile] = audioBuffer;
+      audioBuffers.current[soundFile] = audioBuffer; // Cache the buffer
       return audioBuffer;
     } catch (error) {
-      console.error('Failed to load or decode audio:', soundFile, error);
+      console.error(`Failed to load or decode audio: ${soundFile}`, error);
+      return null;
     }
-  }, [pianoSoundFiles]);
+  }, []);
+
+  const initAudio = useCallback(() => {
+    if (!audioContextRef.current) {
+      try {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        console.log('AudioContext initialized.');
+      } catch (e) {
+        console.error("AudioContext is not supported on this browser.", e);
+      }
+    }
+  }, []);
 
   const playPianoSound = useCallback(async (index) => {
     if (!audioContextRef.current) return;
@@ -57,7 +75,19 @@ const usePianoSounds = () => {
       await audioContextRef.current.resume();
     }
 
-    const audioBuffer = await loadAudioOnDemand(index);
+    let soundFile;
+    if (index === undefined) {
+      // Weighted random selection
+      if (Math.random() < 0.8) { // 80% chance for majority sounds
+        soundFile = majoritySoundFiles[Math.floor(Math.random() * majoritySoundFiles.length)];
+      } else { // 20% chance for minority sounds
+        soundFile = minoritySoundFiles[Math.floor(Math.random() * minoritySoundFiles.length)];
+      }
+    } else {
+      soundFile = pianoSoundFiles[index % pianoSoundFiles.length];
+    }
+
+    const audioBuffer = await loadAudioOnDemand(soundFile);
     if (!audioBuffer) return;
 
     try {
@@ -124,6 +154,7 @@ const usePianoSounds = () => {
 
   return {
     // 主要功能
+    initAudio,
     playPianoSound,
     playSoundSequence,
     preloadSounds,

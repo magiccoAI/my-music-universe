@@ -181,6 +181,7 @@ const SearchPage = () => {
       {results.slice(0, 10).map((item, i) => (
         <motion.div
           key={item.id}
+          ref={el => (backgroundCoverRefs.current[i] = el)}
           className="background-cover"
           data-id={item.id}
           variants={floatVariants}

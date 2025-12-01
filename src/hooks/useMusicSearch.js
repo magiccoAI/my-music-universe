@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
 export const useMusicSearch = (musicData = []) => {
-  const [isLoading, setIsLoading] = useState(!musicData || musicData.length === 0);
+  // 如果没有数据，则视为正在加载。由于 musicData 是异步获取的，
+  // 我们需要根据它的长度或存在与否来动态推导 isLoading，而不是使用只初始化一次的 state。
+  const isLoading = !musicData || musicData.length === 0;
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
   const [artistFilter, setArtistFilter] = useState('');

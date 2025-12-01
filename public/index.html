@@ -4,54 +4,17 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#312e81" />
-    <meta name="description" content="Music Universe - 探索音乐的宇宙" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Music Universe</title>
-
-    <!-- 关键渲染路径 CSS (Critical CSS) -->
-    <!-- 保证 Loader 在任何 JS 加载前都能动起来 -->
-    <style>
-      body { margin: 0; padding: 0; background-color: #1e1b4b; }
-      #root { min-height: 100vh; }
-      
-      /* 原生 CSS 动画定义，不依赖 Tailwind */
-      @keyframes spin-native { to { transform: rotate(360deg); } }
-      
-      .app-loader-overlay {
-        position: fixed; inset: 0; z-index: 99999;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        background: linear-gradient(135deg, #312e81, #581c87, #1e40af);
-      }
-    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    
-    <!-- React 挂载点 -->
     <div id="root"></div>
-
-    <!-- 
-      静态加载屏幕 (HTML版)
-      它在 index.html 里，不属于 React。
-      当 App.js 里的 LoadingScreen 组件挂载时，会执行 document.getElementById('initial-loading-screen').remove() 删掉这里。
-    -->
-    <div id="initial-loading-screen" class="app-loader-overlay">
-      <div style="position: relative; width: 12rem; height: 12rem; margin-bottom: 2rem;">
-        <!-- 模拟 LoadingScreen 组件的圆环 -->
-        <div style="position: absolute; inset: 0; border-radius: 9999px; border: 2px solid rgba(165, 180, 252, 0.3); animation: spin-native 3s linear infinite;"></div>
-        <div style="position: absolute; inset: 1.5rem; border-radius: 9999px; border: 2px solid rgba(192, 132, 252, 0.5); animation: spin-native 4s linear infinite reverse;"></div>
-      </div>
-
-      <div style="text-align: center; color: white;">
-        <h2 style="font-family: sans-serif; font-size: 1.5rem; font-weight: bold; letter-spacing: 0.2em; margin-bottom: 1rem;">
-          MUSIC UNIVERSE
-        </h2>
-        <p style="color: #a5f3fc; font-size: 0.875rem; opacity: 0.8;">
-          System Initializing...
-        </p>
-      </div>
-    </div>
   </body>
 </html>
