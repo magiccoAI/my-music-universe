@@ -61,9 +61,15 @@ function App() {
       */}
       <div className={`App transition-opacity duration-1000 ${isInitialLoading ? 'opacity-0' : 'opacity-100'}`}>
         
-        {/* 这里 fallback 建议设为 null 或简单的 Loading，
-            避免页面切换时再次弹出巨大的 LoadingScreen */}
-        <Suspense fallback={null}> 
+        {/* 使用深色 Loading 占位符防止页面切换白屏 */}
+        <Suspense fallback={
+          <div style={{ 
+            position: 'fixed', 
+            inset: 0, 
+            backgroundColor: '#0f172a', // Slate-900 matching theme
+            zIndex: -1 
+          }} />
+        }> 
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={location.pathname}
