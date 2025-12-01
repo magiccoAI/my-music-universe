@@ -5,18 +5,29 @@
 // 3) Simplified trailing meteor effect (example hook usage shown)
 // 4) Calmer color palette; subtle motion
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
-import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.png';
-import WeChatIcon from '../assets/icons/wechat-icon.png';
+import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
+import WeChatIcon from '../assets/icons/wechat-icon.webp';
 import useMeteorTrail from '../hooks/useMeteorTrail';
+import useIsMobile from '../hooks/useIsMobile';
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const isMobile = useIsMobile();
+  const [showBackground, setShowBackground] = useState(false);
 
   const { handleMouseMove, MeteorRenderer } = useMeteorTrail();
+
+  // Defer heavy visual components
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowBackground(true);
+    }, 100); // Small delay to let main content paint first
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleMusicUniverseClick = (e) => {
     e.preventDefault();
@@ -36,10 +47,10 @@ const HomePage = () => {
   return (
     <div
       className="relative min-h-screen w-full text-white overflow-hidden flex flex-col"
-      onMouseMove={handleMouseMove}
+      onMouseMove={!isMobile ? handleMouseMove : undefined}
     >
-      <StarBackground />
-      <MeteorRenderer />
+      {showBackground && <StarBackground starCount={isMobile ? 500 : 5000} />}
+      {!isMobile && <MeteorRenderer />}
 
       {/* top nav */}
       <nav className="fixed top-0 left-0 right-0 z-20 py-4 backdrop-blur-md bg-white/5 flex justify-center gap-10 border-b border-white/10">

@@ -2,9 +2,9 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const Stars = () => {
+const Stars = ({ count = 5000 }) => {
   const ref = useRef();
-  const numStars = 5000; // Increased number of stars
+  const numStars = count;
   const radius = 100; // Increased radius for a wider spread
 
   const positions = useMemo(() => {
@@ -48,13 +48,13 @@ const Stars = () => {
   );
 };
 
-const StarBackground = () => {
+const StarBackground = ({ starCount = 5000 }) => {
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}>
       <Canvas camera={{ position: [0, 0, 1], fov: 75 }} style={{ background: '#000000' }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
-        <Stars />
+        <Stars count={starCount} />
       </Canvas>
     </div>
   );

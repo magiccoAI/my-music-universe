@@ -50,40 +50,44 @@ const getColorFromId = (id) => {
   return COLOR_PALETTE[Math.abs(hash) % COLOR_PALETTE.length];
 };
 
-const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile }) => {
-  const meshRef = useRef();
-  const { camera } = useThree();
-  const frustum = new Frustum();
-  const box = new Box3();
+const gFrustum = new Frustum();
+const gBox = new Box3();
+const gMatrix = new Matrix4();
 
-  const [loadedTexture, setLoadedTexture] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+// Texture loading queue manager
+const textureQueue = [];
+let activeLoads = 0;
+const MAX_CONCURRENT_LOADS = 4; // Limit concurrent loads
 
-  const loadTexture = useCallback((item, retryCount = 0, useOriginal = false) => {
-    setIsLoading(true);
+const processQueue = () => {
+  if (activeLoads >= MAX_CONCURRENT_LOADS || textureQueue.length === 0) return;
+
+  const { item, retryCount, useOriginal, setLoadedTexture, setIsLoading, isMobile, callback } = textureQueue.shift();
+  activeLoads++;
+
+  const load = (currentItem, currentRetryCount, currentUseOriginal) => {
     const maxRetries = 2;
+    let baseCoverPath = currentItem.cover;
 
-    let baseCoverPath = item.cover; // Default to item.cover
-
-    if (isMobile) {
-      if (item.coverMobile) {
-        baseCoverPath = item.coverMobile;
-      }
+    if (isMobile && currentItem.coverMobile) {
+      baseCoverPath = currentItem.coverMobile;
     }
 
     let textureUrl;
-    if (useOriginal) {
-      textureUrl = baseCoverPath; // Fallback to original path
+    if (currentUseOriginal) {
+      textureUrl = baseCoverPath;
     } else {
       textureUrl = getOptimizedImageUrl(baseCoverPath, isMobile);
     }
 
     if (!textureUrl) {
-      console.warn('No texture URL generated for item:', item);
+      console.warn('No texture URL generated for item:', currentItem);
       setIsLoading(false);
+      activeLoads--;
+      processQueue();
       return;
     }
-      
+
     const loader = new TextureLoader();
     loader.crossOrigin = 'anonymous';
     loader.load(
@@ -92,22 +96,47 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
         texture.minFilter = LinearFilter;
         setLoadedTexture(texture);
         setIsLoading(false);
+        activeLoads--;
+        processQueue();
+        if (callback) callback();
       },
       undefined,
       (error) => {
         console.error('Error loading texture:', textureUrl, error);
-        if (!useOriginal && retryCount < maxRetries) {
-          console.log(`Retrying with original image (${retryCount + 1}/${maxRetries}):`, baseCoverPath);
-          // If optimized image failed, try loading original image
-          setTimeout(() => loadTexture(item, retryCount + 1, true), 500);
-        } else if (useOriginal && retryCount < maxRetries) {
-          console.log(`Retrying original image (${retryCount + 1}/${maxRetries}):`, baseCoverPath);
-          setTimeout(() => loadTexture(item, retryCount + 1, true), 500);
+        if (!currentUseOriginal && currentRetryCount < maxRetries) {
+          console.log(`Retrying with original image (${currentRetryCount + 1}/${maxRetries}):`, baseCoverPath);
+          setTimeout(() => load(currentItem, currentRetryCount + 1, true), 500);
+        } else if (currentUseOriginal && currentRetryCount < maxRetries) {
+          console.log(`Retrying original image (${currentRetryCount + 1}/${maxRetries}):`, baseCoverPath);
+          setTimeout(() => load(currentItem, currentRetryCount + 1, true), 500);
         } else {
           setIsLoading(false);
+          activeLoads--;
+          processQueue();
         }
       }
     );
+  };
+
+  load(item, retryCount, useOriginal);
+};
+
+const enqueueTextureLoad = (item, retryCount, useOriginal, setLoadedTexture, setIsLoading, isMobile) => {
+  textureQueue.push({ item, retryCount, useOriginal, setLoadedTexture, setIsLoading, isMobile });
+  processQueue();
+};
+
+const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile }) => {
+  const meshRef = useRef();
+  const { camera } = useThree();
+  // Removed per-instance object creation
+
+  const [loadedTexture, setLoadedTexture] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadTexture = useCallback((item, retryCount = 0, useOriginal = false) => {
+    setIsLoading(true);
+    enqueueTextureLoad(item, retryCount, useOriginal, setLoadedTexture, setIsLoading, isMobile);
   }, [isMobile]);
 
   useEffect(() => {
@@ -125,26 +154,31 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
     }
   }, [data, isMobile, isLoading, loadedTexture, onVisible, loadTexture]);
 
-  const frameCounter = useRef(0);
+  const frameCounter = useRef(Math.floor(Math.random() * 30)); // Random offset to stagger checks
 
   useFrame(({ clock }) => {
-    // Subtle floating animation
-    if (meshRef.current) {
-      // Only apply animation if not on mobile
-      if (!isMobile) {
-        meshRef.current.position.y = position[1] + Math.sin(clock.getElapsedTime() * 0.5 + data.id) * 0.1;
-      }
-      meshRef.current.lookAt(camera.position);
+    if (!meshRef.current) return;
 
-      // Frustum culling for lazy loading, throttled to run every 30 frames
+    // Subtle floating animation - DESKTOP ONLY
+    if (!isMobile) {
+      meshRef.current.position.y = position[1] + Math.sin(clock.getElapsedTime() * 0.5 + data.id) * 0.1;
+    }
+    meshRef.current.lookAt(camera.position);
+
+    // Frustum culling for lazy loading - MOBILE ONLY logic
+    // For desktop, we load immediately (see useEffect above), so this check is redundant unless we want to unload.
+    // Current logic only loads.
+    if (isMobile && !loadedTexture && !isLoading) {
       frameCounter.current++;
-      if (frameCounter.current % 30 === 0 && !loadedTexture && !isLoading) {
-        camera.updateMatrixWorld();
-        camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
-        frustum.setFromProjectionMatrix(new Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+      if (frameCounter.current % 30 === 0) {
+        // Use global objects to avoid GC
+        camera.updateMatrixWorld(); 
+        // Note: We use the global gMatrix, gFrustum, gBox
+        gMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+        gFrustum.setFromProjectionMatrix(gMatrix);
 
-        box.setFromObject(meshRef.current);
-        if (frustum.intersectsBox(box)) {
+        gBox.setFromObject(meshRef.current);
+        if (gFrustum.intersectsBox(gBox)) {
           // Trigger loading when visible
           loadTexture(data);
         }

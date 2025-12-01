@@ -25,12 +25,12 @@ export const LoadingScreen = ({ onFinished }) => {
     // 文字轮播动画
     const textInterval = setInterval(() => {
       setTextIndex((prev) => (prev + 1) % loadingTexts.length);
-    }, 800);
+    }, 500);
 
-    // 模拟初始化耗时（这里设为 2.5秒，你可以根据实际 API 请求修改）
+    // 模拟初始化耗时（优化为0.5秒，提升 LCP）
     const finishLoadingTimer = setTimeout(() => {
       handleLoadingComplete();
-    }, 2500);
+    }, 500);
 
     return () => {
       clearInterval(textInterval);
@@ -42,17 +42,17 @@ export const LoadingScreen = ({ onFinished }) => {
   const handleLoadingComplete = () => {
     setIsFadingOut(true); // 触发 CSS 淡出动画
     
-    // 等待 CSS transition (1000ms) 结束后，通知 App.js 彻底卸载我
+    // 等待 CSS transition (500ms) 结束后，通知 App.js 彻底卸载我
     setTimeout(() => {
       if (onFinished) onFinished();
-    }, 1000); 
+    }, 500); 
   };
 
   return (
     <div
       className={`fixed inset-0 flex flex-col items-center justify-center z-[9999] 
         bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800
-        transition-opacity duration-1000 ease-in-out
+        transition-opacity duration-500 ease-in-out
         ${isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'}
       `}
     >

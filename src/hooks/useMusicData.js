@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useContext } from 'react';
+import { UniverseContext } from '../UniverseContext';
 
 // --- 辅助函数 ---
 
@@ -68,6 +69,7 @@ const normalizeAndSplitTags = (note) => {
 // --- 自定义 Hook ---
 
 const useMusicData = () => {
+  const { globalMusicCache, setGlobalMusicCache } = useContext(UniverseContext);
   const [musicData, setMusicData] = useState([]);
   const [aggregatedData, setAggregatedData] = useState({ artist_counts: {}, style_counts: {} });
   const [tagCounts, setTagCounts] = useState({});
@@ -81,6 +83,22 @@ const useMusicData = () => {
   });
 
   const fetchData = useCallback(async (signal) => {
+    // Check cache first
+    if (globalMusicCache && globalMusicCache.musicData.length > 0) {
+      setMusicData(globalMusicCache.musicData);
+      setAggregatedData(globalMusicCache.aggregatedData);
+      setTagCounts(globalMusicCache.tagCounts);
+      tagRelationshipsRef.current = globalMusicCache.tagRelationships;
+      
+      setFetchState(prev => ({
+        ...prev,
+        loading: false,
+        error: null,
+        lastSuccessfulFetch: globalMusicCache.timestamp
+      }));
+      return;
+    }
+
     try {
       setFetchState(prev => ({ ...prev, loading: true, error: null }));
 
@@ -209,6 +227,15 @@ const useMusicData = () => {
         lastSuccessfulFetch: new Date().toISOString(),
       }));
 
+      // Update global cache
+      setGlobalMusicCache({
+        musicData: processedMusicData,
+        aggregatedData: processedAggregatedData,
+        tagCounts: counts,
+        tagRelationships: relationships,
+        timestamp: new Date().toISOString()
+      });
+
     } catch (err) {
 
       // 如果是取消请求（外部 signal 或内部超时），不更新状态
@@ -231,7 +258,7 @@ const useMusicData = () => {
         loading: false,
       }));
     }
-  }, []);
+  }, [globalMusicCache, setGlobalMusicCache]);
 
   useEffect(() => {
     // 使用 AbortController 管理整个 useEffect 的生命周期

@@ -120,14 +120,34 @@ const WebGLContextHandler = memo(() => {
 
 const MusicUniverse = ({ isInteractive = true, showNavigation = true }) => {
   const { musicData, loading, error } = useMusicData();
-  const { isConnectionsPageActive } = useContext(UniverseContext);
-  const [currentTheme, setCurrentTheme] = useState('night'); // 默认主题设置为night
-  const [showHint, setShowHint] = useState(true);
+  const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
+  const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night'); // 默认主题设置为night
+  const [showHint, setShowHint] = useState(universeState.hasSeenHint === undefined ? true : !universeState.hasSeenHint);
   const [hoveredMusic, setHoveredMusic] = useState(null);
   // const [positionedMusicData, setPositionedMusicData] = useState([]);
   const isMobile = useIsMobile();
 
+  // Sync theme changes to context
+  useEffect(() => {
+    if (currentTheme !== universeState.currentTheme) {
+        setUniverseState(prev => ({ ...prev, currentTheme }));
+    }
+  }, [currentTheme, setUniverseState, universeState.currentTheme]);
+
+  // Sync hint state to context when it closes
+  useEffect(() => {
+    if (!showHint && !universeState.hasSeenHint) {
+        setUniverseState(prev => ({ ...prev, hasSeenHint: true }));
+    }
+  }, [showHint, universeState.hasSeenHint, setUniverseState]);
+
   const positionedMusicData = React.useMemo(() => {
+    // 1. Try to retrieve from Context first (Persistence)
+    if (universeState.positionedMusicData && universeState.positionedMusicData.length > 0) {
+        return universeState.positionedMusicData;
+    }
+
+    // 2. Calculate if not in context
     if (musicData.length === 0) return [];
     return musicData.map(item => {
       if (!item.position) {
@@ -138,17 +158,25 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true }) => {
       }
       return item;
     });
-  }, [musicData]);
+  }, [musicData, universeState.positionedMusicData]);
 
-  const themes = {
+  // Save calculated positions to context
+  useEffect(() => {
+    if (positionedMusicData.length > 0 && !universeState.positionedMusicData) {
+        setUniverseState(prev => ({ ...prev, positionedMusicData }));
+    }
+  }, [positionedMusicData, universeState.positionedMusicData, setUniverseState]);
+
+  const themes = React.useMemo(() => ({
     day: "bg-gradient-to-b from-blue-900 via-blue-600 to-blue-300", // 白天：飞机上看到的深蓝到浅蓝渐变
     // 替换您当前的傍晚渐变代码
     evening: "evening-symmetric", // 傍晚：日落海面多色渐变
     night: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800", // 夜晚：银河星系的深色弥散渐变
     default: "bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-800", // Add a default theme
-  };
+  }), []);
 
   
+
 
 
 
@@ -175,9 +203,9 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true }) => {
     };
   }, []);
 
-  const handleCoverClick = (data, albumPosition) => {
+  const handleCoverClick = useCallback((data, albumPosition) => {
     setHoveredMusic({ data, position: albumPosition });
-  };
+  }, []);
 
   return (
     <div 
