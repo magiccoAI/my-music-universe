@@ -107,9 +107,10 @@ const WordCloudDisplay = ({
 
     let relevantCounts = {};
     if (type === 'artist') {
-      relevantCounts = data.artist_counts || {};
+      // 兼容两种数据结构：全量数据包含 artist_counts 字段，或者 data 本身就是计数对象
+      relevantCounts = data.artist_counts || data;
     } else if (type === 'style') {
-      relevantCounts = data.style_counts || {};
+      relevantCounts = data.style_counts || data;
     }
 
     if (Object.keys(relevantCounts).length === 0) return [];
