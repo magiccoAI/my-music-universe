@@ -14,6 +14,7 @@ import './WordCloudDisplay.css';
 
 const WordCloudDisplay = ({
   type = 'artist',
+  data: externalData, // 接收外部传入的数据
   maxWords = 100,
   onWordClick,
   width = 800,
@@ -23,14 +24,24 @@ const WordCloudDisplay = ({
   const containerRef = useRef(null);
   
   // 状态管理
-  const [isLoading, setIsLoading] = useState(type !== 'style'); // 如果是图片模式，初始不需要 loading
+  // 初始 loading 状态取决于是否已经有外部数据传入
+  const [isLoading, setIsLoading] = useState(type !== 'style' && (!externalData || Object.keys(externalData).length === 0));
   const [dimensions, setDimensions] = useState({ width, height });
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(externalData || []); // 优先使用 externalData
   const [layoutData, setLayoutData] = useState([]);
   const [hoveredWord, setHoveredWord] = useState(null);
   
   // 用于防抖的 ref
   const resizeTimeoutRef = useRef();
+
+  // 监听外部数据变化
+  useEffect(() => {
+    if (externalData && Object.keys(externalData).length > 0) {
+      console.log('Using external data for word cloud');
+      setData(externalData);
+      setIsLoading(false); // 有数据了，取消 fetch loading（Worker loading 后面会单独处理）
+    }
+  }, [externalData]);
 
   // 1. 处理容器尺寸响应式 (通用)
   useEffect(() => {
@@ -60,9 +71,9 @@ const WordCloudDisplay = ({
     };
   }, []);
 
-  // 2. 获取数据 (仅在非 style 模式下运行)
+  // 2. 获取数据 (仅在非 style 模式下运行，且没有外部数据时)
   useEffect(() => {
-    if (type === 'style') return; // 优化：样式模式显示图片，无需请求数据
+    if (type === 'style' || (externalData && Object.keys(externalData).length > 0)) return;
 
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -162,8 +173,23 @@ const WordCloudDisplay = ({
     // 清理函数：组件卸载或依赖变化时终止 worker
     return () => {
       worker.terminate();
+      // 确保清理 loading 状态，防止组件卸载后状态更新警告
+      // setIsLoading(false); // 注意：React 状态更新在卸载组件上是无操作的，但如果是依赖变化导致重新运行 effect，这行可能多余
     };
   }, [data, dimensions, processData, type]);
+
+  // 6. 超时处理 (防止 Worker 卡死)
+  useEffect(() => {
+    let timeoutId;
+    if (isLoading && type !== 'style') {
+      timeoutId = setTimeout(() => {
+        console.warn('WordCloud generation timed out.');
+        setIsLoading(false);
+        // 这里可以设置一个错误状态或者降级显示
+      }, 8000); // 8秒超时
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isLoading, type]);
 
   // 5. D3 渲染逻辑
   useEffect(() => {
