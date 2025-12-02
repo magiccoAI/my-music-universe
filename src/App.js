@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { UniverseProvider } from './UniverseContext';
 import { LoadingScreen } from './components/LoadingScreen';
+import { GlobalSuspenseFallback } from './components/GlobalSuspenseFallback';
 import { motion, AnimatePresence } from 'framer-motion';
 import './transitions.css';
 
@@ -62,14 +63,7 @@ function App() {
       <div className={`App transition-opacity duration-1000 ${isInitialLoading ? 'opacity-0' : 'opacity-100'}`}>
         
         {/* 使用深色 Loading 占位符防止页面切换白屏 */}
-        <Suspense fallback={
-          <div style={{ 
-            position: 'fixed', 
-            inset: 0, 
-            backgroundColor: '#0f172a', // Slate-900 matching theme
-            zIndex: -1 
-          }} />
-        }> 
+        <Suspense fallback={<GlobalSuspenseFallback />}> 
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={location.pathname}

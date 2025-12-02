@@ -23,8 +23,8 @@ function SpecialCollection() {
 
   const borderColors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F6', '#F6FF33', '#33F6FF'];
   
-  // 音乐报告图片数据
-  const musicReports = [
+  // 音乐报告图片数据 (使用 useMemo 保持引用稳定，避免不必要的重渲染)
+  const musicReports = useMemo(() => [
     { id: 1, name: "音乐报告1" },
     { id: 2, name: "音乐报告2" },
     { id: 3, name: "音乐报告3" },
@@ -33,7 +33,7 @@ function SpecialCollection() {
     { id: 6, name: "音乐报告6" },
     { id: 7, name: "音乐报告7" },
     { id: 8, name: "音乐报告8" }
-  ];
+  ], []);
 
   const [featuredAlbums, setFeaturedAlbums] = useState([
     // ... 您原有的专辑数据保持不变
@@ -95,34 +95,74 @@ function SpecialCollection() {
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [isImageLoading, setIsImageLoading] = useState(false); // 新增：图片加载状态
 
   const handleImageClick = (imageSrc, index) => {
     setSelectedImage(imageSrc);
     setSelectedImageIndex(index);
+    setIsImageLoading(true); // 打开时设为加载中
     setShowModal(true);
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setShowModal(false);
     setSelectedImage(null);
     setSelectedImageIndex(null);
-  };
+    setIsImageLoading(false);
+  }, []);
+
+  // 抽离核心切换逻辑，不依赖 event 对象
+  const navigateImage = useCallback((direction) => {
+    setSelectedImageIndex((prevIndex) => {
+      if (prevIndex === null) return null;
+      
+      let newIndex;
+      if (direction === 'next') {
+        newIndex = (prevIndex + 1) % musicReports.length;
+      } else {
+        newIndex = (prevIndex - 1 + musicReports.length) % musicReports.length;
+      }
+      return newIndex;
+    });
+  }, [musicReports]); // 现在 musicReports 是稳定的
+
+  // 响应 index 变化，更新 URL 和 loading 状态
+  useEffect(() => {
+    if (selectedImageIndex !== null) {
+      setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[selectedImageIndex].id}.png`);
+      setIsImageLoading(true);
+    }
+  }, [selectedImageIndex, musicReports]);
 
   const goToNextImage = (e) => {
-    e.stopPropagation();
-    if (selectedImageIndex === null) return;
-    const nextIndex = (selectedImageIndex + 1) % musicReports.length;
-    setSelectedImageIndex(nextIndex);
-    setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[nextIndex].id}.png`);
+    e && e.stopPropagation();
+    navigateImage('next');
   };
 
   const goToPreviousImage = (e) => {
-    e.stopPropagation();
-    if (selectedImageIndex === null) return;
-    const prevIndex = (selectedImageIndex - 1 + musicReports.length) % musicReports.length;
-    setSelectedImageIndex(prevIndex);
-    setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[prevIndex].id}.png`);
+    e && e.stopPropagation();
+    navigateImage('prev');
   };
+
+  // 键盘事件监听
+  useEffect(() => {
+    if (!showModal) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        navigateImage('prev');
+      } else if (e.key === 'ArrowRight') {
+        navigateImage('next');
+      } else if (e.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+    // 使用 document 监听更保险，虽然 window 也可以
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showModal, navigateImage, closeModal]);
+
 
   const handleTabClick = (tab) => {
     if (tab === 'fav') {
@@ -555,15 +595,22 @@ function SpecialCollection() {
           onClick={closeModal} // 点击背景关闭模态框
         >
           <div 
-            className="relative max-w-full max-h-full"
+            className="relative max-w-full max-h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()} // 阻止点击图片时关闭模态框
           >
+            {isImageLoading && (
+              <div className="absolute z-10 flex items-center justify-center">
+                 <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+              </div>
+            )}
             <img 
               src={selectedImage}
               alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
-              className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+              className={`max-w-full max-h-full object-contain rounded-lg shadow-lg transition-opacity duration-300 ${isImageLoading ? 'opacity-50' : 'opacity-100'}`}
+              onLoad={() => setIsImageLoading(false)} // 加载完成
               onError={(e) => {
                 console.log('Image onError triggered for src:', e.target.src);
+                setIsImageLoading(false); // 错误也视为结束加载状态，避免一直转圈
                 if (selectedImageIndex !== null && musicReports[selectedImageIndex]) {
                   e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[selectedImageIndex].id}.png`;
                   console.log('Image onError: Fallback to', e.target.src);

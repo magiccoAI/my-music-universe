@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Logo from './Logo';
 
 const UniverseNavigation = ({ className = '' }) => {
   const location = useLocation();
@@ -11,7 +12,7 @@ const UniverseNavigation = ({ className = '' }) => {
   // 导航项配置 - 统一管理
   const navItems = [
     { path: '/', label: '首页' },
-    { path: '/music-universe', label: '音乐封面宇宙' },
+    { path: '/music-universe', label: '封面星系' },
     { path: '/music-universe/connections', label: '音乐风格' },
     { path: '/music-universe/search', label: '搜索' },
     { path: '/archive', label: '我的音乐时光机' },
@@ -93,7 +94,10 @@ const UniverseNavigation = ({ className = '' }) => {
   const MobileNavigation = () => (
     <nav className={`fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-50 backdrop-filter backdrop-blur-xl p-4 ${className}`}>
       <div className="flex justify-between items-center">
-        <span className="text-white text-lg font-bold">音乐宇宙</span>
+        <Link to="/" className="flex items-center gap-2 no-underline">
+          <Logo className="w-8 h-8 text-cyan-400" />
+          <span className="text-white text-lg font-bold tracking-wider font-sans">Music Collection 🎶</span>
+        </Link>
         <button 
           onClick={() => setMenuOpen(!menuOpen)}
           className="text-white p-2 text-xl"
