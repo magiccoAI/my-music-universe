@@ -49,8 +49,7 @@
     "clean-install": "rd /s /q node_modules && del package-lock.json && npm install",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "build": "cross-env NODE_ENV=production craco build",
-    "build:vercel": "cross-env NODE_ENV=production PUBLIC_URL=/ craco build",
+    "build": "node scripts/smart-build.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
