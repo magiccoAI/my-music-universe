@@ -1,75 +1,127 @@
-# Music Universe
+# Music Universe - 音乐宇宙可视化
 
-## 项目简介
-Music Universe 是一个旨在可视化和探索音乐收藏的 Web 应用程序。它利用各种现代 Web 技术提供交互式和引人入胜的用户体验，包括3D专辑封面展示、以及用户友好的导航提示。
+## 🎵 项目简介
 
-这个网站是「D小调片段记录」音乐分享的歌单可视化尝试。
-访问地址：https://magiccoai.github.io/my-music-universe/
+**Music Universe** 是一个极具创意和交互性的音乐收藏可视化 Web 应用程序。作为「D小调片段记录」音乐分享的歌单可视化尝试，本项目将抽象的音乐数据转化为一个沉浸式的“音乐宇宙”。
 
+在这个宇宙中，每一首音乐都是一颗独特的星辰，用户可以在星际间漫游，探索音乐与艺术家之间的联系，通过可视化的方式重新发现收藏中的珍宝。
 
+🔗 **在线访问**: [https://magiccoai.github.io/my-music-universe/](https://magiccoai.github.io/my-music-universe/)
 
-## 功能
-- **3D 专辑封面展示**: 沉浸式的 3D 专辑封面浏览体验。
-- **音乐报告图片轮播**: 展示音乐收藏的统计和报告。
-- **音乐播放器**: 内置音乐播放功能。
-- **搜索功能**: 快速查找音乐和艺术家。
-- **响应式设计**: 适配移动设备的界面。
-- **可视化效果**: 流星轨迹、粒子系统和音乐音符等动态视觉效果。
-- **数据可视化**: 使用 D3.js 和 ECharts 进行数据分析和展示，例如艺术家和音乐风格词云。
-- **多页面应用**: 包含主页、搜索页、档案页和连接页。
+---
 
-## 使用的技术
-- **React**: 用于构建用户界面的 JavaScript 库。
-- **Three.js**: 用于在浏览器中显示 3D 图形的 JavaScript 3D 库。
-- **D3.js**: 用于根据数据操作文档的 JavaScript 库，用于数据驱动的文档。
-- **ECharts**: 一个功能强大、交互式的图表和可视化库，用于丰富的数据可视化。
-- **Tailwind CSS**: 一个实用程序优先的 CSS 框架，用于快速构建自定义设计和响应式布局。
-- **Framer Motion**: 一个用于 React 的生产就绪的动画库，用于流畅的 UI 动画。
-- **Craco**: 用于配置 Create React App。
+## 🗺️ 页面导览 & 亮点
 
-## 项目结构
-- `public/`: 静态资源，包括音频、数据、图片和优化后的图片。
-- `src/`: 应用程序的源代码。
-    - `assets/`: 静态资源，如图标。
-    - `components/`: 可重用的 UI 组件，如 `Cover`, `InfoCard`, `MusicPlayer` 等。
-    - `hooks/`: 自定义 React Hooks，用于封装可重用逻辑，如 `useIsMobile`, `useMusicData` 等。
-    - `pages/`: 应用程序的各个页面，如 `HomePage`, `SearchPage`, `ArchivePage`, `ConnectionsPage`。
-    - `utils/`: 实用工具函数，如 `dataTransformUtils.js`。
-    
+### 1. 🏠 首页 (Home)
+**探索起点**
+- **沉浸式氛围**: 星空背景与流星划过的动态视觉效果，为音乐探索之旅定下唯美基调。
+- **便捷导航**: 快速通往“音乐宇宙”、“时光机”等核心功能模块。
 
-## 安装
-要开始使用 Music Universe 项目，请按照以下步骤操作：
+### 2. 🌌 音乐封面宇宙 (Music Universe)
+**核心 3D 体验**
+- **3D 专辑星系**: 利用 Three.js 构建的 3D 空间，每一张歌单中的专辑封面都悬浮于浩瀚星空中。
+- **自由漫游**: 支持键盘（方向键）和鼠标交互，像驾驶飞船一样在音乐星系中穿梭、拉近观察每一张专辑的细节及相关信息。
 
-1. 克隆仓库：
-   ```bash
-   git clone <repository_url>
-   cd music-universe
-   ```
+### 3. ⏳ 音乐时光机 (Archive)
+**数据归档与随机发现**
+- **数据概览**: 展示收藏总量、跨越天数、艺术家与风格数量等统计信息。
+- **音乐词云星系**: 通过动态词云（基于 ECharts），直观呈现你最喜爱的艺术家和音乐风格。
+- **音乐老虎机 (Slot Machine)**: 独特的随机推荐组件，拉动拉杆，随机抽取你的下一首“本命曲目”以及当成惊喜的塔罗牌卡面信息。
+- **内置播放器**: 时光机页面集成音乐播放器，支持试听一首精选曲目。
 
-2. 安装依赖项：
-   ```bash
-   npm install
-   ```
+### 4. � 风格图谱 (Connections)
+**风格探索与听觉交互**
+- **风格可视化**: 将音乐风格以气泡云的形式展现，气泡大小代表收藏权重。
+- **钢琴交互音效**: 当鼠标滑过或点击音乐风格标签时，会触发悦耳的钢琴音效（基于 p5.sound），让数据浏览变成一场即兴演奏。
+- **关联筛选**: 点击任意风格标签，即可快速筛选出属于该流派的所有音乐作品。
 
-## 可用脚本
-在项目目录中，您可以运行：
+### 5. 🔍 音乐搜索 (Search)
+**精准定位**
+- **智能检索**: 支持按艺术家或歌曲名称快速搜索。
 
-### `npm start`
-在开发模式下运行应用程序。
-在浏览器中打开 [http://localhost:3001](http://localhost:3001) 查看。
+---
 
-如果您进行编辑，页面将重新加载。
-您还将在控制台中看到任何 lint 错误。
+## 🛠️ 技术栈
 
-### `npm test`
-以交互式监视模式启动测试运行器。
-有关更多信息，请参阅 [运行测试](https://facebook.github.io/create-react-app/docs/running-tests) 部分。
+本项目采用了现代前端技术栈，融合了 3D 图形、数据可视化和流畅的动画效果。
 
-### `npm run build`
-将应用程序构建到 `build` 文件夹中以进行生产。
-它在生产模式下正确打包 React，并优化构建以获得最佳性能。
+- **核心框架**: [React 18](https://reactjs.org/)
+- **路由管理**: [React Router 6](https://reactrouter.com/)
+- **3D & 图形**:
+  - [Three.js](https://threejs.org/)
+  - [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) & [Drei](https://github.com/pmndrs/drei)
+  - [p5.js](https://p5js.org/) (用于音频处理)
+- **数据可视化**:
+  - [D3.js](https://d3js.org/)
+  - [ECharts](https://echarts.apache.org/) & [ECharts Wordcloud](https://github.com/ecomfe/echarts-wordcloud)
+- **UI & 样式**:
+  - [Tailwind CSS](https://tailwindcss.com/) (原子化 CSS)
+  - [Styled JSX](https://github.com/vercel/styled-jsx)
+- **动画**:
+  - [Framer Motion](https://www.framer.com/motion/)
+  - [React Spring](https://react-spring.dev/)
+- **构建工具**: [Craco](https://github.com/gsoft-inc/craco) (Create React App Configuration Override)
 
-构建已缩小，文件名包含哈希值。
-您的应用程序已准备好部署！
+---
 
-有关更多信息，请参阅 [部署](https://facebook.github.io/create-react-app/docs/deployment) 部分。
+## 📂 项目结构
+
+```plaintext
+src/
+├── assets/           # 静态资源（图标、图片等）
+├── components/       # 可复用 UI 组件
+│   ├── MusicCard     # 音乐卡片组件
+│   ├── MusicPlayer   # 播放器组件
+│   ├── StarBackground# 星空背景组件
+│   └── ...
+├── hooks/            # 自定义 React Hooks (useMusicData, useIsMobile 等)
+├── pages/            # 页面级组件
+│   ├── HomePage      # 主页（入口与概览）
+│   ├── MusicUniverse # 3D 封面宇宙漫游页（歌单中的专辑封面可视化呈现）
+│   ├── ArchivePage   # 「我的音乐时光机」档案页（统计、词云、老虎机）
+│   ├── ConnectionsPage # 「音乐风格」连接页（风格图谱、钢琴交互）
+│   └── SearchPage    # 搜索页
+├── utils/            # 工具函数 (数据转换、图像处理)
+├── workers/          # Web Workers (用于处理耗时任务，如词云布局)
+└── ...
+```
+
+---
+
+## 🚀 快速开始
+
+### 1. 克隆仓库
+```bash
+git clone <repository_url>
+cd music-universe
+```
+
+### 2. 安装依赖
+```bash
+npm install
+# 或者使用清理安装命令（如果遇到依赖问题）
+npm run clean-install
+```
+
+### 3. 启动开发服务器
+```bash
+npm start
+```
+打开浏览器访问 [http://localhost:3012](http://localhost:3012) (端口可能根据配置有所不同)。
+
+### 4. 构建生产版本
+```bash
+npm run build
+```
+
+### 5. 部署
+```bash
+npm run deploy
+```
+此命令将构建项目并推送到 `gh-pages` 分支。
+
+---
+
+## 📄 许可证
+
+本项目基于 MIT 许可证开源。

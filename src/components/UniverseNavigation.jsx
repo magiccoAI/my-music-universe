@@ -12,7 +12,7 @@ const UniverseNavigation = ({ className = '' }) => {
   // 导航项配置 - 统一管理
   const navItems = [
     { path: '/', label: '首页' },
-    { path: '/music-universe', label: '封面星系' },
+    { path: '/music-universe', label: '音乐封面宇宙' },
     { path: '/music-universe/connections', label: '音乐风格' },
     { path: '/music-universe/search', label: '搜索' },
     { path: '/archive', label: '我的音乐时光机' },

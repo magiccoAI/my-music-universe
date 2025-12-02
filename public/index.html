@@ -7,11 +7,31 @@
     <meta name="theme-color" content="#312e81" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Music Universe - 探索公众号「D小调片段记录」的音乐歌单可视化宇宙。在3D星空中漫游，发现音乐与艺术家之间的联系。"
     />
+    <meta
+      name="keywords"
+      content="音乐可视化, Music Universe, 3D音乐, React Three Fiber, D3.js, 音乐收藏, 歌单分享, D小调片段记录"
+    />
+    <meta name="author" content="D小调片段记录" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://magiccoai.github.io/my-music-universe/" />
+    <meta property="og:title" content="Music Universe - 音乐宇宙可视化" />
+    <meta property="og:description" content="探索公众号「D小调片段记录」的音乐歌单可视化宇宙。在3D星空中漫游，发现音乐与艺术家之间的联系。" />
+    <meta property="og:image" content="%PUBLIC_URL%/logo512.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://magiccoai.github.io/my-music-universe/" />
+    <meta property="twitter:title" content="Music Universe - 音乐宇宙可视化" />
+    <meta property="twitter:description" content="探索公众号「D小调片段记录」的音乐歌单可视化宇宙。在3D星空中漫游，发现音乐与艺术家之间的联系。" />
+    <meta property="twitter:image" content="%PUBLIC_URL%/logo512.png" />
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Music Universe</title>
+    <title>Music Universe - 音乐宇宙可视化</title>
     <style>
       body {
         margin: 0;
@@ -48,46 +68,96 @@
       }
       .ring-1 {
         inset: 0;
-        border-width: 2px;
-        border-top-color: rgba(165, 180, 252, 0.3);
-        border-right-color: rgba(165, 180, 252, 0.3);
-        animation: spin 3s linear infinite;
+        border-top-color: #818cf8; /* Indigo 400 */
+        border-width: 4px;
+        animation: spin 2s linear infinite;
       }
       .ring-2 {
-        inset: 24px;
-        border-width: 2px;
-        border-top-color: rgba(192, 132, 252, 0.5);
-        border-left-color: rgba(192, 132, 252, 0.5);
-        animation: spin-reverse 4s linear infinite;
+        inset: 16px;
+        border-right-color: #a78bfa; /* Violet 400 */
+        border-width: 4px;
+        animation: spin 3s linear infinite reverse;
       }
-      .loading-text {
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        letter-spacing: 0.2em;
+      .ring-3 {
+        inset: 32px;
+        border-bottom-color: #38bdf8; /* Sky 400 */
+        border-width: 4px;
+        animation: spin 1.5s linear infinite;
+      }
+      .loading-logo {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .loading-logo svg {
+        width: 64px;
+        height: 64px;
         color: white;
-        text-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+      }
+      .loading-text-container {
+        text-align: center;
+      }
+      .loading-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
         margin-bottom: 8px;
+        letter-spacing: 0.05em;
+      }
+      .loading-subtitle {
+        font-size: 14px;
+        color: #c7d2fe; /* Indigo 200 */
       }
       @keyframes spin {
-        from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
-      @keyframes spin-reverse {
-        from { transform: rotate(360deg); }
-        to { transform: rotate(0deg); }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
       }
     </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+    <!-- Initial Loading Screen (Visible until React mounts) -->
     <div id="initial-loading-screen">
       <div class="spinner-container">
         <div class="spinner-ring ring-1"></div>
         <div class="spinner-ring ring-2"></div>
+        <div class="spinner-ring ring-3"></div>
+        <div class="loading-logo">
+          <!-- Simple Music Note SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+          </svg>
+        </div>
       </div>
-      <h2 class="loading-text">CREATING UNIVERSE</h2>
+      <div class="loading-text-container">
+        <div class="loading-title">Music Universe</div>
+        <div class="loading-subtitle">正在加载音乐宇宙资源...</div>
+      </div>
     </div>
-    <div id="root"></div>
+
+    <!-- Hide loading screen when React app mounts -->
+    <script>
+      // 简单的淡出效果逻辑，React 应用加载完成后会覆盖此行为或通过 JS 移除
+      // 这里作为兜底，防止 React 崩溃导致永远卡在加载屏
+      window.onload = function() {
+        // React will handle the removal of this element usually
+        // But we can set a timeout to warn if it takes too long
+        setTimeout(function() {
+          const loader = document.getElementById('initial-loading-screen');
+          if (loader && !document.getElementById('root').hasChildNodes()) {
+             // console.warn('App taking a long time to load...');
+          }
+        }, 10000);
+      };
+    </script>
   </body>
 </html>
