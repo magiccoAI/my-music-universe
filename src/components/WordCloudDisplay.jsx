@@ -103,7 +103,10 @@ const WordCloudDisplay = ({
   // 3. 数据清洗与处理 (Memoized)
   const processData = useCallback(() => {
     console.log('Entering processData: data =', data, 'type =', type);
-    if (!data || typeof data !== 'object' || Object.keys(data).length === 0) return [];
+    if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
+      console.log('processData: data invalid or empty');
+      return [];
+    }
 
     let relevantCounts = {};
     if (type === 'artist') {
@@ -112,6 +115,8 @@ const WordCloudDisplay = ({
     } else if (type === 'style') {
       relevantCounts = data.style_counts || data;
     }
+    
+    console.log('processData: relevantCounts keys =', Object.keys(relevantCounts).length);
 
     if (Object.keys(relevantCounts).length === 0) return [];
 
@@ -120,6 +125,8 @@ const WordCloudDisplay = ({
       .sort(([, a], [, b]) => b - a)
       .slice(0, maxWords)
       .map(([text, value]) => ({ text, value }));
+    
+    console.log('processData: sortedData length =', sortedData.length);
 
     if (sortedData.length === 0) return [];
 
@@ -142,10 +149,17 @@ const WordCloudDisplay = ({
   // 4. Worker 布局计算 (修复核心：Worker 在 Effect 内部实例化)
   useEffect(() => {
     if (type === 'style') return;
-    if (data.length === 0) return;
+    // FIX: 正确检查 data 是否为空（兼容数组和对象）
+    const isDataEmpty = !data || (Array.isArray(data) && data.length === 0) || (typeof data === 'object' && Object.keys(data).length === 0);
+    if (isDataEmpty) {
+       console.log('WordCloud Effect: Data is empty, returning');
+       return;
+    }
 
+    console.log('WordCloud Effect: Starting processing');
     const processedData = processData();
     if (processedData.length === 0) {
+      console.log('WordCloud Effect: processedData is empty');
       setIsLoading(false);
       return;
     }
