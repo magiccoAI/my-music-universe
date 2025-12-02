@@ -149,7 +149,7 @@ const ConnectionsPage = () => {
             )}
 
             {/* 标签云布局：使用 wrap 和 justify-center，配合 gap 实现云状分布 */}
-            <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-6 max-w-7xl mx-auto px-4">
+            <div id="tag-cloud-container" className="flex flex-wrap justify-center items-center gap-x-4 gap-y-6 max-w-7xl mx-auto px-4">
               {(isExpanded ? sortedTags : sortedTags.slice(0, 25)).map(([tag, count], index) => {
                 const maxCount = sortedTags[0] ? sortedTags[0][1] : 1;
                 const visual = getTagVisualWeight(count, maxCount);
@@ -171,6 +171,7 @@ const ConnectionsPage = () => {
                       hover:border-indigo-300
                       active:scale-95
                       ${animationClass}
+                      focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-900
                     `}
                     style={{
                       // 添加随机延迟，让动画看起来更自然不整齐
@@ -183,6 +184,8 @@ const ConnectionsPage = () => {
                     onMouseEnter={() => {
                       playPianoSound(mapIndexToNote(index));
                     }}
+                    aria-label={`筛选风格：${tag}，包含 ${count} 首曲目`}
+                    aria-pressed={selectedTag === tag}
                   >
                     {/* 内部流光 */}
                     <div className="absolute inset-0 rounded-full overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -217,10 +220,13 @@ const ConnectionsPage = () => {
                       text-sm text-slate-400 hover:text-indigo-300
                       border border-transparent hover:border-indigo-500/30 hover:bg-indigo-950/30
                       transition-all duration-300
+                      focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-900
                     "
+                    aria-expanded={isExpanded}
+                    aria-controls="tag-cloud-container"
                   >
                     <span>{isExpanded ? '收起' : '展开完整图谱'}</span>
-                    <span className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                    <span className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} aria-hidden="true">
                       ⇩
                     </span>
                   </button>
