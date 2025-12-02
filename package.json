@@ -1,6 +1,6 @@
 {
   "name": "music-universe",
-  "homepage": "https://magiccoai.github.io/my-music-universe/",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
