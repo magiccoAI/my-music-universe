@@ -1,6 +1,6 @@
 {
   "name": "music-universe",
-  "homepage": ".",
+  "homepage": "https://magiccoai.github.io/my-music-universe/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -50,6 +50,7 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "build": "cross-env NODE_ENV=production craco build",
+    "build:vercel": "cross-env NODE_ENV=production PUBLIC_URL=/ craco build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
