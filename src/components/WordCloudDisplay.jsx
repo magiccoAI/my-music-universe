@@ -48,10 +48,11 @@ const WordCloudDisplay = ({
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        // 保持一定比例，但限制最大高度
+        // 保持一定比例，但限制最大高度，同时保证移动端最小高度
+        const minHeight = 320;
         setDimensions({
           width: containerWidth,
-          height: Math.min(containerWidth * 0.6, 600) 
+          height: Math.max(minHeight, Math.min(containerWidth * 0.6, 600)) 
         });
       }
     };
