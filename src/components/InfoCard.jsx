@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, memo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { Vector3 } from 'three/src/math/Vector3';
+import AudioPreview from './AudioPreview';
 
 const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
   const { camera } = useThree();
@@ -89,6 +90,9 @@ const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
             </p>
           )}
         </div>
+
+        {/* Audio Preview */}
+        <AudioPreview term={`${music.artist} ${music.music}`} isMobile={isMobile} />
 
         {isValidUrl ? (
           <a

@@ -10,12 +10,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
 import WeChatIcon from '../assets/icons/wechat-icon.webp';
+const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.png';
+const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.png';
 import useMeteorTrail from '../hooks/useMeteorTrail';
 import useIsMobile from '../hooks/useIsMobile';
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const isMobile = useIsMobile();
   const [showBackground, setShowBackground] = useState(false);
 
@@ -61,6 +64,11 @@ const HomePage = () => {
           className="text-base font-medium hover:text-sky-300 transition"
         >音乐封面宇宙</a>
         <Link to="/archive" className="text-base font-medium hover:text-sky-300 transition">我的音乐时光机</Link>
+        <button
+          type="button"
+          onClick={() => setShowAbout(true)}
+          className="text-base font-medium hover:text-sky-300 transition"
+        >关于</button>
       </nav>
 
       {/* hero */}
@@ -134,6 +142,86 @@ const HomePage = () => {
             >
               了解了，开始探索
             </button>
+          </div>
+        </div>
+      )}
+
+      {showAbout && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowAbout(false)} />
+          <div className="relative bg-gray-900/70 p-8 rounded-xl shadow-xl max-w-xl w-full mx-4 text-left border border-sky-500/40 backdrop-blur-md">
+            <h3 className="text-lg font-bold text-sky-300 mb-4 font-mono tracking-wider">&lt;关于这个宇宙 /&gt;</h3>
+            <div className="space-y-6 text-gray-300 text-sm leading-8 max-h-[60vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-sky-500/30 scrollbar-track-transparent font-sans">
+              <p className="tracking-wide">
+                这个网站，是我为自己打造的<span className="text-sky-200 font-semibold">“音乐记忆合集宇宙”</span>。它暂时没有集成播放资源，只是从一份基础的音乐数据表格（ <code className="bg-black/40 px-1 py-0.5 rounded text-sky-400 font-mono">data.json</code> ）延伸出来的星图，但对我而言，它是一个外部记忆体——帮助我在看到封面的瞬间，重新提取当时的旋律、心境与感受。
+              </p>
+              
+              {/* Data Visualization Section */}
+              <div className="my-6 space-y-4">
+                <figure className="relative group rounded-lg overflow-hidden border border-sky-500/30 bg-black/50 shadow-[0_0_15px_rgba(14,165,233,0.1)]">
+                  <div className="absolute inset-0 bg-sky-500/5 pointer-events-none mix-blend-overlay" />
+                  <img 
+                    src={BasicTableImage} 
+                    alt="Original Music Data Table" 
+                    className="w-full h-auto opacity-90 hover:opacity-100 transition-all duration-500"
+                  />
+                  <figcaption className="absolute bottom-0 inset-x-0 p-2 bg-gradient-to-t from-black/90 to-transparent text-[10px] text-sky-300/70 text-center font-mono tracking-wider">
+                    STEP 1: RAW DATA COLLECTION
+                  </figcaption>
+                </figure>
+
+                <div className="flex justify-center text-sky-500/50">
+                  <svg className="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </div>
+
+                <figure className="relative group rounded-lg overflow-hidden border border-sky-500/30 bg-black/50 shadow-[0_0_15px_rgba(14,165,233,0.1)]">
+                  <div className="absolute inset-0 bg-sky-500/5 pointer-events-none mix-blend-overlay" />
+                  <img 
+                    src={DataJsonImage} 
+                    alt="Music Collection Data JSON Source" 
+                    className="w-full h-auto opacity-90 hover:opacity-100 transition-all duration-500"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="hidden absolute inset-0 flex items-center justify-center text-xs text-sky-400/50 font-mono bg-gray-900/90">
+                    <div className="text-left p-4">
+                      &#123;<br/>
+                      &nbsp;&nbsp;"id": 1,<br/>
+                      &nbsp;&nbsp;"title": "The Other Side",<br/>
+                      &nbsp;&nbsp;"artist": "Moonchild",<br/>
+                      &nbsp;&nbsp;"date": "2022-06-22"<br/>
+                      &#125;
+                    </div>
+                  </div>
+                  <figcaption className="absolute bottom-0 inset-x-0 p-2 bg-gradient-to-t from-black/90 to-transparent text-[10px] text-sky-300/70 text-center font-mono tracking-wider">
+                    STEP 2: STRUCTURED JSON DATA
+                  </figcaption>
+                </figure>
+              </div>
+
+              <div className="relative pl-4 border-l-2 border-sky-500/30 my-6 italic">
+                <p className="text-gray-200">在公众号 2022–2023 的推文尾声，我分享了一些歌。把那些零散片段收拢到同一个入口，记录的意义就被再次点亮：当你按下播放键（或只是停留在封面上），一系列声波与触感的体验就有机会被启动。</p>
+              </div>
+
+              <p className="leading-loose">
+                我一直对可视化着迷：像《黑客帝国》的数据流、维基百科的关系图、各种创意交互。于是我用 <span className="text-sky-300 font-mono">React</span> 和 <span className="text-purple-300 font-mono">TraeAI</span> 及多种大语言模型，一点点摸索，把这份歌单做成一个可视化空间。
+              </p>
+              
+              <p className="leading-loose">
+                未来它或许会迁移发展成更多与我生命相关的东西，但在此刻，它只想温柔地提醒我：这些歌，曾经陪伴我，也仍在陪伴我。这是一位非专业开发者的持续实践，也是一段与工具共创的旅程；每一次迭代，都是在把<span className="text-white font-bold">“听过什么歌”</span>变成<span className="text-sky-300 font-bold">“看见我的故事”</span>。
+              </p>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowAbout(false)}
+                className="bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-600 hover:to-sky-600 text-white font-semibold py-2 px-6 rounded-full transition"
+              >关闭</button>
+            </div>
           </div>
         </div>
       )}

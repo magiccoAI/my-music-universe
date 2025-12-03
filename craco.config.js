@@ -19,6 +19,25 @@ module.exports = function ({ env }) {
           }
         });
 
+        // FIX: Exclude worker files from React Refresh to prevent importScripts error in development
+        if (webpackEnv === 'development') {
+          const ReactRefreshPlugin = webpackConfig.plugins.find(
+            (plugin) => plugin.constructor.name === 'ReactRefreshPlugin'
+          );
+          if (ReactRefreshPlugin) {
+            // Exclude worker files from React Refresh
+            // Use a safe approach to merge with existing exclude if present
+            const originalExclude = ReactRefreshPlugin.options.exclude;
+            if (Array.isArray(originalExclude)) {
+               ReactRefreshPlugin.options.exclude = [...originalExclude, /worker\.js$/];
+            } else if (originalExclude) {
+               ReactRefreshPlugin.options.exclude = [originalExclude, /worker\.js$/];
+            } else {
+               ReactRefreshPlugin.options.exclude = [/node_modules/, /worker\.js$/];
+            }
+          }
+        }
+
         // Set public path
         // webpackConfig.output.publicPath = publicUrl.endsWith('/') 
         //   ? publicUrl 

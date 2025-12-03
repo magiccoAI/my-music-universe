@@ -17,6 +17,8 @@ const ConnectionsPage = lazy(() => import('./pages/ConnectionsPage'));
 ConnectionsPage.preload = () => import('./pages/ConnectionsPage');
 const SearchPage = lazy(() => import('./pages/SearchPage'));
 SearchPage.preload = () => import('./pages/SearchPage');
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+AboutPage.preload = () => import('./pages/AboutPage');
 
 // 页面切换动画配置
 const pageVariants = {
@@ -41,7 +43,7 @@ function App() {
   useEffect(() => {
     // 预加载页面资源，提升后续点击体验
     // 注意：这会增加首屏后的网络消耗，但在音乐/视觉类应用中是值得的
-    const preloadComponents = [HomePage, MusicUniverse, ArchivePage, ConnectionsPage, SearchPage];
+    const preloadComponents = [HomePage, MusicUniverse, ArchivePage, ConnectionsPage, SearchPage, AboutPage];
     preloadComponents.forEach(component => component.preload?.());
   }, []);
 
@@ -79,6 +81,7 @@ function App() {
                 <Route path="/music-universe/connections" element={<ConnectionsPage />} />
                 <Route path="/music-universe/search" element={<SearchPage />} />
                 <Route path="/archive" element={<ArchivePage />} />
+                <Route path="/about" element={<AboutPage />} />
               </Routes>
             </motion.div>
           </AnimatePresence>

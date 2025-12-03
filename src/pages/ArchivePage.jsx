@@ -12,8 +12,21 @@ import MouseParticleEffect from '../components/MouseParticleEffect';
 import StarBackground from '../components/StarBackground';
 import UniverseNavigation from '../components/UniverseNavigation';
 import MusicPlayer from '../components/MusicPlayer'; // Import MusicPlayer
+import TerminalText from '../components/TerminalText';
 
 import './ArchivePage.css';
+
+const terminalLines = [
+  "> Establishing connection...",
+  "> Accessing memory archives...",
+  "> Syncing timeline data...",
+  "> 403+ records found.",
+  "--------------------------------",
+  "正在回溯音乐时空...",
+  "解析听歌记录...",
+  "重构旋律坐标...",
+  "> Archive System Ready."
+];
 
 const parseDate = (dateString) => {
   if (typeof dateString !== 'string' || !dateString) {
@@ -174,6 +187,13 @@ const ArchivePage = () => {
       {/* 背景星空效果 */}
       <div className="stars-background"></div>
       <div className="gradient-overlay"></div>
+
+      {/* Background Terminal Effect (Desktop Only) */}
+      {!isMobile && (
+        <div className="fixed bottom-8 left-8 z-0 opacity-40 pointer-events-none select-none mix-blend-screen">
+          <TerminalText lines={terminalLines} speed={40} className="w-64 h-auto max-h-48 border-none bg-transparent shadow-none text-[10px] text-sky-400/60" />
+        </div>
+      )}
 
       
 

@@ -325,8 +325,13 @@ const WordCloudDisplay = ({
       {/* 主要内容区 */}
       {type === 'style' ? (
         <img 
-          src={`${process.env.PUBLIC_URL}/optimized-images/musicstyle-cloud2.webp`} 
+          src={`${process.env.PUBLIC_URL}/optimized-images/musicstyle-cloud2.png`} 
           alt="Music Style Word Cloud" 
+          onError={(e) => {
+            e.target.onerror = null;
+            // Fallback to webp if png doesn't exist
+            e.target.src = `${process.env.PUBLIC_URL}/optimized-images/musicstyle-cloud2.webp`;
+          }}
           style={{ width: '100%', height: 'auto', maxHeight: '600px', objectFit: 'contain' }} 
         />
       ) : (

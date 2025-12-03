@@ -16,6 +16,7 @@ const UniverseNavigation = ({ className = '' }) => {
     { path: '/music-universe/connections', label: '音乐风格' },
     { path: '/music-universe/search', label: '搜索' },
     { path: '/archive', label: '我的音乐时光机' },
+    { path: '/about', label: '关于' },
   ];
 
   // 优化响应式检测 - 使用防抖
