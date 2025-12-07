@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import UniverseNavigation from '../components/UniverseNavigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import MouseParticleEffect from '../components/MouseParticleEffect';
@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { useMusicSearch } from '../hooks/useMusicSearch';
 import { getOptimizedImagePath } from '../utils/imageUtils';
 import useMusicData from '../hooks/useMusicData';
+import MusicCard from '../components/MusicCard';
 
 
 
@@ -19,15 +20,21 @@ const SearchPage = () => {
     artistFilter,
     setArtistFilter,
     results,
+    globalResults,
+    isSearchingGlobal,
     artists,
+    artistsByName,
     resetSearch
   } = useMusicSearch(musicData);
 
   const [selected, setSelected] = useState(null);
+  const [playingCardId, setPlayingCardId] = useState(null);
   const [visibleBackgroundImages, setVisibleBackgroundImages] = useState(new Set());
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [focusedSuggestionIndex, setFocusedSuggestionIndex] = useState(-1);
+  const [sortMethod, setSortMethod] = useState('count'); // 'count' | 'name'
+
   const suggestionsRef = useRef(null);
   const searchInputRef = useRef(null);
   const backgroundCoverRefs = useRef([]);
@@ -76,6 +83,29 @@ const SearchPage = () => {
     }
     setFocusedSuggestionIndex(-1);
   }, [query, artists]);
+
+  // Group artists by first letter
+  const groupedArtists = useMemo(() => {
+    if (sortMethod !== 'name') return null;
+    
+    const groups = {};
+    artistsByName.forEach(([name, count]) => {
+      const firstChar = name.charAt(0).toUpperCase();
+      // Check if it's an English letter
+      const key = /^[A-Z]/.test(firstChar) ? firstChar : '#';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push({ name, count });
+    });
+    
+    // Sort keys: # at the end
+    const sortedKeys = Object.keys(groups).sort((a, b) => {
+        if (a === '#') return 1;
+        if (b === '#') return -1;
+        return a.localeCompare(b);
+    });
+
+    return { groups, sortedKeys };
+  }, [artistsByName, sortMethod]);
 
   // 处理搜索建议点击
   const handleSuggestionClick = (suggestion) => {
@@ -276,18 +306,46 @@ const SearchPage = () => {
               </div>
             )}
           </div>
-          <div className="mt-3">
+          <div className="mt-3 flex gap-2 items-center">
             <select
               value={artistFilter}
               onChange={(e) => setArtistFilter(e.target.value)}
-              className="w-full px-3 py-2 rounded-md bg-white/80 text-gray-800 focus:outline-none"
+              className="flex-1 px-3 py-2 rounded-md bg-white/80 text-gray-800 focus:outline-none min-w-0"
               aria-label="选择艺术家过滤"
             >
               <option value="">全部艺术家</option>
-              {artists.map(([name, count]) => (
-                <option key={name} value={name}>{name} ({count})</option>
-              ))}
+              {sortMethod === 'count' ? (
+                artists.map(([name, count]) => (
+                  <option key={name} value={name}>{name} ({count})</option>
+                ))
+              ) : (
+                groupedArtists?.sortedKeys.map(key => (
+                  <optgroup key={key} label={key}>
+                    {groupedArtists.groups[key].map(artist => (
+                      <option key={artist.name} value={artist.name}>
+                        {artist.name} ({artist.count})
+                      </option>
+                    ))}
+                  </optgroup>
+                ))
+              )}
             </select>
+            
+            <button
+              onClick={() => setSortMethod(prev => prev === 'count' ? 'name' : 'count')}
+              className="p-2 rounded-md bg-white/20 hover:bg-white/30 text-white transition-colors flex-shrink-0"
+              title={sortMethod === 'count' ? "当前按数量排序，点击切换为按首字母排序" : "当前按字母排序，点击切换为按数量排序"}
+            >
+              {sortMethod === 'count' ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                </svg>
+              )}
+            </button>
           </div>
           <div className="mt-3 flex gap-2">
             <button 
@@ -339,55 +397,71 @@ const SearchPage = () => {
                 animate="visible"
                 exit="exit"
               >
-                <h3 
-                  className="text-xl font-semibold mb-2"
-                  aria-live="polite"
-                >
-                  共 {results.length} 条结果
-                  {results.length === 0 && (
-                    <span className="text-sm text-gray-400 ml-2">
-                      没有找到相关音乐，请尝试其他关键词
-                    </span>
-                  )}
-                </h3>
-                <div
-                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-                  role="grid"
-                  aria-label="音乐列表"
-                >
-                  {results.map((item, index) => (
-                    <div role="row" key={`row-${item.id}`}>
-                      <motion.div
-                        key={item.id}
-                        className="relative group overflow-hidden rounded-lg shadow-md bg-white/10 cursor-pointer"
-                        onClick={() => setSelected(item)}
-                        onKeyDown={(e) => handleResultKeyDown(e, item)}
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                        role="gridcell"
-                        tabIndex={0}
-                        aria-label={`${item.music} - ${item.artist}`}
-                      >
-                      <img
-                        src={getOptimizedImagePath(item.cover)}
-                        alt={`${item.album}的封面`}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => {
-                          e.target.src = `${process.env.PUBLIC_URL}/images/default-cover.webp`;
-                          e.target.alt = "默认封面图片";
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm">
-                        <div className="font-bold">{item.music}</div>
-                        <div>{item.artist}</div>
+                {/* Local Results */}
+                {results.length > 0 && (
+                  <div className="mb-8">
+                     <h3 className="text-xl font-semibold mb-4" aria-live="polite">
+                       我的收藏 ({results.length})
+                     </h3>
+                     <div
+                       className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                       role="grid"
+                       aria-label="本地音乐列表"
+                     >
+                       {results.map((item) => (
+                         <div role="row" key={`row-${item.id}`}>
+                           <MusicCard
+                             key={item.id}
+                             item={item}
+                             playingCardId={playingCardId}
+                             setPlayingCardId={setPlayingCardId}
+                             onClick={() => setSelected(item)}
+                             onKeyDown={(e) => handleResultKeyDown(e, item)}
+                             className="cursor-pointer"
+                           />
+                         </div>
+                       ))}
+                     </div>
+                  </div>
+                )}
+
+                {/* Global Results */}
+                {(globalResults.length > 0 || isSearchingGlobal) && (
+                  <div className="mt-8 pt-6 border-t border-white/10">
+                    <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-indigo-300">
+                      <span>🌍 全球发现</span>
+                      {isSearchingGlobal && <div className="scale-75 origin-left"><LoadingSpinner /></div>}
+                    </h3>
+                    
+                    {globalResults.length > 0 ? (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        {globalResults.map((item) => (
+                           <div role="row" key={`row-${item.id}`}>
+                             <MusicCard
+                               key={item.id}
+                               item={item}
+                               playingCardId={playingCardId}
+                               setPlayingCardId={setPlayingCardId}
+                               onClick={() => setSelected(item)}
+                               onKeyDown={(e) => handleResultKeyDown(e, item)}
+                               className="cursor-pointer border-indigo-500/30"
+                               showNote={false} 
+                             />
+                           </div>
+                        ))}
                       </div>
-                    </motion.div>
-                    </div>
-                  ))}
-                </div>
+                    ) : (
+                       isSearchingGlobal && <div className="text-gray-400 text-sm pl-1">正在探索更广阔的音乐宇宙...</div>
+                    )}
+                  </div>
+                )}
+
+                {/* No Results at all */}
+                {results.length === 0 && globalResults.length === 0 && !isSearchingGlobal && (
+                   <div className="text-center text-gray-400 mt-10">
+                      <p>没有找到相关音乐，请尝试其他关键词</p>
+                   </div>
+                )}
               </motion.div>
             </AnimatePresence>
           )}

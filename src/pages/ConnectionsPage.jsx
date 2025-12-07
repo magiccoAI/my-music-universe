@@ -4,6 +4,7 @@ import { UniverseContext } from '../UniverseContext';
 import UniverseNavigation from '../components/UniverseNavigation';
 import useMusicData from '../hooks/useMusicData';
 import useSamplePlayer from '../hooks/useSamplePlayer';
+import MusicCard from '../components/MusicCard';
 
 // Construct paths using PUBLIC_URL to ensure they are correct in any environment
 const publicUrl = process.env.PUBLIC_URL;
@@ -43,6 +44,7 @@ const ConnectionsPage = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [relatedTags, setRelatedTags] = useState([]); // 保留原有状态，尽管此处未深入使用
   const [error, setError] = useState(null);
+  const [playingCardId, setPlayingCardId] = useState(null);
   
   const { playSound: playPianoSound, isLoaded: areSoundsLoaded } = useSamplePlayer(pianoNotes);
   const { musicData, tagCounts, tagRelationships, loading: isLoading } = useMusicData();
@@ -114,7 +116,7 @@ const ConnectionsPage = () => {
          
          {/* 2. 动态星空 (固定不随页面滚动) */}
          <div className="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none">
-           <MusicUniverse isInteractive={false} showNavigation={false} />
+           <MusicUniverse isInteractive={false} showNavigation={false} highlightedTag={selectedTag} />
          </div>
          
          {/* 3. 宇宙光晕 (Vignette) - 柔和暗角，聚焦中心 */}
@@ -269,57 +271,17 @@ const ConnectionsPage = () => {
               </button>
             </div>
 
-            {/* 卡片网格 - 保持不变 */}
+            {/* 卡片网格 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
               {filtered.map((item) => (
-                <div
+                <MusicCard
                   key={item.id}
-                  className="
-                    relative group overflow-hidden
-                    rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/90
-                    border border-slate-700/50 hover:border-indigo-500/30
-                    transition-all duration-500 ease-out
-                    shadow-xl hover:shadow-2xl hover:shadow-indigo-500/10
-                    hover:scale-[1.02]
-                  "
-                  onMouseEnter={() => setHovered(item.id)}
-                  onMouseLeave={() => setHovered(null)}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => { /* handle click */ }}
-                >
-                  {/* 专辑封面 */}
-                  <div className="relative overflow-hidden">
-                     {/* 图片逻辑保持原样，为了演示简洁我省略了 onError 的详细部分，请保留你原有的 */}
-                    <img
-                      src={`${process.env.PUBLIC_URL}/optimized-images/${item.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp`}
-                      alt={`${item.album} - ${item.artist}`}
-                      className="w-full aspect-square object-cover transform group-hover:scale-110 transition-transform duration-700"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `${process.env.PUBLIC_URL}/${item.cover}`;
-                      }}
-                    />
-                    <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/60 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent" />
-                    
-                    {/* 悬停信息 */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                      <div className="text-slate-200 text-sm mb-2">分享于 {item.date}</div>
-                      <div className="text-slate-300 text-xs">
-                        {splitNote(item.note).slice(0, 3).join(' · ')}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 卡片底部信息 */}
-                  <div className="relative p-4">
-                    <div className="font-bold text-lg mb-1 text-white leading-tight">{item.music}</div>
-                    <div className="text-indigo-200 font-medium text-sm mb-2">{item.artist}</div>
-                    <div className="text-slate-300 text-xs">{item.album}</div>
-                    <div className="absolute bottom-3 right-3 w-2 h-2 bg-indigo-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                </div>
+                  item={item}
+                  playingCardId={playingCardId}
+                  setPlayingCardId={setPlayingCardId}
+                  onHover={setHovered}
+                  onLeave={() => setHovered(null)}
+                />
               ))}
             </div>
 

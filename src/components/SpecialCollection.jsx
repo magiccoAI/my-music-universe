@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import SpecialCollectionCSS from './SpecialCollection.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon } from '@heroicons/react/24/outline';
 import useIsMobile from '../hooks/useIsMobile';
+import AudioPreview from './AudioPreview';
 import useMusicData from '../hooks/useMusicData';
 
 function SpecialCollection() {
@@ -96,6 +97,18 @@ function SpecialCollection() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(false); // 新增：图片加载状态
+  const [playingFavId, setPlayingFavId] = useState(null);
+
+  const handleFavPlay = (e, item) => {
+    e.stopPropagation();
+    if (playingFavId === item.id) {
+      setPlayingFavId(null);
+    } else {
+      setPlayingFavId(item.id);
+      // Stop any spinning vinyls
+      setFeaturedAlbums(prev => prev.map(a => ({ ...a, isPlaying: false })));
+    }
+  };
 
   const handleImageClick = (imageSrc, index) => {
     setSelectedImage(imageSrc);
@@ -356,6 +369,7 @@ function SpecialCollection() {
                 key={item.id}
                 onMouseEnter={() => setHoveredItem(item.id)}
                 onMouseLeave={() => setHoveredItem(null)}
+                onClick={(e) => handleFavPlay(e, item)}
                 style={{
                   backgroundColor: hoveredItem === item.id ? colors[index % colors.length] : 'rgba(255, 255, 255, 0.03)',
                   borderLeft: `4px solid ${borderColors[index % borderColors.length]}`,
@@ -365,34 +379,80 @@ function SpecialCollection() {
                   transition: 'all 0.3s ease',
                   backdropFilter: hoveredItem === item.id ? 'blur(5px)' : 'none',
                   transform: hoveredItem === item.id ? 'translateX(5px)' : 'translateX(0)',
-                  boxShadow: hoveredItem === item.id ? '0 4px 15px rgba(0, 0, 0, 0.2)' : 'none'
+                  boxShadow: hoveredItem === item.id ? '0 4px 15px rgba(0, 0, 0, 0.2)' : 'none',
+                  cursor: 'pointer'
                 }}
               >
-                <p style={{
-                  margin: 0,
-                  color: '#e6e6e6',
-                  fontSize: '0.95rem',
-                  lineHeight: '1.4'
-                }}>
-                  <strong style={{ color: '#ffffff' }}>{item.music}</strong> 
-                  {' - '}
-                  <span style={{ opacity: 0.9 }}>{item.artist}</span>
-                  {' - '}
-                  <span style={{ opacity: 0.8, fontSize: '0.9rem' }}>{item.album}</span>
-                </p>
-                {item.note && item.note.includes('Fav') && (
-                  <span style={{
-                    display: 'inline-block',
-                    background: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                    color: '#000',
-                    fontSize: '0.7rem',
-                    padding: '2px 8px',
-                    borderRadius: '10px',
-                    marginTop: '5px',
-                    fontWeight: 'bold'
-                  }}>
-                    
-                  </span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <p style={{
+                      margin: 0,
+                      color: '#e6e6e6',
+                      fontSize: '0.95rem',
+                      lineHeight: '1.4'
+                    }}>
+                      <strong style={{ color: '#ffffff' }}>{item.music}</strong> 
+                      {' - '}
+                      <span style={{ opacity: 0.9 }}>{item.artist}</span>
+                      {' - '}
+                      <span style={{ opacity: 0.8, fontSize: '0.9rem' }}>{item.album}</span>
+                    </p>
+                    {item.note && item.note.includes('Fav') && (
+                      <span style={{
+                        display: 'inline-block',
+                        background: 'linear-gradient(45deg, #FFD700, #FFA500)',
+                        color: '#000',
+                        fontSize: '0.7rem',
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        marginTop: '5px',
+                        fontWeight: 'bold'
+                      }}>
+                        Fav
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={(e) => handleFavPlay(e, item)}
+                    style={{
+                      background: 'rgba(255,255,255,0.1)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '36px',
+                      height: '36px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginLeft: '15px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      flexShrink: 0
+                    }}
+                    className="hover:bg-white/20"
+                    title={playingFavId === item.id ? "暂停" : "播放预览"}
+                  >
+                    {playingFavId === item.id ? (
+                      <PauseIcon className="w-5 h-5 text-white" />
+                    ) : (
+                      <PlayIcon className="w-5 h-5 text-white" />
+                    )}
+                  </button>
+                </div>
+                
+                {playingFavId === item.id && (
+                  <div 
+                    onClick={e => e.stopPropagation()} 
+                    style={{ marginTop: '10px' }}
+                    className="animate-fade-in"
+                  >
+                    <AudioPreview 
+                      term={`${item.artist} ${item.music}`} 
+                      previewUrl={item.previewUrl}
+                      isMobile={isMobile} 
+                      autoPlay={true} 
+                      darkMode={true} 
+                    />
+                  </div>
                 )}
               </div>
             ))}

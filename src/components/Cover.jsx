@@ -126,7 +126,7 @@ const enqueueTextureLoad = (item, retryCount, useOriginal, setLoadedTexture, set
   processQueue();
 };
 
-const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile }) => {
+const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile, dimmed }) => {
   const meshRef = useRef();
   const { camera } = useThree();
   // Removed per-instance object creation
@@ -203,7 +203,7 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
         scale={scale}
         onClick={handleClick}
       >
-        <meshBasicMaterial attach="material" color={placeholderColor} /> {/* 使用生成的颜色 */}
+        <meshBasicMaterial attach="material" color={placeholderColor} transparent opacity={dimmed ? 0.1 : 1} /> {/* 使用生成的颜色 */}
       </Plane>
     );
   }
@@ -218,7 +218,7 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
         scale={scale}
         onClick={handleClick}
       >
-        <meshBasicMaterial attach="material" map={loadedTexture} transparent />
+        <meshBasicMaterial attach="material" map={loadedTexture} transparent opacity={dimmed ? 0.1 : 1} />
       </Plane>
     </>
   );

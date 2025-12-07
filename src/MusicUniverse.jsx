@@ -118,7 +118,7 @@ const WebGLContextHandler = memo(() => {
   return null;
 });
 
-const MusicUniverse = ({ isInteractive = true, showNavigation = true }) => {
+const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlightedTag }) => {
   const { musicData, loading, error } = useMusicData();
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
   const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night'); // 默认主题设置为night
@@ -223,7 +223,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true }) => {
         <Canvas
           style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
           camera={{ fov: 75, near: 0.1, far: 1000 }}
-          className={isConnectionsPageActive ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
+          className={isConnectionsPageActive && !highlightedTag ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
           dpr={isMobile ? [1, 1] : [1, 2]}
         >
           <WebGLContextHandler />
@@ -253,6 +253,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true }) => {
                 scale={data.scale}
                 onClick={handleCoverClick}
                 isMobile={isMobile}
+                dimmed={highlightedTag && !data.tags.includes(highlightedTag)}
               />
           ))}
           {hoveredMusic && <InfoCard data={hoveredMusic.data} position={hoveredMusic.position} onClose={() => setHoveredMusic(null)} isMobile={isMobile} />}

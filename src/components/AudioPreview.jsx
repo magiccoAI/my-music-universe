@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const AudioPreview = ({ term, isMobile }) => {
-  const [audioUrl, setAudioUrl] = useState(null);
+const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false, darkMode = false }) => {
+  const [audioUrl, setAudioUrl] = useState(directUrl || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
   useEffect(() => {
+    // If we have a direct URL, use it and skip fetching
+    if (directUrl) {
+      setAudioUrl(directUrl);
+      return;
+    }
+
     if (!term) return;
 
     const fetchPreview = async () => {
@@ -52,6 +58,18 @@ const AudioPreview = ({ term, isMobile }) => {
     };
   }, [term]);
 
+  // AutoPlay logic
+  useEffect(() => {
+      if (autoPlay && audioUrl && audioRef.current) {
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+              playPromise
+                  .then(() => setIsPlaying(true))
+                  .catch(error => console.warn("Auto-play prevented:", error));
+          }
+      }
+  }, [audioUrl, autoPlay]);
+
   const togglePlay = (e) => {
     e.stopPropagation(); // Prevent closing the card
     if (audioRef.current) {
@@ -68,11 +86,14 @@ const AudioPreview = ({ term, isMobile }) => {
     setIsPlaying(false);
   };
 
-  if (loading) return <div className="text-xs text-gray-400 mt-2">正在寻找试听片段...</div>;
+  if (loading) return <div className={`text-xs ${darkMode ? 'text-slate-400' : 'text-gray-400'} mt-2`}>正在寻找试听片段...</div>;
   if (!audioUrl) return null; // Hide if no audio found
 
   return (
-    <div className="mt-2 bg-gray-50 rounded-lg p-2 border border-gray-100" onClick={(e) => e.stopPropagation()}>
+    <div 
+      className={`mt-2 rounded-lg p-2 border transition-colors duration-300 ${darkMode ? 'bg-slate-700/50 border-slate-600' : 'bg-gray-50 border-gray-100'}`} 
+      onClick={(e) => e.stopPropagation()}
+    >
       <audio 
         ref={audioRef} 
         src={audioUrl} 
@@ -81,7 +102,7 @@ const AudioPreview = ({ term, isMobile }) => {
         onPlay={() => setIsPlaying(true)}
       />
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-500 font-medium">
+        <span className={`text-xs font-medium ${darkMode ? 'text-slate-300' : 'text-gray-500'}`}>
             Preview (30s)
         </span>
         <button
@@ -89,7 +110,9 @@ const AudioPreview = ({ term, isMobile }) => {
           className={`
             flex items-center justify-center w-8 h-8 rounded-full 
             transition-all duration-200 
-            ${isPlaying ? 'bg-indigo-100 text-indigo-600' : 'bg-indigo-600 text-white hover:bg-indigo-700'}
+            ${isPlaying 
+                ? (darkMode ? 'bg-indigo-500/20 text-indigo-300' : 'bg-indigo-100 text-indigo-600') 
+                : (darkMode ? 'bg-indigo-500 text-white hover:bg-indigo-400' : 'bg-indigo-600 text-white hover:bg-indigo-700')}
           `}
           aria-label={isPlaying ? "Pause preview" : "Play preview"}
         >
@@ -105,7 +128,7 @@ const AudioPreview = ({ term, isMobile }) => {
         </button>
       </div>
       {/* iTunes attribution (required by Apple usually, or good practice) */}
-      <div className="text-[10px] text-right text-gray-300 mt-1">
+      <div className={`text-[10px] text-right mt-1 ${darkMode ? 'text-slate-500' : 'text-gray-300'}`}>
         Provided by Apple Music
       </div>
     </div>
