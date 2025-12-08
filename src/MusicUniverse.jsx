@@ -242,17 +242,17 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           <pointLight position={[10, 10, 10]} />
           {currentTheme === 'night' && (
             <React.Suspense fallback={null}>
-              <Stars />
+              <Stars isMobile={isMobile} />
             </React.Suspense>
           )}
           {currentTheme === 'day' && (
             <React.Suspense fallback={null}>
-              <Clouds />
+              <Clouds isMobile={isMobile} />
             </React.Suspense>
           )}
           {currentTheme === 'evening' && (
             <React.Suspense fallback={null}>
-              <Evening />
+              <Evening isMobile={isMobile} />
             </React.Suspense>
           )}
 

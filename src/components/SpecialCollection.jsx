@@ -546,32 +546,34 @@ function SpecialCollection() {
                 style={{
                   position: 'absolute',
                   top: '50%',
-                  left: '15px',
+                  left: isMobile ? '5px' : '15px',
                   transform: 'translateY(-50%)',
                   background: 'rgba(178, 204, 244, 0.2)',
                   border: 'none',
-                  width: '50px',
-                  height: '50px',
+                  width: isMobile ? '40px' : '50px',
+                  height: isMobile ? '40px' : '50px',
                   borderRadius: '50%',
                   color: 'white',
-                  fontSize: '20px',
                   cursor: 'pointer',
                   backdropFilter: 'blur(10px)',
                   transition: 'all 0.3s ease',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  zIndex: 10
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.3)';
-                  e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                  if (isMobile) return;
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-                  e.target.style.transform = 'translateY(-50%) scale(1)';
+                  if (isMobile) return;
+                  e.currentTarget.style.background = 'rgba(178, 204, 244, 0.2)';
+                  e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
                 }}
               >
-                ‹
+                <ChevronLeftIcon className="w-6 h-6" />
               </button>
               {/* 下一张按钮 */}
               <button
@@ -580,32 +582,34 @@ function SpecialCollection() {
                 style={{
                   position: 'absolute',
                   top: '50%',
-                  right: '15px',
+                  right: isMobile ? '5px' : '15px',
                   transform: 'translateY(-50%)',
                   background: 'rgba(143, 187, 243, 0.44)',
                   border: 'none',
-                  width: '50px',
-                  height: '50px',
+                  width: isMobile ? '40px' : '50px',
+                  height: isMobile ? '40px' : '50px',
                   borderRadius: '50%',
                   color: 'white',
-                  fontSize: '20px',
                   cursor: 'pointer',
                   backdropFilter: 'blur(10px)',
                   transition: 'all 0.3s ease',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  zIndex: 10
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(197, 216, 243, 0.3)';
-                  e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                  if (isMobile) return;
+                  e.currentTarget.style.background = 'rgba(197, 216, 243, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'rgba(158, 232, 250, 0.2)';
-                  e.target.style.transform = 'translateY(-50%) scale(1)';
+                  if (isMobile) return;
+                  e.currentTarget.style.background = 'rgba(143, 187, 243, 0.44)';
+                  e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
                 }}
               >
-                &gt;
+                <ChevronRightIcon className="w-6 h-6" />
               </button>
 
               {/* 指示器点 */}
@@ -615,7 +619,7 @@ function SpecialCollection() {
                 left: '50%',
                 transform: 'translateX(-50%)',
                 display: 'flex',
-                gap: '10px'
+                gap: isMobile ? '14px' : '10px'
               }}>
                 {musicReports.map((_, index) => (
                   <button
@@ -623,8 +627,8 @@ function SpecialCollection() {
                     onClick={() => goToSlide(index)}
                     aria-label={`前往幻灯片 ${index + 1}`}
                     style={{
-                      width: '14px',
-                      height: '14px',
+                      width: isMobile ? '16px' : '14px',
+                      height: isMobile ? '16px' : '14px',
                       borderRadius: '50%',
                       border: 'none',
                       background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.65)',
@@ -687,32 +691,34 @@ function SpecialCollection() {
               style={{
                 position: 'absolute',
                 top: '50%',
-                left: '15px',
+                left: isMobile ? '5px' : '15px',
                 transform: 'translateY(-50%)',
                 background: 'rgba(178, 204, 244, 0.2)',
                 border: 'none',
-                width: '50px',
-                height: '50px',
+                width: isMobile ? '40px' : '50px',
+                height: isMobile ? '40px' : '50px',
                 borderRadius: '50%',
                 color: 'white',
-                fontSize: '20px',
                 cursor: 'pointer',
                 backdropFilter: 'blur(10px)',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                zIndex: 20
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.3)';
-                e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                if (isMobile) return;
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-                e.target.style.transform = 'translateY(-50%) scale(1)';
+                if (isMobile) return;
+                e.currentTarget.style.background = 'rgba(178, 204, 244, 0.2)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
               }}
             >
-              &lt;
+              <ChevronLeftIcon className="w-6 h-6" />
             </button>
             {/* 下一张按钮 */}
             <button
@@ -720,38 +726,41 @@ function SpecialCollection() {
               style={{
                 position: 'absolute',
                 top: '50%',
-                right: '15px',
+                right: isMobile ? '5px' : '15px',
                 transform: 'translateY(-50%)',
                 background: 'rgba(143, 187, 243, 0.44)',
                 border: 'none',
-                width: '50px',
-                height: '50px',
+                width: isMobile ? '40px' : '50px',
+                height: isMobile ? '40px' : '50px',
                 borderRadius: '50%',
                 color: 'white',
-                fontSize: '20px',
                 cursor: 'pointer',
                 backdropFilter: 'blur(10px)',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                zIndex: 20
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(197, 216, 243, 0.3)';
-                e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                if (isMobile) return;
+                e.currentTarget.style.background = 'rgba(197, 216, 243, 0.3)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(158, 232, 250, 0.2)';
-                e.target.style.transform = 'translateY(-50%) scale(1)';
+                if (isMobile) return;
+                e.currentTarget.style.background = 'rgba(143, 187, 243, 0.44)';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
               }}
             >
-              &gt;
+              <ChevronRightIcon className="w-6 h-6" />
             </button>
             <button 
               onClick={closeModal}
-              className="absolute top-4 right-4 text-white text-3xl font-bold bg-gray-800 bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-75 transition-all duration-200"
+              className="absolute top-4 right-4 text-white font-bold bg-gray-800 bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-75 transition-all duration-200"
+              style={{ zIndex: 20, width: isMobile ? '44px' : '40px', height: isMobile ? '44px' : '40px' }}
             >
-              &times;
+              <XMarkIcon className="w-6 h-6" />
             </button>
           </div>
         </div>

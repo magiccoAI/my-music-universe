@@ -1,7 +1,7 @@
 import React from 'react';
 import { Cloud } from '@react-three/drei';
 
-const CloudsOnly = () => {
+const CloudsOnly = ({ isMobile }) => {
   return (
     <group>
       {/* 
@@ -39,52 +39,70 @@ const CloudsOnly = () => {
         speed={0.2} 
         width={20} 
         depth={1.5} 
-        segments={20} 
+        segments={isMobile ? 10 : 20} // 移动端降低分段
         position={[0, -5, -20]}
         color="#f0f0f0" 
       />
       
-      {/* 中景层：高亮纯白云朵 */}
-      <Cloud 
-        opacity={0.9} 
-        speed={0.25} 
-        width={10} 
-        depth={2} 
-        segments={20} 
-        position={[-8, 2, -12]} // 左上方
-        color="#ffffff" 
-      />
+      {/* 移动端只保留核心云朵，减少渲染压力 */}
+      {!isMobile && (
+        <>
+            {/* 中景层：高亮纯白云朵 */}
+            <Cloud 
+                opacity={0.9} 
+                speed={0.25} 
+                width={10} 
+                depth={2} 
+                segments={20} 
+                position={[-8, 2, -12]} // 左上方
+                color="#ffffff" 
+            />
 
-      <Cloud 
-        opacity={0.9} 
-        speed={0.25} 
-        width={10} 
-        depth={2} 
-        segments={20} 
-        position={[8, -2, -12]} // 右下方
-        color="#ffffff" 
-      />
+            <Cloud 
+                opacity={0.9} 
+                speed={0.25} 
+                width={10} 
+                depth={2} 
+                segments={20} 
+                position={[8, -2, -12]} // 右下方
+                color="#ffffff" 
+            />
 
-      {/* 远景点缀 */}
-      <Cloud 
-        opacity={0.7} 
-        speed={0.2} 
-        width={15} 
-        depth={1} 
-        segments={15} 
-        position={[-15, 10, -18]} 
-        color="#ffffff" 
-      />
+            {/* 远景点缀 */}
+            <Cloud 
+                opacity={0.7} 
+                speed={0.2} 
+                width={15} 
+                depth={1} 
+                segments={15} 
+                position={[-15, 10, -18]} 
+                color="#ffffff" 
+            />
 
-      <Cloud 
-        opacity={0.7} 
-        speed={0.2} 
-        width={15} 
-        depth={1} 
-        segments={15} 
-        position={[15, 5, -15]} 
-        color="#ffffff" 
-      />
+            <Cloud 
+                opacity={0.7} 
+                speed={0.2} 
+                width={15} 
+                depth={1} 
+                segments={15} 
+                position={[15, 5, -15]} 
+                color="#ffffff" 
+            />
+        </>
+      )}
+
+      {/* 移动端额外保留一个简化的右侧云朵以保持平衡 */}
+      {isMobile && (
+        <Cloud 
+            opacity={0.8} 
+            speed={0.25} 
+            width={12} 
+            depth={1.5} 
+            segments={10} 
+            position={[5, 0, -15]} 
+            color="#ffffff" 
+        />
+      )}
     </group>
   );
 };

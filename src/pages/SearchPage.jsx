@@ -11,6 +11,8 @@ import MusicCard from '../components/MusicCard';
 
 
 
+import { pinyin } from 'pinyin-pro';
+
 const SearchPage = () => {
   const { musicData, loading: musicDataLoading, error: musicDataError } = useMusicData();
   const {
@@ -85,15 +87,31 @@ const SearchPage = () => {
     setFocusedSuggestionIndex(-1);
   }, [query, artists]);
 
-  // Group artists by first letter
+  // Group artists by first letter (optimized for Chinese)
   const groupedArtists = useMemo(() => {
     if (sortMethod !== 'name') return null;
     
     const groups = {};
     artistsByName.forEach(([name, count]) => {
-      const firstChar = name.charAt(0).toUpperCase();
+      let firstChar = name.charAt(0).toUpperCase();
+      
       // Check if it's an English letter
+      if (!/^[A-Z]/.test(firstChar)) {
+        // Try to convert Chinese to pinyin first letter
+        try {
+           const pinyinResult = pinyin(name.charAt(0), { pattern: 'first', toneType: 'none', type: 'array' });
+           if (pinyinResult && pinyinResult.length > 0) {
+             firstChar = pinyinResult[0].toUpperCase();
+           }
+        } catch (e) {
+           // Fallback to # if conversion fails
+           firstChar = '#';
+        }
+      }
+
+      // Final check if it is a letter after conversion
       const key = /^[A-Z]/.test(firstChar) ? firstChar : '#';
+      
       if (!groups[key]) groups[key] = [];
       groups[key].push({ name, count });
     });
@@ -103,6 +121,11 @@ const SearchPage = () => {
         if (a === '#') return 1;
         if (b === '#') return -1;
         return a.localeCompare(b);
+    });
+
+    // Sort artists within each group
+    Object.keys(groups).forEach(key => {
+        groups[key].sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
     });
 
     return { groups, sortedKeys };
@@ -254,6 +277,8 @@ const SearchPage = () => {
           <div className="relative">
             <input
               ref={searchInputRef}
+              name="search-query"
+              id="main-search-input"
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
@@ -378,7 +403,7 @@ const SearchPage = () => {
           ) : (
             <AnimatePresence mode="wait">
               <motion.div
-                key={query + artistFilter}
+                key="results-container"
                 variants={resultVariants}
                 initial="hidden"
                 animate="visible"

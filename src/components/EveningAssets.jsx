@@ -3,6 +3,44 @@ import { Sparkles, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
 
+const SimpleWater = () => {
+  const waterNormals = useLoader(
+    THREE.TextureLoader,
+    'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/water/Water_1_M_Normal.jpg'
+  );
+  waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+  waterNormals.repeat.set(10, 10); // 增加纹理重复，避免拉伸
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    // 简单的纹理流动动画，性能开销极低
+    waterNormals.offset.x = t * 0.05;
+    waterNormals.offset.y = t * 0.02;
+  });
+
+  return (
+    <mesh 
+      rotation={[-Math.PI / 2, 0, 0]} 
+      position={[0, -5, 0]}
+      receiveShadow={false} // 移动端关闭接收阴影
+    >
+      <planeGeometry args={[1000, 1000]} />
+      <meshStandardMaterial 
+        color="#2a3055" // 稍微调亮一点的基础色，偏紫
+        normalMap={waterNormals}
+        normalScale={new THREE.Vector2(1.5, 1.5)} // 再次增强波浪细节，让反光更细碎
+        roughness={0.02} // 极致光滑
+        metalness={1.0} // 全金属感，最大化反射环境
+        emissive="#7c3aed" // 自发光改为紫色，呼应晚霞
+        emissiveIntensity={0.3}
+        transparent={true}
+        opacity={0.6} // 降低不透明度，让背景透出来
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
+};
+
 const DynamicWaveWater = () => {
   const meshRef = useRef();
   // 增加分段数以支持顶点动画
@@ -300,17 +338,21 @@ const Mountains = () => {
   );
 };
 
-const EveningAssets = () => {
+const EveningAssets = ({ isMobile }) => {
   const { scene } = useThree();
   
   // 飞鸟群配置
-  const birds = useMemo(() => [
-    { pos: [-15, 8, -20], speed: 1.2, scale: 0.5 },
-    { pos: [-18, 9, -22], speed: 1.1, scale: 0.4 },
-    { pos: [-12, 7.5, -18], speed: 1.3, scale: 0.45 },
-    { pos: [10, 12, -25], speed: 0.9, scale: 0.3 },
-    { pos: [14, 11, -28], speed: 0.85, scale: 0.25 },
-  ], []);
+  const birds = useMemo(() => {
+    const allBirds = [
+      { pos: [-15, 8, -20], speed: 1.2, scale: 0.5 },
+      { pos: [-18, 9, -22], speed: 1.1, scale: 0.4 },
+      { pos: [-12, 7.5, -18], speed: 1.3, scale: 0.45 },
+      { pos: [10, 12, -25], speed: 0.9, scale: 0.3 },
+      { pos: [14, 11, -28], speed: 0.85, scale: 0.25 },
+    ];
+    // 移动端减少飞鸟数量
+    return isMobile ? allBirds.slice(0, 2) : allBirds;
+  }, [isMobile]);
 
   // 设置场景雾效，使水面边缘与背景融合
   React.useEffect(() => {
@@ -340,7 +382,7 @@ const EveningAssets = () => {
         position={[0, 10, -100]} 
         intensity={5.0} 
         color="#fb923c" // 强烈的橙色夕阳
-        castShadow 
+        castShadow={!isMobile} // 移动端关闭阴影
       />
       
       {/* 补光：放在相机后方，稍微照亮前景物体，避免完全剪影 */}
@@ -355,18 +397,19 @@ const EveningAssets = () => {
         intensity={10}
         color="#ff7e5f"
         distance={200}
+        castShadow={!isMobile} // 移动端关闭阴影
       />
 
-      {/* 🌊 真实水面渲染 */}
+      {/* 🌊 真实水面渲染 - 移动端使用简化版 */}
       <React.Suspense fallback={null}>
-        <DynamicWaveWater />
+        {isMobile ? <SimpleWater /> : <DynamicWaveWater />}
       </React.Suspense>
 
       {/* 🏝️ 远景：一座孤山 */}
       <Mountains />
 
-      {/* 🌳 前景：水面上的立体树 */}
-      <Tree position={[20, -5, -30]} />
+      {/* 🌳 前景：水面上的立体树 - 移动端移除 */}
+      {!isMobile && <Tree position={[20, -5, -30]} />}
 
       {/* 🕊️ 点缀：傍晚归巢的海鸥 */}
       {birds.map((bird, index) => (
@@ -375,7 +418,7 @@ const EveningAssets = () => {
 
       {/* ✨ 氛围粒子 (Sparkles) - 模拟水面反光或萤火虫 */}
       <Sparkles 
-        count={300} 
+        count={isMobile ? 50 : 300} // 移动端减少粒子数量
         scale={[40, 10, 40]} 
         position={[0, -2, -10]} 
         size={8} 

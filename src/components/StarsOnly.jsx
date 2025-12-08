@@ -3,9 +3,9 @@ import { useFrame } from '@react-three/fiber';
 import { Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 
-const Stars = () => {
+const Stars = ({ isMobile }) => {
   const ref = useRef();
-  const numStars = 5000; // Increased number of stars
+  const numStars = isMobile ? 1500 : 5000; // Reduced stars for mobile
   const radius = 100; // Increased radius for a wider spread
 
   const positions = useMemo(() => {
@@ -28,9 +28,11 @@ const Stars = () => {
       ref.current.rotation.y += 0.0001;
 
       // Mouse interaction: move stars slightly based on mouse position
-      // Adjust these multipliers for desired sensitivity
-      ref.current.rotation.x += mouse.y * 0.00005;
-      ref.current.rotation.y += mouse.x * 0.00005;
+      // 移动端通常没有鼠标 hover，所以这个效果主要针对桌面端
+      if (!isMobile && mouse) {
+          ref.current.rotation.x += mouse.y * 0.00005;
+          ref.current.rotation.y += mouse.x * 0.00005;
+      }
     }
   });
 
@@ -51,7 +53,7 @@ const Stars = () => {
 
       {/* ✨ Floating Particles - Layer 1: Close and active (Cyan/Blue tint) */}
       <Sparkles 
-        count={200} 
+        count={isMobile ? 50 : 200} 
         scale={[20, 20, 20]} 
         size={4} 
         speed={0.4} 
@@ -61,7 +63,7 @@ const Stars = () => {
 
       {/* ✨ Floating Particles - Layer 2: Widespread background dust (White) */}
       <Sparkles 
-        count={500} 
+        count={isMobile ? 100 : 500} 
         scale={[50, 50, 50]} 
         size={2} 
         speed={0.2} 
@@ -71,7 +73,7 @@ const Stars = () => {
 
       {/* ✨ Floating Particles - Layer 3: Occasional brighter glints (Purple tint) */}
       <Sparkles 
-        count={50} 
+        count={isMobile ? 10 : 50} 
         scale={[30, 30, 30]} 
         size={10} 
         speed={0.5} 
