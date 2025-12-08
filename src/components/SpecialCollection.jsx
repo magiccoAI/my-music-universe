@@ -268,9 +268,9 @@ function SpecialCollection() {
                   border: '3px solid rgba(255, 255, 255, 0.2)'
                 }}>
                   <img
-                    src={`${process.env.PUBLIC_URL}/optimized-images/${album.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp`}
+                    src={`${process.env.PUBLIC_URL}/${album.cover.replace(/\.(png|jpg|jpeg)$/i, '.webp')}`}
                     alt={album.music}
-                    loading="lazy" // Add lazy loading
+                    loading="lazy"
                     style={{
                       width: '100%',
                       height: '100%',
@@ -279,7 +279,7 @@ function SpecialCollection() {
                     }}
                     onError={(e) => {
                       e.target.onerror = null; // Prevent infinite loop if fallback also fails
-                       e.target.src = `${process.env.PUBLIC_URL}/${album.cover}`;
+                      e.target.src = `${process.env.PUBLIC_URL}/${album.cover}`;
                     }}
                   />
                 </div>
@@ -530,7 +530,7 @@ function SpecialCollection() {
                         cursor: 'pointer' // 添加手型光标表示可点击
                       }}
                       onError={(e) => {
-                        e.target.onerror = null;
+                        e.target.onerror = null; // Prevent infinite loop
                         e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`;
                       }}
                     />
