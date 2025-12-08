@@ -142,7 +142,7 @@ function SpecialCollection() {
   // 响应 index 变化，更新 URL 和 loading 状态
   useEffect(() => {
     if (selectedImageIndex !== null) {
-      setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[selectedImageIndex].id}.png`);
+      setSelectedImage(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[selectedImageIndex].id}.webp`);
       setIsImageLoading(true);
     }
   }, [selectedImageIndex, musicReports]);
@@ -518,10 +518,10 @@ function SpecialCollection() {
                     }}
                   >
                     <img 
-                      src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`}
+                      src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.webp`}
                       alt={report.name}
                       loading="lazy" // Add lazy loading
-                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`, index)}
+                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.webp`, index)}
                       style={{
                         maxWidth: '100%',
                         maxHeight: '100%',
@@ -530,6 +530,7 @@ function SpecialCollection() {
                         cursor: 'pointer' // 添加手型光标表示可点击
                       }}
                       onError={(e) => {
+                        e.target.onerror = null;
                         e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`;
                       }}
                     />

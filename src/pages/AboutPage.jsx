@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import UniverseNavigation from '../components/UniverseNavigation';
 import StarBackground from '../components/StarBackground';
 
-const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.png';
-const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.png';
+const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
+const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 
 const AboutPage = () => {
   const [lang, setLang] = useState('zh');
@@ -88,7 +88,13 @@ const AboutPage = () => {
                     <img 
                     src={BasicTableImage} 
                     alt="Original Music Data Table" 
+                    loading="lazy"
                     className="w-full h-48 md:h-64 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                    onError={(e) => {
+                      if (e.target.src.endsWith('.webp')) {
+                        e.target.src = e.target.src.replace('.webp', '.png');
+                      }
+                    }}
                     />
                     <figcaption className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-xs text-sky-300/70 text-center font-mono tracking-widest">
                     {t.imageCaption1}
@@ -100,10 +106,15 @@ const AboutPage = () => {
                     <img 
                     src={DataJsonImage} 
                     alt="Music Collection Data JSON Source" 
+                    loading="lazy"
                     className="w-full h-48 md:h-64 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                     onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
+                        if (e.target.src.endsWith('.webp')) {
+                            e.target.src = e.target.src.replace('.webp', '.png');
+                        } else {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                        }
                     }}
                     />
                     <div className="hidden absolute inset-0 flex items-center justify-center text-xs text-sky-400/50 font-mono bg-gray-900/90">

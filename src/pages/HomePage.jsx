@@ -10,8 +10,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
 import WeChatIcon from '../assets/icons/wechat-icon.webp';
-const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.png';
-const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.png';
+const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
+const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 import useMeteorTrail from '../hooks/useMeteorTrail';
 import useIsMobile from '../hooks/useIsMobile';
 
@@ -258,6 +258,11 @@ const HomePage = () => {
                     src={BasicTableImage} 
                     alt="Original Music Data Table" 
                     className="w-full h-auto opacity-90 hover:opacity-100 transition-all duration-500"
+                    onError={(e) => {
+                      if (e.target.src.endsWith('.webp')) {
+                        e.target.src = e.target.src.replace('.webp', '.png');
+                      }
+                    }}
                   />
                   <figcaption className="absolute bottom-0 inset-x-0 p-2 bg-gradient-to-t from-black/90 to-transparent text-[10px] text-sky-300/70 text-center font-mono tracking-wider">
                     STEP 1: RAW DATA COLLECTION
@@ -277,8 +282,12 @@ const HomePage = () => {
                     alt="Music Collection Data JSON Source" 
                     className="w-full h-auto opacity-90 hover:opacity-100 transition-all duration-500"
                     onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
+                      if (e.target.src.endsWith('.webp')) {
+                        e.target.src = e.target.src.replace('.webp', '.png');
+                      } else {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }
                     }}
                   />
                   <div className="hidden absolute inset-0 flex items-center justify-center text-xs text-sky-400/50 font-mono bg-gray-900/90">
