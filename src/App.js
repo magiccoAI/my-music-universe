@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { UniverseProvider } from './UniverseContext';
 import { LoadingScreen } from './components/LoadingScreen';
 import { GlobalSuspenseFallback } from './components/GlobalSuspenseFallback';
+import OrientationHint from './components/OrientationHint';
 import { motion, AnimatePresence } from 'framer-motion';
 import './transitions.css';
 
@@ -58,6 +59,9 @@ function App() {
 
       {/* 全局渐变背景层 */}
       <div className="global-background"></div>
+      
+      {/* 移动端横屏提示 */}
+      <OrientationHint />
       
       {/* 2. 主应用内容
           使用 opacity 控制显隐，确保加载动画结束时内容已经准备好了，实现无缝过渡 

@@ -1,5 +1,6 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 
 const Stars = () => {
@@ -34,17 +35,51 @@ const Stars = () => {
   });
 
   return (
-    <points ref={ref}>
-      <bufferGeometry attach="geometry">
-        <bufferAttribute
-          attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <pointsMaterial attach="material" color="white" size={0.1} sizeAttenuation transparent opacity={0.7} />
-    </points>
+    <group>
+      {/* Original Stars */}
+      <points ref={ref}>
+        <bufferGeometry attach="geometry">
+          <bufferAttribute
+            attach="attributes-position"
+            count={positions.length / 3}
+            array={positions}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial attach="material" color="white" size={0.1} sizeAttenuation transparent opacity={0.7} />
+      </points>
+
+      {/* ✨ Floating Particles - Layer 1: Close and active (Cyan/Blue tint) */}
+      <Sparkles 
+        count={200} 
+        scale={[20, 20, 20]} 
+        size={4} 
+        speed={0.4} 
+        opacity={0.6}
+        color="#a5f3fc" // Cyan-200
+      />
+
+      {/* ✨ Floating Particles - Layer 2: Widespread background dust (White) */}
+      <Sparkles 
+        count={500} 
+        scale={[50, 50, 50]} 
+        size={2} 
+        speed={0.2} 
+        opacity={0.4}
+        color="#ffffff" 
+      />
+
+      {/* ✨ Floating Particles - Layer 3: Occasional brighter glints (Purple tint) */}
+      <Sparkles 
+        count={50} 
+        scale={[30, 30, 30]} 
+        size={10} 
+        speed={0.5} 
+        opacity={0.8}
+        color="#e879f9" // Purple-400
+        noise={1} // Add some noise for irregular movement
+      />
+    </group>
   );
 };
 

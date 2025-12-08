@@ -19,8 +19,50 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [aboutLang, setAboutLang] = useState('zh');
   const isMobile = useIsMobile();
   const [showBackground, setShowBackground] = useState(false);
+
+  const aboutContent = {
+    zh: {
+      intro: (
+        <>
+          这个网站，是我为自己打造的<span className="text-sky-200 font-semibold">“音乐记忆合集宇宙”</span>。它暂时没有集成全面的播放资源，只是从一份基础的音乐数据表格（ <code className="bg-black/40 px-1 py-0.5 rounded text-sky-400 font-mono">data.json</code> ）延伸出来的星图，但对我而言，它是一个外部记忆体——帮助我在看到封面的瞬间，重新提取当时的旋律、心境与感受。
+        </>
+      ),
+      quote: "在公众号 2022–2023 的推文尾声，我分享了一些歌。把那些零散片段收拢到同一个入口，记录的意义就被再次点亮：当你按下播放键（或只是停留在封面上），一系列声波与触感的体验就有机会被启动。",
+      techP1: (
+        <>
+          我一直对可视化感兴趣：像《黑客帝国》的数据流、维基百科的关系图、各种创意交互。于是我用 <span className="text-sky-300 font-mono">React</span> 和 <span className="text-purple-300 font-mono">TraeAI</span> 及多种大语言模型，一点点摸索，把这份歌单做成一个可视化空间。
+        </>
+      ),
+      techP2: (
+        <>
+          未来它或许会迁移发展成更多与我生命相关的东西，但在此刻，它只想温柔地提醒我：这些歌，曾经陪伴我，也仍在陪伴我。这是我作为一位非专业开发者的持续实践，也是一段与工具共创的旅程；每一次迭代，都是在把<span className="text-white font-bold">“听过什么歌”</span>变成<span className="text-sky-300 font-bold">“看见我的故事”</span>。
+        </>
+      )
+    },
+    en: {
+      intro: (
+        <>
+          This digital expanse is my personal <span className="text-sky-200 font-semibold">"Cosmos of Musical Memories."</span> It is not merely a player, but a star map born from a humble spreadsheet (<code className="bg-black/40 px-1 py-0.5 rounded text-sky-400 font-mono">data.json</code>). To me, it serves as an external memory bank—one where a single glance at an album cover instantly retrieves the melodies, moods, and emotions of days past.
+        </>
+      ),
+      quote: "From 2022 to 2023, I shared musical fragments at the end of my blog posts. Gathering these scattered pieces here reignites the purpose of documentation: whether you press play or simply gaze upon a cover, a symphony of sonic and emotional experiences is reawakened.",
+      techP1: (
+        <>
+          I have always been captivated by the art of visualization—from the digital rain of <em>The Matrix</em> to the knowledge webs of Wikipedia. Guided by this fascination, I utilized <span className="text-sky-300 font-mono">React</span>, <span className="text-purple-300 font-mono">TraeAI</span>, and various LLMs to meticulously sculpt this playlist into an immersive visual dimension.
+        </>
+      ),
+      techP2: (
+        <>
+          While this universe may evolve to hold more of my life's data, for now, it stands as a gentle testament: these songs have been, and remain, my constant companions. This is the ongoing journey of an amateur developer co-creating with AI—where every iteration transforms <span className="text-white font-bold">"what I heard"</span> into <span className="text-sky-300 font-bold">"seeing my story."</span>
+        </>
+      )
+    }
+  };
+
+  const t = aboutContent[aboutLang];
 
   const { handleMouseMove, MeteorRenderer } = useMeteorTrail();
 
@@ -67,8 +109,14 @@ const HomePage = () => {
         <button
           type="button"
           onClick={() => setShowAbout(true)}
-          className="text-base font-medium hover:text-sky-300 transition"
-        >关于</button>
+          className="text-base font-medium hover:text-sky-300 transition opacity-80 hover:opacity-100"
+          aria-label="关于"
+          title="关于这个宇宙"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+          </svg>
+        </button>
       </nav>
 
       {/* hero */}
@@ -85,7 +133,7 @@ const HomePage = () => {
         </p>
         <div className="w-40 h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent opacity-60 mb-8" />
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <a
             href="/music-universe"
             onClick={handleMusicUniverseClick}
@@ -101,29 +149,58 @@ const HomePage = () => {
           </Link>
         </div>
 
+        {/* Story Signal Trigger */}
+        <button
+          onClick={() => setShowAbout(true)}
+          className="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-sky-500/30 transition-all duration-500 hover:shadow-[0_0_20px_rgba(14,165,233,0.15)] mx-auto"
+        >
+          <div className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.8)]"></span>
+          </div>
+          <span className="text-xs md:text-sm text-gray-400 group-hover:text-sky-200 transition-colors font-mono tracking-wider">
+            来自设计者的信号：关于这个网站
+          </span>
+        </button>
+
        
       </header>
 
       {/* external links */}
-      <footer className="pb-12 flex justify-center gap-6 z-10">
-        <a
-          href="https://music.163.com/playlist?id=14356909162&uct2=U2FsdGVkX1/gFqE4/o/Ao72aJFZQeOfU4v1DPeNGiAE="
-          target="_blank"
-          rel="noopener noreferrer"
-          title="「D小调片段记录」过往公众号推文歌单合集"
-          className="hover:opacity-80 transition"
-        >
-          <img src={NetEaseCloudMusicIcon} alt="网易云" className="w-8 h-8" />
-        </a>
-        <a
-          href="https://mp.weixin.qq.com/s/P-UimdNlkT5cUGt572dBAQ"
-          target="_blank"
-          rel="noopener noreferrer"
-          title="公众号"
-          className="hover:opacity-80 transition"
-        >
-          <img src={WeChatIcon} alt="微信" className="w-8 h-8" />
-        </a>
+      <footer className="pb-12 flex flex-col items-center gap-5 z-10">
+        <div className="flex items-center gap-3">
+          <div className="h-px w-12 bg-gradient-to-r from-transparent to-gray-700"></div>
+          <span className="text-xs text-gray-500 font-mono tracking-widest uppercase">Contact</span>
+          <div className="h-px w-12 bg-gradient-to-l from-transparent to-gray-700"></div>
+        </div>
+        
+        <div className="flex justify-center gap-8">
+          <a
+            href="https://music.163.com/playlist?id=14356909162&uct2=U2FsdGVkX1/gFqE4/o/Ao72aJFZQeOfU4v1DPeNGiAE="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col items-center gap-2"
+            title="「D小调片段记录」过往公众号推文歌单合集"
+          >
+            <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:bg-white/10 group-hover:border-sky-500/30 group-hover:scale-110 transition-all duration-300 backdrop-blur-sm">
+              <img src={NetEaseCloudMusicIcon} alt="网易云音乐" className="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <span className="text-[10px] text-gray-500 group-hover:text-sky-400 transition-colors font-mono">网易云歌单</span>
+          </a>
+
+          <a
+            href="https://mp.weixin.qq.com/s/P-UimdNlkT5cUGt572dBAQ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col items-center gap-2"
+            title="关注公众号：D小调片段记录"
+          >
+            <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:bg-white/10 group-hover:border-green-500/30 group-hover:scale-110 transition-all duration-300 backdrop-blur-sm">
+              <img src={WeChatIcon} alt="微信公众号" className="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors font-mono">公众号</span>
+          </a>
+        </div>
       </footer>
 
       {/* modal */}
@@ -148,12 +225,29 @@ const HomePage = () => {
 
       {showAbout && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setShowAbout(false)} />
-          <div className="relative bg-gray-900/70 p-8 rounded-xl shadow-xl max-w-xl w-full mx-4 text-left border border-sky-500/40 backdrop-blur-md">
-            <h3 className="text-lg font-bold text-sky-300 mb-4 font-mono tracking-wider">&lt;关于这个宇宙 /&gt;</h3>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAbout(false)} />
+          <div className="relative bg-gray-900/80 p-8 rounded-xl shadow-[0_0_50px_rgba(14,165,233,0.15)] max-w-xl w-full mx-4 text-left border border-sky-500/30 backdrop-blur-md animate-in fade-in zoom-in duration-300">
+            <div className="flex items-center justify-between mb-6 border-b border-sky-500/20 pb-4">
+              <div className="flex items-center gap-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                </span>
+                <h3 className="text-lg font-bold text-sky-100 font-mono tracking-wider">
+                  INCOMING SIGNAL: ORIGIN STORY
+                </h3>
+              </div>
+              <button 
+                onClick={() => setAboutLang(l => l === 'zh' ? 'en' : 'zh')}
+                className="px-3 py-1 rounded-full border border-sky-500/30 text-sky-400 hover:bg-sky-500/10 transition-colors text-xs font-mono"
+              >
+                {aboutLang === 'zh' ? 'EN' : '中文'}
+              </button>
+            </div>
+            
             <div className="space-y-6 text-gray-300 text-sm leading-8 max-h-[60vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-sky-500/30 scrollbar-track-transparent font-sans">
-              <p className="tracking-wide">
-                这个网站，是我为自己打造的<span className="text-sky-200 font-semibold">“音乐记忆合集宇宙”</span>。它暂时没有集成播放资源，只是从一份基础的音乐数据表格（ <code className="bg-black/40 px-1 py-0.5 rounded text-sky-400 font-mono">data.json</code> ）延伸出来的星图，但对我而言，它是一个外部记忆体——帮助我在看到封面的瞬间，重新提取当时的旋律、心境与感受。
+              <p className="tracking-wide first-letter:text-2xl first-letter:text-sky-400 first-letter:mr-1 first-letter:font-bold">
+                {t.intro}
               </p>
               
               {/* Data Visualization Section */}
@@ -204,23 +298,26 @@ const HomePage = () => {
               </div>
 
               <div className="relative pl-4 border-l-2 border-sky-500/30 my-6 italic">
-                <p className="text-gray-200">在公众号 2022–2023 的推文尾声，我分享了一些歌。把那些零散片段收拢到同一个入口，记录的意义就被再次点亮：当你按下播放键（或只是停留在封面上），一系列声波与触感的体验就有机会被启动。</p>
+                <p className="text-gray-200">{t.quote}</p>
               </div>
 
               <p className="leading-loose">
-                我一直对可视化着迷：像《黑客帝国》的数据流、维基百科的关系图、各种创意交互。于是我用 <span className="text-sky-300 font-mono">React</span> 和 <span className="text-purple-300 font-mono">TraeAI</span> 及多种大语言模型，一点点摸索，把这份歌单做成一个可视化空间。
+                {t.techP1}
               </p>
               
               <p className="leading-loose">
-                未来它或许会迁移发展成更多与我生命相关的东西，但在此刻，它只想温柔地提醒我：这些歌，曾经陪伴我，也仍在陪伴我。这是一位非专业开发者的持续实践，也是一段与工具共创的旅程；每一次迭代，都是在把<span className="text-white font-bold">“听过什么歌”</span>变成<span className="text-sky-300 font-bold">“看见我的故事”</span>。
+                {t.techP2}
               </p>
             </div>
-            <div className="mt-6 flex justify-end">
+            <div className="mt-8 pt-6 border-t border-sky-500/20 flex justify-end">
               <button
                 type="button"
                 onClick={() => setShowAbout(false)}
-                className="bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-600 hover:to-sky-600 text-white font-semibold py-2 px-6 rounded-full transition"
-              >关闭</button>
+                className="group flex items-center gap-2 px-6 py-2 rounded-full border border-sky-500/30 hover:bg-sky-500/10 hover:border-sky-500/50 transition-all duration-300"
+              >
+                <span className="text-xs font-mono text-sky-400 group-hover:text-sky-300">CLOSE SIGNAL</span>
+                <span className="text-sky-500 group-hover:translate-x-1 transition-transform">→</span>
+              </button>
             </div>
           </div>
         </div>

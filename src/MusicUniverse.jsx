@@ -5,6 +5,8 @@ import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
 // import Stars from './components/StarsOnly';
 const Stars = React.lazy(() => import('./components/StarsOnly'));
+const Clouds = React.lazy(() => import('./components/CloudsOnly'));
+const Evening = React.lazy(() => import('./components/EveningAssets'));
 import UniverseNavigation from './components/UniverseNavigation';
 
 import { UniverseContext } from './UniverseContext';
@@ -241,6 +243,16 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           {currentTheme === 'night' && (
             <React.Suspense fallback={null}>
               <Stars />
+            </React.Suspense>
+          )}
+          {currentTheme === 'day' && (
+            <React.Suspense fallback={null}>
+              <Clouds />
+            </React.Suspense>
+          )}
+          {currentTheme === 'evening' && (
+            <React.Suspense fallback={null}>
+              <Evening />
             </React.Suspense>
           )}
 

@@ -3,6 +3,7 @@ import UniverseNavigation from '../components/UniverseNavigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import MouseParticleEffect from '../components/MouseParticleEffect';
 import LoadingSpinner from '../components/LoadingSpinner';
+import CustomSelect from '../components/CustomSelect';
 import { useMusicSearch } from '../hooks/useMusicSearch';
 import { getOptimizedImagePath } from '../utils/imageUtils';
 import useMusicData from '../hooks/useMusicData';
@@ -307,29 +308,15 @@ const SearchPage = () => {
             )}
           </div>
           <div className="mt-3 flex gap-2 items-center">
-            <select
-              value={artistFilter}
-              onChange={(e) => setArtistFilter(e.target.value)}
-              className="flex-1 px-3 py-2 rounded-md bg-white/80 text-gray-800 focus:outline-none min-w-0"
-              aria-label="选择艺术家过滤"
-            >
-              <option value="">全部艺术家</option>
-              {sortMethod === 'count' ? (
-                artists.map(([name, count]) => (
-                  <option key={name} value={name}>{name} ({count})</option>
-                ))
-              ) : (
-                groupedArtists?.sortedKeys.map(key => (
-                  <optgroup key={key} label={key}>
-                    {groupedArtists.groups[key].map(artist => (
-                      <option key={artist.name} value={artist.name}>
-                        {artist.name} ({artist.count})
-                      </option>
-                    ))}
-                  </optgroup>
-                ))
-              )}
-            </select>
+            <div className="flex-1 min-w-0 relative z-20">
+              <CustomSelect
+                value={artistFilter}
+                onChange={setArtistFilter}
+                options={sortMethod === 'count' ? artists : groupedArtists}
+                isGrouped={sortMethod === 'name'}
+                defaultLabel="全部艺术家"
+              />
+            </div>
             
             <button
               onClick={() => setSortMethod(prev => prev === 'count' ? 'name' : 'count')}
