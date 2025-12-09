@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UniverseNavigation from '../components/UniverseNavigation';
 import StarBackground from '../components/StarBackground';
 
@@ -6,6 +7,7 @@ const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
 const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 
 const AboutPage = () => {
+  const navigate = useNavigate();
   const [lang, setLang] = useState('zh');
 
   const content = {
@@ -60,6 +62,19 @@ const AboutPage = () => {
       <StarBackground count={3000} />
       <UniverseNavigation />
       
+      {/* Back Button */}
+      <div className="fixed top-24 left-4 md:left-12 z-50 animate-fade-in-down">
+         <button 
+           onClick={() => navigate(-1)}
+           className="p-2 rounded-full border border-sky-500/30 bg-black/40 backdrop-blur text-sky-400 hover:bg-sky-500/10 hover:border-sky-500/60 transition-all shadow-[0_0_15px_rgba(14,165,233,0.1)] group"
+           aria-label="Go Back"
+         >
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6 group-hover:-translate-x-1 transition-transform">
+             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+           </svg>
+         </button>
+      </div>
+
       {/* Language Switcher */}
       <div className="fixed top-24 right-4 md:right-12 z-50 animate-fade-in-down">
          <button 
@@ -147,6 +162,18 @@ const AboutPage = () => {
                 <p className="leading-loose">
                   {t.techP2}
                 </p>
+            </div>
+
+            {/* Close Button (Bottom) */}
+            <div className="mt-8 pt-6 border-t border-sky-500/20 flex justify-end">
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="group flex items-center gap-2 px-6 py-2 rounded-full border border-sky-500/30 hover:bg-sky-500/10 hover:border-sky-500/50 transition-all duration-300"
+              >
+                <span className="text-xs font-mono text-sky-400 group-hover:text-sky-300">CLOSE SIGNAL</span>
+                <span className="text-sky-500 group-hover:translate-x-1 transition-transform">→</span>
+              </button>
             </div>
         </div>
         

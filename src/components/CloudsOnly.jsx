@@ -91,17 +91,31 @@ const CloudsOnly = ({ isMobile }) => {
         </>
       )}
 
-      {/* 移动端额外保留一个简化的右侧云朵以保持平衡 */}
+      {/* 移动端保留核心云朵，但稍微简化参数以平衡性能与效果 */}
       {isMobile && (
-        <Cloud 
-            opacity={0.8} 
-            speed={0.25} 
-            width={12} 
-            depth={1.5} 
-            segments={10} 
-            position={[5, 0, -15]} 
-            color="#ffffff" 
-        />
+        <>
+          {/* 主云朵：左上 */}
+          <Cloud 
+              opacity={0.8} 
+              speed={0.2} 
+              width={10} 
+              depth={1} 
+              segments={10} 
+              position={[-6, 4, -15]} 
+              color="#ffffff" 
+          />
+          
+          {/* 辅助云朵：右下，平衡构图 */}
+          <Cloud 
+              opacity={0.8} 
+              speed={0.25} 
+              width={12} 
+              depth={1.5} 
+              segments={8} 
+              position={[6, -2, -15]} 
+              color="#ffffff" 
+          />
+        </>
       )}
     </group>
   );

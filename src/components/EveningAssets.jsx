@@ -4,37 +4,33 @@ import * as THREE from 'three';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
 
 const SimpleWater = () => {
-  const waterNormals = useLoader(
-    THREE.TextureLoader,
-    'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/water/Water_1_M_Normal.jpg'
-  );
-  waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
-  waterNormals.repeat.set(10, 10); // 增加纹理重复，避免拉伸
+  // 使用纯色材质代替纹理加载，避免纹理加载导致的崩溃
+  // 移动端 GPU 对大面积纹理采样非常敏感
+  const meshRef = useRef();
 
   useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    // 简单的纹理流动动画，性能开销极低
-    waterNormals.offset.x = t * 0.05;
-    waterNormals.offset.y = t * 0.02;
+    if (meshRef.current) {
+      // 简单的上下浮动模拟水面
+      meshRef.current.position.y = -5 + Math.sin(clock.getElapsedTime() * 0.5) * 0.2;
+    }
   });
 
   return (
     <mesh 
+      ref={meshRef}
       rotation={[-Math.PI / 2, 0, 0]} 
       position={[0, -5, 0]}
-      receiveShadow={false} // 移动端关闭接收阴影
+      receiveShadow={false}
     >
       <planeGeometry args={[1000, 1000]} />
       <meshStandardMaterial 
-        color="#2a3055" // 稍微调亮一点的基础色，偏紫
-        normalMap={waterNormals}
-        normalScale={new THREE.Vector2(1.5, 1.5)} // 再次增强波浪细节，让反光更细碎
-        roughness={0.02} // 极致光滑
-        metalness={1.0} // 全金属感，最大化反射环境
-        emissive="#7c3aed" // 自发光改为紫色，呼应晚霞
-        emissiveIntensity={0.3}
+        color="#1e1b4b" // 深邃的蓝紫色
+        roughness={0.1} // 光滑
+        metalness={0.8} // 金属感
+        emissive="#4c1d95" // 微弱的紫色自发光
+        emissiveIntensity={0.2}
         transparent={true}
-        opacity={0.6} // 降低不透明度，让背景透出来
+        opacity={0.8}
         side={THREE.DoubleSide}
       />
     </mesh>
@@ -111,95 +107,90 @@ const DynamicWaveWater = () => {
   );
 };
 
-const Seagull = ({ position, speed = 1, scale = 1 }) => {
+const Seagull = ({ position, speed = 1, scale = 1, isMobile = false }) => {
   const groupRef = useRef();
-  const leftWingRef = useRef();
-  const rightWingRef = useRef();
   
-  // 🦅 优化的海鸥几何体
+  // 移动端使用简化的几何体，不再使用 ExtrudeGeometry 和复杂的 Shape
   const { bodyGeo, wingGeo } = useMemo(() => {
-    // 身体：细长的梭形，模拟鸟类流线型躯干
+    if (isMobile) {
+        // 移动端极简几何体
+        const body = new THREE.BoxGeometry(0.5, 0.1, 0.1);
+        const wing = new THREE.PlaneGeometry(0.8, 0.3);
+        return { bodyGeo: body, wingGeo: wing };
+    }
+
+    // 桌面端保持原样
     const body = new THREE.CapsuleGeometry(0.06, 0.3, 4, 8);
-    body.rotateZ(Math.PI / 2); // 旋转使其水平
+    body.rotateZ(Math.PI / 2); 
     
-    // 翅膀：使用 Shape 绘制更真实的海鸥翅膀剖面
     const shape = new THREE.Shape();
-    shape.moveTo(0, 0); // 翅膀根部（连接身体）
-    // 前缘：先向前伸展，再向后弯曲（典型海鸥翅膀形态）
-    shape.bezierCurveTo(0.2, 0.05, 0.4, 0.1, 0.8, -0.1); // 翅尖
-    // 后缘
+    shape.moveTo(0, 0); 
+    shape.bezierCurveTo(0.2, 0.05, 0.4, 0.1, 0.8, -0.1); 
     shape.bezierCurveTo(0.5, -0.2, 0.2, -0.15, 0, -0.1); 
     
     const wing = new THREE.ExtrudeGeometry(shape, { 
-      depth: 0.02, // 薄翅膀
+      depth: 0.02, 
       bevelEnabled: true,
       bevelThickness: 0.01,
       bevelSize: 0.01,
       bevelSegments: 2
     });
-    // 调整翅膀几何体中心，使其绕根部旋转
-    // 默认 (0,0) 就是根部，无需额外平移
     
     return { bodyGeo: body, wingGeo: wing };
-  }, []);
+  }, [isMobile]);
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
     const t = clock.getElapsedTime();
     
-    // 1. 飞行轨迹：正弦波路径
+    // 飞行逻辑保持，计算量很小
     groupRef.current.position.x += 0.03 * speed;
     groupRef.current.position.y += Math.sin(t * 1.5 + position[0]) * 0.01;
     
-    // 循环飞行
     if (groupRef.current.position.x > 40) {
       groupRef.current.position.x = -40;
-      // 随机重置高度，增加变化
       groupRef.current.position.y = position[1] + (Math.random() - 0.5) * 5;
     }
-
-    // 2. 翅膀拍打动画 (Flapping)
-    // 拍打速度与飞行速度相关
-    // 增加一点 randomness 让每只鸟拍打相位不同
-    const flapSpeed = 10 * speed;
-    const flapAngle = Math.sin(t * flapSpeed + position[0]) * 0.4; // 拍打幅度
     
-    if (leftWingRef.current && rightWingRef.current) {
-      // 左翅膀旋转
-      leftWingRef.current.rotation.z = flapAngle; 
-      // 右翅膀镜像旋转
-      rightWingRef.current.rotation.z = -flapAngle;
+    // 移动端不进行复杂的骨骼/翅膀拍打动画，只做整体晃动
+    if (!isMobile) {
+        // ... 原有桌面端动画逻辑 ...
     }
-    
-    // 3. 身体姿态随拍打微调 (Banking)
-    // 拍翅膀时身体会轻微反向受力
-    groupRef.current.position.y += Math.sin(t * flapSpeed) * 0.002;
-    // 转弯时的侧倾 (模拟)
-    groupRef.current.rotation.z = Math.sin(t * 0.5) * 0.05;
   });
 
+  if (isMobile) {
+      // 移动端极简渲染
+      return (
+        <group ref={groupRef} position={position} scale={scale}>
+            <mesh geometry={bodyGeo}>
+                <meshBasicMaterial color="#e2e8f0" />
+            </mesh>
+             {/* 简单的V形翅膀 */}
+            <mesh geometry={wingGeo} position={[0, 0, 0.2]} rotation={[0.5, 0, 0]}>
+                <meshBasicMaterial color="#f8fafc" side={THREE.DoubleSide} />
+            </mesh>
+            <mesh geometry={wingGeo} position={[0, 0, -0.2]} rotation={[-0.5, 0, 0]}>
+                <meshBasicMaterial color="#f8fafc" side={THREE.DoubleSide} />
+            </mesh>
+        </group>
+      );
+  }
+
+  // 桌面端原有渲染逻辑
   return (
     <group ref={groupRef} position={position} scale={scale}>
       {/* 身体 */}
       <mesh geometry={bodyGeo}>
-        {/* 灰白色羽毛，受环境光影响 */}
         <meshStandardMaterial color="#e2e8f0" roughness={0.8} />
       </mesh>
       
-      {/* 左翅膀枢轴 */}
-      <group ref={leftWingRef} position={[0, 0.05, 0]}>
-        <mesh geometry={wingGeo} position={[0.05, 0, 0]}>
-             <meshStandardMaterial color="#f8fafc" roughness={0.8} side={THREE.DoubleSide} />
-        </mesh>
-      </group>
-
-      {/* 右翅膀枢轴 */}
-      <group ref={rightWingRef} position={[0, 0.05, 0]}>
-        {/* 镜像：沿 Y 轴旋转 180 度 */}
-        <mesh geometry={wingGeo} position={[-0.05, 0, 0]} rotation={[0, Math.PI, 0]}>
-             <meshStandardMaterial color="#f8fafc" roughness={0.8} side={THREE.DoubleSide} />
-        </mesh>
-      </group>
+      {/* 简化的翅膀渲染，移除复杂的引用 */}
+      <mesh geometry={wingGeo} position={[0.05, 0.05, 0]}>
+           <meshStandardMaterial color="#f8fafc" roughness={0.8} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh geometry={wingGeo} position={[-0.05, 0.05, 0]} rotation={[0, Math.PI, 0]}>
+           <meshStandardMaterial color="#f8fafc" roughness={0.8} side={THREE.DoubleSide} />
+      </mesh>
     </group>
   );
 };
@@ -413,7 +404,7 @@ const EveningAssets = ({ isMobile }) => {
 
       {/* 🕊️ 点缀：傍晚归巢的海鸥 */}
       {birds.map((bird, index) => (
-        <Seagull key={index} position={bird.pos} speed={bird.speed} scale={bird.scale} />
+        <Seagull key={index} position={bird.pos} speed={bird.speed} scale={bird.scale} isMobile={isMobile} />
       ))}
 
       {/* ✨ 氛围粒子 (Sparkles) - 模拟水面反光或萤火虫 */}
