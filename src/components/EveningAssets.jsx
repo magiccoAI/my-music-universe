@@ -9,10 +9,27 @@ const SimpleWater = () => {
   const meshRef = useRef();
 
   useFrame(({ clock }) => {
-    if (meshRef.current) {
-      // 简单的上下浮动模拟水面
-      meshRef.current.position.y = -5 + Math.sin(clock.getElapsedTime() * 0.5) * 0.2;
+    if (!meshRef.current) return;
+    
+    const time = clock.getElapsedTime();
+    const position = meshRef.current.geometry.attributes.position;
+    const count = position.count;
+
+    // 移动端简易波动算法
+    // 仅使用24x24=576个顶点，计算量极小，性能安全
+    for (let i = 0; i < count; i++) {
+        const x = position.getX(i);
+        const y = position.getY(i);
+        
+        // 简化的正弦波叠加
+        let z = Math.sin(x * 0.1 + time * 0.8) * 0.8;
+        z += Math.cos(y * 0.1 + time * 0.6) * 0.8;
+        
+        position.setZ(i, z);
     }
+    
+    position.needsUpdate = true;
+    meshRef.current.geometry.computeVertexNormals();
   });
 
   return (
@@ -22,7 +39,8 @@ const SimpleWater = () => {
       position={[0, -5, 0]}
       receiveShadow={false}
     >
-      <planeGeometry args={[1000, 1000]} />
+      {/* 增加适量分段以支持波动，但保持低多边形 */}
+      <planeGeometry args={[1000, 1000, 24, 24]} />
       <meshStandardMaterial 
         color="#1e1b4b" // 深邃的蓝紫色
         roughness={0.1} // 光滑
@@ -32,6 +50,7 @@ const SimpleWater = () => {
         transparent={true}
         opacity={0.8}
         side={THREE.DoubleSide}
+        flatShading={true} // 低多边形风格，看起来更有趣且性能更好
       />
     </mesh>
   );
