@@ -21,9 +21,10 @@ const SimpleWater = () => {
         const x = position.getX(i);
         const y = position.getY(i);
         
-        // 简化的正弦波叠加
-        let z = Math.sin(x * 0.1 + time * 0.8) * 0.8;
-        z += Math.cos(y * 0.1 + time * 0.6) * 0.8;
+        // 简化的正弦波叠加 - 增强波动幅度和频率
+        // 幅度从 0.8 提升到 1.5，频率从 0.1 提升到 0.15，让起伏更明显
+        let z = Math.sin(x * 0.15 + time * 0.8) * 1.5;
+        z += Math.cos(y * 0.15 + time * 0.6) * 1.5;
         
         position.setZ(i, z);
     }
@@ -42,15 +43,15 @@ const SimpleWater = () => {
       {/* 增加适量分段以支持波动，但保持低多边形 */}
       <planeGeometry args={[1000, 1000, 24, 24]} />
       <meshStandardMaterial 
-        color="#1e1b4b" // 深邃的蓝紫色
-        roughness={0.1} // 光滑
-        metalness={0.8} // 金属感
-        emissive="#4c1d95" // 微弱的紫色自发光
-        emissiveIntensity={0.2}
+        color="#4c51bf" // 调整为更亮的蓝紫色，配合透明度
+        roughness={0.1} 
+        metalness={0.3} // 降低金属感 (0.8 -> 0.3)，减少“铁板”感
+        emissive="#5b21b6" 
+        emissiveIntensity={0.3} // 稍微增强自发光
         transparent={true}
-        opacity={0.8}
+        opacity={0.5} // 提高透明度 (0.8 -> 0.5)
         side={THREE.DoubleSide}
-        flatShading={true} // 低多边形风格，看起来更有趣且性能更好
+        flatShading={true} // 低多边形风格
       />
     </mesh>
   );
@@ -379,8 +380,8 @@ const EveningAssets = ({ isMobile }) => {
 
   return (
     <group>
-      {/* 🌍 环境贴图：提供真实的夕阳反射源 - 移动端禁用以节省内存 */}
-      {!isMobile && <Environment preset="sunset" background={false} />}
+      {/* 🌍 环境贴图：提供真实的夕阳反射源 - 移动端现在也开启以获得更好的水面反光 */}
+      <Environment preset="sunset" background={false} />
 
       {/* 💡 暖色夕阳照明系统 */}
       {/* 环境光：提供基础亮度，偏紫粉色，模拟暮色 */}
