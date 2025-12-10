@@ -7,6 +7,9 @@ const SimpleWater = () => {
   // 使用纯色材质代替纹理加载，避免纹理加载导致的崩溃
   // 移动端 GPU 对大面积纹理采样非常敏感
   const meshRef = useRef();
+  
+  // 使用 useMemo 显式创建几何体，确保引用稳定
+  const geometry = useMemo(() => new THREE.PlaneGeometry(1000, 1000, 24, 24), []);
 
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
@@ -36,22 +39,22 @@ const SimpleWater = () => {
   return (
     <mesh 
       ref={meshRef}
+      geometry={geometry}
       rotation={[-Math.PI / 2, 0, 0]} 
       position={[0, -5, 0]}
       receiveShadow={false}
     >
-      {/* 增加适量分段以支持波动，但保持低多边形 */}
-      <planeGeometry args={[1000, 1000, 24, 24]} />
       <meshStandardMaterial 
-        color="#312e81" // 加深基础色，让高光反射更明显
-        roughness={0.05} // 极度光滑，增强反射
-        metalness={0.4} // 适度金属感，模拟水面反光
-        emissive="#4c1d95" 
-        emissiveIntensity={0.4} // 增强自发光，确保在暗部也可见
+        color="#ffffff"
+        roughness={0.5}
+        metalness={0.05}
+        emissive="#000000"
+        emissiveIntensity={0}
         transparent={true}
-        opacity={0.8} // 提高不透明度，防止看不见
+        opacity={0.45}
         side={THREE.DoubleSide}
-        flatShading={false} // 关闭低多边形风格，使用平滑着色以获得更自然的水面反光
+        depthWrite={false}
+        flatShading={false}
       />
     </mesh>
   );
@@ -333,6 +336,168 @@ const Tree = ({ position }) => {
   );
 };
 
+const WaveLine = ({ position, rotation, scale, speed }) => {
+  const meshRef = useRef();
+  
+  useFrame(({ clock }) => {
+    if (!meshRef.current) return;
+    const t = clock.getElapsedTime();
+    // 🌊 动线动画：缓慢的往复漂移和缩放
+    meshRef.current.rotation.z = rotation + Math.sin(t * speed * 0.5) * 0.2;
+    const s = scale + Math.sin(t * speed) * 0.1;
+    meshRef.current.scale.set(s, s, 1);
+    meshRef.current.material.opacity = 0.2 + Math.sin(t * speed * 0.8) * 0.1;
+  });
+
+  return (
+    <mesh ref={meshRef} position={position} rotation={[-Math.PI / 2, 0, rotation]}>
+      {/* 🎭 涟漪：使用圆环的一段弧线 */}
+      <ringGeometry args={[3, 3.1, 64, 1, 0, Math.PI / 1.5]} />
+      <meshBasicMaterial color="#ffffff" transparent opacity={0.3} side={THREE.DoubleSide} />
+    </mesh>
+  );
+};
+
+// 🎨 艺术波浪线曲线定义
+class ArtisticSineCurve extends THREE.Curve {
+  constructor(scale = 1) {
+    super();
+    this.scale = scale;
+  }
+  getPoint(t) {
+    // t from 0 to 1
+    const x = (t - 0.5) * 10; // -5 to 5
+    // 经典手绘风格波浪：y = sin(x)
+    const y = Math.sin(x * 1.5) * 0.5;
+    return new THREE.Vector3(x * this.scale, y * this.scale, 0);
+  }
+}
+
+const SineWaveLine = ({ position, rotation, scale, speed }) => {
+  const meshRef = useRef();
+  // 缓存几何体，避免每帧重建
+  const geometry = useMemo(() => {
+    const path = new ArtisticSineCurve(1);
+    // TubeGeometry: path, segments(20够了), radius(0.04很细), radialSegments(3三角形省面), closed(false)
+    return new THREE.TubeGeometry(path, 32, 0.04, 3, false);
+  }, []);
+
+  useFrame(({ clock }) => {
+    if (!meshRef.current) return;
+    const t = clock.getElapsedTime();
+    // 🌊 漂浮动画
+    // 缓慢沿X轴移动（模拟水流）
+    const xOffset = Math.sin(t * speed * 0.3) * 0.5;
+    meshRef.current.position.x = position[0] + xOffset;
+    
+    // 透明度呼吸
+    meshRef.current.material.opacity = 0.4 + Math.sin(t * speed + position[0]) * 0.2;
+  });
+
+  return (
+    <mesh 
+      ref={meshRef} 
+      geometry={geometry}
+      position={position} 
+      rotation={[-Math.PI / 2, 0, rotation]} 
+      scale={[scale, scale, scale]}
+    >
+      <meshBasicMaterial color="#e0f2fe" transparent opacity={0.5} side={THREE.DoubleSide} />
+    </mesh>
+  );
+};
+
+const StylizedWaveLines = () => {
+  // 生成几组写意的波纹线条，点缀在水面上
+  // 混合使用“弧形涟漪”和“正弦波浪线”
+  return (
+    <group position={[0, -4.95, 0]}> {/* 略高于水面 -5 */}
+       {/* 🌊 弧形涟漪 */}
+       <WaveLine position={[10, 0, -20]} rotation={0} scale={1.2} speed={0.8} />
+       <WaveLine position={[-15, 0, -25]} rotation={Math.PI} scale={1.5} speed={0.6} />
+       <WaveLine position={[5, 0, -35]} rotation={Math.PI / 2} scale={2} speed={0.4} />
+       
+       {/* 〰️ 艺术正弦波浪线 (新增) */}
+       {/* 近处 */}
+       <SineWaveLine position={[0, 0, -15]} rotation={0.2} scale={0.8} speed={1.2} />
+       <SineWaveLine position={[12, 0, -18]} rotation={-0.1} scale={1.0} speed={1.0} />
+       <SineWaveLine position={[-12, 0, -22]} rotation={0.1} scale={1.2} speed={0.9} />
+       
+       {/* 远处 */}
+       <SineWaveLine position={[-5, 0, -30]} rotation={0.05} scale={1.5} speed={0.8} />
+       <SineWaveLine position={[15, 0, -35]} rotation={-0.05} scale={1.8} speed={0.7} />
+       <SineWaveLine position={[-20, 0, -40]} rotation={0.1} scale={2.0} speed={0.6} />
+    </group>
+  );
+};
+
+const MobileBoat = ({ position }) => {
+  const groupRef = useRef();
+  
+  useFrame(({ clock }) => {
+    if (!groupRef.current) return;
+    const t = clock.getElapsedTime();
+    
+    // 🌊 核心修复：让船只跟随水面高度波动，避免被淹没
+    // 算法必须与 SimpleWater 中的波浪算法保持一致
+    const x = position[0];
+    const z = position[2]; // World Z
+    // PlaneGeometry 旋转 -90度后，Local Y 对应 World -Z
+    const geomY = -z; 
+    
+    // 计算当前位置的水面高度偏移
+    // 对应 SimpleWater: sin(x * 0.15 + t * 0.8) * 1.5 + cos(y * 0.15 + t * 0.6) * 1.5
+    let waterY = Math.sin(x * 0.15 + t * 0.8) * 1.5;
+    waterY += Math.cos(geomY * 0.15 + t * 0.6) * 1.5;
+    
+    // 基础海平面 -5
+    // ⚖️ 阻尼优化：乘以 0.3 的系数，大幅减弱沉浮幅度，让船看起来更稳
+    // +0.2 浮力偏移保持不变
+    groupRef.current.position.y = -5 + waterY * 0.3 + 0.2;
+
+    // ⛵ 摇摆动画：模拟船身随波晃动 (叠加在跟随运动上)
+    // 根据波浪斜率估算摇摆（简化版）
+    groupRef.current.rotation.z = Math.sin(t * 0.8) * 0.08; // 减小左右侧倾
+    groupRef.current.rotation.x = Math.sin(t * 0.6) * 0.03; // 减小前后俯仰
+  });
+
+  return (
+    <group ref={groupRef} position={position} rotation={[0, -Math.PI / 6, 0]} scale={[1.8, 1.8, 1.8]}>
+      {/* 🚤 船身 - 极简几何体 */}
+      <mesh position={[0, 0.3, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        {/* 上宽下窄的船身，横向放置 */}
+        <cylinderGeometry args={[0.5, 0.25, 2.5, 6]} />
+        <meshStandardMaterial color="#451a03" roughness={0.8} />
+      </mesh>
+      
+      {/* 甲板装饰（防止看穿） */}
+      <mesh position={[0, 0.55, 0]} rotation={[Math.PI / 2, 0, 0]}>
+         <boxGeometry args={[0.8, 2.2, 0.1]} />
+         <meshStandardMaterial color="#573e29" roughness={0.9} />
+      </mesh>
+
+      {/* 🚩 桅杆 */}
+      <mesh position={[0, 1.8, 0.3]}>
+        <cylinderGeometry args={[0.04, 0.06, 3.5, 4]} />
+        <meshStandardMaterial color="#2a1810" roughness={0.9} />
+      </mesh>
+
+      {/* 🏳️ 主帆 - 白色三角帆 */}
+      <mesh position={[0, 2.0, 0.8]} rotation={[0, Math.PI / 2, 0]} scale={[1, 1, 0.1]}>
+         {/* 压扁的圆锥体作为帆 */}
+         <coneGeometry args={[1.2, 2.5, 4]} />
+         <meshStandardMaterial color="#fefce8" roughness={0.4} />
+      </mesh>
+      
+      {/* 🏳️ 副帆 - 小三角帆 */}
+      <mesh position={[0, 1.2, -0.6]} rotation={[0, Math.PI / 2, 0]} scale={[0.8, 0.8, 0.1]}>
+         <coneGeometry args={[0.8, 1.8, 4]} />
+         <meshStandardMaterial color="#f1f5f9" roughness={0.4} />
+      </mesh>
+    </group>
+  );
+};
+
 const Mountains = () => {
   return (
     // 提升山脉位置匹配海平面 (y: -5)
@@ -362,7 +527,7 @@ const EveningAssets = ({ isMobile }) => {
       { pos: [14, 11, -28], speed: 0.85, scale: 0.25 },
     ];
     // 移动端减少飞鸟数量
-    return isMobile ? allBirds.slice(0, 2) : allBirds;
+    return isMobile ? allBirds.slice(0, 3) : allBirds;
   }, [isMobile]);
 
   // 设置场景雾效，使水面边缘与背景融合
@@ -380,47 +545,53 @@ const EveningAssets = ({ isMobile }) => {
 
   return (
     <group>
-      {/* 🌍 环境贴图：提供真实的夕阳反射源 - 移动端现在也开启以获得更好的水面反光 */}
-      <Environment preset="sunset" background={false} />
+      {/* 🌍 环境贴图：仅桌面端开启，移动端禁用以节省显存 */}
+      {!isMobile && <Environment preset="sunset" background={false} />}
 
       {/* 💡 暖色夕阳照明系统 */}
       {/* 环境光：提供基础亮度，偏紫粉色，模拟暮色 */}
-      <ambientLight intensity={2.0} color="#6d28d9" /> 
+      <ambientLight intensity={isMobile ? 1.5 : 2.0} color="#6d28d9" /> 
       
       {/* 主光源（夕阳）：放在远处低角度逆光位置，照向相机 */}
       {/* 位置设为 Z 轴负方向远处，模拟太阳即将落山 */}
       <directionalLight 
         position={[0, 10, -100]} 
-        intensity={5.0} 
+        intensity={isMobile ? 3.0 : 5.0} 
         color="#fb923c" // 强烈的橙色夕阳
         castShadow={!isMobile} // 移动端关闭阴影
       />
       
-      {/* 补光：放在相机后方，稍微照亮前景物体，避免完全剪影 */}
-      <pointLight position={[0, 10, 20]} intensity={1.5} color="#818cf8" />
+      {/* 补光：放在相机后方，稍微照亮前景物体，避免完全剪影 - 移动端移除 */}
+      {!isMobile && <pointLight position={[0, 10, 20]} intensity={1.5} color="#818cf8" />}
 
-      {/* 增加一个聚光灯专门打在水面上形成高光通道 */}
-      <spotLight
-        position={[0, 20, -50]}
-        // target-position 属性无效，SpotLight 默认指向 (0,0,0)，这正是我们需要的
-        angle={0.5}
-        penumbra={1}
-        intensity={10}
-        color="#ff7e5f"
-        distance={200}
-        castShadow={!isMobile} // 移动端关闭阴影
-      />
+      {/* 增加一个聚光灯专门打在水面上形成高光通道 - 移动端移除 */}
+      {!isMobile && (
+        <spotLight
+          position={[0, 20, -50]}
+          // target-position 属性无效，SpotLight 默认指向 (0,0,0)，这正是我们需要的
+          angle={0.5}
+          penumbra={1}
+          intensity={10}
+          color="#ff7e5f"
+          distance={200}
+          castShadow={true}
+        />
+      )}
 
       {/* 🌊 真实水面渲染 - 移动端使用简化版 */}
       <React.Suspense fallback={null}>
-        {isMobile ? <SimpleWater /> : <DynamicWaveWater />}
+        {isMobile ? (
+          <>
+            <SimpleWater />
+            <StylizedWaveLines />
+          </>
+        ) : <DynamicWaveWater />}
       </React.Suspense>
 
       {/* 🏝️ 远景：一座孤山 */}
       <Mountains />
 
-      {/* 🌳 前景：水面上的立体树 - 移动端移除 */}
-      {!isMobile && <Tree position={[20, -5, -30]} />}
+      {isMobile ? <MobileBoat position={[15, -5.2, -25]} /> : <Tree position={[20, -5, -30]} />}
 
       {/* 🕊️ 点缀：傍晚归巢的海鸥 */}
       {birds.map((bird, index) => (

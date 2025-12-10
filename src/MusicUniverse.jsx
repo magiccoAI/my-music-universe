@@ -14,14 +14,14 @@ import { UniverseContext } from './UniverseContext';
 import Cover from './components/Cover';
 import InfoCard from './components/InfoCard';
 
-const EveningAmbient = memo(({ enabled, volume = 1 }) => {
+const AmbientSound = memo(({ enabled, volume = 1, theme = 'evening' }) => {
   const ctxRef = useRef(null);
   const sourceRef = useRef(null);
   const gainRef = useRef(null);
   const userGainRef = useRef(null);
-  const lpRef = useRef(null);
-  const lfoRef = useRef(null);
-  const lfoGainRef = useRef(null);
+  // Refs for filters/LFOs to clean up
+  const filtersRef = useRef([]);
+  const lfosRef = useRef([]);
 
   useEffect(() => {
     if (!enabled) {
@@ -31,73 +31,128 @@ const EveningAmbient = memo(({ enabled, volume = 1 }) => {
       ctxRef.current = null;
       sourceRef.current = null;
       gainRef.current = null;
-      lpRef.current = null;
-      lfoRef.current = null;
-      lfoGainRef.current = null;
+      filtersRef.current = [];
+      lfosRef.current = [];
       return;
     }
 
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     ctxRef.current = ctx;
-    const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.loop = true;
-    const lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 500;
-    lp.Q.value = 0.7;
-    const gain = ctx.createGain();
-    gain.gain.value = 0.25;
+    
+    // Setup Audio Graph based on Theme
+    const mainGain = ctx.createGain();
     const userGain = ctx.createGain();
     userGain.gain.value = Math.max(0, Math.min(volume, 1));
-    const lfo = ctx.createOscillator();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.06;
-    const lfoGain = ctx.createGain();
-    lfoGain.gain.value = 0.12;
-    lfo.connect(lfoGain);
-    lfoGain.connect(gain.gain);
-    source.connect(lp);
-    lp.connect(gain);
-    gain.connect(userGain);
-    userGain.connect(ctx.destination);
-    lfo.start();
-    source.start();
-    sourceRef.current = source;
-    gainRef.current = gain;
-    userGainRef.current = userGain;
-    lpRef.current = lp;
-    lfoRef.current = lfo;
-    lfoGainRef.current = lfoGain;
+    
+    if (theme === 'day') {
+      // Day Theme: Play Audio File
+      const dayTracks = [
+        `${process.env.PUBLIC_URL}/audio/peace-of-mind-calm-ambient-music-341056.mp3`,
+        `${process.env.PUBLIC_URL}/audio/tunetank.com_1867_new-era_by_alivesound.mp3`,
+        `${process.env.PUBLIC_URL}/audio/tunetank.com_3624_high-flight_by_victorwayne.mp3`
+      ];
+      // Randomly select one track
+      const randomTrack = dayTracks[Math.floor(Math.random() * dayTracks.length)];
+      
+      mainGain.gain.value = 0.5; // Base volume for audio file
 
+      fetch(randomTrack)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+        .then(audioBuffer => {
+           // Check if context is still valid (component might have unmounted)
+           if (!ctxRef.current) return;
+
+           const source = ctx.createBufferSource();
+           source.buffer = audioBuffer;
+           source.loop = true;
+           
+           source.connect(mainGain);
+           mainGain.connect(userGain);
+           userGain.connect(ctx.destination);
+           
+           source.start();
+           sourceRef.current = source;
+        })
+        .catch(e => console.error("Failed to load ambient sound", e));
+
+      gainRef.current = mainGain;
+      userGainRef.current = userGain;
+
+    } else {
+      // Evening Theme: Ocean/Rumble (Lowpass nature) - Synthesized
+      
+      // 1. Create White Noise Buffer
+      const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 500;
+      lp.Q.value = 0.7;
+
+      // LFO for waves (Slow)
+      const lfo = ctx.createOscillator();
+      lfo.type = 'sine';
+      lfo.frequency.value = 0.06;
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 0.12;
+
+      mainGain.gain.value = 0.25;
+
+      // Graph: Source -> LP -> MainGain -> UserGain -> Dest
+      source.connect(lp);
+      lp.connect(mainGain);
+      
+      lfo.connect(lfoGain);
+      lfoGain.connect(mainGain.gain);
+      lfo.start();
+
+      mainGain.connect(userGain);
+      userGain.connect(ctx.destination);
+      
+      source.start();
+
+      sourceRef.current = source;
+      gainRef.current = mainGain;
+      userGainRef.current = userGain;
+      filtersRef.current = [lp];
+      lfosRef.current = [lfo, lfoGain];
+    }
+
+    // Ducking logic for preview audio
     const onPlay = () => {
       if (!ctxRef.current || !gainRef.current) return;
       const t = ctxRef.current.currentTime;
+      const targetVal = theme === 'day' ? 0.1 : 0.08; // Lower volume when preview plays
       gainRef.current.gain.cancelScheduledValues(t);
-      gainRef.current.gain.setTargetAtTime(0.08, t, 0.5);
+      gainRef.current.gain.setTargetAtTime(targetVal, t, 0.5);
     };
     const onStop = () => {
       if (!ctxRef.current || !gainRef.current) return;
       const t = ctxRef.current.currentTime;
+      const targetVal = theme === 'day' ? 0.5 : 0.25; // Restore volume
       gainRef.current.gain.cancelScheduledValues(t);
-      gainRef.current.gain.setTargetAtTime(0.25, t, 1.0);
+      gainRef.current.gain.setTargetAtTime(targetVal, t, 1.0);
     };
+
     window.addEventListener('preview-audio-play', onPlay);
     window.addEventListener('preview-audio-stop', onStop);
 
     return () => {
       window.removeEventListener('preview-audio-play', onPlay);
       window.removeEventListener('preview-audio-stop', onStop);
-      try { source.stop(); } catch {}
-      try { lfo.stop(); } catch {}
+      try { sourceRef.current?.stop(); } catch {}
+      lfosRef.current.forEach(node => { try { node.stop ? node.stop() : node.disconnect(); } catch {} });
       try { ctx.close(); } catch {}
     };
-  }, [enabled]);
+  }, [enabled, theme]); // Re-run if theme changes
 
   useEffect(() => {
     if (!userGainRef.current || !ctxRef.current) return;
@@ -307,14 +362,14 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   }, []);
 
   useEffect(() => {
-    if (currentTheme !== 'evening') {
+    if (currentTheme !== 'evening' && currentTheme !== 'day') {
       setAmbientEnabled(false);
     }
   }, [currentTheme]);
 
   useEffect(() => {
     const enable = () => {
-      if (currentTheme === 'evening') {
+      if (currentTheme === 'evening' || currentTheme === 'day') {
         setAmbientEnabled(true);
       }
     };
@@ -420,14 +475,14 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
       </div>
 
       {showNavigation && !wallpaperMode && <UniverseNavigation />}
-      {ambientEnabled && currentTheme === 'evening' && <EveningAmbient enabled={true} volume={ambientVolume} />}
+      {ambientEnabled && (currentTheme === 'evening' || currentTheme === 'day') && <AmbientSound enabled={true} volume={ambientVolume} theme={currentTheme} />}
       {musicData.length > 0 && positionedMusicData.length > 0 && (
         <Canvas
           style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
           camera={{ fov: 75, near: 0.1, far: 1000 }}
           className={isConnectionsPageActive && !highlightedTag ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
-          // 移动端适当提升最大 DPR 到 1.5 以提高横屏清晰度，但避免 2.0+ 导致崩溃
-          dpr={isMobile ? [1, 1.5] : [1, 2]}
+          // 移动端强制使用 1.0 DPR 以防止内存崩溃，尤其是纹理加载较多时
+          dpr={isMobile ? [1, 1] : [1, 2]}
         >
           <WebGLContextHandler />
           <CameraLogger />
@@ -557,8 +612,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
         <div className="relative group">
             <button
-              className={`p-2.5 rounded-full border border-white/10 backdrop-blur-md transition-all shadow-lg ${currentTheme === 'evening' ? 'bg-gray-900/50 text-gray-300 hover:bg-emerald-500/80 hover:text-white hover:scale-110' : 'bg-gray-800/40 text-gray-500 cursor-not-allowed'}`}
-              onClick={() => { if (currentTheme === 'evening') setAmbientEnabled(v => !v); }}
+              className={`p-2.5 rounded-full border border-white/10 backdrop-blur-md transition-all shadow-lg ${(currentTheme === 'evening' || currentTheme === 'day') ? 'bg-gray-900/50 text-gray-300 hover:bg-emerald-500/80 hover:text-white hover:scale-110' : 'bg-gray-800/40 text-gray-500 cursor-not-allowed'}`}
+              onClick={() => { if (currentTheme === 'evening' || currentTheme === 'day') setAmbientEnabled(v => !v); }}
               aria-label="环境声"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -567,7 +622,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </button>
             <div className="absolute bottom-full right-0 mb-3 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-sm border border-white/10">
                 <div className="font-bold mb-1 text-emerald-400">环境声</div>
-                <div className="text-[11px] mb-2">傍晚海浪与风的声景。试听时自动降低音量。</div>
+                <div className="text-[11px] mb-2">
+                  {currentTheme === 'day' ? '舒缓氛围背景音。' : '傍晚海浪与风的声景。'}
+                  试听时自动降低音量。
+                </div>
                 <div className="flex items-center space-x-2">
                   <span className="text-[11px] text-gray-300">音量</span>
                   <input type="range" min="0" max="1" step="0.01" value={ambientVolume} onChange={(e) => setAmbientVolume(parseFloat(e.target.value))} className="w-32 accent-emerald-400" />

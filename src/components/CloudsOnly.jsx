@@ -1,13 +1,65 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Cloud } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+
+// ☁️ 移动端极简云朵 (Low Poly Cloud)
+// 使用简单的几何体组合，替代昂贵的体积云渲染
+const MobileSimpleCloud = ({ position, scale = 1, speed = 0.5 }) => {
+  const groupRef = useRef();
+
+  useFrame(({ clock }) => {
+    if (!groupRef.current) return;
+    const t = clock.getElapsedTime();
+    // 缓慢漂浮
+    groupRef.current.position.x = position[0] + Math.sin(t * speed * 0.2) * 2;
+    // 微微上下浮动
+    groupRef.current.position.y = position[1] + Math.sin(t * speed * 0.5) * 0.5;
+  });
+
+  return (
+    <group ref={groupRef} position={position} scale={[scale, scale, scale]}>
+      {/* 核心材质：纯白、不发光、轻微透明 */}
+      <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
+      
+      {/* 主体 */}
+      <mesh position={[0, 0, 0]}>
+        <dodecahedronGeometry args={[1.5, 0]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+      </mesh>
+      {/* 左侧团块 */}
+      <mesh position={[-1.2, -0.2, 0.5]} scale={0.7}>
+        <dodecahedronGeometry args={[1.2, 0]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+      </mesh>
+      {/* 右侧团块 */}
+      <mesh position={[1.2, 0.3, -0.5]} scale={0.8}>
+        <dodecahedronGeometry args={[1.3, 0]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+      </mesh>
+      {/* 顶部团块 */}
+      <mesh position={[0.4, 1.0, 0]} scale={0.6}>
+        <dodecahedronGeometry args={[1.1, 0]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+      </mesh>
+    </group>
+  );
+};
 
 const CloudsOnly = ({ isMobile }) => {
-  // 移动端优化：直接返回 null，不渲染任何 3D 云朵
-  // 仅依赖 CSS 背景渐变来营造氛围，极大减轻 GPU 负担
+  // 移动端：使用极简几何体云朵
   if (isMobile) {
-      return null;
+      return (
+        <group>
+           {/* 1. 强力环境光：确保云朵是白的 */}
+           <ambientLight intensity={1.5} />
+           
+           {/* 2. 移动端云朵实例 */}
+           <MobileSimpleCloud position={[0, 4, -15]} scale={1.5} speed={0.5} />
+        </group>
+      );
   }
 
+  // 桌面端：保持原有高质量体积云
   return (
     <group>
       {/* 

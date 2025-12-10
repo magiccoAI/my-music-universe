@@ -28,7 +28,7 @@ const AboutPage = () => {
       ),
       techP2: (
         <>
-          未来它或许会迁移发展成更多与我生命相关的东西，但在此刻，它只想温柔地提醒我：这些歌，曾经陪伴我，也仍在陪伴我。这是一位非专业开发者的持续实践，也是一段与工具共创的旅程；每一次迭代，都是在把<span className="text-white font-bold border-b border-sky-500/50">“听过什么歌”</span>变成<span className="text-sky-300 font-bold border-b border-sky-500/50">“看见我的故事”</span>。
+          未来它或许会迁移发展成更多与我生命相关的东西，但在此刻，它只想温柔地提醒我：这些歌，曾经陪伴我，也仍在陪伴我。这是我作为一位非专业开发者的持续实践，也是一段与工具共创的旅程；每一次迭代，都是在把<span className="text-white font-bold border-b border-sky-500/50">“听过什么歌”</span>变成<span className="text-sky-300 font-bold border-b border-sky-500/50">“看见我的故事”</span>。也愿这里成为一个温暖的连接点——在<span className="text-sky-200 font-semibold">音乐的无界时空</span>中，愿你的每一次浏览，都能听到遥远的共鸣。
         </>
       )
     },
@@ -49,7 +49,7 @@ const AboutPage = () => {
       ),
       techP2: (
         <>
-          While this universe may evolve to hold more of my life's data, for now, it stands as a gentle testament: these songs have been, and remain, my constant companions. This is the ongoing journey of an amateur developer co-creating with AI—where every iteration transforms <span className="text-white font-bold border-b border-sky-500/50">"what I heard"</span> into <span className="text-sky-300 font-bold border-b border-sky-500/50">"seeing my story."</span>
+          While this universe may evolve to hold more of my life's data, for now, it stands as a gentle testament: these songs have been, and remain, my constant companions. This is the ongoing journey of an amateur developer co-creating with AI—where every iteration transforms <span className="text-white font-bold border-b border-sky-500/50">"what I heard"</span> into <span className="text-sky-300 font-bold border-b border-sky-500/50">"seeing my story."</span> May this space also become a <span className="text-sky-200 font-semibold">sanctuary of shared resonance</span>—in this boundless musical spacetime, may your every visit find a distant echo.
         </>
       )
     }
