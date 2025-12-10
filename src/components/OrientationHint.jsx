@@ -62,7 +62,7 @@ const OrientationHint = () => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -50 }}
-        className="fixed top-36 left-1/2 -translate-x-1/2 z-[9999] w-auto max-w-[90%] pointer-events-none"
+        className="fixed top-40 left-1/2 -translate-x-1/2 z-[9999] w-auto max-w-[90%] pointer-events-none"
       >
         <div className="pointer-events-auto backdrop-blur-md border border-white/20 bg-black/60 text-white rounded-full p-3 pl-4 shadow-2xl flex items-center gap-4 relative overflow-hidden group transition-all duration-300">
           
@@ -91,7 +91,7 @@ const OrientationHint = () => {
               建议横屏浏览
             </h4>
             <p className="text-[11px] text-gray-300 leading-tight opacity-90 whitespace-nowrap">
-              转动手机，开启沉浸式之旅
+              浏览器打开，转动手机体验更佳
             </p>
           </div>
 
