@@ -62,9 +62,9 @@ const OrientationHint = () => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -50 }}
-        className="fixed top-28 left-1/2 -translate-x-1/2 z-[9999] w-[90%] max-w-sm pointer-events-none"
+        className="fixed top-36 left-1/2 -translate-x-1/2 z-[9999] w-auto max-w-[90%] pointer-events-none"
       >
-        <div className="pointer-events-auto backdrop-blur-md border border-white/20 bg-black/40 text-white rounded-full p-3 pl-4 shadow-2xl flex items-center gap-4 relative overflow-hidden group transition-all duration-300">
+        <div className="pointer-events-auto backdrop-blur-md border border-white/20 bg-black/60 text-white rounded-full p-3 pl-4 shadow-2xl flex items-center gap-4 relative overflow-hidden group transition-all duration-300">
           
           {/* 动态背景光效 */}
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -87,11 +87,11 @@ const OrientationHint = () => {
 
           {/* 文本内容 */}
           <div className="flex-1 min-w-0 flex flex-col justify-center">
-            <h4 className="font-medium text-sm text-sky-100">
+            <h4 className="font-medium text-sm text-sky-100 whitespace-nowrap">
               建议横屏浏览
             </h4>
-            <p className="text-[10px] text-gray-300 leading-tight opacity-80">
-              转动手机，获得最佳沉浸体验
+            <p className="text-[11px] text-gray-300 leading-tight opacity-90 whitespace-nowrap">
+              转动手机，开启沉浸式之旅
             </p>
           </div>
 
