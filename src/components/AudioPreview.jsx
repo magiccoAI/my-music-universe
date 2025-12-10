@@ -97,9 +97,9 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
       <audio 
         ref={audioRef} 
         src={audioUrl} 
-        onEnded={handleEnded} 
-        onPause={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
+        onEnded={() => { handleEnded(); window.dispatchEvent(new CustomEvent('preview-audio-stop')); }} 
+        onPause={() => { setIsPlaying(false); window.dispatchEvent(new CustomEvent('preview-audio-stop')); }}
+        onPlay={() => { setIsPlaying(true); window.dispatchEvent(new CustomEvent('preview-audio-play')); }}
       />
       <div className="flex items-center justify-between">
         <span className={`text-xs font-medium ${darkMode ? 'text-slate-300' : 'text-gray-500'}`}>

@@ -4,7 +4,7 @@ import { Html } from '@react-three/drei';
 import { Vector3, MathUtils } from 'three';
 import AudioPreview from './AudioPreview';
 
-const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
+const InfoCard = memo(({ data: music, position: externalPosition, onClose: onCardClose, isMobile }) => {
   const { camera } = useThree();
   const cardRef = useRef(); // For 3D group (position/scale)
   const htmlRef = useRef(); // For HTML DOM element (click detection)
@@ -17,11 +17,17 @@ const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
     progress.current = 0;
   }, [music]);
 
+  // Determine the target position (prioritize external position prop)
+  const targetPosition = React.useMemo(() => {
+    if (externalPosition) return externalPosition;
+    if (music && music.position) return music.position;
+    return [0, 0, 0];
+  }, [externalPosition, music]);
+
   // 初始化位置，避免第一帧闪烁
   const initialPosition = React.useMemo(() => {
-      if (!music) return [0, 0, 0];
-      return new Vector3(...music.position);
-  }, [music]);
+      return new Vector3(...targetPosition);
+  }, [targetPosition]);
 
   useFrame((state, delta) => {
     if (cardRef.current && music) {
@@ -29,7 +35,7 @@ const InfoCard = memo(({ data: music, onClose: onCardClose, isMobile }) => {
       // 这里的 10 是平滑速度，可以调整
       progress.current = MathUtils.damp(progress.current, 1, 10, delta);
 
-      const coverWorldPosition = new Vector3(...music.position);
+      const coverWorldPosition = new Vector3(...targetPosition);
       const distToCover = camera.position.distanceTo(coverWorldPosition);
       const cameraDirection = new Vector3();
       camera.getWorldDirection(cameraDirection);

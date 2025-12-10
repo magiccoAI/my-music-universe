@@ -360,8 +360,8 @@ const EveningAssets = ({ isMobile }) => {
 
   return (
     <group>
-      {/* 🌍 环境贴图：提供真实的夕阳反射源 */}
-      <Environment preset="sunset" background={false} />
+      {/* 🌍 环境贴图：提供真实的夕阳反射源 - 移动端禁用以节省内存 */}
+      {!isMobile && <Environment preset="sunset" background={false} />}
 
       {/* 💡 暖色夕阳照明系统 */}
       {/* 环境光：提供基础亮度，偏紫粉色，模拟暮色 */}

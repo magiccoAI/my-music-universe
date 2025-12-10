@@ -2,6 +2,12 @@ import React from 'react';
 import { Cloud } from '@react-three/drei';
 
 const CloudsOnly = ({ isMobile }) => {
+  // 移动端优化：直接返回 null，不渲染任何 3D 云朵
+  // 仅依赖 CSS 背景渐变来营造氛围，极大减轻 GPU 负担
+  if (isMobile) {
+      return null;
+  }
+
   return (
     <group>
       {/* 
