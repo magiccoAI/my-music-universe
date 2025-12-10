@@ -43,15 +43,15 @@ const SimpleWater = () => {
       {/* 增加适量分段以支持波动，但保持低多边形 */}
       <planeGeometry args={[1000, 1000, 24, 24]} />
       <meshStandardMaterial 
-        color="#4c51bf" // 调整为更亮的蓝紫色，配合透明度
-        roughness={0.1} 
-        metalness={0.3} // 降低金属感 (0.8 -> 0.3)，减少“铁板”感
-        emissive="#5b21b6" 
-        emissiveIntensity={0.3} // 稍微增强自发光
+        color="#312e81" // 加深基础色，让高光反射更明显
+        roughness={0.05} // 极度光滑，增强反射
+        metalness={0.4} // 适度金属感，模拟水面反光
+        emissive="#4c1d95" 
+        emissiveIntensity={0.4} // 增强自发光，确保在暗部也可见
         transparent={true}
-        opacity={0.5} // 提高透明度 (0.8 -> 0.5)
+        opacity={0.8} // 提高不透明度，防止看不见
         side={THREE.DoubleSide}
-        flatShading={true} // 低多边形风格
+        flatShading={false} // 关闭低多边形风格，使用平滑着色以获得更自然的水面反光
       />
     </mesh>
   );

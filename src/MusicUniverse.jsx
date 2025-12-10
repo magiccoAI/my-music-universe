@@ -426,7 +426,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
           camera={{ fov: 75, near: 0.1, far: 1000 }}
           className={isConnectionsPageActive && !highlightedTag ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
-          dpr={isMobile ? [1, 1] : [1, 2]}
+          // 移动端适当提升最大 DPR 到 1.5 以提高横屏清晰度，但避免 2.0+ 导致崩溃
+          dpr={isMobile ? [1, 1.5] : [1, 2]}
         >
           <WebGLContextHandler />
           <CameraLogger />
