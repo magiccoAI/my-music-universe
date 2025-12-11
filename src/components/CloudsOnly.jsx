@@ -55,6 +55,8 @@ const CloudsOnly = ({ isMobile }) => {
            
            {/* 2. 移动端云朵实例 */}
            <MobileSimpleCloud position={[0, 4, -15]} scale={1.5} speed={0.5} />
+           {/* 新增一朵云，丰富画面 */}
+           <MobileSimpleCloud position={[8, 2, -25]} scale={1.2} speed={0.4} />
         </group>
       );
   }

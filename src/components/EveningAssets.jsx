@@ -4,9 +4,20 @@ import * as THREE from 'three';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
 
 const SimpleWater = () => {
-  // 使用纯色材质代替纹理加载，避免纹理加载导致的崩溃
-  // 移动端 GPU 对大面积纹理采样非常敏感
+  // 移动端水面：增加纹理细节，但保持低几何复杂度
   const meshRef = useRef();
+  
+  // 加载法线贴图以增加水波纹理质感
+  const waterNormals = useLoader(
+    THREE.TextureLoader,
+    'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/water/Water_1_M_Normal.jpg'
+  );
+
+  // 配置纹理重复
+  useMemo(() => {
+    waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+    waterNormals.repeat.set(6, 6); // 适度重复，避免移动端锯齿
+  }, [waterNormals]);
   
   // 使用 useMemo 显式创建几何体，确保引用稳定
   const geometry = useMemo(() => new THREE.PlaneGeometry(1000, 1000, 24, 24), []);
@@ -34,6 +45,10 @@ const SimpleWater = () => {
     
     position.needsUpdate = true;
     meshRef.current.geometry.computeVertexNormals();
+    
+    // 纹理动画：让法线贴图缓慢流动，增加动态感
+    waterNormals.offset.x += 0.0005;
+    waterNormals.offset.y += 0.0005;
   });
 
   return (
@@ -45,13 +60,15 @@ const SimpleWater = () => {
       receiveShadow={false}
     >
       <meshStandardMaterial 
-        color="#ffffff"
-        roughness={0.5}
-        metalness={0.05}
-        emissive="#000000"
-        emissiveIntensity={0}
+        color="#818cf8" // 提亮基础色：使用明亮的靛蓝色，防止在无环境贴图时变黑
+        normalMap={waterNormals}
+        normalScale={new THREE.Vector2(0.8, 0.8)} 
+        roughness={0.1} 
+        metalness={0.1} // 降低金属度：移动端无环境反射，高金属度会导致变黑。降低后可显示基础色
+        emissive="#4f46e5" // 增强自发光：模拟夕阳余晖在水面的散射
+        emissiveIntensity={0.4} // 提高发光强度，确保水面明亮
         transparent={true}
-        opacity={0.45}
+        opacity={0.8}
         side={THREE.DoubleSide}
         depthWrite={false}
         flatShading={false}

@@ -3,11 +3,15 @@ import useMusicData from './hooks/useMusicData';
 import useIsMobile from './hooks/useIsMobile';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
+import { SunIcon, CloudIcon } from '@heroicons/react/24/outline';
+import * as THREE from 'three';
 // import Stars from './components/StarsOnly';
 const Stars = React.lazy(() => import('./components/StarsOnly'));
 const Clouds = React.lazy(() => import('./components/CloudsOnly'));
 const PaperPlanes = React.lazy(() => import('./components/PaperPlanes'));
 const Evening = React.lazy(() => import('./components/EveningAssets'));
+const Snowfall = React.lazy(() => import('./components/Snowfall'));
+const SnowMountain = React.lazy(() => import('./components/SnowMountain'));
 import UniverseNavigation from './components/UniverseNavigation';
 
 import { UniverseContext } from './UniverseContext';
@@ -16,78 +20,167 @@ import InfoCard from './components/InfoCard';
 
 const AmbientSound = memo(({ enabled, volume = 1, theme = 'evening' }) => {
   const ctxRef = useRef(null);
-  const sourceRef = useRef(null);
   const gainRef = useRef(null);
   const userGainRef = useRef(null);
-  // Refs for filters/LFOs to clean up
-  const filtersRef = useRef([]);
-  const lfosRef = useRef([]);
+  // Refs for active nodes to clean up
+  const activeNodesRef = useRef([]);
 
+  // 1. Manage AudioContext Lifecycle (Create once, Resume on interaction)
   useEffect(() => {
     if (!enabled) {
+      // Cleanup context if disabled
       if (ctxRef.current) {
         try { ctxRef.current.close(); } catch {}
+        ctxRef.current = null;
       }
-      ctxRef.current = null;
-      sourceRef.current = null;
-      gainRef.current = null;
-      filtersRef.current = [];
-      lfosRef.current = [];
       return;
     }
 
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    ctxRef.current = ctx;
+    // Create Context if missing
+    if (!ctxRef.current) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      ctxRef.current = new AudioContext();
+    }
+    const ctx = ctxRef.current;
+
+    // Resume Logic
+    const resumeAudio = () => {
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(e => console.warn("Audio resume failed", e));
+      }
+    };
+    // Try immediate resume (works if triggered by click)
+    resumeAudio();
     
-    // Setup Audio Graph based on Theme
+    // Add listeners for future interaction
+    ['click', 'touchstart', 'keydown'].forEach(event => 
+      window.addEventListener(event, resumeAudio, { once: true })
+    );
+
+    return () => {
+      // Don't close context on unmount immediately if we want to reuse? 
+      // Actually, if component unmounts (e.g. ambient disabled), we should close.
+      // But if just theme changes, this effect won't run (dep is [enabled]).
+      ['click', 'touchstart', 'keydown'].forEach(event => 
+        window.removeEventListener(event, resumeAudio)
+      );
+      if (ctxRef.current && !enabled) { // Double check
+         try { ctxRef.current.close(); } catch {}
+         ctxRef.current = null;
+      }
+    };
+  }, [enabled]);
+
+  // 2. Manage Audio Graph (Theme/Volume changes)
+  useEffect(() => {
+    if (!enabled || !ctxRef.current) return;
+
+    const ctx = ctxRef.current;
+    
+    // Cleanup previous graph
+    activeNodesRef.current.forEach(node => {
+        try {
+            if (node.stop) node.stop();
+            if (node.disconnect) node.disconnect();
+        } catch (e) { /* ignore */ }
+    });
+    activeNodesRef.current = [];
+
+    // Master Gain for this theme
     const mainGain = ctx.createGain();
     const userGain = ctx.createGain();
     userGain.gain.value = Math.max(0, Math.min(volume, 1));
     
+    mainGain.connect(userGain);
+    userGain.connect(ctx.destination);
+    
+    activeNodesRef.current.push(mainGain, userGain);
+    gainRef.current = mainGain;
+    userGainRef.current = userGain;
+
+    console.log(`[AmbientSound] Setting up theme: ${theme}`);
+
     if (theme === 'day') {
-      // Day Theme: Play Audio File
-      const dayTracks = [
-        `${process.env.PUBLIC_URL}/audio/peace-of-mind-calm-ambient-music-341056.mp3`,
-        `${process.env.PUBLIC_URL}/audio/tunetank.com_1867_new-era_by_alivesound.mp3`,
-        `${process.env.PUBLIC_URL}/audio/tunetank.com_3624_high-flight_by_victorwayne.mp3`
-      ];
-      // Randomly select one track
-      const randomTrack = dayTracks[Math.floor(Math.random() * dayTracks.length)];
+      // Day Theme: Brian Eno Style (Continuous)
       
-      mainGain.gain.value = 0.5; // Base volume for audio file
+      // Reverb
+      const reverb = ctx.createConvolver();
+      const duration = 8;
+      const length = ctx.sampleRate * duration;
+      const impulse = ctx.createBuffer(2, length, ctx.sampleRate);
+      for (let i = 0; i < length; i++) {
+        const n = i / length;
+        const vol = Math.pow(1 - n, 3); 
+        impulse.getChannelData(0)[i] = (Math.random() * 2 - 1) * vol;
+        impulse.getChannelData(1)[i] = (Math.random() * 2 - 1) * vol;
+      }
+      reverb.buffer = impulse;
 
-      fetch(randomTrack)
-        .then(response => response.arrayBuffer())
-        .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
-        .then(audioBuffer => {
-           // Check if context is still valid (component might have unmounted)
-           if (!ctxRef.current) return;
+      const reverbGain = ctx.createGain();
+      reverbGain.gain.value = 0.6;
+      reverb.connect(reverbGain);
+      reverbGain.connect(mainGain);
+      
+      // Dry signal
+      mainGain.gain.value = 0.5;
 
-           const source = ctx.createBufferSource();
-           source.buffer = audioBuffer;
-           source.loop = true;
-           
-           source.connect(mainGain);
-           mainGain.connect(userGain);
-           userGain.connect(ctx.destination);
-           
-           source.start();
-           sourceRef.current = source;
-        })
-        .catch(e => console.error("Failed to load ambient sound", e));
+      const notes = [155.56, 196.00, 233.08, 261.63, 311.13, 349.23, 392.00];
 
-      gainRef.current = mainGain;
-      userGainRef.current = userGain;
+      notes.forEach((freq) => {
+        const osc = ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+
+        const mod = ctx.createOscillator();
+        mod.frequency.value = freq * 2;
+        const modGain = ctx.createGain();
+        modGain.gain.value = freq * 0.1;
+        mod.connect(modGain);
+        modGain.connect(osc.frequency);
+
+        const voiceGain = ctx.createGain();
+        voiceGain.gain.value = 0; 
+
+        // LFO for volume
+        const lfoRate = 0.02 + (Math.random() * 0.05);
+        const lfo = ctx.createOscillator();
+        lfo.frequency.value = lfoRate;
+        const lfoGain = ctx.createGain();
+        lfoGain.gain.value = 0.3; // Depth
+        lfo.connect(lfoGain);
+        lfoGain.connect(voiceGain.gain);
+        // Add base volume offset manually since we can't easily sum constant
+        // Instead, let's use the LFO to drive 0..0.6 range by connecting to gain
+        // A simple trick: Set voiceGain.gain to 0.3, and LFO mod +/- 0.3.
+        voiceGain.gain.value = 0.3;
+
+        const panner = ctx.createStereoPanner();
+        panner.pan.value = (Math.random() * 2 - 1) * 0.6;
+
+        osc.connect(voiceGain);
+        voiceGain.connect(panner);
+        panner.connect(reverb);
+        
+        const dryGain = ctx.createGain();
+        dryGain.gain.value = 0.3; 
+        panner.connect(dryGain);
+        dryGain.connect(mainGain);
+
+        const now = ctx.currentTime;
+        osc.start(now);
+        mod.start(now);
+        lfo.start(now);
+
+        activeNodesRef.current.push(osc, mod, lfo, modGain, voiceGain, lfoGain, panner, dryGain);
+      });
 
     } else {
-      // Evening Theme: Ocean/Rumble (Lowpass nature) - Synthesized
-      
-      // 1. Create White Noise Buffer
-      const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+      // Evening Theme: Ocean/Rumble
+      const bufferSize = ctx.sampleRate * 2;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
-      for (let i = 0; i < data.length; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+      
       const source = ctx.createBufferSource();
       source.buffer = buffer;
       source.loop = true;
@@ -97,84 +190,73 @@ const AmbientSound = memo(({ enabled, volume = 1, theme = 'evening' }) => {
       lp.frequency.value = 500;
       lp.Q.value = 0.7;
 
-      // LFO for waves (Slow)
       const lfo = ctx.createOscillator();
-      lfo.type = 'sine';
       lfo.frequency.value = 0.06;
       const lfoGain = ctx.createGain();
       lfoGain.gain.value = 0.12;
 
       mainGain.gain.value = 0.25;
 
-      // Graph: Source -> LP -> MainGain -> UserGain -> Dest
       source.connect(lp);
       lp.connect(mainGain);
-      
       lfo.connect(lfoGain);
       lfoGain.connect(mainGain.gain);
-      lfo.start();
-
-      mainGain.connect(userGain);
-      userGain.connect(ctx.destination);
       
       source.start();
+      lfo.start();
 
-      sourceRef.current = source;
-      gainRef.current = mainGain;
-      userGainRef.current = userGain;
-      filtersRef.current = [lp];
-      lfosRef.current = [lfo, lfoGain];
+      activeNodesRef.current.push(source, lp, lfo, lfoGain);
     }
+    
+    // Ensure context is running (double check)
+    if (ctx.state === 'suspended') ctx.resume();
 
-    // Ducking logic for preview audio
+  }, [enabled, theme]); // Re-run when theme changes, but reuse context
+
+  // Volume update
+  useEffect(() => {
+    if (userGainRef.current && ctxRef.current) {
+        const t = ctxRef.current.currentTime;
+        userGainRef.current.gain.setTargetAtTime(Math.max(0, Math.min(volume, 1)), t, 0.2);
+    }
+  }, [volume]);
+
+  // Ducking logic
+  useEffect(() => {
     const onPlay = () => {
       if (!ctxRef.current || !gainRef.current) return;
       const t = ctxRef.current.currentTime;
-      const targetVal = theme === 'day' ? 0.1 : 0.08; // Lower volume when preview plays
-      gainRef.current.gain.cancelScheduledValues(t);
+      const targetVal = theme === 'day' ? 0.02 : 0.08;
       gainRef.current.gain.setTargetAtTime(targetVal, t, 0.5);
     };
     const onStop = () => {
       if (!ctxRef.current || !gainRef.current) return;
       const t = ctxRef.current.currentTime;
-      const targetVal = theme === 'day' ? 0.5 : 0.25; // Restore volume
-      gainRef.current.gain.cancelScheduledValues(t);
-      gainRef.current.gain.setTargetAtTime(targetVal, t, 1.0);
+      const targetVal = theme === 'day' ? 0.08 : 0.25; // Note: Day uses lower base gain in this graph
+      // Actually, in the graph above:
+      // Day mainGain = 0.5. 
+      // Evening mainGain = 0.25.
+      // So we should restore to those values.
+      // Let's dynamically read current base? No, hardcode is safer for restore.
+      const restoreVal = theme === 'day' ? 0.5 : 0.25; 
+      gainRef.current.gain.setTargetAtTime(restoreVal, t, 1.0);
     };
 
     window.addEventListener('preview-audio-play', onPlay);
     window.addEventListener('preview-audio-stop', onStop);
-
     return () => {
       window.removeEventListener('preview-audio-play', onPlay);
       window.removeEventListener('preview-audio-stop', onStop);
-      try { sourceRef.current?.stop(); } catch {}
-      lfosRef.current.forEach(node => { try { node.stop ? node.stop() : node.disconnect(); } catch {} });
-      try { ctx.close(); } catch {}
     };
-  }, [enabled, theme]); // Re-run if theme changes
+  }, [theme]);
 
+  // Final cleanup on unmount
   useEffect(() => {
-    if (!userGainRef.current || !ctxRef.current) return;
-    const t = ctxRef.current.currentTime;
-    const v = Math.max(0, Math.min(volume, 1));
-    userGainRef.current.gain.cancelScheduledValues(t);
-    userGainRef.current.gain.setTargetAtTime(v, t, 0.2);
-  }, [volume]);
-
-  useEffect(() => {
-    const onPointer = async () => {
-      if (ctxRef.current && ctxRef.current.state === 'suspended') {
-        try { await ctxRef.current.resume(); } catch {}
-      }
-    };
-    window.addEventListener('pointerdown', onPointer, { once: true });
-    window.addEventListener('keydown', onPointer, { once: true });
-    window.addEventListener('touchstart', onPointer, { once: true });
     return () => {
-      window.removeEventListener('pointerdown', onPointer);
-      window.removeEventListener('keydown', onPointer);
-      window.removeEventListener('touchstart', onPointer);
+        if (ctxRef.current) {
+            try { ctxRef.current.close(); } catch {}
+            ctxRef.current = null;
+        }
     };
   }, []);
 
@@ -331,10 +413,48 @@ const ResetCameraHandler = memo(() => {
   return null;
 });
 
+const DayAtmosphere = ({ mode }) => {
+  const { scene } = useThree();
+  const fogRef = useRef();
+
+  useEffect(() => {
+    // Initial Fog Setup
+    // 使用 FogExp2 营造更自然的远处朦胧感
+    const fog = new THREE.FogExp2('#ffffff', 0.002); 
+    scene.fog = fog;
+    fogRef.current = fog;
+    return () => {
+      scene.fog = null;
+    };
+  }, [scene]);
+
+  useFrame((state, delta) => {
+    if (!fogRef.current) return;
+    
+    let targetDensity = 0.002;
+    let targetColor = new THREE.Color('#dbeafe'); // Default: blue-100 equivalent
+
+    if (mode === 'snow') {
+        targetDensity = 0.01; // Reduced from 0.025 to allow visibility of background and albums from distance
+        targetColor.set('#f1f5f9'); // Slate-100 (Snowy white/gray)
+    } else {
+        targetDensity = 0.002; // Clear
+        targetColor.set('#dbeafe');
+    }
+
+    // Smooth transition
+    fogRef.current.density = THREE.MathUtils.lerp(fogRef.current.density, targetDensity, delta * 0.5);
+    fogRef.current.color.lerp(targetColor, delta * 0.5);
+  });
+
+  return null;
+};
+
 const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlightedTag }) => {
   const { musicData, loading, error } = useMusicData();
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
   const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night'); // 默认主题设置为night
+  const [dayMode, setDayMode] = useState('normal'); // 'normal', 'snow'
   const [showHint, setShowHint] = useState(universeState.hasSeenHint === undefined ? true : !universeState.hasSeenHint);
   const [hoveredMusic, setHoveredMusic] = useState(null);
   const [wallpaperMode, setWallpaperMode] = useState(false);
@@ -465,7 +585,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
   return (
     <div 
-      className={`w-screen h-screen ${themes[currentTheme]}`}
+      className={`w-screen h-screen relative ${themes[currentTheme]}`}
       role="main"
       aria-label="音乐宇宙三维可视化"
     >
@@ -506,13 +626,24 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           )}
           {currentTheme === 'day' && (
             <React.Suspense fallback={null}>
-              <Clouds isMobile={isMobile} />
-              <PaperPlanes 
-                count={4} 
-                musicData={musicData} 
-                onRecommend={(data, pos) => handleCoverClick(data, pos)} 
-                isMobile={isMobile}
-              />
+              <DayAtmosphere mode={dayMode} />
+              {dayMode === 'normal' && (
+                <>
+                  <Clouds isMobile={isMobile} />
+                  <PaperPlanes 
+                    count={4} 
+                    musicData={musicData} 
+                    onRecommend={(data, pos) => handleCoverClick(data, pos)} 
+                    isMobile={isMobile}
+                  />
+                </>
+              )}
+              {dayMode === 'snow' && (
+                <>
+                  <Snowfall count={isMobile ? 500 : 1500} />
+                  <SnowMountain />
+                </>
+              )}
             </React.Suspense>
           )}
           {currentTheme === 'evening' && (
@@ -536,10 +667,35 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           {hoveredMusic && <InfoCard data={hoveredMusic.data} position={hoveredMusic.position} onClose={() => setHoveredMusic(null)} isMobile={isMobile} />}
         </Canvas>
       )}
+
       {!wallpaperMode && (
-      <div className="absolute bottom-4 right-4 z-10 flex items-center space-x-3">
+      <div className="absolute bottom-4 right-4 z-10 flex flex-col items-end space-y-3">
+        <div className="flex items-center space-x-3">
         {/* 主题切换组 */}
-        <div className="flex bg-gray-900/50 backdrop-blur-md rounded-full p-1 shadow-lg border border-white/10">
+        <div className="relative z-30">
+          {/* 白天模式子选项 */}
+          {currentTheme === 'day' && (
+            <div className="absolute bottom-full left-0 mb-4 flex gap-2 z-20">
+              <button
+                onClick={() => setDayMode('normal')}
+                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'normal' ? 'bg-white text-orange-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                aria-label="晴空模式"
+                title="晴空"
+              >
+                <SunIcon className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setDayMode('snow')}
+                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'snow' ? 'bg-white text-blue-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                aria-label="飘雪模式"
+                title="飘雪"
+              >
+                <CloudIcon className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+          
+          <div className="flex bg-gray-900/50 backdrop-blur-md rounded-full p-1 shadow-lg border border-white/10">
             <button
             key="day-theme-button"
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${currentTheme === 'day' ? 'bg-blue-500 text-white shadow-md' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}
@@ -567,6 +723,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             >
             夜晚
             </button>
+        </div>
         </div>
         
         {/* 沉浸模式按钮 - 次级按钮设计 */}
@@ -620,7 +777,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5a1 1 0 012 0v14a1 1 0 01-2 0V5zM5 9a1 1 0 012 0v6a1 1 0 01-2 0V9zm12-2a1 1 0 012 0v10a1 1 0 01-2 0V7z" />
               </svg>
             </button>
-            <div className="absolute bottom-full right-0 mb-3 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-sm border border-white/10">
+            <div className="absolute bottom-full right-0 mb-3 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-sm border border-white/10 z-10">
                 <div className="font-bold mb-1 text-emerald-400">环境声</div>
                 <div className="text-[11px] mb-2">
                   {currentTheme === 'day' ? '舒缓氛围背景音。' : '傍晚海浪与风的声景。'}
@@ -634,9 +791,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 <div className="absolute bottom-[-6px] right-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
             </div>
         </div>
+        </div>
       </div>
       )}
-      
+
       {/* 退出沉浸模式的隐藏按钮 (仅在移动鼠标时显示，或者一直显示一个非常淡的退出提示) */}
       {wallpaperMode && (
          <button

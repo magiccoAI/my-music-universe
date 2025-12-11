@@ -65,7 +65,13 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
           if (playPromise !== undefined) {
               playPromise
                   .then(() => setIsPlaying(true))
-                  .catch(error => console.warn("Auto-play prevented:", error));
+                  .catch(error => {
+                    if (error.name === 'AbortError') {
+                        // Ignore abort errors (component unmounted during load)
+                        return;
+                    }
+                    console.warn("Auto-play prevented:", error);
+                  });
           }
       }
   }, [audioUrl, autoPlay]);
