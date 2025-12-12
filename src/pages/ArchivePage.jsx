@@ -361,10 +361,30 @@ const ArchivePage = () => {
           <div className="footer-section">    
           </div>
           <div className="footer-section">
-            <p className="disclaimer">
+            <p className="disclaimer relative group inline-block cursor-help">
               本网站仅作为个人音乐收藏的可视化展示与技术探索，非商业用途。<br />
               所有音乐专辑封面、艺术家名称及音频试听片段版权归其合法所有者所有。<br />
-              如有侵权，请联系公众号「D小调片段记录」删除。
+              如有侵权，请联系<span className="text-sky-400 border-b border-sky-400/30 hover:text-sky-300 transition-colors">公众号「D小调片段记录」</span>删除。
+              
+              {/* Hover Popup */}
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-56 p-2 bg-indigo-950/95 backdrop-filter backdrop-blur-xl border border-sky-500/30 rounded-xl shadow-[0_0_30px_rgba(14,165,233,0.2)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0 z-50">
+                <div className="relative w-full rounded-lg overflow-hidden bg-white mb-2">
+                   <img 
+                    src={process.env.PUBLIC_URL + "/images/wechat-qrcode.png"} 
+                    alt="公众号二维码" 
+                    className="w-full h-auto block"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentNode.innerHTML = '<div class="flex items-center justify-center h-20 text-gray-500 text-xs text-center p-2">请将二维码图片保存为<br/>public/images/wechat-qrcode.png</div>';
+                    }}
+                  />
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] text-sky-300 font-mono">SCAN TO CONNECT</p>
+                </div>
+                {/* Arrow */}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-8 border-transparent border-t-indigo-950/95 filter drop-shadow-lg"></div>
+              </div>
             </p>
             <p>感谢每一段旋律的陪伴</p>
             <p>© 2025 音乐歌单可视化探索</p>

@@ -102,40 +102,77 @@ const UniverseNavigation = ({ className = '' }) => {
 
   // 移动端导航
   const MobileNavigation = () => (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-50 backdrop-filter backdrop-blur-xl p-4 ${className}`}>
-      <div className="flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 no-underline">
-          <Logo className="w-8 h-8 text-cyan-400" />
-          <span className="text-white text-lg font-bold tracking-wider font-sans">Music Collection 🎶</span>
-        </Link>
-        <button 
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="text-white p-2 text-xl"
-          aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
-      </div>
-      
+    <>
+      <nav className={`fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-filter backdrop-blur-xl p-4 border-b border-white/10 ${className}`}>
+        <div className="flex justify-between items-center">
+          <Link to="/" className="flex items-center gap-2 no-underline group">
+            <Logo className="w-8 h-8 text-cyan-400 group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+            <span className="text-white/90 text-lg font-bold tracking-wider font-sans group-hover:text-white transition-colors">Music Universe</span>
+          </Link>
+          <button 
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-white/80 p-2 hover:text-white transition-colors focus:outline-none"
+            aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
+          >
+            {menuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </nav>
+
+      {/* 全屏移动菜单 */}
       {menuOpen && (
         <motion.div 
-          className="mt-4 pb-2 flex flex-col space-y-4"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+          className="fixed inset-0 z-40 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              path={item.path}
-              label={item.label}
-              onClick={() => setMenuOpen(false)}
-              isMobile={true}
-            />
-          ))}
+          <div className="flex flex-col space-y-8 text-center w-full px-8">
+            {navItems.map((item, index) => {
+              const active = isActive(item.path);
+              return (
+                <motion.div
+                  key={item.path}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 + 0.1 }}
+                >
+                  <Link
+                    to={item.path}
+                    onClick={() => setMenuOpen(false)}
+                    className={`
+                      block text-xl font-sans font-medium tracking-wider py-2
+                      transition-all duration-300 relative
+                      ${active 
+                        ? 'text-cyan-400 font-bold scale-110 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' 
+                        : 'text-gray-300 hover:text-white hover:scale-105'
+                      }
+                    `}
+                  >
+                    {item.label}
+                    {active && (
+                      <motion.div
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+                        layoutId="mobileUnderline"
+                      />
+                    )}
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
         </motion.div>
       )}
-    </nav>
+    </>
   );
 
   // 桌面端导航

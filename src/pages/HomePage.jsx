@@ -14,6 +14,7 @@ const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
 const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 import useMeteorTrail from '../hooks/useMeteorTrail';
 import useIsMobile from '../hooks/useIsMobile';
+import { aboutContent } from '../data/aboutContent';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -22,45 +23,6 @@ const HomePage = () => {
   const [aboutLang, setAboutLang] = useState('zh');
   const isMobile = useIsMobile();
   const [showBackground, setShowBackground] = useState(false);
-
-  const aboutContent = {
-    zh: {
-      intro: (
-        <>
-          这个网站，是我为自己打造的<span className="text-sky-200 font-semibold">“音乐记忆合集宇宙”</span>。它暂时没有集成全面的播放资源，只是从一份基础的音乐数据表格（ <code className="bg-black/40 px-1 py-0.5 rounded text-sky-400 font-mono">data.json</code> ）延伸出来的星图，但对我而言，它是一个外部记忆体——帮助我在看到封面的瞬间，重新提取当时的旋律、心境与感受。
-        </>
-      ),
-      quote: "在公众号 2022–2023 的推文尾声，我分享了一些歌。把那些零散片段收拢到同一个入口，记录的意义就被再次点亮：当你按下播放键（或只是停留在封面上），一系列声波与触感的体验就有机会被启动。",
-      techP1: (
-        <>
-          我一直对可视化感兴趣：像《黑客帝国》的数据流、维基百科的关系图、各种创意交互。于是我用 <span className="text-sky-300 font-mono">React</span> 和 <span className="text-purple-300 font-mono">TraeAI</span> 及多种大语言模型，一点点摸索，把这份歌单做成一个可视化空间。
-        </>
-      ),
-      techP2: (
-        <>
-          未来它或许会迁移发展成更多与我生命相关的东西，但在此刻，它只想温柔地提醒我：这些歌，曾经陪伴我，也仍在陪伴我。这是我作为一位非专业开发者的持续实践，也是一段与工具共创的旅程；每一次迭代，都是在把<span className="text-white font-bold">“听过什么歌”</span>变成<span className="text-sky-300 font-bold">“看见我的故事”</span>。
-        </>
-      )
-    },
-    en: {
-      intro: (
-        <>
-          This digital expanse is my personal <span className="text-sky-200 font-semibold">"Cosmos of Musical Memories."</span> It is not merely a player, but a star map born from a humble spreadsheet (<code className="bg-black/40 px-1 py-0.5 rounded text-sky-400 font-mono">data.json</code>). To me, it serves as an external memory bank—one where a single glance at an album cover instantly retrieves the melodies, moods, and emotions of days past.
-        </>
-      ),
-      quote: "From 2022 to 2023, I shared musical fragments at the end of my blog posts. Gathering these scattered pieces here reignites the purpose of documentation: whether you press play or simply gaze upon a cover, a symphony of sonic and emotional experiences is reawakened.",
-      techP1: (
-        <>
-          I have always been captivated by the art of visualization—from the digital rain of <em>The Matrix</em> to the knowledge webs of Wikipedia. Guided by this fascination, I utilized <span className="text-sky-300 font-mono">React</span>, <span className="text-purple-300 font-mono">TraeAI</span>, and various LLMs to meticulously sculpt this playlist into an immersive visual dimension.
-        </>
-      ),
-      techP2: (
-        <>
-          While this universe may evolve to hold more of my life's data, for now, it stands as a gentle testament: these songs have been, and remain, my constant companions. This is the ongoing journey of an amateur developer co-creating with AI—where every iteration transforms <span className="text-white font-bold">"what I heard"</span> into <span className="text-sky-300 font-bold">"seeing my story."</span>
-        </>
-      )
-    }
-  };
 
   const t = aboutContent[aboutLang];
 
@@ -98,25 +60,35 @@ const HomePage = () => {
       {!isMobile && <MeteorRenderer />}
 
       {/* top nav */}
-      <nav className="fixed top-0 left-0 right-0 z-20 py-4 backdrop-blur-md bg-white/5 flex justify-center gap-10 border-b border-white/10">
-        <Link to="/" className="text-base font-medium hover:text-sky-300 transition">首页</Link>
+      <nav className="fixed top-0 left-0 right-0 z-20 py-3 backdrop-blur-md bg-black/20 flex justify-center items-center gap-8 md:gap-12 border-b border-white/5 transition-all duration-300">
+        <Link 
+          to="/" 
+          className="relative group py-2"
+        >
+          <span className="font-sans font-medium text-xs md:text-sm tracking-widest text-gray-400 group-hover:text-white transition-colors duration-300">首页</span>
+          <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full opacity-50"></span>
+        </Link>
+        
+        <div className="w-1 h-1 rounded-full bg-white/10"></div>
+
         <a
           href="/music-universe"
           onClick={handleMusicUniverseClick}
-          className="text-base font-medium hover:text-sky-300 transition"
-        >音乐封面宇宙</a>
-        <Link to="/archive" className="text-base font-medium hover:text-sky-300 transition">我的音乐时光机</Link>
-        <button
-          type="button"
-          onClick={() => setShowAbout(true)}
-          className="text-base font-medium hover:text-sky-300 transition opacity-80 hover:opacity-100"
-          aria-label="关于"
-          title="关于这个宇宙"
+          className="relative group py-2"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-          </svg>
-        </button>
+          <span className="font-sans font-medium text-xs md:text-sm tracking-widest text-gray-400 group-hover:text-sky-300 transition-colors duration-300">音乐封面宇宙</span>
+          <span className="absolute bottom-0 left-0 w-0 h-px bg-sky-300 transition-all duration-300 group-hover:w-full opacity-50"></span>
+        </a>
+
+        <div className="w-1 h-1 rounded-full bg-white/10"></div>
+
+        <Link 
+          to="/archive" 
+          className="relative group py-2"
+        >
+          <span className="font-sans font-medium text-xs md:text-sm tracking-widest text-gray-400 group-hover:text-purple-300 transition-colors duration-300">我的音乐时光机</span>
+          <span className="absolute bottom-0 left-0 w-0 h-px bg-purple-300 transition-all duration-300 group-hover:w-full opacity-50"></span>
+        </Link>
       </nav>
 
       {/* hero */}
@@ -234,7 +206,7 @@ const HomePage = () => {
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
                 </span>
                 <h3 className="text-lg font-bold text-sky-100 font-mono tracking-wider">
-                  INCOMING SIGNAL: ORIGIN STORY
+                  {t.title}
                 </h3>
               </div>
               <button 
@@ -265,7 +237,7 @@ const HomePage = () => {
                     }}
                   />
                   <figcaption className="absolute bottom-0 inset-x-0 p-2 bg-gradient-to-t from-black/90 to-transparent text-[10px] text-sky-300/70 text-center font-mono tracking-wider">
-                    STEP 1: RAW DATA COLLECTION
+                    {t.imageCaption1}
                   </figcaption>
                 </figure>
 
@@ -301,7 +273,7 @@ const HomePage = () => {
                     </div>
                   </div>
                   <figcaption className="absolute bottom-0 inset-x-0 p-2 bg-gradient-to-t from-black/90 to-transparent text-[10px] text-sky-300/70 text-center font-mono tracking-wider">
-                    STEP 2: STRUCTURED JSON DATA
+                    {t.imageCaption2}
                   </figcaption>
                 </figure>
               </div>
@@ -317,6 +289,12 @@ const HomePage = () => {
               <p className="leading-loose">
                 {t.techP2}
               </p>
+
+              {t.techP3 && (
+                <p className="leading-loose">
+                  {t.techP3}
+                </p>
+              )}
             </div>
             <div className="mt-8 pt-6 border-t border-sky-500/20 flex justify-end">
               <button
