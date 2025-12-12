@@ -107,9 +107,9 @@
 /* 保持你原有的其他样式不变 */
 .evening-symmetric {
   background: linear-gradient(to bottom,
-    #1e3a8a 0%,
-    #3b82f6 15%,
-    #7dd3fc 30%,
+    #1e1b4b 0%,   /* Indigo 950 - 深邃夜色紫蓝 */
+    #1e3a8a 15%,  /* Blue 900 - 深蓝 */
+    #3b82f6 30%,  /* Blue 500 - 傍晚蓝 */
     #fef3c7 40%,
     #fde68a 45%,
     #fb923c 50%,
@@ -117,8 +117,9 @@
     #fb923c 60%,
     #fde68a 65%,
     #fef3c7 70%,
-    #7dd3fc 85%,
-    #1e3a8a 100%
+    #3b82f6 85%,
+    #1e3a8a 95%,
+    #1e1b4b 100%  /* Indigo 950 - 深水夜色 */
   );
 }
 

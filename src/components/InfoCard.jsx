@@ -64,9 +64,17 @@ const InfoCard = memo(({ data: music, position: externalPosition, onClose: onCar
       const floatY = !isMobile ? Math.sin(state.clock.getElapsedTime() * 0.5 + (music.id || 0)) * 0.1 : 0;
 
       // Twin Mode Position (与封面同平面)
-      const twinPosition = new Vector3()
-        .copy(coverWorldPosition)
-        .add(rightDir);
+      // 修改策略：如果距离过远，限制最大距离，避免卡片变得太小或太大
+      const maxTwinDistance = 10;
+      let twinPosition = new Vector3().copy(coverWorldPosition);
+      
+      // 如果距离太远，将卡片拉近到 maxTwinDistance
+      if (distToCover > maxTwinDistance) {
+        const directionToCover = new Vector3().subVectors(coverWorldPosition, camera.position).normalize();
+        twinPosition = new Vector3().copy(camera.position).add(directionToCover.multiplyScalar(maxTwinDistance));
+      }
+
+      twinPosition.add(rightDir);
       twinPosition.y += floatY; // 加上浮动动画
 
       // B. 计算 HUD 模式位置 (HUD Mode)
@@ -108,24 +116,20 @@ const InfoCard = memo(({ data: music, position: externalPosition, onClose: onCar
       // 计算卡片到相机的实际距离
       const distToCard = camera.position.distanceTo(finalPosition);
       
-      // 更加激进的缩放策略：
-      // 目标：让卡片在屏幕上的视觉大小保持相对恒定，不要因为距离近而变得巨大
+      // 全局自适应缩放策略：
+      // 目标：无论距离多远，卡片在屏幕上的视觉大小保持恒定。
+      // 公式：Scale = Distance * Constant
+      // 我们以距离 12 (adaptiveThreshold) 为基准，此时 scale 为 1.0
+      const referenceDistance = 12;
+      let scale = distToCard / referenceDistance;
       
-      // 基础缩放：默认是1
-      let scale = 1;
-
-      // 动态调整缩放以抑制近距离的放大效果
-      // 阈值提高到 12，并使用指数衰减让近距离更小
-      const adaptiveThreshold = 12;
+      // 设置最小缩放值，防止太近时消失或穿模
+      scale = Math.max(0.15, scale); 
       
-      if (distToCard < adaptiveThreshold) {
-        // 指数衰减：距离越近，缩小得更明显
-        scale = Math.pow(distToCard / adaptiveThreshold, 1.2);
-        
-        // 设置最小缩放值，防止太近时消失
-        scale = Math.max(0.22, scale); 
-      }
-
+      // 设置最大缩放值，防止太远时物理尺寸过大（虽然视觉大小正常，但可能会穿插其他模型）
+      // 由于我们限制了 maxTwinDistance = 10，所以实际上这里的 scale 不会超过 10/12 ≈ 0.83
+      // 但如果是 HUD 模式 (dist=4)，scale = 4/12 = 0.33
+      
       // 动画：缩放也从小变大 (0.5 -> 1.0 * targetScale)
       const animatedScale = scale * (0.5 + 0.5 * progress.current);
 

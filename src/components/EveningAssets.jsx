@@ -1,5 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import { Sparkles, Environment } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
 
@@ -531,8 +532,142 @@ const Mountains = () => {
   );
 };
 
-const EveningAssets = ({ isMobile }) => {
+// 水面波光效果组件 - 专为移动端优化
+const WaterGlints = ({ config }) => {
+  const count = 120; // 稍微减少数量，让每个光斑更具表现力
+  const { positions, phases, sizes } = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const ph = new Float32Array(count);
+    const sz = new Float32Array(count);
+    
+    for(let i = 0; i < count; i++) {
+      // Z轴分布：从近处(-20)延伸到远处(-120)
+      const z = -20 - Math.random() * 100; 
+      
+      // X轴分布：加宽扩散范围，模拟更广阔的水面反光
+      const spread = 15 + (Math.abs(z) / 100) * 40;
+      const r1 = Math.random();
+      const r2 = Math.random();
+      // 使用三次方分布让光点更集中在中间，但也有些散落在远处
+      const x = (Math.pow(r1 * 2 - 1, 3)) * spread;
+      
+      const y = -4.9; // 紧贴水面
+      
+      pos[i*3] = x;
+      pos[i*3+1] = y;
+      pos[i*3+2] = z;
+      
+      ph[i] = Math.random() * Math.PI * 2;
+      // 随机大小差异，制造远近层次
+      sz[i] = 0.5 + Math.random() * 1.5;
+    }
+    return { positions: pos, phases: ph, sizes: sz };
+  }, []);
+
+  const shaderRef = useRef();
+
+  useFrame(({ clock }) => {
+    if (shaderRef.current) {
+      shaderRef.current.uniforms.uTime.value = clock.getElapsedTime();
+    }
+  });
+
+  const material = useMemo(() => new THREE.ShaderMaterial({
+    uniforms: {
+      uTime: { value: 0 },
+      uColor: { value: new THREE.Color(config.sparkleColor || '#ffccaa') },
+      uSize: { value: 120.0 } // 增大基础大小，以适应横向拉伸
+    },
+    vertexShader: `
+      attribute float aPhase;
+      attribute float aSize;
+      varying float vAlpha;
+      uniform float uTime;
+      uniform float uSize;
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        
+        // 添加轻微的水流漂移效果
+        // 随时间在X轴上缓慢移动
+        mvPosition.x += sin(uTime * 0.2 + aPhase) * 1.5;
+
+        gl_Position = projectionMatrix * mvPosition;
+        
+        // 大小随距离衰减
+        gl_PointSize = uSize * aSize * (30.0 / -mvPosition.z);
+        
+        // 闪烁计算：更生动的呼吸感
+        float sine = sin(uTime * 2.0 + aPhase);
+        // 亮度范围 0.2 ~ 1.0
+        vAlpha = 0.2 + 0.8 * (sine * 0.5 + 0.5);
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 uColor;
+      varying float vAlpha;
+      void main() {
+        vec2 coord = gl_PointCoord - vec2(0.5);
+        
+        // 核心修改：横向拉伸，模拟水面波光的扁平形态
+        // y轴乘以4.0，使得纵向距离计算权重增加，形状变扁
+        float dist = length(vec2(coord.x, coord.y * 4.0));
+        
+        if (dist > 0.5) discard;
+        
+        // 径向渐变，增强中心亮度，模拟反光的高光点
+        float glow = 1.0 - (dist * 2.0);
+        glow = pow(glow, 2.5); // 增加指数让边缘更锐利
+        
+        // 混合颜色
+        gl_FragColor = vec4(uColor, vAlpha * glow);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  }), [config.sparkleColor]);
+
+  return (
+    <points>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
+        />
+        <bufferAttribute
+          attach="attributes-aPhase"
+          count={count}
+          array={phases}
+          itemSize={1}
+        />
+        <bufferAttribute
+          attach="attributes-aSize"
+          count={count}
+          array={sizes}
+          itemSize={1}
+        />
+      </bufferGeometry>
+      <primitive object={material} ref={shaderRef} attach="material" />
+    </points>
+  );
+};
+
+const EveningAssets = ({ isMobile, config }) => {
   const { scene } = useThree();
+
+  // 合并配置与默认值
+  const themeConfig = useMemo(() => ({
+    fogColor: '#2e1065',
+    ambientIntensity: isMobile ? 0.8 : 0.6,
+    dirLightColor: '#fb923c',
+    dirLightIntensity: isMobile ? 1.5 : 2.0,
+    spotLightColor: '#ff7e5f',
+    spotLightIntensity: 8,
+    sparkleColor: '#ffccaa',
+    ...config
+  }), [isMobile, config]);
   
   // 飞鸟群配置
   const birds = useMemo(() => {
@@ -551,46 +686,57 @@ const EveningAssets = ({ isMobile }) => {
   React.useEffect(() => {
     const oldFog = scene.fog;
     // ⚠️ 修复：改用线性雾 (Fog) 代替指数雾 (FogExp2)
-    // Fog(color, near, far)
-    // near=40: 雾气从距离相机 40 的地方才开始产生，保证近处的专辑墙(z=0左右)完全清晰，不发黑
-    // far=200: 远处完全消失在雾中
-    scene.fog = new THREE.Fog('#0f172a', 40, 200); 
+    // 颜色调整为深紫色 #2e1065 (Indigo 950)，避免远处变黑，而是融入夜色
+    // near=50: 雾气推远，保证近景清晰
+    // far=300: 雾气延伸更远
+    scene.fog = new THREE.Fog(themeConfig.fogColor, 50, 300); 
     return () => {
       scene.fog = oldFog;
     };
-  }, [scene]);
+  }, [scene, themeConfig.fogColor]);
 
   return (
     <group>
       {/* 🌍 环境贴图：仅桌面端开启，移动端禁用以节省显存 */}
       {!isMobile && <Environment preset="sunset" background={false} />}
-
-      {/* 💡 暖色夕阳照明系统 */}
-      {/* 环境光：提供基础亮度，偏紫粉色，模拟暮色 */}
-      <ambientLight intensity={isMobile ? 1.5 : 2.0} color="#6d28d9" /> 
       
-      {/* 主光源（夕阳）：放在远处低角度逆光位置，照向相机 */}
-      {/* 位置设为 Z 轴负方向远处，模拟太阳即将落山 */}
+      {/* 🎨 后处理：Bloom 泛光效果 (仅桌面端) */}
+      {!isMobile && (
+        <EffectComposer disableNormalPass>
+          <Bloom 
+            luminanceThreshold={0.95} // 提高阈值，只有极亮的光源（如水面反光）才发光，避免专辑封面发白
+            mipmapBlur 
+            intensity={0.8} // 降低发光强度，柔和一点
+            radius={0.4}
+          />
+        </EffectComposer>
+      )}
+
+      {/* 💡 暖色夕阳照明系统 - 整体亮度下调，恢复相册清晰度 */}
+      {/* 环境光：大幅降低强度，避免画面发白 */}
+      <ambientLight intensity={themeConfig.ambientIntensity} color="#6d28d9" /> 
+      
+      {/* 主光源（夕阳）：保留方向感，但降低强度 */}
       <directionalLight 
-        position={[0, 10, -100]} 
-        intensity={isMobile ? 3.0 : 5.0} 
-        color="#fb923c" // 强烈的橙色夕阳
-        castShadow={!isMobile} // 移动端关闭阴影
+        position={[0, 15, -120]} 
+        intensity={themeConfig.dirLightIntensity} 
+        color={themeConfig.dirLightColor} // 强烈的橙色夕阳
+        castShadow={!isMobile} 
       />
       
-      {/* 补光：放在相机后方，稍微照亮前景物体，避免完全剪影 - 移动端移除 */}
-      {!isMobile && <pointLight position={[0, 10, 20]} intensity={1.5} color="#818cf8" />}
+      {/* 补光：放在相机后方，稍微照亮前景物体 */}
+      {!isMobile && <pointLight position={[0, 10, 20]} intensity={0.5} color="#818cf8" />}
 
-      {/* 增加一个聚光灯专门打在水面上形成高光通道 - 移动端移除 */}
+      {/* 增加一个聚光灯专门打在水面上形成高光通道 */}
+      {/* 调整角度，使其更集中在水面，减少对上方相册墙的影响 */}
       {!isMobile && (
         <spotLight
-          position={[0, 20, -50]}
-          // target-position 属性无效，SpotLight 默认指向 (0,0,0)，这正是我们需要的
-          angle={0.5}
-          penumbra={1}
-          intensity={10}
-          color="#ff7e5f"
-          distance={200}
+          position={[0, 30, -60]} // 抬高位置
+          angle={0.4} // 减小角度，更聚光
+          penumbra={0.5} // 边缘柔和
+          intensity={themeConfig.spotLightIntensity} // 降低强度
+          color={themeConfig.spotLightColor} // 珊瑚色高光
+          distance={300}
           castShadow={true}
         />
       )}
@@ -604,6 +750,10 @@ const EveningAssets = ({ isMobile }) => {
           </>
         ) : <DynamicWaveWater />}
       </React.Suspense>
+
+      {/* 🌅 视觉太阳与晚霞 - 已移除 */}
+      {/* <VisualSun /> */}
+      {/* <SunsetClouds /> */}
 
       {/* 🏝️ 远景：一座孤山 */}
       <Mountains />
@@ -620,11 +770,14 @@ const EveningAssets = ({ isMobile }) => {
         count={isMobile ? 50 : 300} // 移动端减少粒子数量
         scale={[40, 10, 40]} 
         position={[0, -2, -10]} 
-        size={8} 
+        size={3} // 再次大幅减小尺寸，消除方块感
         speed={0.3} 
-        opacity={0.8}
-        color="#ffecd2" 
+        opacity={0.1} // 极低透明度，若有若无
+        color={themeConfig.sparkleColor} 
       />
+
+      {/* 移动端水面波光增强 */}
+      {isMobile && <WaterGlints config={themeConfig} />}
     </group>
   );
 };

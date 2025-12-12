@@ -3,9 +3,12 @@ import useMusicData from './hooks/useMusicData';
 import useIsMobile from './hooks/useIsMobile';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
-import { SunIcon, CloudIcon } from '@heroicons/react/24/outline';
+import { SunIcon, CloudIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import * as THREE from 'three';
 // import Stars from './components/StarsOnly';
+import EveningThemeControl, { EVENING_PRESETS } from './components/EveningThemeControl';
+import SceneErrorBoundary from './components/SceneErrorBoundary';
+
 const Stars = React.lazy(() => import('./components/StarsOnly'));
 const Clouds = React.lazy(() => import('./components/CloudsOnly'));
 const PaperPlanes = React.lazy(() => import('./components/PaperPlanes'));
@@ -463,6 +466,16 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   // const [positionedMusicData, setPositionedMusicData] = useState([]);
   const isMobile = useIsMobile();
 
+  // 傍晚主题配置状态
+  const [showEveningControl, setShowEveningControl] = useState(false);
+  const [eveningConfig, setEveningConfig] = useState(() => {
+    // 根据当前时间初始化推荐色调
+    const hour = new Date().getHours();
+    if (hour >= 19 && hour < 20) return { ...EVENING_PRESETS.lateSunset, hueRotate: 0, saturate: 100, brightness: 100 };
+    if (hour >= 20 || hour < 5) return { ...EVENING_PRESETS.twilight, hueRotate: 0, saturate: 100, brightness: 100 };
+    return { ...EVENING_PRESETS.sunset, hueRotate: 0, saturate: 100, brightness: 100 };
+  });
+
   // Wallpaper Mode Logic
   useEffect(() => {
     // Check URL params for wallpaper mode
@@ -583,9 +596,21 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
     setHoveredMusic({ data, position: albumPosition });
   }, []);
 
+  const themeStyle = React.useMemo(() => {
+    if (currentTheme === 'evening') {
+      return {
+        background: eveningConfig.cssGradient,
+        filter: `hue-rotate(${eveningConfig.hueRotate}deg) saturate(${eveningConfig.saturate}%) brightness(${eveningConfig.brightness}%)`,
+        transition: 'background 1s ease, filter 0.3s ease'
+      };
+    }
+    return {};
+  }, [currentTheme, eveningConfig]);
+
   return (
     <div 
-      className={`w-screen h-screen relative ${themes[currentTheme]}`}
+      className={`w-screen h-screen relative ${currentTheme === 'evening' ? '' : themes[currentTheme]}`}
+      style={themeStyle}
       role="main"
       aria-label="音乐宇宙三维可视化"
     >
@@ -647,9 +672,11 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </React.Suspense>
           )}
           {currentTheme === 'evening' && (
-            <React.Suspense fallback={null}>
-              <Evening isMobile={isMobile} />
-            </React.Suspense>
+            <SceneErrorBoundary>
+              <React.Suspense fallback={null}>
+                <Evening isMobile={isMobile} config={eveningConfig} />
+              </React.Suspense>
+            </SceneErrorBoundary>
           )}
 
           {positionedMusicData.map((data) => (
@@ -726,6 +753,25 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
         </div>
         </div>
         
+        {/* 傍晚主题调色板按钮 */}
+        {currentTheme === 'evening' && (
+          <div className="relative group">
+            <button
+              className={`p-2.5 rounded-full border border-white/10 backdrop-blur-md transition-all shadow-lg bg-gray-900/50 text-orange-300 hover:bg-orange-500/80 hover:text-white hover:scale-110 ${showEveningControl ? 'bg-orange-500/80 text-white' : ''}`}
+              onClick={() => setShowEveningControl(!showEveningControl)}
+              aria-label="调色板"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+            </button>
+            <div className="absolute bottom-full right-0 mb-3 w-32 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-sm border border-white/10 text-center pointer-events-none">
+                <span className="font-bold block mb-1 text-orange-400">暮色调音台</span>
+                自定义你的傍晚
+            </div>
+          </div>
+        )}
+
         {/* 沉浸模式按钮 - 次级按钮设计 */}
         <div className="relative group">
             <button
@@ -806,6 +852,15 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
          </button>
+      )}
+
+      {/* 傍晚主题控制面板 */}
+      {currentTheme === 'evening' && showEveningControl && !wallpaperMode && (
+        <EveningThemeControl 
+          currentConfig={eveningConfig} 
+          onConfigChange={setEveningConfig}
+          onClose={() => setShowEveningControl(false)}
+        />
       )}
 
       {showHint && !wallpaperMode && (
