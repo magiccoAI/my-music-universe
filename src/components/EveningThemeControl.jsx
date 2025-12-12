@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // 预设方案定义
 export const EVENING_PRESETS = {
@@ -84,13 +84,59 @@ export const EVENING_PRESETS = {
     dirLightIntensity: 1.5,
     spotLightColor: '#e879f9', // 粉紫光斑
     spotLightIntensity: 6,
-    sparkleColor: '#e9d5ff' // 浅紫粒子
+    sparkleColor: '#e9d5ff', // 浅紫粒子
+    showAurora: false // 默认不显示极光
+  },
+  aurora: {
+    id: 'aurora',
+    name: '极光之夜',
+    description: '绚丽的北极光，神秘而梦幻',
+    cssGradient: `linear-gradient(to bottom,
+      #022c22 0%,   /* Dark Green */
+      #064e3b 15%,  /* Green 900 */
+      #115e59 30%,  /* Teal 800 */
+      #14b8a6 45%,  /* Teal 500 */
+      #2dd4bf 50%,  /* Teal 400 */
+      #818cf8 60%,  /* Indigo 400 */
+      #6366f1 75%,  /* Indigo 500 */
+      #312e81 100%  /* Indigo 900 */
+    )`,
+    textColor: 'text-teal-100',
+    accentColor: 'text-teal-400',
+    // 3D 场景参数
+    fogColor: '#022c22', // 深绿色雾
+    ambientIntensity: 0.4,
+    dirLightColor: '#2dd4bf', // 青色主光
+    dirLightIntensity: 1.2,
+    spotLightColor: '#818cf8', // 蓝紫光斑
+    spotLightIntensity: 5,
+    sparkleColor: '#ccfbf1', // 浅青粒子
+    showAurora: true // 开启极光
   }
 };
 
 const EveningThemeControl = ({ currentConfig, onConfigChange, onClose }) => {
   const [activeTab, setActiveTab] = useState('presets'); // 'presets' | 'custom'
   const [showTutorial, setShowTutorial] = useState(false);
+  const containerRef = useRef(null);
+
+  // 点击外部关闭
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // 检查点击是否在组件外部
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        // 如果点击的是控制按钮（通常在外部），让控制按钮的逻辑处理，避免冲突
+        // 但由于我们无法直接访问控制按钮的引用，这里依靠 mousedown 事件的特性
+        // 如果点击了外部，就触发 onClose
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   // 首次使用检查
   useEffect(() => {
@@ -128,7 +174,10 @@ const EveningThemeControl = ({ currentConfig, onConfigChange, onClose }) => {
   };
 
   return (
-    <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 w-72 bg-gray-900/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 text-white">
+    <div 
+      ref={containerRef}
+      className="fixed left-4 top-1/2 -translate-y-1/2 z-50 w-72 bg-gray-900/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 text-white"
+    >
       {/* 标题栏 */}
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
         <h3 className="font-bold text-lg bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">

@@ -3,7 +3,7 @@ import useMusicData from './hooks/useMusicData';
 import useIsMobile from './hooks/useIsMobile';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
-import { SunIcon, CloudIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { SunIcon, CloudIcon, AdjustmentsHorizontalIcon, SparklesIcon, StarIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import * as THREE from 'three';
 // import Stars from './components/StarsOnly';
 import EveningThemeControl, { EVENING_PRESETS } from './components/EveningThemeControl';
@@ -15,6 +15,10 @@ const PaperPlanes = React.lazy(() => import('./components/PaperPlanes'));
 const Evening = React.lazy(() => import('./components/EveningAssets'));
 const Snowfall = React.lazy(() => import('./components/Snowfall'));
 const SnowMountain = React.lazy(() => import('./components/SnowMountain'));
+const RainbowMeadow = React.lazy(() => import('./components/RainbowMeadow'));
+const Aurora = React.lazy(() => import('./components/Aurora'));
+const Planets = React.lazy(() => import('./components/Planets'));
+const Spaceship = React.lazy(() => import('./components/Spaceship'));
 import UniverseNavigation from './components/UniverseNavigation';
 
 import { UniverseContext } from './UniverseContext';
@@ -458,6 +462,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
   const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night'); // 默认主题设置为night
   const [dayMode, setDayMode] = useState('normal'); // 'normal', 'snow'
+  const [nightMode, setNightMode] = useState('aurora'); // 'stars', 'aurora'
   const [showHint, setShowHint] = useState(universeState.hasSeenHint === undefined ? true : !universeState.hasSeenHint);
   const [hoveredMusic, setHoveredMusic] = useState(null);
   const [wallpaperMode, setWallpaperMode] = useState(false);
@@ -469,10 +474,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   // 傍晚主题配置状态
   const [showEveningControl, setShowEveningControl] = useState(false);
   const [eveningConfig, setEveningConfig] = useState(() => {
-    // 根据当前时间初始化推荐色调
-    const hour = new Date().getHours();
-    if (hour >= 19 && hour < 20) return { ...EVENING_PRESETS.lateSunset, hueRotate: 0, saturate: 100, brightness: 100 };
-    if (hour >= 20 || hour < 5) return { ...EVENING_PRESETS.twilight, hueRotate: 0, saturate: 100, brightness: 100 };
+    // 默认使用 '落日余晖' (sunset) 作为固定初始主题
     return { ...EVENING_PRESETS.sunset, hueRotate: 0, saturate: 100, brightness: 100 };
   });
 
@@ -647,12 +649,15 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           {currentTheme === 'night' && (
             <React.Suspense fallback={null}>
               <Stars isMobile={isMobile} />
+              {nightMode === 'aurora' && <Aurora isMobile={isMobile} position={[0, 10, -50]} scale={[3, 3, 1]} />}
+              {nightMode === 'deepspace' && <Planets isMobile={isMobile} />}
+              {nightMode === 'deepspace' && <Spaceship isMobile={isMobile} />}
             </React.Suspense>
           )}
           {currentTheme === 'day' && (
             <React.Suspense fallback={null}>
               <DayAtmosphere mode={dayMode} />
-              {dayMode === 'normal' && (
+              {(dayMode === 'normal' || dayMode === 'rainbow') && (
                 <>
                   <Clouds isMobile={isMobile} />
                   <PaperPlanes 
@@ -668,6 +673,9 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                   <Snowfall count={isMobile ? 500 : 1500} />
                   <SnowMountain />
                 </>
+              )}
+              {dayMode === 'rainbow' && (
+                 <RainbowMeadow />
               )}
             </React.Suspense>
           )}
@@ -689,6 +697,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 onClick={handleCoverClick}
                 isMobile={isMobile}
                 dimmed={highlightedTag && !data.tags.includes(highlightedTag)}
+                globalBrightness={currentTheme === 'evening' ? 0.85 : 1}
               />
           ))}
           {hoveredMusic && <InfoCard data={hoveredMusic.data} position={hoveredMusic.position} onClose={() => setHoveredMusic(null)} isMobile={isMobile} />}
@@ -714,10 +723,48 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
               <button
                 onClick={() => setDayMode('snow')}
                 className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'snow' ? 'bg-white text-blue-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="飘雪模式"
-                title="飘雪"
+                aria-label="雪景模式"
+                title="雪景模式"
               >
-                <CloudIcon className="w-5 h-5" />
+                <div className="w-5 h-5 flex items-center justify-center">❄️</div>
+              </button>
+              <button
+                onClick={() => setDayMode('rainbow')}
+                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'rainbow' ? 'bg-white text-green-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                aria-label="彩虹草地"
+                title="彩虹草地"
+              >
+                 <div className="w-5 h-5 flex items-center justify-center">🌈</div>
+              </button>
+            </div>
+          )}
+
+          {/* 夜晚模式子选项 */}
+          {currentTheme === 'night' && (
+            <div className="absolute bottom-full right-0 mb-4 flex gap-2 z-20 justify-end">
+              <button
+                onClick={() => setNightMode('stars')}
+                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'stars' ? 'bg-white text-indigo-900 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                aria-label="纯净星空"
+                title="纯净星空"
+              >
+                <StarIcon className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setNightMode('aurora')}
+                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'aurora' ? 'bg-white text-purple-600 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                aria-label="极光之夜"
+                title="极光之夜"
+              >
+                <SparklesIcon className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setNightMode('deepspace')}
+                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'deepspace' ? 'bg-white text-blue-600 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                aria-label="深空星球"
+                title="深空星球"
+              >
+                <GlobeAltIcon className="w-5 h-5" />
               </button>
             </div>
           )}
@@ -823,19 +870,22 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5a1 1 0 012 0v14a1 1 0 01-2 0V5zM5 9a1 1 0 012 0v6a1 1 0 01-2 0V9zm12-2a1 1 0 012 0v10a1 1 0 01-2 0V7z" />
               </svg>
             </button>
-            <div className="absolute bottom-full right-0 mb-3 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-sm border border-white/10 z-10">
-                <div className="font-bold mb-1 text-emerald-400">环境声</div>
-                <div className="text-[11px] mb-2">
-                  {currentTheme === 'day' ? '舒缓氛围背景音。' : '傍晚海浪与风的声景。'}
-                  试听时自动降低音量。
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-[11px] text-gray-300">音量</span>
-                  <input type="range" min="0" max="1" step="0.01" value={ambientVolume} onChange={(e) => setAmbientVolume(parseFloat(e.target.value))} className="w-32 accent-emerald-400" />
-                  <span className="text-[11px] text-gray-300">{Math.round(ambientVolume * 100)}%</span>
-                </div>
-                <div className="absolute bottom-[-6px] right-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
-            </div>
+            {/* 仅在非移动端显示提示框，并增加延迟防止误触 */}
+            {!isMobile && (
+              <div className="absolute bottom-full right-0 mb-3 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-500 backdrop-blur-sm border border-white/10 z-10">
+                  <div className="font-bold mb-1 text-emerald-400">环境声</div>
+                  <div className="text-[11px] mb-2">
+                    {currentTheme === 'day' ? '舒缓氛围背景音。' : '傍晚海浪与风的声景。'}
+                    试听时自动降低音量。
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[11px] text-gray-300">音量</span>
+                    <input type="range" min="0" max="1" step="0.01" value={ambientVolume} onChange={(e) => setAmbientVolume(parseFloat(e.target.value))} className="w-32 accent-emerald-400" />
+                    <span className="text-[11px] text-gray-300">{Math.round(ambientVolume * 100)}%</span>
+                  </div>
+                  <div className="absolute bottom-[-6px] right-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
+              </div>
+            )}
         </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback, memo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Plane } from '@react-three/drei';
-import { Frustum, Box3, TextureLoader, LinearFilter, Matrix4 } from 'three'; // Import THREE
+import { Frustum, Box3, TextureLoader, LinearFilter, Matrix4, Color } from 'three'; // Import THREE
 
 const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
   if (!originalCoverPath) return null; // Handle null or undefined paths
@@ -126,7 +126,7 @@ const enqueueTextureLoad = (item, retryCount, useOriginal, setLoadedTexture, set
   processQueue();
 };
 
-const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile, dimmed }) => {
+const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMobile, dimmed, globalBrightness = 1 }) => {
   const meshRef = useRef();
   const { camera } = useThree();
   // Removed per-instance object creation
@@ -203,7 +203,12 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
         scale={scale}
         onClick={handleClick}
       >
-        <meshBasicMaterial attach="material" color={placeholderColor} transparent opacity={dimmed ? 0.1 : 1} /> {/* 使用生成的颜色 */}
+        <meshBasicMaterial 
+          attach="material" 
+          color={new Color(placeholderColor).multiplyScalar(globalBrightness)} 
+          transparent 
+          opacity={dimmed ? 0.1 : 1} 
+        /> {/* 使用生成的颜色 */}
       </Plane>
     );
   }
@@ -218,7 +223,13 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
         scale={scale}
         onClick={handleClick}
       >
-        <meshBasicMaterial attach="material" map={loadedTexture} transparent opacity={dimmed ? 0.1 : 1} />
+        <meshBasicMaterial 
+          attach="material" 
+          map={loadedTexture} 
+          color={new Color().setScalar(globalBrightness)} 
+          transparent 
+          opacity={dimmed ? 0.1 : 1} 
+        />
       </Plane>
     </>
   );

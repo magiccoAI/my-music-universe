@@ -3,6 +3,7 @@ import { Sparkles, Environment } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
+import Aurora from './Aurora';
 
 const SimpleWater = () => {
   // 移动端水面：增加纹理细节，但保持低几何复杂度
@@ -81,13 +82,8 @@ const SimpleWater = () => {
 const DynamicWaveWater = () => {
   const meshRef = useRef();
   // 增加分段数以支持顶点动画
-  // 1000x1000 大小，128x128 分段
-  const geometry = useMemo(() => new THREE.PlaneGeometry(1000, 1000, 128, 128), []);
-  
-  // 备份原始顶点位置，用于计算波动
-  // 我们只需要备份 position 属性，因为我们是在原始平面上进行波动
-  // PlaneGeometry 默认在 XY 平面，朝向 Z。旋转后变成 XZ 平面。
-  // 顶点原始 Z 都是 0。
+  // 700x700 大小，96x96 分段 - 减小尺寸以降低性能压力
+  const geometry = useMemo(() => new THREE.PlaneGeometry(700, 700, 96, 96), []);
   
   const waterNormals = useLoader(
     THREE.TextureLoader,
@@ -96,33 +92,54 @@ const DynamicWaveWater = () => {
   waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
   waterNormals.repeat.set(10, 10); // 增加纹理重复，避免拉伸
 
-  useFrame(({ clock }) => {
-    if (!meshRef.current) return;
-    
-    const time = clock.getElapsedTime();
-    const position = meshRef.current.geometry.attributes.position;
-    const count = position.count;
+  const materialRef = useRef();
 
-    // 动态更新顶点 Z 坐标 (在旋转前的坐标系中是 Z，即平面的法向起伏)
-    for (let i = 0; i < count; i++) {
-      const x = position.getX(i);
-      const y = position.getY(i); // PlaneGeometry 默认是 XY 平面
-      
-      // 叠加多个正弦波模拟自然水面
-      // 波 1: 大涌浪
-      let z = Math.sin(x * 0.05 + time * 0.5) * 1.5;
-      // 波 2: 交叉浪
-      z += Math.cos(y * 0.05 + time * 0.5) * 1.5;
-      // 波 3: 细节纹理波
-      z += Math.sin(x * 0.2 + time) * 0.5;
-      
-      position.setZ(i, z);
+  useFrame(({ clock }) => {
+    if (materialRef.current && materialRef.current.userData.shader) {
+        materialRef.current.userData.shader.uniforms.uTime.value = clock.getElapsedTime();
     }
-    
-    position.needsUpdate = true;
-    // 重新计算法线以获得正确的光照反射
-    meshRef.current.geometry.computeVertexNormals();
   });
+
+  const onBeforeCompile = (shader) => {
+    shader.uniforms.uTime = { value: 0 };
+    materialRef.current.userData.shader = shader;
+
+    shader.vertexShader = `
+      uniform float uTime;
+      ${shader.vertexShader}
+    `;
+
+    shader.vertexShader = shader.vertexShader.replace(
+      '#include <begin_vertex>',
+      `
+        #include <begin_vertex>
+        
+        // 动态更新顶点 Z 坐标 (在旋转前的坐标系中是 Z，即平面的法向起伏)
+        float time = uTime;
+        
+        // 叠加多个正弦波模拟自然水面
+        // 波 1: 大涌浪
+        float z = sin(position.x * 0.05 + time * 0.5) * 1.5;
+        // 波 2: 交叉浪
+        z += cos(position.y * 0.05 + time * 0.5) * 1.5;
+        // 波 3: 细节纹理波
+        z += sin(position.x * 0.2 + time) * 0.5;
+        
+        transformed.z += z;
+
+        // 重新计算法线以获得正确的光照反射
+        // f(x,y) = 1.5*sin(0.05x + 0.5t) + 1.5*cos(0.05y + 0.5t) + 0.5*sin(0.2x + t)
+        // df/dx = 1.5*0.05*cos(...) + 0.5*0.2*cos(...)
+        // df/dy = -1.5*0.05*sin(...)
+        
+        float dfdx = 0.075 * cos(position.x * 0.05 + time * 0.5) + 0.1 * cos(position.x * 0.2 + time);
+        float dfdy = -0.075 * sin(position.y * 0.05 + time * 0.5);
+        
+        vec3 newNormal = normalize(vec3(-dfdx, -dfdy, 1.0));
+        vNormal = normalMatrix * newNormal;
+      `
+    );
+  };
 
   return (
     <mesh 
@@ -130,19 +147,21 @@ const DynamicWaveWater = () => {
       geometry={geometry} 
       rotation={[-Math.PI / 2, 0, 0]} 
       position={[0, -5, 0]}
-      receiveShadow // 接收阴影
+      receiveShadow={false} // 🚫 关闭水面接收阴影：动态顶点的自阴影计算非常消耗性能且容易闪烁
     >
       <meshStandardMaterial 
+        ref={materialRef}
         color="#2a3055" // 稍微调亮一点的基础色，偏紫
         normalMap={waterNormals}
         normalScale={new THREE.Vector2(1.5, 1.5)} // 再次增强波浪细节，让反光更细碎
-        roughness={0.02} // 极致光滑
-        metalness={1.0} // 全金属感，最大化反射环境
+        roughness={0.1} // 稍微增加粗糙度，防止过曝
+        metalness={0.9} // 稍微降低金属度
         emissive="#7c3aed" // 自发光改为紫色，呼应晚霞
-        emissiveIntensity={0.3}
+        emissiveIntensity={0.2} // 降低发光强度
         transparent={true}
         opacity={0.6} // 降低不透明度，让背景透出来
         side={THREE.DoubleSide}
+        onBeforeCompile={onBeforeCompile}
       />
     </mesh>
   );
@@ -240,6 +259,14 @@ const Tree = ({ position }) => {
   // 🌲 程序化生成分形树 (Fractal Tree)
   // 模拟参考图中多枝干、细碎叶片的形态
   const { branches, leaves } = useMemo(() => {
+    // 简单的伪随机数生成器 (Linear Congruential Generator)
+    // 保证每次刷新页面时生成的树形状一致
+    let seed = 67890; // 更换种子以获得更好看的初始形态
+    const random = () => {
+      const x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    };
+
     const _branches = [];
     const _leaves = [];
     
@@ -256,59 +283,83 @@ const Tree = ({ position }) => {
       // 记录树枝数据
       _branches.push({ start, end, radius, length, angle });
 
-      if (depth <= 0) {
-        // 在末端添加叶子簇
+      // 在末端添加叶子簇，不仅是最后深度的，倒数第二层也添加，增加繁茂感
+      if (depth <= 1) {
         // 模拟参考图中稀疏但均匀的叶片分布
-        for (let i = 0; i < 5; i++) {
+        // 增加叶子数量
+        const leafCount = depth === 0 ? 8 : 4;
+        for (let i = 0; i < leafCount; i++) {
             const leafPos = end.clone().add(
                 new THREE.Vector3(
-                    (Math.random() - 0.5) * 1.5,
-                    (Math.random() - 0.5) * 1.5,
-                    (Math.random() - 0.5) * 1.5
+                    (random() - 0.5) * 2.0,
+                    (random() - 0.5) * 2.0,
+                    (random() - 0.5) * 2.0
                 )
             );
-            _leaves.push({ pos: leafPos, scale: Math.random() * 0.3 + 0.2 });
+            _leaves.push({ pos: leafPos, scale: random() * 0.4 + 0.3 });
         }
-        return;
       }
 
+      if (depth <= 0) return;
+
       // 分支逻辑
-      const branchCount = Math.floor(Math.random() * 2) + 2; // 2-3个分支
+      // 增加分支数量的随机性，偶尔出现3个分支
+      const branchCount = random() > 0.3 ? 2 : 3; 
+      
       for (let i = 0; i < branchCount; i++) {
-        // 计算新角度：在当前角度基础上随机偏移
-        const offsetX = (Math.random() - 0.5) * 1.5; // 较大的展开角度
-        const offsetZ = (Math.random() - 0.5) * 1.5;
+        // 计算新角度：让树更倾向于向上生长，减少水平散开
+        // 减小 X/Z 的偏移范围，增加 Y 轴的保持力
+        const spreadFactor = 0.8 + depth * 0.1; // 越往上越散开
+        const offsetX = (random() - 0.5) * spreadFactor; 
+        const offsetZ = (random() - 0.5) * spreadFactor;
+        
+        // 基础角度 + 随机偏移
         const newAngle = new THREE.Euler(
             angle.x + offsetX,
-            angle.y + (Math.random() - 0.5), // 稍微旋转
+            angle.y + (random() - 0.5) * 2.0, // Y轴旋转可以随意一点
             angle.z + offsetZ
         );
         
         grow(
             end, 
             newAngle, 
-            length * 0.75, // 长度衰减
-            radius * 0.7, // 粗细衰减
+            length * 0.8, // 长度衰减减缓，让树更高挑
+            radius * 0.65, // 粗细衰减
             depth - 1
         );
       }
     };
 
     // 启动生长：从原点向上
-    grow(new THREE.Vector3(0, 0, 0), new THREE.Euler(0, 0, 0), 3.5, 0.6, 4);
+    // 增加初始高度，增加递归深度
+    grow(new THREE.Vector3(0, 0, 0), new THREE.Euler(0, 0, 0), 4.0, 0.7, 5);
 
-    return { branches: _branches, leaves: _leaves };
+    return { branches: _branches, leaves: _leaves, random };
   }, []);
 
   // 使用 InstancedMesh 渲染叶子以优化性能
   const leafMeshRef = useRef();
   React.useLayoutEffect(() => {
     if (leafMeshRef.current) {
+        // 复用 useMemo 中创建的 random 函数，确保叶子旋转也一致
+        // 但由于 random 是闭包内的，这里重新创建一个临时的或使用 leaves 数据中的随机性
+        // 为了简单，这里我们可以重新使用一个确定的种子生成器，或者直接使用 leaves 索引作为伪随机源
         const tempObj = new THREE.Object3D();
         leaves.forEach((leaf, i) => {
             tempObj.position.copy(leaf.pos);
             tempObj.scale.setScalar(leaf.scale);
-            tempObj.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+            
+            // 使用索引 i 生成伪随机旋转，保证确定性
+            const pseudoRandom = (seed) => {
+                const x = Math.sin(seed) * 10000;
+                return x - Math.floor(x);
+            };
+            
+            tempObj.rotation.set(
+                pseudoRandom(i) * Math.PI, 
+                pseudoRandom(i + 1000) * Math.PI, 
+                0
+            );
             tempObj.updateMatrix();
             leafMeshRef.current.setMatrixAt(i, tempObj.matrix);
         });
@@ -317,7 +368,7 @@ const Tree = ({ position }) => {
   }, [leaves]);
 
   return (
-    <group position={position} scale={[1.2, 1.2, 1.2]}>
+    <group position={position} scale={[0.8, 0.8, 0.8]}>
       {/* 渲染树枝 */}
       {branches.map((b, i) => {
           // 计算位置和旋转以连接 start 和 end
@@ -666,6 +717,7 @@ const EveningAssets = ({ isMobile, config }) => {
     spotLightColor: '#ff7e5f',
     spotLightIntensity: 8,
     sparkleColor: '#ffccaa',
+    showAurora: false,
     ...config
   }), [isMobile, config]);
   
@@ -697,6 +749,9 @@ const EveningAssets = ({ isMobile, config }) => {
 
   return (
     <group>
+      {/* 🌌 极光效果 - 放在山脉后方作为背景 */}
+      {themeConfig.showAurora && <Aurora position={[0, 20, -80]} scale={[2, 2, 1]} />}
+
       {/* 🌍 环境贴图：仅桌面端开启，移动端禁用以节省显存 */}
       {!isMobile && <Environment preset="sunset" background={false} />}
       
@@ -704,9 +759,9 @@ const EveningAssets = ({ isMobile, config }) => {
       {!isMobile && (
         <EffectComposer disableNormalPass>
           <Bloom 
-            luminanceThreshold={0.95} // 提高阈值，只有极亮的光源（如水面反光）才发光，避免专辑封面发白
+            luminanceThreshold={0.8} // 降低阈值，让发光更稳定，避免在临界值反复跳动
             mipmapBlur 
-            intensity={0.8} // 降低发光强度，柔和一点
+            intensity={0.6} // 进一步降低强度，配合低阈值
             radius={0.4}
           />
         </EffectComposer>
@@ -722,6 +777,7 @@ const EveningAssets = ({ isMobile, config }) => {
         intensity={themeConfig.dirLightIntensity} 
         color={themeConfig.dirLightColor} // 强烈的橙色夕阳
         castShadow={!isMobile} 
+        shadow-bias={-0.0005} // 减少阴影伪影 (Shadow Acne)
       />
       
       {/* 补光：放在相机后方，稍微照亮前景物体 */}
@@ -737,7 +793,7 @@ const EveningAssets = ({ isMobile, config }) => {
           intensity={themeConfig.spotLightIntensity} // 降低强度
           color={themeConfig.spotLightColor} // 珊瑚色高光
           distance={300}
-          castShadow={true}
+          castShadow={false} // 🚫 关闭聚光灯阴影：性能开销大且在水面上效果不明显
         />
       )}
 
