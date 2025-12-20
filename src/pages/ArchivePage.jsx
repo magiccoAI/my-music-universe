@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef, Suspense } from 'react';
+import React, { useEffect, useState, useRef, Suspense, lazy } from 'react';
 import useIsMobile from '../hooks/useIsMobile';
 import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
-import WordCloudDisplay from '../components/WordCloudDisplay';
 
 import { Link, useLocation } from 'react-router-dom';
 
@@ -15,6 +14,8 @@ import MusicPlayer from '../components/MusicPlayer'; // Import MusicPlayer
 import TerminalText from '../components/TerminalText';
 
 import './ArchivePage.css';
+
+const WordCloudDisplay = lazy(() => import('../components/WordCloudDisplay'));
 
 const terminalLines = [
   "> Establishing connection...",

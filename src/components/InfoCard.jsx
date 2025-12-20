@@ -233,7 +233,11 @@ const InfoCard = memo(({ data: music, position: externalPosition, onClose: onCar
         </div>
 
         {/* Audio Preview */}
-        <AudioPreview term={`${music.artist} ${music.music}`} isMobile={isMobile} />
+        <AudioPreview 
+          term={`${music.artist} ${music.music}`} 
+          previewUrl={music.previewUrl} 
+          isMobile={isMobile} 
+        />
 
         {isValidUrl ? (
           <a

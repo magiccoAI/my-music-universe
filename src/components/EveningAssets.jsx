@@ -8,6 +8,7 @@ import Aurora from './Aurora';
 const SimpleWater = () => {
   // 移动端水面：增加纹理细节，但保持低几何复杂度
   const meshRef = useRef();
+  const frameRef = useRef(0);
   
   // 加载法线贴图以增加水波纹理质感
   const waterNormals = useLoader(
@@ -22,11 +23,17 @@ const SimpleWater = () => {
   }, [waterNormals]);
   
   // 使用 useMemo 显式创建几何体，确保引用稳定
-  const geometry = useMemo(() => new THREE.PlaneGeometry(1000, 1000, 24, 24), []);
+  const geometry = useMemo(() => {
+    const geom = new THREE.PlaneGeometry(1000, 1000, 24, 24);
+    geom.computeVertexNormals();
+    return geom;
+  }, []);
 
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
     
+    frameRef.current += 1;
+
     const time = clock.getElapsedTime();
     const position = meshRef.current.geometry.attributes.position;
     const count = position.count;
@@ -46,7 +53,9 @@ const SimpleWater = () => {
     }
     
     position.needsUpdate = true;
-    meshRef.current.geometry.computeVertexNormals();
+    if (frameRef.current % 8 === 0) {
+      meshRef.current.geometry.computeVertexNormals();
+    }
     
     // 纹理动画：让法线贴图缓慢流动，增加动态感
     waterNormals.offset.x += 0.0005;

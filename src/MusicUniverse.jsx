@@ -16,14 +16,73 @@ const Evening = React.lazy(() => import('./components/EveningAssets'));
 const Snowfall = React.lazy(() => import('./components/Snowfall'));
 const SnowMountain = React.lazy(() => import('./components/SnowMountain'));
 const RainbowMeadow = React.lazy(() => import('./components/RainbowMeadow'));
+const DayMeadowLakeScene = React.lazy(() => import('./components/DayMeadowLakeScene'));
 const Aurora = React.lazy(() => import('./components/Aurora'));
 const Planets = React.lazy(() => import('./components/Planets'));
 const Spaceship = React.lazy(() => import('./components/Spaceship'));
+const ShootingStars = React.lazy(() => import('./components/ShootingStars'));
 import UniverseNavigation from './components/UniverseNavigation';
 
 import { UniverseContext } from './UniverseContext';
 import Cover from './components/Cover';
 import InfoCard from './components/InfoCard';
+
+const SNOW_BACKGROUNDS = [
+  {
+    name: '默认雪景',
+    path: '/images/snow-bg.jpg',
+    fog: { color: '#dbeafe', density: 0.0045 },
+    environment: {
+      ambient: { intensity: 0.6, color: '#e0f2fe' },
+      sun: { intensity: 1.2, color: '#ffffff', position: [20, 30, 10] }
+    }
+  },
+  {
+    name: '星空雪景',
+    path: '/images/stars-snow.jpg',
+    fog: { color: '#0b1b3a', density: 0.002 },
+    environment: {
+      ambient: { intensity: 0.35, color: '#c7d2fe' },
+      sun: { intensity: 0.85, color: '#c7d2fe', position: [14, 22, 18] }
+    }
+  },
+  {
+    name: '全景 07',
+    path: '/images/自然风光_期末的延时_07_全景.jpg',
+    fog: { color: '#e2e8f0', density: 0.0035 },
+    environment: {
+      ambient: { intensity: 0.55, color: '#f1f5f9' },
+      sun: { intensity: 1.15, color: '#fff7ed', position: [26, 28, 6] }
+    }
+  },
+  {
+    name: '全景 11',
+    path: '/images/自然风光_期末的延时_11_全景.jpg',
+    fog: { color: '#e2e8f0', density: 0.0035 },
+    environment: {
+      ambient: { intensity: 0.55, color: '#f8fafc' },
+      sun: { intensity: 1.1, color: '#fefce8', position: [18, 30, 12] }
+    }
+  },
+  {
+    name: '意大利',
+    path: '/images/自然风光_意大利_5_中景.jpg',
+    fog: { color: '#e0f2fe', density: 0.003 },
+    environment: {
+      ambient: { intensity: 0.6, color: '#e0f2fe' },
+      sun: { intensity: 1.2, color: '#fff7ed', position: [22, 26, 14] }
+    }
+  },
+  {
+    name: '全景 01',
+    path: '/images/自然风光_期末的延时_01_全景.jpg',
+    fog: { color: '#dbeafe', density: 0.004 },
+    environment: {
+      ambient: { intensity: 0.6, color: '#e0f2fe' },
+      sun: { intensity: 1.15, color: '#ffffff', position: [24, 30, 10] }
+    }
+  }
+];
 
 const AmbientSound = memo(({ enabled, volume = 1, theme = 'evening' }) => {
   const ctxRef = useRef(null);
@@ -420,7 +479,7 @@ const ResetCameraHandler = memo(() => {
   return null;
 });
 
-const DayAtmosphere = ({ mode }) => {
+const DayAtmosphere = ({ mode, meadowPreset }) => {
   const { scene } = useThree();
   const fogRef = useRef();
 
@@ -444,6 +503,9 @@ const DayAtmosphere = ({ mode }) => {
     if (mode === 'snow') {
         targetDensity = 0.01; // Reduced from 0.025 to allow visibility of background and albums from distance
         targetColor.set('#f1f5f9'); // Slate-100 (Snowy white/gray)
+    } else if (mode === 'meadow' && meadowPreset?.fog) {
+        targetDensity = meadowPreset.fog.density ?? 0.0045;
+        targetColor.set(meadowPreset.fog.color ?? '#dbeafe');
     } else {
         targetDensity = 0.002; // Clear
         targetColor.set('#dbeafe');
@@ -460,16 +522,35 @@ const DayAtmosphere = ({ mode }) => {
 const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlightedTag }) => {
   const { musicData, loading, error } = useMusicData();
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
-  const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night'); // 默认主题设置为night
-  const [dayMode, setDayMode] = useState('normal'); // 'normal', 'snow'
+  const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night');
+  const [dayMode, setDayMode] = useState('normal');
   const [nightMode, setNightMode] = useState('aurora'); // 'stars', 'aurora'
   const [showHint, setShowHint] = useState(universeState.hasSeenHint === undefined ? true : !universeState.hasSeenHint);
   const [hoveredMusic, setHoveredMusic] = useState(null);
   const [wallpaperMode, setWallpaperMode] = useState(false);
   const [ambientEnabled, setAmbientEnabled] = useState(false);
   const [ambientVolume, setAmbientVolume] = useState(1);
+  const [isRaining, setIsRaining] = useState(true);
+  const [snowBg, setSnowBg] = useState(SNOW_BACKGROUNDS[0].path);
+  const [showBgMenu, setShowBgMenu] = useState(false);
   // const [positionedMusicData, setPositionedMusicData] = useState([]);
   const isMobile = useIsMobile();
+
+  const handleDayModeSelect = useCallback((mode) => {
+    if (mode === 'meadow') {
+      if (dayMode === 'meadow') {
+        setShowBgMenu((v) => !v);
+        return;
+      }
+      setDayMode('meadow');
+      setShowBgMenu(true);
+      return;
+    }
+    setDayMode(mode);
+  }, [dayMode]);
+
+  // Define isWallMode to control album wall display and camera constraints
+  const isWallMode = false; // Disable specific wall mode to use generic scattered layout for all themes
 
   // 傍晚主题配置状态
   const [showEveningControl, setShowEveningControl] = useState(false);
@@ -477,6 +558,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
     // 默认使用 '落日余晖' (sunset) 作为固定初始主题
     return { ...EVENING_PRESETS.sunset, hueRotate: 0, saturate: 100, brightness: 100 };
   });
+
+  useEffect(() => {
+    import('./components/EveningAssets');
+  }, []);
 
   // Wallpaper Mode Logic
   useEffect(() => {
@@ -550,6 +635,70 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
       return item;
     });
   }, [musicData, universeState.positionedMusicData]);
+
+  const arrangedMusicData = React.useMemo(() => {
+    if (positionedMusicData.length === 0) return [];
+    
+    // In Snow/Meadow mode (Snow Mountain Scene), the ground is at y = -2.
+    // We need to raise the albums so they don't get buried in the snow.
+    // NOTE: 'snow' mode is now just Drifting Snow (no ground), so we only apply this to 'meadow' (Snow Mountain).
+    const isSnowMountainScene = currentTheme === 'day' && dayMode === 'meadow';
+    
+    if (isSnowMountainScene) {
+        return positionedMusicData.map(item => {
+            const [x, y, z] = item.position;
+            // Adjust Y to be strictly above ground (e.g., min y = 0.5)
+            // Original random y is roughly [-10, 10].
+            // We use Math.abs(y) to flip underground albums up, and add a small offset.
+            // Also spread them out more (x1.5) to avoid looking too compact.
+            const spreadFactor = 1.5;
+            const newY = (Math.abs(y) * 1.2) + 0.5; // Spread height slightly more and ensure min height
+            return {
+                ...item,
+                position: [x * spreadFactor, newY, z * spreadFactor]
+            };
+        });
+    }
+
+    if (!isWallMode) return positionedMusicData;
+
+    // Album Wall Layout
+    const maxAlbums = 60;
+    const source = positionedMusicData.slice(0, maxAlbums);
+    const rows = 3;
+    const cols = Math.ceil(source.length / rows);
+    const radius = 9; // Radius of the curved wall
+    const angleSpan = Math.PI / 2.4; // Total angle span
+    const baseY = 3;
+    const depth = -18; // Push back into the scene
+
+    return source.map((item, index) => {
+      const row = Math.floor(index / cols);
+      const col = index % cols;
+      
+      // Calculate angle for curvature
+      const t = cols === 1 ? 0 : col / (cols - 1);
+      const angle = (t - 0.5) * angleSpan;
+      
+      const x = Math.sin(angle) * radius;
+      const z = depth + Math.cos(angle) * radius;
+      const y = baseY - row * 1.8;
+      
+      // Rotate albums to face the center
+      const rotationY = angle;
+
+      return {
+        ...item,
+        position: [x, y, z],
+        rotation: [0, rotationY, 0],
+        scale: item.scale || [1.25, 1.25, 1],
+      };
+    });
+  }, [positionedMusicData, isWallMode, currentTheme, dayMode]);
+
+  const snowBgPreset = React.useMemo(() => {
+    return SNOW_BACKGROUNDS.find((b) => b.path === snowBg) || SNOW_BACKGROUNDS[0];
+  }, [snowBg]);
 
   // Save calculated positions to context
   useEffect(() => {
@@ -640,15 +789,22 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           <OrbitControls 
             makeDefault
             enabled={isInteractive}
-            enableRotate={true} // 移动设备上启用旋转
-            enableZoom={true} 
-            enablePan={true} // 移动设备上启用平移
+            enableRotate
+            enableZoom={!isWallMode}
+            enablePan={!isWallMode}
+            minAzimuthAngle={isWallMode ? -Math.PI / 6 : undefined}
+            maxAzimuthAngle={isWallMode ? Math.PI / 8 : undefined}
+            minPolarAngle={isWallMode ? Math.PI / 3 : 0}
+            maxPolarAngle={isWallMode ? Math.PI / 2.2 : Math.PI}
+            minDistance={5}
+            maxDistance={50}
           />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           {currentTheme === 'night' && (
             <React.Suspense fallback={null}>
               <Stars isMobile={isMobile} />
+              {nightMode !== 'aurora' && <ShootingStars />}
               {nightMode === 'aurora' && <Aurora isMobile={isMobile} position={[0, 10, -50]} scale={[3, 3, 1]} />}
               {nightMode === 'deepspace' && <Planets isMobile={isMobile} />}
               {nightMode === 'deepspace' && <Spaceship isMobile={isMobile} />}
@@ -656,8 +812,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           )}
           {currentTheme === 'day' && (
             <React.Suspense fallback={null}>
-              <DayAtmosphere mode={dayMode} />
-              {(dayMode === 'normal' || dayMode === 'rainbow') && (
+              <DayAtmosphere mode={dayMode} meadowPreset={snowBgPreset} />
+              {dayMode === 'normal' && (
                 <>
                   <Clouds isMobile={isMobile} />
                   <PaperPlanes 
@@ -669,13 +825,13 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 </>
               )}
               {dayMode === 'snow' && (
-                <>
-                  <Snowfall count={isMobile ? 500 : 1500} />
-                  <SnowMountain />
-                </>
+                <Snowfall count={2000} />
               )}
-              {dayMode === 'rainbow' && (
-                 <RainbowMeadow />
+              {dayMode === 'rainbow' && !isMobile && (
+                 <RainbowMeadow isRaining={isRaining} />
+              )}
+              {dayMode === 'meadow' && !isMobile && (
+                <SnowMountain bgImage={snowBg} environment={snowBgPreset.environment} />
               )}
             </React.Suspense>
           )}
@@ -683,11 +839,12 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             <SceneErrorBoundary>
               <React.Suspense fallback={null}>
                 <Evening isMobile={isMobile} config={eveningConfig} />
+                {eveningConfig.id === 'twilight' && <ShootingStars />}
               </React.Suspense>
             </SceneErrorBoundary>
           )}
 
-          {positionedMusicData.map((data) => (
+          {arrangedMusicData.map((data) => (
               <Cover
                 key={data.id}
                 data={data}
@@ -709,11 +866,42 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
         <div className="flex items-center space-x-3">
         {/* 主题切换组 */}
         <div className="relative z-30">
+          {/* Snow Mountain Background Switcher */}
+          {currentTheme === 'day' && dayMode === 'meadow' && (
+            showBgMenu && (
+              <div className="absolute bottom-full left-0 mb-16 flex flex-col gap-1 z-20 bg-black/30 p-2 rounded-lg backdrop-blur-md border border-white/10 w-32">
+                <button
+                  type="button"
+                  onClick={() => setShowBgMenu(false)}
+                  className="text-left text-white/80 text-[10px] font-bold mb-1 pl-1 hover:text-white"
+                  title="隐藏菜单（再点一次🏔️按钮可打开）"
+                >
+                  切换背景
+                </button>
+                <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+                  {SNOW_BACKGROUNDS.map((bg) => (
+                    <button
+                      key={bg.path}
+                      onClick={() => {
+                        setSnowBg(bg.path);
+                        setShowBgMenu(false);
+                      }}
+                      className={`text-left px-2 py-1 rounded text-[10px] transition-colors truncate ${snowBg === bg.path ? 'bg-white/90 text-black font-medium' : 'text-white/70 hover:bg-white/20'}`}
+                      title={bg.name}
+                    >
+                      {bg.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
+          )}
+
           {/* 白天模式子选项 */}
           {currentTheme === 'day' && (
             <div className="absolute bottom-full left-0 mb-4 flex gap-2 z-20">
               <button
-                onClick={() => setDayMode('normal')}
+                onClick={() => handleDayModeSelect('normal')}
                 className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'normal' ? 'bg-white text-orange-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
                 aria-label="晴空模式"
                 title="晴空"
@@ -721,20 +909,42 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 <SunIcon className="w-5 h-5" />
               </button>
               <button
-                onClick={() => setDayMode('snow')}
+                onClick={() => handleDayModeSelect('snow')}
                 className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'snow' ? 'bg-white text-blue-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="雪景模式"
-                title="雪景模式"
+                aria-label="飘雪"
+                title="飘雪"
               >
                 <div className="w-5 h-5 flex items-center justify-center">❄️</div>
               </button>
+              <div className="relative group">
+                {dayMode === 'rainbow' && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setIsRaining(!isRaining); }}
+                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-1.5 rounded-full backdrop-blur-md border border-white/10 bg-black/20 text-white hover:bg-white hover:text-blue-500 transition-all shadow-sm z-50"
+                    title={isRaining ? "停止下雨" : "开始下雨"}
+                    aria-label={isRaining ? "停止下雨" : "开始下雨"}
+                  >
+                     <div className="w-4 h-4 flex items-center justify-center text-[10px]">
+                         {isRaining ? '🌂' : '💧'}
+                      </div>
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDayModeSelect('rainbow')}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'rainbow' ? 'bg-white text-green-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                  aria-label="彩虹草地"
+                  title="彩虹草地"
+                >
+                   <div className="w-5 h-5 flex items-center justify-center">🌈</div>
+                </button>
+              </div>
               <button
-                onClick={() => setDayMode('rainbow')}
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'rainbow' ? 'bg-white text-green-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="彩虹草地"
-                title="彩虹草地"
+                onClick={() => handleDayModeSelect('meadow')}
+                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'meadow' ? 'bg-white text-green-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                aria-label="雪山"
+                title="雪山"
               >
-                 <div className="w-5 h-5 flex items-center justify-center">🌈</div>
+                <div className="w-5 h-5 flex items-center justify-center">🏔️</div>
               </button>
             </div>
           )}

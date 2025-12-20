@@ -86,32 +86,6 @@ export const EVENING_PRESETS = {
     spotLightIntensity: 6,
     sparkleColor: '#e9d5ff', // 浅紫粒子
     showAurora: false // 默认不显示极光
-  },
-  aurora: {
-    id: 'aurora',
-    name: '极光之夜',
-    description: '绚丽的北极光，神秘而梦幻',
-    cssGradient: `linear-gradient(to bottom,
-      #022c22 0%,   /* Dark Green */
-      #064e3b 15%,  /* Green 900 */
-      #115e59 30%,  /* Teal 800 */
-      #14b8a6 45%,  /* Teal 500 */
-      #2dd4bf 50%,  /* Teal 400 */
-      #818cf8 60%,  /* Indigo 400 */
-      #6366f1 75%,  /* Indigo 500 */
-      #312e81 100%  /* Indigo 900 */
-    )`,
-    textColor: 'text-teal-100',
-    accentColor: 'text-teal-400',
-    // 3D 场景参数
-    fogColor: '#022c22', // 深绿色雾
-    ambientIntensity: 0.4,
-    dirLightColor: '#2dd4bf', // 青色主光
-    dirLightIntensity: 1.2,
-    spotLightColor: '#818cf8', // 蓝紫光斑
-    spotLightIntensity: 5,
-    sparkleColor: '#ccfbf1', // 浅青粒子
-    showAurora: true // 开启极光
   }
 };
 
