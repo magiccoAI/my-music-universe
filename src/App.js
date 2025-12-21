@@ -42,10 +42,14 @@ function App() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
-    // 预加载页面资源，提升后续点击体验
-    // 注意：这会增加首屏后的网络消耗，但在音乐/视觉类应用中是值得的
-    const preloadComponents = [HomePage, MusicUniverse, ArchivePage, ConnectionsPage, SearchPage, AboutPage];
-    preloadComponents.forEach(component => component.preload?.());
+    // 延迟预加载，优先保证首屏加载速度
+    // 3秒后再开始加载其他页面资源
+    const timer = setTimeout(() => {
+      const preloadComponents = [HomePage, MusicUniverse, ArchivePage, ConnectionsPage, SearchPage, AboutPage];
+      preloadComponents.forEach(component => component.preload?.());
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (

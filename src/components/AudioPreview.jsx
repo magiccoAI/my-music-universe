@@ -5,6 +5,8 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
   const [applePreviewUrl, setApplePreviewUrl] = useState(null);
   const [useAppleFallback, setUseAppleFallback] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [iframeLoaded, setIframeLoaded] = useState(false); // New: Track iframe load
+  const [showSlowLoadingWarning, setShowSlowLoadingWarning] = useState(false); // New: Slow loading warning
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
@@ -12,6 +14,8 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
   useEffect(() => {
     // Reset fallback state when directUrl changes
     setUseAppleFallback(false);
+    setIframeLoaded(false);
+    setShowSlowLoadingWarning(false);
     
     // If we have a direct URL that is NOT NetEase, use it and skip fetching
     if (directUrl && !directUrl.includes('music.163.com')) {
@@ -95,6 +99,18 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
       }
   }, [audioUrl, autoPlay]);
 
+  const isNetEase = audioUrl && audioUrl.includes('music.163.com/outchain/player');
+
+  useEffect(() => {
+    let timer;
+    if (isNetEase && !iframeLoaded && !useAppleFallback) {
+      timer = setTimeout(() => {
+        setShowSlowLoadingWarning(true);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [isNetEase, iframeLoaded, useAppleFallback]);
+
   const togglePlay = (e) => {
     e.stopPropagation(); // Prevent closing the card
     if (audioRef.current) {
@@ -114,10 +130,6 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
   if (loading) return <div className={`text-xs ${darkMode ? 'text-slate-400' : 'text-gray-400'} mt-2`}>正在寻找试听片段...</div>;
   if (!audioUrl) return null; // Hide if no audio found
 
-  // Netease Cloud Music Iframe Support
-  // Render NetEase if audioUrl is NetEase AND we are not forcing Apple Fallback
-  const isNetEase = audioUrl && audioUrl.includes('music.163.com/outchain/player');
-  
   if (isNetEase && !useAppleFallback) {
       // Extract height from URL params if present, default to 86
       let iframeHeight = 86;
@@ -125,12 +137,6 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
         const urlObj = new URL(audioUrl.startsWith('//') ? 'https:' + audioUrl : audioUrl);
         const heightParam = urlObj.searchParams.get('height');
         if (heightParam) {
-          // Add some padding/buffer or use exact height. Netease usually matches iframe height to param.
-          // However, for safety, let's use the param value directly if it seems reasonable.
-          // The standard heights are usually 32, 66 (requires iframe height 86), 430.
-          // If param is 66, iframe usually needs to be 86 to fit the border/shadow? 
-          // Actually user provided: src="...height=66" iframe height=86.
-          // Let's stick to 86 as default, but if it's clearly a large player (like > 100), update it.
           const h = parseInt(heightParam, 10);
           if (!isNaN(h) && h > 100) {
              iframeHeight = h;
@@ -142,9 +148,19 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
 
       return (
           <div 
-            className={`mt-2 rounded-lg overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-slate-700/50' : 'bg-gray-50'}`} 
+            className={`mt-2 rounded-lg overflow-hidden relative transition-colors duration-300 ${darkMode ? 'bg-slate-700/50' : 'bg-gray-50'}`} 
             onClick={(e) => e.stopPropagation()}
+            style={{ minHeight: iframeHeight }}
           >
+              {!iframeLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-800/20 z-10 backdrop-blur-sm">
+                   <div className="flex flex-col items-center space-y-2">
+                     <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+                     {showSlowLoadingWarning && <div className="text-[10px] text-indigo-300">加载较慢...</div>}
+                   </div>
+                </div>
+              )}
+
               <iframe 
                   frameBorder="no" 
                   border="0" 
@@ -154,7 +170,10 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
                   height={iframeHeight}
                   src={audioUrl}
                   title="Netease Music Player"
+                  onLoad={() => setIframeLoaded(true)}
+                  className={`transition-opacity duration-500 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
               ></iframe>
+
               <div className="flex justify-between items-center px-2 pb-1">
                 <div className={`text-[10px] ${darkMode ? 'text-slate-500' : 'text-gray-300'}`}>
                     Provided by Netease Cloud Music
@@ -167,9 +186,13 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
                             // Also update audioUrl to applePreviewUrl for the standard player
                             setAudioUrl(applePreviewUrl);
                         }}
-                        className={`text-[10px] px-2 py-0.5 rounded border ${darkMode ? 'border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20' : 'border-indigo-200 text-indigo-500 hover:bg-indigo-50'} transition-colors`}
+                        className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
+                          showSlowLoadingWarning 
+                            ? 'bg-indigo-600/90 text-white border-indigo-500 shadow-lg shadow-indigo-500/20 hover:bg-indigo-500' 
+                            : (darkMode ? 'border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20' : 'border-indigo-200 text-indigo-500 hover:bg-indigo-50')
+                        }`}
                     >
-                        内容不符/播放失败？试听 Apple Music
+                        {showSlowLoadingWarning ? '播放困难？切换 Apple Music' : '播放失败？切换 Apple Music'}
                     </button>
                 )}
               </div>

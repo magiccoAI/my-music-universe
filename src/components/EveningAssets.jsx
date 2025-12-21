@@ -10,10 +10,10 @@ const SimpleWater = () => {
   const meshRef = useRef();
   const frameRef = useRef(0);
   
-  // 加载法线贴图以增加水波纹理质感
+  // 加载本地纹理
   const waterNormals = useLoader(
     THREE.TextureLoader,
-    'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/water/Water_1_M_Normal.jpg'
+    process.env.PUBLIC_URL + '/images/textures/water_normal.jpg'
   );
 
   // 配置纹理重复
@@ -96,7 +96,7 @@ const DynamicWaveWater = () => {
   
   const waterNormals = useLoader(
     THREE.TextureLoader,
-    'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/water/Water_1_M_Normal.jpg'
+    process.env.PUBLIC_URL + '/images/textures/water_normal.jpg'
   );
   waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
   waterNormals.repeat.set(10, 10); // 增加纹理重复，避免拉伸
