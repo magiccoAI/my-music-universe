@@ -163,9 +163,9 @@ const ChristmasTree = ({ scale = 1 }) => (
   </group>
 );
 
-const ScatteredTrees = React.memo(() => {
+const ScatteredTrees = React.memo(({ count = 15 }) => {
   const trees = useMemo(() => {
-    return Array.from({ length: 15 }).map((_, i) => {
+    return Array.from({ length: count }).map((_, i) => {
       const angle = Math.random() * Math.PI * 2;
       const r = 20 + Math.random() * 30;
       const x = Math.cos(angle) * r;
@@ -176,7 +176,7 @@ const ScatteredTrees = React.memo(() => {
         scale: 1.5 + Math.random()
       };
     });
-  }, []);
+  }, [count]);
 
   return (
     <>
@@ -235,6 +235,7 @@ const Backdrop = ({ texture, materialRef }) => {
 const SnowMountain = ({
   bgImage = '/images/snow-bg.jpg',
   environment,
+  isMobile = false,
 }) => {
   const { camera } = useThree();
   const snowPath = (process.env.PUBLIC_URL || '') + '/images/snow texture.jpg';
@@ -311,6 +312,12 @@ const SnowMountain = ({
   const ambient = environment?.ambient ?? { intensity: 0.6, color: '#e0f2fe' };
   const sun = environment?.sun ?? { intensity: 1.2, color: '#ffffff', position: [20, 30, 10] };
 
+  // Mobile optimization constants
+  const groundSegments = isMobile ? 64 : 128;
+  const shadowMapSize = isMobile ? [1024, 1024] : [2048, 2048];
+  const scatteredTreeCount = isMobile ? 5 : 15;
+  const snowCount = isMobile ? 500 : 2000;
+
   return (
     <group>
       {prevBgTexture && (
@@ -332,11 +339,11 @@ const SnowMountain = ({
         intensity={sun.intensity} 
         castShadow 
         color={sun.color} 
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={shadowMapSize}
       />
       
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>
-        <planeGeometry args={[200, 200, 128, 128]} />
+        <planeGeometry args={[200, 200, groundSegments, groundSegments]} />
         <shaderMaterial 
           vertexShader={SnowGroundShader.vertexShader}
           fragmentShader={SnowGroundShader.fragmentShader}
@@ -359,10 +366,10 @@ const SnowMountain = ({
         <group position={[-4, 0, -12]}> <ChristmasTree scale={1.2} /> </group>
         <group position={[6, 0.2, -15]}> <ChristmasTree scale={1.6} /> </group>
         
-        <ScatteredTrees />
+        <ScatteredTrees count={scatteredTreeCount} />
       </group>
 
-      <Snowfall count={2000} />
+      <Snowfall count={snowCount} />
     </group>
   );
 };

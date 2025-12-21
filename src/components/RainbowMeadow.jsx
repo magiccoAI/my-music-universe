@@ -1232,7 +1232,7 @@ const SunRain = ({ count = 1000, active = true }) => {
   );
 };
 
-const RainbowMeadow = ({ isRaining = true }) => {
+const RainbowMeadow = ({ isRaining = true, isMobile = false }) => {
   const { scene } = useThree();
   const meadowRef = useRef();
   const rainbowRef = useRef();
@@ -1260,6 +1260,17 @@ const RainbowMeadow = ({ isRaining = true }) => {
     []
   );
 
+  // Mobile optimization constants
+  const grassCount = isMobile ? 200 : 800;
+  const flowerCount = isMobile ? 40 : 120;
+  const pondVegCount = isMobile ? 5 : 15;
+  const rainCount = isMobile ? 300 : 1000;
+  const sparkleCount = isMobile ? 60 : 220;
+  const underwaterCount = isMobile ? 3 : 8;
+  const groundSegments = isMobile ? 32 : 64;
+  const rainbowRadialSegments = isMobile ? 16 : 32;
+  const rainbowTubularSegments = isMobile ? 64 : 128;
+
   return (
     <group>
       {/* 1. 环境光效 */}
@@ -1268,7 +1279,7 @@ const RainbowMeadow = ({ isRaining = true }) => {
 
       {/* 2. 地面与草地 */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -15, 0]}>
-        <circleGeometry args={[200, 64]} />
+        <circleGeometry args={[200, groundSegments]} />
         <shaderMaterial
           ref={meadowRef}
           vertexShader={MeadowGroundShader.vertexShader}
@@ -1279,14 +1290,14 @@ const RainbowMeadow = ({ isRaining = true }) => {
       </mesh>
 
       <group position={[0, 0.5, 0]}>
-         <SwayingGrass count={800} />
-         <MeadowFlowers count={120} />
+         <SwayingGrass count={grassCount} />
+         <MeadowFlowers count={flowerCount} />
       </group>
 
       <group>
-        <MagicLake />
-        <UnderwaterLife />
-        <PondVegetation count={15} radius={40} />
+        <MagicLake isMobile={isMobile} />
+        <UnderwaterLife count={underwaterCount} />
+        <PondVegetation count={pondVegCount} radius={40} />
       </group>
 
       <MeadowAnimals />
@@ -1295,10 +1306,10 @@ const RainbowMeadow = ({ isRaining = true }) => {
 
       <FloatingRocks />
       
-      <SunRain active={isRaining} />
+      <SunRain count={rainCount} active={isRaining} />
 
       <mesh ref={rainbowRef} position={[0, -15, -50]} rotation={[0, 0, 0]}>
-        <torusGeometry args={[110, 8, 32, 128, Math.PI]} /> 
+        <torusGeometry args={[110, 8, rainbowRadialSegments, rainbowTubularSegments, Math.PI]} /> 
         <shaderMaterial
           ref={rainbowMaterialRef}
           vertexShader={Rainbow3DShader.vertexShader}
@@ -1311,7 +1322,7 @@ const RainbowMeadow = ({ isRaining = true }) => {
       </mesh>
       
       <Sparkles
-        count={220}
+        count={sparkleCount}
         scale={[60, 20, 60]}
         size={4}
         speed={0.35}

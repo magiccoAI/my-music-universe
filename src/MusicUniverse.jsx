@@ -827,11 +827,11 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
               {dayMode === 'snow' && (
                 <Snowfall count={2000} />
               )}
-              {dayMode === 'rainbow' && !isMobile && (
-                 <RainbowMeadow isRaining={isRaining} />
+              {dayMode === 'rainbow' && (
+                 <RainbowMeadow isRaining={isRaining} isMobile={isMobile} />
               )}
-              {dayMode === 'meadow' && !isMobile && (
-                <SnowMountain bgImage={snowBg} environment={snowBgPreset.environment} />
+              {dayMode === 'meadow' && (
+                <SnowMountain bgImage={snowBg} environment={snowBgPreset.environment} isMobile={isMobile} />
               )}
             </React.Suspense>
           )}
