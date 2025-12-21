@@ -9,7 +9,8 @@
     "url": "https://mp.weixin.qq.com/f/P-UimdNlkT5cUGt572dBAQ",
     "note": "纯音乐",
     "cover": "covers/1.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1468084892&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8f/9d/40/8f9d408d-700b-80f1-1551-22231dce4d47/mzaf_13851583824867375354.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 2,
@@ -21,7 +22,8 @@
     "url": "https://mp.weixin.qq.com/s/t4-qJuHb40agUJ5LtKai3w",
     "note": "美声交响乐",
     "cover": "covers/2.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1954876081&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/62/d4/fe/62d4feea-af7e-4ece-a2e3-2a8f5b6497de/mzaf_14666770710780726159.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 3,
@@ -45,7 +47,8 @@
     "url": "https://mp.weixin.qq.com/s/TLorSY7HhaKnPz3a64LeEQ",
     "note": "原声带",
     "cover": "covers/4.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1923643450&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/86/be/77/86be7735-015e-1431-0dc9-df237d98bd3d/mzaf_16714532692321104215.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 5,
@@ -57,7 +60,8 @@
     "url": "https://mp.weixin.qq.com/s/SJhu3zNtZg3Lw2n2NL4JHQ",
     "note": "Fav",
     "cover": "covers/5.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=420154482&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/30/54/ca/3054caec-4771-8ce3-cbe5-7534411d9694/mzaf_14057272363233286069.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 6,
@@ -69,7 +73,8 @@
     "url": "https://mp.weixin.qq.com/s/SJhu3zNtZg3Lw2n2NL4JHQ",
     "note": "Fav",
     "cover": "covers/6.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1954888936&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/bf/f3/df/bff3df52-aeb3-5318-e07f-e551964fc966/mzaf_15145049002801337280.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 7,
@@ -81,7 +86,8 @@
     "url": "https://mp.weixin.qq.com/s/Knd8tEZ6NtCcqArH37KBqw",
     "note": "classic",
     "cover": "covers/7.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1495430435&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 8,
@@ -93,7 +99,8 @@
     "url": "https://mp.weixin.qq.com/s/Knd8tEZ6NtCcqArH37KBqw",
     "note": "爵士？",
     "cover": "covers/8.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=130250&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/7e/d4/6b/7ed46b33-b7ee-f333-a520-55632daeae63/mzaf_2197138425160397620.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 9,
@@ -105,7 +112,8 @@
     "url": "https://mp.weixin.qq.com/s/OwCeJiF9d7MBbyabeZqWaQ",
     "note": "数摇",
     "cover": "covers/9.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1431692614&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/77/f3/73/77f3732d-8fa5-d712-17ad-9fece0487995/mzaf_15762628937084729399.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 10,
@@ -129,7 +137,8 @@
     "url": "https://mp.weixin.qq.com/s/OwCeJiF9d7MBbyabeZqWaQ",
     "note": "数摇",
     "cover": "covers/11.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26484759&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/3d/5c/35/3d5c3574-b1be-ba47-e6c9-075d0ffc6a00/mzaf_356526560938207036.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 12,
@@ -141,7 +150,8 @@
     "url": "https://mp.weixin.qq.com/s/JgjZ_IUvwSY2m4h2Af2QhQ",
     "note": "Ambient氛围音乐",
     "cover": "covers/12.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1453469809&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/79/84/6f/79846f4d-4324-4885-0757-1c77bf9cd73e/mzaf_9687232041919926919.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 13,
@@ -153,7 +163,8 @@
     "url": "https://mp.weixin.qq.com/s/JgjZ_IUvwSY2m4h2Af2QhQ",
     "note": "绝美音乐",
     "cover": "covers/13.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1931527267&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1925322700&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 14,
@@ -165,7 +176,8 @@
     "url": "https://mp.weixin.qq.com/s/hiZc9mdq-u8fP0xWREl9Gw",
     "note": "合唱团choir",
     "cover": "covers/14.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=465882112&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=465882112&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 15,
@@ -189,7 +201,8 @@
     "url": "https://mp.weixin.qq.com/s/Y2aD3ncrKq7GAWKItCwFow",
     "note": "原声带",
     "cover": "covers/16.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b4/bf/58/b4bf5873-94ad-5103-3c61-f2fb1e31b53b/mzaf_2854085972839762471.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 17,
@@ -213,7 +226,8 @@
     "url": "https://mp.weixin.qq.com/s/0AazmQm0Hz7Md-kM1CRcqw",
     "note": "爵士",
     "cover": "covers/18.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/76/73/29/767329aa-3afa-735d-d3f3-3f6c56373b07/mzaf_8663673140032357826.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 19,
@@ -225,7 +239,8 @@
     "url": "https://mp.weixin.qq.com/s/NJS9f_ZnyYpPYUQoMI1bdg",
     "note": "氛围音乐/电子",
     "cover": "covers/19.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1905509040&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/cc/4c/88/cc4c8886-3096-da08-4e6d-12ebf8b11214/mzaf_16132190870586560358.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 20,
@@ -237,7 +252,8 @@
     "url": "https://mp.weixin.qq.com/s/NJS9f_ZnyYpPYUQoMI1bdg",
     "note": "交响乐/纯音乐",
     "cover": "covers/20.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=22511475&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/79/cc/af/79ccaf0b-4d5f-976d-1230-98f70ec53fb5/mzaf_14314831293677332214.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 21,
@@ -249,7 +265,8 @@
     "url": "https://mp.weixin.qq.com/s/vsbMm3ZFlx3x_ITX0qgq3w",
     "note": "Fav",
     "cover": "covers/21.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=420154475&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/d9/9c/8f/d99c8f63-0b02-98c3-da3a-4780cd0c4df3/mzaf_11200030040169908466.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 22,
@@ -261,7 +278,8 @@
     "url": "https://mp.weixin.qq.com/s/vsbMm3ZFlx3x_ITX0qgq3w",
     "note": "原声带",
     "cover": "covers/22.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=28116468&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/7b/90/9c/7b909c22-3283-0b30-6da5-b59dc547ed70/mzaf_17015513379905592648.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 23,
@@ -273,7 +291,8 @@
     "url": "https://mp.weixin.qq.com/s/vsbMm3ZFlx3x_ITX0qgq3w",
     "note": "纯音乐/原声带",
     "cover": "covers/23.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=29774805&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/69/cb/2169cb72-ddf0-8a79-7734-274dfec81f52/mzaf_12238077248823254464.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 24,
@@ -297,7 +316,8 @@
     "url": "https://mp.weixin.qq.com/s/Zad19uGC2wEd02ohW6T3EQ",
     "note": "乐队",
     "cover": "covers/25.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1338149101&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/2d/33/5e/2d335e96-a766-6d47-726f-50ebef2a6e23/mzaf_8643398881672136893.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 26,
@@ -309,7 +329,8 @@
     "url": "https://mp.weixin.qq.com/s/Zad19uGC2wEd02ohW6T3EQ",
     "note": "欧美",
     "cover": "covers/26.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=473341382&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/55/bb/8d/55bb8df2-a76e-3691-5f31-d49501314daa/mzaf_13985918795130650886.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 27,
@@ -333,7 +354,8 @@
     "url": "https://mp.weixin.qq.com/s/GQh_EYoKm8cAGRQyC8hsnA",
     "note": "交响乐",
     "cover": "covers/28.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=511092125&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5f/be/61/5fbe6151-cc8f-c59b-dad4-ca0a77704c13/mzaf_17059114576307118770.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 29,
@@ -345,7 +367,8 @@
     "url": "https://mp.weixin.qq.com/s/5IpKleOZBq4mhhDaapiPdw",
     "note": "原声带",
     "cover": "covers/29.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26330508&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/f6/cc/c7/f6ccc7ac-fc97-a276-5485-0560037e7157/mzaf_3785308696401502389.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 30,
@@ -357,7 +380,8 @@
     "url": "https://mp.weixin.qq.com/s/5IpKleOZBq4mhhDaapiPdw",
     "note": "民谣",
     "cover": "covers/30.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=27317272&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b3/f3/f4/b3f3f47d-f913-61ae-ac80-300952d6fc9e/mzaf_6406485217441508976.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 31,
@@ -369,7 +393,8 @@
     "url": "https://mp.weixin.qq.com/s/5IpKleOZBq4mhhDaapiPdw",
     "note": "原声带",
     "cover": "covers/31.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=35957377&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/3d/e7/f5/3de7f5b1-475f-4c43-f8ef-9cbeee4e7f12/mzaf_6838208580754593443.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 32,
@@ -381,7 +406,8 @@
     "url": "https://mp.weixin.qq.com/s/sBib4Zma7veC4F0WSR0HnA",
     "note": "原声带",
     "cover": "covers/32.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=4351614&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/77/11/83/7711833b-e72f-d7ec-0eb0-f562505af011/mzaf_12353729268624283785.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 33,
@@ -393,7 +419,8 @@
     "url": "https://mp.weixin.qq.com/s/sBib4Zma7veC4F0WSR0HnA",
     "note": "乐队/Fav",
     "cover": "covers/33.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1823422061&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/74/c1/61/74c161c5-bb6d-a48b-fcb8-ff604cf64e29/mzaf_11818833474303679119.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 34,
@@ -405,7 +432,7 @@
     "url": "https://mp.weixin.qq.com/s/sBib4Zma7veC4F0WSR0HnA",
     "note": "交响乐版",
     "cover": "covers/34.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1896858068&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 35,
@@ -417,7 +444,8 @@
     "url": "https://mp.weixin.qq.com/s/ev59TXDNO-EB7TYix8Zagg",
     "note": "原声带",
     "cover": "covers/35.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1951194236&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1951194236&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 36,
@@ -453,7 +481,8 @@
     "url": "https://mp.weixin.qq.com/s/tbCCoqpWfCWNiHCwPiTJGg",
     "note": "动画原声带",
     "cover": "covers/38.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=600400&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/73/8d/0b/738d0b66-4a4e-db91-3c24-91fb2ea46ccb/mzaf_9004881787113908787.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 39,
@@ -477,7 +506,8 @@
     "url": "https://mp.weixin.qq.com/s/DonlGfUVeNbECnqwAXED7A",
     "note": "吉他弹奏",
     "cover": "covers/40.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/23/eb/f9/23ebf990-4759-f02b-cfcd-710a70c90aa7/mzaf_1089887469044055670.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 41,
@@ -489,7 +519,8 @@
     "url": "https://mp.weixin.qq.com/s/YLPJ2uUsDKs41AenWmRo3Q",
     "note": "MG背景音乐",
     "cover": "covers/41.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=29207820&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/76/80/3e/76803e5f-dedc-ca3e-6212-d67365ed2f33/mzaf_7546249679012978362.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 42,
@@ -501,7 +532,8 @@
     "url": "https://mp.weixin.qq.com/s/YLPJ2uUsDKs41AenWmRo3Q",
     "note": "原声带",
     "cover": "covers/42.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1455887183&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5f/be/2e/5fbe2e33-4caf-0316-2839-3f5550b1d421/mzaf_5182765757376075754.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 43,
@@ -525,7 +557,8 @@
     "url": "https://mp.weixin.qq.com/s/IGeFVNQ0U7b-iukTvbxvag",
     "note": "Motion Graphic背景音乐",
     "cover": "covers/44.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=29207821&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/85/e3/a6/85e3a6f9-235b-e5c4-0ba1-7a0a960bec6d/mzaf_9338979473734940859.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 45,
@@ -537,7 +570,8 @@
     "url": "https://mp.weixin.qq.com/s/IGeFVNQ0U7b-iukTvbxvag",
     "note": "Fav",
     "cover": "covers/45.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1329901506&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/19/ac/a9/19aca9fa-5414-8b72-38d1-a30fd6484581/mzaf_10623333019108840785.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 46,
@@ -549,7 +583,8 @@
     "url": "https://mp.weixin.qq.com/s/I0o6IQpiWl6AJtrs1t8YTQ",
     "note": "数摇",
     "cover": "covers/46.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1946176575&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1946176575&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 47,
@@ -561,7 +596,8 @@
     "url": "https://mp.weixin.qq.com/s/I0o6IQpiWl6AJtrs1t8YTQ",
     "note": "原声带",
     "cover": "covers/47.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1419188877&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/f5/54/4a/f5544ad5-03eb-4394-cb04-b865360ffce1/mzaf_14336671153319319012.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 48,
@@ -573,7 +609,8 @@
     "url": "https://mp.weixin.qq.com/s/iEAUTiG-8_Qw-hyeoW2vBQ",
     "note": "纯音乐",
     "cover": "covers/48.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1725153&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/40/76/3e/40763e41-6180-a614-dd69-3b003eb6def4/mzaf_4791755879044401247.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 49,
@@ -585,7 +622,8 @@
     "url": "https://mp.weixin.qq.com/s/iEAUTiG-8_Qw-hyeoW2vBQ",
     "note": "folk music",
     "cover": "covers/49.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1485796616&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/da/54/45/da5445c4-5aed-c1a5-c23f-098da14793c1/mzaf_12851519086889285604.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 50,
@@ -597,7 +635,8 @@
     "url": "https://mp.weixin.qq.com/s/iEAUTiG-8_Qw-hyeoW2vBQ",
     "note": "原声带",
     "cover": "covers/50.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1870469768&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/d4/6c/4e/d46c4e68-5371-9961-b39e-0b7ac680f90b/mzaf_13289415971441065462.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 51,
@@ -609,7 +648,8 @@
     "url": "https://mp.weixin.qq.com/s/iEAUTiG-8_Qw-hyeoW2vBQ",
     "note": "原声带",
     "cover": "covers/51.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=32924276&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/fc/3d/08/fc3d084b-0af7-4f60-50e7-d404bc58c194/mzaf_8412825569063964802.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 52,
@@ -621,7 +661,8 @@
     "url": "https://mp.weixin.qq.com/s/CSVaCmtz9SNVUyy2SKduwA",
     "note": "爵士",
     "cover": "covers/52.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/24/99/d7/2499d72d-f0a3-7eaf-329f-a95c0f8652f6/mzaf_804423790632209102.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 53,
@@ -633,7 +674,8 @@
     "url": "https://mp.weixin.qq.com/s/CSVaCmtz9SNVUyy2SKduwA",
     "note": "爵士",
     "cover": "covers/53.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=22363680&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1f/fe/2d/1ffe2dcc-1d45-026e-8302-a4c56e0e0b31/mzaf_3506163788646319070.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 54,
@@ -645,7 +687,8 @@
     "url": "https://mp.weixin.qq.com/s/CSVaCmtz9SNVUyy2SKduwA",
     "note": "爵士",
     "cover": "covers/54.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=3152854&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/64/0f/c4/640fc461-2497-db08-5726-7220c2abc378/mzaf_11269047901974297655.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 55,
@@ -657,7 +700,8 @@
     "url": "https://mp.weixin.qq.com/s/CSVaCmtz9SNVUyy2SKduwA",
     "note": "原声带",
     "cover": "covers/55.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=5052985&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/dd/5f/e8/dd5fe8e1-7a26-447b-e5eb-c47347aa844b/mzaf_1131894773339333351.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 56,
@@ -669,7 +713,8 @@
     "url": "https://mp.weixin.qq.com/s/IX5Q7YprgyI4eO8_dSc5zw",
     "note": "数摇",
     "cover": "covers/56.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=22664748&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/00/de/c8/00dec87a-48ab-c00a-2b1e-d16baf8d90c1/mzaf_2675679708293298947.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 57,
@@ -705,7 +750,8 @@
     "url": "https://mp.weixin.qq.com/s/IX5Q7YprgyI4eO8_dSc5zw",
     "note": "经典",
     "cover": "covers/59.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206768&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206768&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 60,
@@ -717,7 +763,8 @@
     "url": "https://mp.weixin.qq.com/s/ptnhwxx71Tj8z-lb_r0f-w",
     "note": "原声带",
     "cover": "covers/60.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=28747425&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5a/a7/78/5aa7780a-ee34-c634-bdda-2850b62e0ba1/mzaf_12669874174810356265.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 61,
@@ -729,7 +776,8 @@
     "url": "https://mp.weixin.qq.com/s/ptnhwxx71Tj8z-lb_r0f-w",
     "note": "原声带/ Fav",
     "cover": "covers/61.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=28773544&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/3b/94/fb/3b94fb1a-62ab-d1a2-1918-689d96eb05be/mzaf_17427757726869113659.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 62,
@@ -741,7 +789,8 @@
     "url": "https://mp.weixin.qq.com/s/ptnhwxx71Tj8z-lb_r0f-w",
     "note": "治愈",
     "cover": "covers/62.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=27630180&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ee/21/f8/ee21f86e-a26b-eb96-a9cd-253a8e50cdba/mzaf_1568473346580876219.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 63,
@@ -753,7 +802,7 @@
     "url": "https://mp.weixin.qq.com/s/ptnhwxx71Tj8z-lb_r0f-w",
     "note": "治愈",
     "cover": "covers/63.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 64,
@@ -765,7 +814,8 @@
     "url": "https://mp.weixin.qq.com/s/ptnhwxx71Tj8z-lb_r0f-w",
     "note": "Fav",
     "cover": "covers/64.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1358187559&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e5/6b/b8/e56bb864-824b-c427-9d59-ddb110697bdf/mzaf_1026393920142855163.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 65,
@@ -777,7 +827,8 @@
     "url": "https://mp.weixin.qq.com/s/ptnhwxx71Tj8z-lb_r0f-w",
     "note": "Fav",
     "cover": "covers/65.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1331829050&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1331829050&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 66,
@@ -789,7 +840,8 @@
     "url": "https://mp.weixin.qq.com/s/d35l5Er-zKBx-3Ce13PuYw",
     "note": "原创",
     "cover": "covers/66.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1370879993&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/9e/2c/709e2c6b-f38d-f786-276b-c192b33c75c2/mzaf_853832357086605101.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 67,
@@ -801,7 +853,7 @@
     "url": "https://mp.weixin.qq.com/s/d35l5Er-zKBx-3Ce13PuYw",
     "note": "治愈",
     "cover": "covers/67.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=479938888&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 68,
@@ -825,7 +877,8 @@
     "url": "https://mp.weixin.qq.com/s/d35l5Er-zKBx-3Ce13PuYw",
     "note": "民谣",
     "cover": "covers/69.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=415793049&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/93/6e/40/936e407c-367e-6cca-d4b5-3b6d45a64a62/mzaf_3945447909629002393.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 70,
@@ -837,7 +890,8 @@
     "url": "https://mp.weixin.qq.com/s/QBkqwGuOp_p2EhI-Nb3pgQ",
     "note": "钢琴曲",
     "cover": "covers/70.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=461759712&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=461759712&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 71,
@@ -849,7 +903,8 @@
     "url": "https://mp.weixin.qq.com/s/QBkqwGuOp_p2EhI-Nb3pgQ",
     "note": "悠扬",
     "cover": "covers/71.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2786474&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2786474&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 72,
@@ -873,7 +928,8 @@
     "url": "https://mp.weixin.qq.com/s/QBkqwGuOp_p2EhI-Nb3pgQ",
     "note": "精灵/原声带",
     "cover": "covers/73.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=30590330&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=30590330&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 74,
@@ -897,7 +953,8 @@
     "url": "https://mp.weixin.qq.com/s/QBkqwGuOp_p2EhI-Nb3pgQ",
     "note": "爵士/欢快/原声带",
     "cover": "covers/75.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26429459&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=26243686&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 76,
@@ -921,7 +978,8 @@
     "url": "https://mp.weixin.qq.com/s/tDv6_o3VYZY9oCpTBH4QKA",
     "note": "爵士",
     "cover": "covers/77.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=569854916&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=21794165&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 78,
@@ -933,7 +991,7 @@
     "url": "https://mp.weixin.qq.com/s/tDv6_o3VYZY9oCpTBH4QKA",
     "note": "Fav",
     "cover": "covers/78.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1322204700&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 79,
@@ -945,7 +1003,7 @@
     "url": "https://mp.weixin.qq.com/s/tDv6_o3VYZY9oCpTBH4QKA",
     "note": "电子",
     "cover": "covers/79.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=544739911&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 80,
@@ -957,7 +1015,7 @@
     "url": "https://mp.weixin.qq.com/s/tDv6_o3VYZY9oCpTBH4QKA",
     "note": "数摇",
     "cover": "covers/80.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1946176579&auto=1&height=66"
+    "previewUrl": ""
   },
   {
     "id": 81,
@@ -969,7 +1027,8 @@
     "url": "https://mp.weixin.qq.com/s/U3A3HJRtnSPDf3IMCJuaCQ",
     "note": "原声带",
     "cover": "covers/81.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819716738&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819716738&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 82,
@@ -993,7 +1052,8 @@
     "url": "https://mp.weixin.qq.com/s/U3A3HJRtnSPDf3IMCJuaCQ",
     "note": "治愈",
     "cover": "covers/83.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=19079973&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0e/36/5f/0e365f8d-2161-386b-1b37-5955ca410b7e/mzaf_5464292086091193305.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 84,
@@ -1005,7 +1065,8 @@
     "url": "https://mp.weixin.qq.com/s/U3A3HJRtnSPDf3IMCJuaCQ",
     "note": "特别",
     "cover": "covers/84.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=19080075&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=19080075&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 85,
@@ -1017,7 +1078,7 @@
     "url": "https://mp.weixin.qq.com/s/U3A3HJRtnSPDf3IMCJuaCQ",
     "note": "抒情",
     "cover": "covers/85.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=36199725&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 86,
@@ -1029,7 +1090,7 @@
     "url": "https://mp.weixin.qq.com/s/U3A3HJRtnSPDf3IMCJuaCQ",
     "note": "国语",
     "cover": "covers/86.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1299326404&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 87,
@@ -1041,7 +1102,7 @@
     "url": "https://mp.weixin.qq.com/s/efDJw0IX9uMjS3AkyKO-QQ",
     "note": "原声带",
     "cover": "covers/87.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=445867332&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 88,
@@ -1053,7 +1114,7 @@
     "url": "https://mp.weixin.qq.com/s/efDJw0IX9uMjS3AkyKO-QQ",
     "note": "南美风情/欢快",
     "cover": "covers/88.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=995927&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 89,
@@ -1065,7 +1126,8 @@
     "url": "https://mp.weixin.qq.com/s/efDJw0IX9uMjS3AkyKO-QQ",
     "note": "原声带/音乐剧",
     "cover": "covers/89.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1888089765&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 90,
@@ -1077,7 +1139,7 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "原声带/纯音乐",
     "cover": "covers/90.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=493283623&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 91,
@@ -1089,7 +1151,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "日语/好听",
     "cover": "covers/91.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=512376195&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=512376195&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 92,
@@ -1101,7 +1164,7 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "主题曲",
     "cover": "covers/92.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=536622304&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 93,
@@ -1113,7 +1176,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "主题曲",
     "cover": "covers/93.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1842312887&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1842312887&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 94,
@@ -1125,7 +1189,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "日语",
     "cover": "covers/94.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=424474124&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=424474124&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 95,
@@ -1137,7 +1202,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "日语/治愈",
     "cover": "covers/95.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=32317208&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=32317208&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 96,
@@ -1149,7 +1215,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "欧美经典/治愈",
     "cover": "covers/96.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=21971060&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=21971060&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 97,
@@ -1161,7 +1228,7 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "法语老歌",
     "cover": "covers/97.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 98,
@@ -1173,7 +1240,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "民谣",
     "cover": "covers/98.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=986444&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=986444&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 99,
@@ -1185,7 +1253,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "法语经典/人生",
     "cover": "covers/99.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1383639&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1383639&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 100,
@@ -1197,7 +1266,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "经典民谣",
     "cover": "covers/100.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18824422&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=18824422&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 101,
@@ -1209,7 +1279,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "唯美/纯音乐/",
     "cover": "covers/101.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=17730156&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=17730156&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 102,
@@ -1221,7 +1292,7 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "爵士/欢快",
     "cover": "covers/102.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1348099055&auto=1&height=66"
+    "previewUrl": ""
   },
   {
     "id": 103,
@@ -1233,7 +1304,7 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "爵士/欢快",
     "cover": "covers/103.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1696409&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 104,
@@ -1245,7 +1316,7 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "爵士/欢快",
     "cover": "covers/104.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=29401059&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 105,
@@ -1257,7 +1328,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "感动",
     "cover": "covers/105.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=16869570&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=16323636&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 106,
@@ -1269,7 +1341,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "经典/好听",
     "cover": "covers/106.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2309212&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=5200795&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 107,
@@ -1281,7 +1354,7 @@
     "url": "https://mp.weixin.qq.com/s/wBK0fShWFgngGj9DOZK9dA",
     "note": "爵士/电子",
     "cover": "covers/107.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1958646534&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 108,
@@ -1305,7 +1378,8 @@
     "url": "https://mp.weixin.qq.com/s/wBK0fShWFgngGj9DOZK9dA",
     "note": "民谣类",
     "cover": "covers/109.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18663164&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=18663164&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 110,
@@ -1317,7 +1391,8 @@
     "url": "https://mp.weixin.qq.com/s/wBK0fShWFgngGj9DOZK9dA",
     "note": "Fav",
     "cover": "covers/110.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1329905676&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1329905676&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 111,
@@ -1329,7 +1404,8 @@
     "url": "https://mp.weixin.qq.com/s/wBK0fShWFgngGj9DOZK9dA",
     "note": "音乐剧/治愈",
     "cover": "covers/111.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=457770268&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1880746203&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 112,
@@ -1341,7 +1417,8 @@
     "url": "https://mp.weixin.qq.com/s/wBK0fShWFgngGj9DOZK9dA",
     "note": "原声带",
     "cover": "covers/112.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=36089602&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=36089602&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 113,
@@ -1353,7 +1430,8 @@
     "url": "https://mp.weixin.qq.com/s/wBK0fShWFgngGj9DOZK9dA",
     "note": "民谣/好听",
     "cover": "covers/113.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=17642323&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=17642323&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 114,
@@ -1365,7 +1443,8 @@
     "url": "https://mp.weixin.qq.com/s/wBK0fShWFgngGj9DOZK9dA",
     "note": "翻唱",
     "cover": "covers/114.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1846030049&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/6c/6a/66/6c6a660f-89bd-8c18-2cfd-e2ea070900e6/mzaf_3200100361713957033.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 115,
@@ -1377,7 +1456,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "大师",
     "cover": "covers/115.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/2f/fd/68/2ffd6829-982d-a005-18fa-3dcfc4c4f93f/mzaf_17621650590710941158.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 116,
@@ -1401,7 +1481,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "经典的弦乐",
     "cover": "covers/117.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1471871404&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=492743599&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 118,
@@ -1413,7 +1494,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "美声",
     "cover": "covers/118.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=29553325&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 119,
@@ -1425,7 +1507,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "经典/女声",
     "cover": "covers/119.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26678437&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3b/ab/36/3bab3662-28aa-601a-dbf4-a908f1d2a0ac/mzaf_5494071247994734091.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 120,
@@ -1449,7 +1532,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "经典美声",
     "cover": "covers/121.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=25961663&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5f/03/53/5f03531b-465c-c563-cd35-e8b2556f4c4e/mzaf_5807874382267535070.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 122,
@@ -1461,7 +1545,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "原声带",
     "cover": "covers/122.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c1/39/b6/c139b6d6-34f0-6d64-6cab-3d1d575fbd95/mzaf_5443588330009374327.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 123,
@@ -1473,7 +1558,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "原生带/空灵",
     "cover": "covers/123.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1427212577&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/80/70/62/80706292-f6eb-1adf-e7d1-52f3ae52e3de/mzaf_1705074291996603416.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 124,
@@ -1485,7 +1571,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "老柴经典",
     "cover": "covers/124.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=403829698&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 125,
@@ -1497,7 +1584,8 @@
     "url": "https://mp.weixin.qq.com/s/oGzfR59Wpy91jfDaneLEug",
     "note": "音乐剧",
     "cover": "covers/125.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1419685672&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=31565250&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 126,
@@ -1533,7 +1621,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "苹果广告曲/电子",
     "cover": "covers/128.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=862263360&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=862263360&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 129,
@@ -1545,7 +1634,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "Taylor!",
     "cover": "covers/129.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=32102397&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=32102397&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 130,
@@ -1557,7 +1647,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "电子",
     "cover": "covers/130.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2705129481&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 131,
@@ -1569,7 +1660,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "经典！林肯",
     "cover": "covers/131.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=16686386&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=16686386&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 132,
@@ -1581,7 +1673,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "电子",
     "cover": "covers/132.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1455887938&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1455887937&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 133,
@@ -1593,7 +1686,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "经典舞曲",
     "cover": "covers/133.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=5059535&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=5059535&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 134,
@@ -1605,7 +1699,7 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "经典舞曲",
     "cover": "covers/134.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=19703313&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 135,
@@ -1617,7 +1711,7 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "经典舞曲",
     "cover": "covers/135.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1938199&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 136,
@@ -1629,7 +1723,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "欢快/原声带",
     "cover": "covers/136.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=438803483&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=438803483&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 137,
@@ -1641,7 +1736,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "群星",
     "cover": "covers/137.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2572781&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2572781&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 138,
@@ -1653,7 +1749,7 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "日语",
     "cover": "covers/138.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206765&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 139,
@@ -1665,7 +1761,7 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "中文",
     "cover": "covers/139.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 140,
@@ -1677,7 +1773,7 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "Fav/人生之曲",
     "cover": "covers/140.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206771&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 141,
@@ -1689,7 +1785,7 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "法语",
     "cover": "covers/141.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206774&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 142,
@@ -1701,7 +1797,8 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "跨界",
     "cover": "covers/142.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206777&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206777&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 143,
@@ -1713,7 +1810,8 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "跨界",
     "cover": "covers/143.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206780&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 144,
@@ -1725,7 +1823,7 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "跨界",
     "cover": "covers/144.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 145,
@@ -1737,7 +1835,7 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "Fav/人生之曲",
     "cover": "covers/145.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 146,
@@ -1749,7 +1847,8 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "跨界",
     "cover": "covers/146.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206793&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 147,
@@ -1761,7 +1860,8 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "跨界",
     "cover": "covers/147.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206796&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 148,
@@ -1785,7 +1885,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "诵唱",
     "cover": "covers/149.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2038353542&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2038353542&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 150,
@@ -1797,7 +1898,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "原声带",
     "cover": "covers/150.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=29774796&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=29774796&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 151,
@@ -1809,7 +1911,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "纯音乐",
     "cover": "covers/151.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1928535331&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1928535331&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 152,
@@ -1821,7 +1924,7 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "纯音乐",
     "cover": "covers/152.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2722022913&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 153,
@@ -1833,7 +1936,7 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "氛围音乐",
     "cover": "covers/153.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2722022912&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 154,
@@ -1845,7 +1948,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "氛围音乐",
     "cover": "covers/154.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=16625166&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=16625026&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 155,
@@ -1857,7 +1961,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "纯音乐",
     "cover": "covers/155.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=533368974&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2005441063&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 156,
@@ -1893,7 +1998,7 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "原声带/经典/人生之曲",
     "cover": "covers/158.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=442567&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 159,
@@ -1905,7 +2010,7 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "经典/民谣",
     "cover": "covers/159.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=17245412&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 160,
@@ -1917,7 +2022,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "经典/民谣",
     "cover": "covers/160.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=22703127&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 161,
@@ -1929,7 +2035,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "好听/爵士",
     "cover": "covers/161.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=440403791&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=440403791&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 162,
@@ -1941,7 +2048,7 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "原声带",
     "cover": "covers/162.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1429338&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 163,
@@ -1953,7 +2060,8 @@
     "url": "https://mp.weixin.qq.com/s/NxpsVoyL9UppUSj8Qcr8lA",
     "note": "原声带/经典",
     "cover": "covers/163.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1484893&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1484893&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 164,
@@ -1965,7 +2073,7 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "爵士纯音乐",
     "cover": "covers/164.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1975561510&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 165,
@@ -1977,7 +2085,7 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "中文",
     "cover": "covers/165.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=300216&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 166,
@@ -1989,7 +2097,8 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "中文/原声带/经典",
     "cover": "covers/166.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=68350&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=68350&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 167,
@@ -2001,7 +2110,7 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "国风",
     "cover": "covers/167.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1370073246&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 168,
@@ -2013,7 +2122,7 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "中文/摇滚",
     "cover": "covers/168.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=357263&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 169,
@@ -2037,7 +2146,7 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "中文/声线特别",
     "cover": "covers/170.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=410628900&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 171,
@@ -2049,7 +2158,7 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "原声带",
     "cover": "covers/171.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1312711537&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 172,
@@ -2061,7 +2170,7 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "原声带",
     "cover": "covers/172.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 173,
@@ -2073,7 +2182,8 @@
     "url": "https://mp.weixin.qq.com/s/LUyeaKeCgjj5I-UqBfTqMA",
     "note": "原声带",
     "cover": "covers/173.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1343434285&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1312710513&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 174,
@@ -2085,7 +2195,8 @@
     "url": "https://mp.weixin.qq.com/s/xLXzgWT__F5k8kmoPcFN6A",
     "note": "原声带",
     "cover": "covers/174.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=439030878&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2001387865&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 175,
@@ -2097,7 +2208,7 @@
     "url": "https://mp.weixin.qq.com/s/xLXzgWT__F5k8kmoPcFN6A",
     "note": "治愈",
     "cover": "covers/175.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1886345442&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 176,
@@ -2109,7 +2220,7 @@
     "url": "https://mp.weixin.qq.com/s/xLXzgWT__F5k8kmoPcFN6A",
     "note": "经典/抒情",
     "cover": "covers/176.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=27198691&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 177,
@@ -2121,7 +2232,8 @@
     "url": "https://mp.weixin.qq.com/s/xLXzgWT__F5k8kmoPcFN6A",
     "note": "经典/摇滚",
     "cover": "covers/177.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26857076&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=26857076&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 178,
@@ -2133,7 +2245,8 @@
     "url": "https://mp.weixin.qq.com/s/xLXzgWT__F5k8kmoPcFN6A",
     "note": "氛围音乐",
     "cover": "covers/178.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1989332668&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1989332668&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 179,
@@ -2144,7 +2257,7 @@
     "album": "21世纪中国音乐 民族器乐欣赏(三)",
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "古筝/国风",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=5273867&auto=0&height=66",
+    "previewUrl": "",
     "cover": "covers/179.png"
   },
   {
@@ -2157,7 +2270,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "国风",
     "cover": "covers/180.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=471404038&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 181,
@@ -2169,7 +2282,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "国风",
     "cover": "covers/181.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=5090648&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 182,
@@ -2193,7 +2306,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "中文",
     "cover": "covers/183.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=27876927&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 184,
@@ -2205,7 +2318,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "纯音乐/钢琴",
     "cover": "covers/184.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 185,
@@ -2217,7 +2330,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "经典钢琴/德彪西",
     "cover": "covers/185.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 186,
@@ -2229,7 +2342,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "Fav",
     "cover": "covers/186.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=21178421&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 187,
@@ -2241,7 +2354,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "原声带",
     "cover": "covers/187.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=464035730&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 188,
@@ -2253,7 +2366,7 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "原声带",
     "cover": "covers/188.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=441612583&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 189,
@@ -2265,7 +2378,8 @@
     "url": "https://mp.weixin.qq.com/s/sYtU8u5APRWNaJnQQziRXw",
     "note": "纯音乐",
     "cover": "covers/189.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=406924163&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=406924163&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 190,
@@ -2277,7 +2391,8 @@
     "url": "https://mp.weixin.qq.com/s/sYtU8u5APRWNaJnQQziRXw",
     "note": "民谣",
     "cover": "covers/190.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=139377&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=28996922&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 191,
@@ -2301,7 +2416,8 @@
     "url": "https://mp.weixin.qq.com/s/sYtU8u5APRWNaJnQQziRXw",
     "note": "民谣",
     "cover": "covers/192.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=475073276&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=475073276&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 193,
@@ -2313,7 +2429,7 @@
     "url": "https://mp.weixin.qq.com/s/sYtU8u5APRWNaJnQQziRXw",
     "note": "民谣",
     "cover": "covers/193.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=139359&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 194,
@@ -2385,7 +2501,8 @@
     "url": "https://mp.weixin.qq.com/s/tiN9zRm4EoVNRh5k9rhrvg",
     "note": "氛围音乐",
     "cover": "covers/199.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1928430207&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1928430207&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 200,
@@ -2397,7 +2514,8 @@
     "url": "https://mp.weixin.qq.com/s/tiN9zRm4EoVNRh5k9rhrvg",
     "note": "先锋音乐/氛围音乐",
     "cover": "covers/200.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1983688959&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1983688959&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 201,
@@ -2409,7 +2527,7 @@
     "url": "https://mp.weixin.qq.com/s/tiN9zRm4EoVNRh5k9rhrvg",
     "note": "有点像是音乐剧",
     "cover": "covers/201.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1981799679&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 202,
@@ -2421,7 +2539,7 @@
     "url": "https://mp.weixin.qq.com/s/tiN9zRm4EoVNRh5k9rhrvg",
     "note": "电子爵士风格",
     "cover": "covers/202.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1377300440&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 203,
@@ -2433,7 +2551,8 @@
     "url": "https://mp.weixin.qq.com/s/tiN9zRm4EoVNRh5k9rhrvg",
     "note": "经典民谣/披头士",
     "cover": "covers/203.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=4337279&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=493156576&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 204,
@@ -2445,7 +2564,7 @@
     "url": "https://mp.weixin.qq.com/s/a1QOeJJZqdXyRLQTAR8qvA",
     "note": "特别的风格/耳目一新/大爱/封面抽象",
     "cover": "covers/204.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1388185891&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 206,
@@ -2457,7 +2576,7 @@
     "url": "https://mp.weixin.qq.com/s/M2413vDlDhzHixxIFOAlDw",
     "note": "Fav/欢快",
     "cover": "covers/206.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1470906286&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 207,
@@ -2469,7 +2588,8 @@
     "url": "https://mp.weixin.qq.com/s/M2413vDlDhzHixxIFOAlDw",
     "note": "Fav/欢快",
     "cover": "covers/207.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1470906288&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1470906288&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 208,
@@ -2493,7 +2613,7 @@
     "url": "https://mp.weixin.qq.com/s/M2413vDlDhzHixxIFOAlDw",
     "note": "音乐剧/主题爱",
     "cover": "covers/209.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1358880593&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 210,
@@ -2517,7 +2637,8 @@
     "url": "https://mp.weixin.qq.com/s/4r8SK8F421ww9gyQTxrvIg",
     "note": "爵士",
     "cover": "covers/211.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=22486342&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=22486350&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 212,
@@ -2529,7 +2650,8 @@
     "url": "https://mp.weixin.qq.com/s/4r8SK8F421ww9gyQTxrvIg",
     "note": "抒情歌",
     "cover": "covers/212.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=5056673&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=18929474&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 213,
@@ -2541,7 +2663,7 @@
     "url": "https://mp.weixin.qq.com/s/4r8SK8F421ww9gyQTxrvIg",
     "note": "抒情歌",
     "cover": "covers/213.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=17567262&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 214,
@@ -2553,7 +2675,8 @@
     "url": "https://mp.weixin.qq.com/s/4r8SK8F421ww9gyQTxrvIg",
     "note": "女性/好听",
     "cover": "covers/214.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1316791323&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1316791323&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 215,
@@ -2565,7 +2688,8 @@
     "url": "https://mp.weixin.qq.com/s/4r8SK8F421ww9gyQTxrvIg",
     "note": "女性/好听",
     "cover": "covers/215.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=27725002&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=27725002&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 216,
@@ -2577,7 +2701,7 @@
     "url": "https://mp.weixin.qq.com/s/4r8SK8F421ww9gyQTxrvIg",
     "note": "女性/好听/经典欧美英文歌",
     "cover": "covers/216.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=21373645&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 217,
@@ -2589,7 +2713,7 @@
     "url": "https://mp.weixin.qq.com/s/CFNrITqGvZF2kTgLx522HQ",
     "note": "经典/交响乐",
     "cover": "covers/217.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 218,
@@ -2601,7 +2725,8 @@
     "url": "https://mp.weixin.qq.com/s/CFNrITqGvZF2kTgLx522HQ",
     "note": "原声带",
     "cover": "covers/218.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819712277&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819712277&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 219,
@@ -2613,7 +2738,8 @@
     "url": "https://mp.weixin.qq.com/s/CFNrITqGvZF2kTgLx522HQ",
     "note": "原声带/治愈/女声",
     "cover": "covers/219.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819714118&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819714118&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 220,
@@ -2625,7 +2751,7 @@
     "url": "https://mp.weixin.qq.com/s/CFNrITqGvZF2kTgLx522HQ",
     "note": "女声/好听/循环过",
     "cover": "covers/220.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=33414830&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 221,
@@ -2649,7 +2775,7 @@
     "url": "https://mp.weixin.qq.com/s/CFNrITqGvZF2kTgLx522HQ",
     "note": "原声带/爵士/舒缓",
     "cover": "covers/222.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1938292&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 223,
@@ -2661,7 +2787,7 @@
     "url": "https://mp.weixin.qq.com/s/CFNrITqGvZF2kTgLx522HQ",
     "note": "经典民谣",
     "cover": "covers/223.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1216195&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 224,
@@ -2673,7 +2799,7 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典民谣",
     "cover": "covers/224.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=22088505&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 225,
@@ -2685,7 +2811,7 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典民谣",
     "cover": "covers/225.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 226,
@@ -2697,7 +2823,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典民谣/抒情/情歌",
     "cover": "covers/226.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1965761707&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1470274244&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 227,
@@ -2709,7 +2836,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典民谣/披头士",
     "cover": "covers/227.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1811303184&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=4331344&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 228,
@@ -2721,7 +2849,7 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典民谣",
     "cover": "covers/228.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1891598962&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 229,
@@ -2733,7 +2861,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典民谣/栖息地",
     "cover": "covers/229.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18822292&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=18822292&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 230,
@@ -2757,7 +2886,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典乐队/民谣",
     "cover": "covers/231.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=531954634&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=4049431&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 232,
@@ -2769,7 +2899,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "摇滚/乐队",
     "cover": "covers/232.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1962034425&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=3879508&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 233,
@@ -2781,7 +2912,7 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "摇滚/乐队/前奏",
     "cover": "covers/233.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=21972611&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 234,
@@ -2793,7 +2924,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "摇滚/乐队/年代",
     "cover": "covers/234.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=4338718&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=4338755&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 235,
@@ -2805,7 +2937,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "摇滚/乐队/年代",
     "cover": "covers/235.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=21303927&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=21303927&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 236,
@@ -2817,7 +2950,7 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "摇滚/乐队/年代",
     "cover": "covers/236.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 237,
@@ -2829,7 +2962,7 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "摇滚",
     "cover": "covers/237.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18212227&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 238,
@@ -2841,7 +2974,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "乐队/经典/舞动",
     "cover": "covers/238.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=3880210&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=3880210&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 239,
@@ -2853,7 +2987,7 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典欧美民谣",
     "cover": "covers/239.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=491424530&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 240,
@@ -2865,7 +2999,8 @@
     "url": "https://mp.weixin.qq.com/s/cN7hyfSEI5CKmNg_tl1fhQ",
     "note": "经典欧美音乐",
     "cover": "covers/240.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=19553535&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=19553535&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 241,
@@ -2877,7 +3012,7 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "原声带",
     "cover": "covers/241.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=40047005&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 242,
@@ -2889,7 +3024,8 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "原声带",
     "cover": "covers/242.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1942594380&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1942594380&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 243,
@@ -2901,7 +3037,7 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "原声带",
     "cover": "covers/243.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 244,
@@ -2913,7 +3049,8 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "原声带",
     "cover": "covers/244.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=458697983&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=458697983&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 245,
@@ -2925,7 +3062,8 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "欧美流行乐/R&B",
     "cover": "covers/245.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=433681259&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=433681259&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 246,
@@ -2937,7 +3075,8 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "欧美流行乐/乐感",
     "cover": "covers/246.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=428642533&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=428642533&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 247,
@@ -2949,7 +3088,8 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "说唱经典/姆爷",
     "cover": "covers/247.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=17572422&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 248,
@@ -2961,7 +3101,7 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "欧美流行乐/电子氛围",
     "cover": "covers/248.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1406633327&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 249,
@@ -2973,7 +3113,7 @@
     "url": "https://mp.weixin.qq.com/s/w17MEqIYdK2g4CU4mKgtVQ",
     "note": "欧美流行乐/乐感/乐队",
     "cover": "covers/249.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1448195341&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 250,
@@ -2985,7 +3125,7 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "MG动画BGM",
     "cover": "covers/250.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=29207843&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 251,
@@ -2997,7 +3137,7 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "原声带/超绝爵士",
     "cover": "covers/251.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1482098196&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 252,
@@ -3009,7 +3149,7 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "原声带/爱乐之城",
     "cover": "covers/252.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=445867338&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 253,
@@ -3021,7 +3161,7 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "爵士/女声/好听",
     "cover": "covers/253.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=22489132&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 254,
@@ -3033,7 +3173,7 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "爵士",
     "cover": "covers/254.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=3164102&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 255,
@@ -3045,7 +3185,8 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "Fav/经典女声",
     "cover": "covers/255.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=36871368&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=36871368&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 256,
@@ -3057,7 +3198,8 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "Fav/经典女声",
     "cover": "covers/256.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=16435016&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=16435028&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 257,
@@ -3069,7 +3211,8 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "Fav/经典女声",
     "cover": "covers/257.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=402073823&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=36871370&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 258,
@@ -3081,7 +3224,8 @@
     "url": "https://mp.weixin.qq.com/s/Q1RP-x_xf7mXkHunrh3b-Q",
     "note": "Fav/经典女声",
     "cover": "covers/258.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2117009&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2117009&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 259,
@@ -3093,7 +3237,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "氛围音乐/电子/纯音乐",
     "cover": "covers/259.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=17724536&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=17724536&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 260,
@@ -3105,7 +3250,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "Fav/即兴",
     "cover": "covers/260.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1985557950&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1985557950&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 261,
@@ -3117,7 +3263,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "Fav/",
     "cover": "covers/261.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1985556128&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1985556128&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 262,
@@ -3129,7 +3276,7 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "Fav/",
     "cover": "covers/262.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1985556130&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 263,
@@ -3141,7 +3288,7 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "Fav/",
     "cover": "covers/263.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1985557952&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 264,
@@ -3165,7 +3312,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "JohnMayer风格",
     "cover": "covers/265.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=36530332&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1475460&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 266,
@@ -3177,7 +3325,7 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "经典欧美流行歌/节奏向",
     "cover": "covers/266.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 267,
@@ -3189,7 +3337,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "欧美流行歌/节奏向/舞蹈",
     "cover": "covers/267.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2188411&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=26827276&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 268,
@@ -3201,7 +3350,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "欧美流行歌",
     "cover": "covers/268.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=19550156&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=19550156&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 269,
@@ -3213,7 +3363,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "欧美流行歌/舞蹈",
     "cover": "covers/269.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=20515754&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 270,
@@ -3225,7 +3376,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "欧美流行歌/舞蹈",
     "cover": "covers/270.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1451492235&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1451492235&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 271,
@@ -3249,7 +3401,7 @@
     "url": "https://mp.weixin.qq.com/s/3INttw2esjkV06eTOJVEGg",
     "note": "无歌词音乐/乐队",
     "cover": "covers/272.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1409761499&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 273,
@@ -3273,7 +3425,8 @@
     "url": "https://mp.weixin.qq.com/s/cuJEKHshB3TqP1j15oeEow",
     "note": "爵士钢琴三重奏组曲",
     "cover": "covers/274.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1161402&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 275,
@@ -3297,7 +3450,7 @@
     "url": "https://mp.weixin.qq.com/s/cuJEKHshB3TqP1j15oeEow",
     "note": "女声",
     "cover": "covers/276.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26304428&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 277,
@@ -3309,7 +3462,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "无歌词音乐/乐队",
     "cover": "covers/277.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2665152994&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 278,
@@ -3321,7 +3475,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "独立摇滚/乐队/人生阶段记忆曲",
     "cover": "covers/278.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=381858&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 279,
@@ -3333,7 +3488,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "独立摇滚/乐队/",
     "cover": "covers/279.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=381849&auto=1&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=381849&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 280,
@@ -3345,7 +3501,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "独立摇滚/乐队/",
     "cover": "covers/280.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=28949131&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=28949131&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 281,
@@ -3357,7 +3514,7 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "独立摇滚/乐队/人生阶段记忆曲",
     "cover": "covers/281.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=28860055&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 282,
@@ -3369,7 +3526,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "独立摇滚/乐队/",
     "cover": "covers/282.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=381747&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=381747&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 283,
@@ -3381,7 +3539,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "粤语经典",
     "cover": "covers/283.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1940770373&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1940770373&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 284,
@@ -3393,7 +3552,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "粤语经典/循环专辑",
     "cover": "covers/284.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=64429&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=64922&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 285,
@@ -3405,7 +3565,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "氛围音乐",
     "cover": "covers/285.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1989332675&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1989332675&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 286,
@@ -3417,7 +3578,7 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "纯音乐",
     "cover": "covers/286.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1879949888&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 287,
@@ -3429,7 +3590,7 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "电子乐",
     "cover": "covers/287.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=16505502&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 288,
@@ -3441,7 +3602,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "日语",
     "cover": "covers/288.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=522631664&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=522631664&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 289,
@@ -3453,7 +3615,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "日语/原声带/女声",
     "cover": "covers/289.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1403215795&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=522617158&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 290,
@@ -3465,7 +3628,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "独特女声/另类",
     "cover": "covers/290.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2072361367&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=32341424&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 291,
@@ -3477,7 +3641,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "爵士/纯音乐",
     "cover": "covers/291.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1479950962&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1479950962&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 292,
@@ -3489,7 +3654,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "爵士",
     "cover": "covers/292.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=5048569&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=432780454&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 293,
@@ -3501,7 +3667,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "爵士/女声",
     "cover": "covers/293.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=632452&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1442431916&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 294,
@@ -3513,7 +3680,8 @@
     "url": "https://mp.weixin.qq.com/s/geP07oRg7FAeOXRFI6Kv7Q",
     "note": "游戏原声带/女声",
     "cover": "covers/294.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1496089152&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1496089152&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 295,
@@ -3525,7 +3693,8 @@
     "url": "https://mp.weixin.qq.com/s/geP07oRg7FAeOXRFI6Kv7Q",
     "note": "氛围音乐/电子",
     "cover": "covers/295.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1989837426&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2030247489&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 296,
@@ -3537,7 +3706,7 @@
     "url": "https://mp.weixin.qq.com/s/x2bKfi7WAcfMZ6zPWUI0gg",
     "note": "氛围音乐/纯音乐",
     "cover": "covers/296.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1989318113&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 297,
@@ -3549,7 +3718,7 @@
     "url": "",
     "note": "音乐剧/好听/循环过",
     "cover": "covers/297.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=4326120&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 298,
@@ -3561,7 +3730,7 @@
     "url": "",
     "note": "音乐剧/合唱/爵士/生命力",
     "cover": "covers/298.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=4325975&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 299,
@@ -3573,7 +3742,8 @@
     "url": "",
     "note": "音乐剧/经典曲目",
     "cover": "covers/299.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18417551&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=18417551&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 300,
@@ -3585,7 +3755,8 @@
     "url": "",
     "note": "音乐剧经典曲目/翻唱",
     "cover": "covers/300.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1381373631&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1381373631&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 301,
@@ -3597,7 +3768,7 @@
     "url": "",
     "note": "音乐剧经典曲目/翻唱",
     "cover": "covers/301.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1381574049&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 302,
@@ -3609,7 +3780,7 @@
     "url": "",
     "note": "音乐剧经典曲目/翻唱",
     "cover": "covers/302.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1381574715&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 303,
@@ -3621,7 +3792,7 @@
     "url": "",
     "note": "原声带/爵士",
     "cover": "covers/303.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1978657&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 304,
@@ -3633,7 +3804,7 @@
     "url": "",
     "note": "原声带/音乐剧",
     "cover": "covers/304.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=559351671&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 305,
@@ -3645,7 +3816,7 @@
     "url": "",
     "note": "原声带/民谣/TS",
     "cover": "covers/305.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1958623002&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 306,
@@ -3657,7 +3828,7 @@
     "url": "",
     "note": "TS/好听",
     "cover": "covers/306.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1891456146&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 307,
@@ -3669,7 +3840,8 @@
     "url": "",
     "note": "TS/好听",
     "cover": "covers/307.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1853370384&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1803546869&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 308,
@@ -3681,7 +3853,7 @@
     "url": "",
     "note": "TS/好听",
     "cover": "covers/308.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1449130127&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 309,
@@ -3693,7 +3865,7 @@
     "url": "",
     "note": "另类/独立/女声/乐队",
     "cover": "covers/309.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1821466007&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 310,
@@ -3705,7 +3877,7 @@
     "url": "",
     "note": "说唱/专辑",
     "cover": "covers/310.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1947055150&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 311,
@@ -3717,7 +3889,7 @@
     "url": "",
     "note": "说唱/专辑",
     "cover": "covers/311.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1947052600&auto=1&height=66"
+    "previewUrl": ""
   },
   {
     "id": 312,
@@ -3729,7 +3901,7 @@
     "url": "",
     "note": "MJ/经典",
     "cover": "covers/312.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=27505499&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 313,
@@ -3741,7 +3913,7 @@
     "url": "",
     "note": "MJ/经典",
     "cover": "covers/313.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=21178259&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 314,
@@ -3753,7 +3925,8 @@
     "url": "https://mp.weixin.qq.com/s/aTYKkxQNzwGQ8yff_k4rLQ",
     "note": "爵士/当代爵士",
     "cover": "covers/314.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1990147902&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1990147902&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 315,
@@ -3765,7 +3938,8 @@
     "url": "",
     "note": "氛围音乐/电子/拓展想象力",
     "cover": "covers/315.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1821694747&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1821694747&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 316,
@@ -3777,7 +3951,7 @@
     "url": "",
     "note": "氛围音乐/电子/拓展想象力",
     "cover": "covers/316.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1821694744&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 317,
@@ -3789,7 +3963,7 @@
     "url": "",
     "note": "翻唱/合唱",
     "cover": "covers/317.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 318,
@@ -3801,7 +3975,7 @@
     "url": "",
     "note": "Fav/ Jason/ 民谣/好听/欧美流行",
     "cover": "covers/318.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18611621&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 319,
@@ -3813,7 +3987,7 @@
     "url": "",
     "note": "女声/治愈",
     "cover": "covers/319.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2311902&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 320,
@@ -3825,7 +3999,7 @@
     "url": "https://mp.weixin.qq.com/s/gvUxZDjBUERfrEtCa1NXCw",
     "note": "电子",
     "cover": "covers/320.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1905509042&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 321,
@@ -3837,7 +4011,8 @@
     "url": "https://mp.weixin.qq.com/s/fxIyL19gdExHH8znj9IieQ",
     "note": "电子",
     "cover": "covers/321.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2142219851&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2142219851&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 322,
@@ -3861,7 +4036,7 @@
     "url": "https://mp.weixin.qq.com/s/fxIyL19gdExHH8znj9IieQ",
     "note": "欢快民谣",
     "cover": "covers/323.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 324,
@@ -3873,7 +4048,8 @@
     "url": "https://mp.weixin.qq.com/s/fxIyL19gdExHH8znj9IieQ",
     "note": "乐队/电子/朋克",
     "cover": "covers/324.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=506094012&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1486449944&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 325,
@@ -3885,7 +4061,8 @@
     "url": "https://mp.weixin.qq.com/s/NtoHsAvmsSFWA3SGvY1SCg",
     "note": "氛围音乐",
     "cover": "covers/325.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1474359072&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1474359072&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 326,
@@ -3897,7 +4074,8 @@
     "url": "https://mp.weixin.qq.com/s/NtoHsAvmsSFWA3SGvY1SCg",
     "note": "氛围音乐",
     "cover": "covers/326.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1474357778&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1474357778&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 327,
@@ -3909,7 +4087,8 @@
     "url": "https://mp.weixin.qq.com/s/NtoHsAvmsSFWA3SGvY1SCg",
     "note": "氛围音乐",
     "cover": "covers/327.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1474357779&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1474357779&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 328,
@@ -3921,7 +4100,8 @@
     "url": "https://mp.weixin.qq.com/s/NtoHsAvmsSFWA3SGvY1SCg",
     "note": "小语种",
     "cover": "covers/328.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1419881343&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2706205459&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 329,
@@ -3933,7 +4113,8 @@
     "url": "https://mp.weixin.qq.com/s/rZ779wsGnU8emqp2BJxVTw",
     "note": "氛围音乐/鼓点",
     "cover": "covers/329.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819552026&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819552026&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 330,
@@ -3945,7 +4126,8 @@
     "url": "https://mp.weixin.qq.com/s/rZ779wsGnU8emqp2BJxVTw",
     "note": "氛围音乐",
     "cover": "covers/330.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819550541&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819550541&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 331,
@@ -3957,7 +4139,8 @@
     "url": "https://mp.weixin.qq.com/s/rZ779wsGnU8emqp2BJxVTw",
     "note": "原声带/气势/摇滚/吉他",
     "cover": "covers/331.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1858861098&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=26692049&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 332,
@@ -3969,7 +4152,8 @@
     "url": "https://mp.weixin.qq.com/s/rZ779wsGnU8emqp2BJxVTw",
     "note": "原声带/",
     "cover": "covers/332.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26145413&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=26145413&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 333,
@@ -3981,7 +4165,8 @@
     "url": "https://mp.weixin.qq.com/s/rZ779wsGnU8emqp2BJxVTw",
     "note": "电子",
     "cover": "covers/333.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1969705930&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1969705930&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 334,
@@ -3993,7 +4178,8 @@
     "url": "https://mp.weixin.qq.com/s/wMza3HgKrOuPW6Jx25tFqQ",
     "note": "电子/氛围音乐",
     "cover": "covers/334.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1496177406&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1361475291&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 335,
@@ -4005,7 +4191,7 @@
     "url": "https://mp.weixin.qq.com/s/M22MlD1EouxT-vtWau3i9g",
     "note": "电子/氛围音乐",
     "cover": "covers/335.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1975141539&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 336,
@@ -4017,7 +4203,7 @@
     "url": "https://mp.weixin.qq.com/s/M22MlD1EouxT-vtWau3i9g",
     "note": "电子/氛围音乐",
     "cover": "covers/336.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 337,
@@ -4029,7 +4215,7 @@
     "url": "https://mp.weixin.qq.com/s/M22MlD1EouxT-vtWau3i9g",
     "note": "电子/氛围音乐",
     "cover": "covers/337.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 338,
@@ -4041,7 +4227,8 @@
     "url": "https://mp.weixin.qq.com/s/M22MlD1EouxT-vtWau3i9g",
     "note": "电子/氛围音乐",
     "cover": "covers/338.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1975141969&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 339,
@@ -4053,7 +4240,7 @@
     "url": "https://mp.weixin.qq.com/s/M22MlD1EouxT-vtWau3i9g",
     "note": "电子/氛围音乐",
     "cover": "covers/339.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 340,
@@ -4065,7 +4252,8 @@
     "url": "https://mp.weixin.qq.com/s/M22MlD1EouxT-vtWau3i9g",
     "note": "原声带",
     "cover": "covers/340.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2015616&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=16434161&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 341,
@@ -4077,7 +4265,7 @@
     "url": "https://mp.weixin.qq.com/s/b8pGc6M0JN7wrRy0DTRhHg",
     "note": "咏叹调/古典/悠扬",
     "cover": "covers/341.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18613128&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 342,
@@ -4113,7 +4301,8 @@
     "url": "https://mp.weixin.qq.com/s/fA8LB1CtoJVEoE4wFBDmeA",
     "note": "电子/氛围音乐",
     "cover": "covers/344.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1994555695&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1994556123&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 345,
@@ -4125,7 +4314,7 @@
     "url": "https://mp.weixin.qq.com/s/fA8LB1CtoJVEoE4wFBDmeA",
     "note": "纯音乐",
     "cover": "covers/345.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1998367030&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 346,
@@ -4137,7 +4326,8 @@
     "url": "https://mp.weixin.qq.com/s/fA8LB1CtoJVEoE4wFBDmeA",
     "note": "纯音乐",
     "cover": "covers/346.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1998367998&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1982659071&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 347,
@@ -4149,7 +4339,8 @@
     "url": "https://mp.weixin.qq.com/s/fA8LB1CtoJVEoE4wFBDmeA",
     "note": "纯音乐",
     "cover": "covers/347.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1998367999&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=492999917&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 348,
@@ -4161,7 +4352,7 @@
     "url": "https://mp.weixin.qq.com/s/fA8LB1CtoJVEoE4wFBDmeA",
     "note": "纯音乐",
     "cover": "covers/348.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 349,
@@ -4173,7 +4364,8 @@
     "url": "https://mp.weixin.qq.com/s/fq6whvr189W3Ppk3ojHRpQ",
     "note": "纯音乐",
     "cover": "covers/349.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=461624937&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=461624937&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 350,
@@ -4185,7 +4377,7 @@
     "url": "https://mp.weixin.qq.com/s/fq6whvr189W3Ppk3ojHRpQ",
     "note": "原声带",
     "cover": "covers/350.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 351,
@@ -4197,7 +4389,7 @@
     "url": "https://mp.weixin.qq.com/s/xFrDn0_O-ij0_jZjjQUrgA",
     "note": "电子",
     "cover": "covers/351.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=28911976&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 352,
@@ -4209,7 +4401,7 @@
     "url": "https://mp.weixin.qq.com/s/xFrDn0_O-ij0_jZjjQUrgA",
     "note": "原声带/游戏",
     "cover": "covers/352.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1419191927&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 353,
@@ -4221,7 +4413,7 @@
     "url": "https://mp.weixin.qq.com/s/xFrDn0_O-ij0_jZjjQUrgA",
     "note": "原声带/游戏",
     "cover": "covers/353.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1419191935&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 354,
@@ -4245,7 +4437,8 @@
     "url": "https://mp.weixin.qq.com/s/xFrDn0_O-ij0_jZjjQUrgA",
     "note": "原声带/游戏/北欧",
     "cover": "covers/355.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1992104420&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1992104420&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 356,
@@ -4257,7 +4450,7 @@
     "url": "https://mp.weixin.qq.com/s/xFrDn0_O-ij0_jZjjQUrgA",
     "note": "原声带/游戏/北欧",
     "cover": "covers/356.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1992106712&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 357,
@@ -4281,7 +4474,7 @@
     "url": "https://mp.weixin.qq.com/s/VW0zXRYiM-VFXZhkM7iqKQ",
     "note": "纯音乐/古风氛围",
     "cover": "covers/358.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=77169&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 359,
@@ -4293,7 +4486,7 @@
     "url": "https://mp.weixin.qq.com/s/VW0zXRYiM-VFXZhkM7iqKQ",
     "note": "日语",
     "cover": "covers/359.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=864647178&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 360,
@@ -4305,7 +4498,7 @@
     "url": "https://mp.weixin.qq.com/s/VW0zXRYiM-VFXZhkM7iqKQ",
     "note": "日语/原声带",
     "cover": "covers/360.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=22786083&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 361,
@@ -4317,7 +4510,7 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "氛围音乐/新世纪-冥想音乐",
     "cover": "covers/361.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1931455190&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 362,
@@ -4329,7 +4522,7 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "原声带/民谣",
     "cover": "covers/362.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=19011036&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 363,
@@ -4341,7 +4534,7 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "原声带/纯音乐/循环过",
     "cover": "covers/363.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1819716735&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 364,
@@ -4353,7 +4546,7 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "粤语/有爱",
     "cover": "covers/364.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=64594&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 365,
@@ -4365,7 +4558,7 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "原声带/迪士尼/好听",
     "cover": "covers/365.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1057507&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 366,
@@ -4377,7 +4570,8 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "摇滚/乐队/共鸣/经典",
     "cover": "covers/366.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=18795421&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=18795421&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 367,
@@ -4389,7 +4583,7 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "原声带",
     "cover": "covers/367.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26635186&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 368,
@@ -4401,7 +4595,7 @@
     "url": "https://mp.weixin.qq.com/s/l6z3xhW7s20SpDXbS_vg-g",
     "note": "跨界/摇滚",
     "cover": "covers/368.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=21255954&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 369,
@@ -4413,7 +4607,8 @@
     "url": "https://mp.weixin.qq.com/s/mppqc9d_aH-GG2d9RmWqWw",
     "note": "流行/女声",
     "cover": "covers/369.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1409137716&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1409137716&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 370,
@@ -4425,7 +4620,7 @@
     "url": "",
     "note": "氛围音乐/纯音乐/世界音乐",
     "cover": "covers/370.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1896308834&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 371,
@@ -4437,7 +4632,7 @@
     "url": "",
     "note": "好听/循环/治愈/充满希望感",
     "cover": "covers/371.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1846209641&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 372,
@@ -4449,7 +4644,7 @@
     "url": "https://mp.weixin.qq.com/s/foL7jdo4tQbGb35Ld7alkg",
     "note": "氛围音乐/悠闲时光",
     "cover": "covers/372.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1984177888&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 373,
@@ -4461,7 +4656,7 @@
     "url": "https://mp.weixin.qq.com/s/-qOi9ArxxxVblBMkjMRqLw",
     "note": "氛围音乐/新世纪-冥想音乐",
     "cover": "covers/373.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1982915376&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 374,
@@ -4473,7 +4668,7 @@
     "url": "https://mp.weixin.qq.com/s/tfMQEYidvhaAUY7L56s5PA",
     "note": "氛围音乐/电子/",
     "cover": "covers/374.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1844816364&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 375,
@@ -4485,7 +4680,7 @@
     "url": "https://mp.weixin.qq.com/s/tfMQEYidvhaAUY7L56s5PA",
     "note": "女声",
     "cover": "covers/375.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1826016241&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 376,
@@ -4497,7 +4692,8 @@
     "url": "https://mp.weixin.qq.com/s/tfMQEYidvhaAUY7L56s5PA",
     "note": "氛围音乐/",
     "cover": "covers/376.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2021339567&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2021339567&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 377,
@@ -4509,7 +4705,8 @@
     "url": "https://mp.weixin.qq.com/s/tfMQEYidvhaAUY7L56s5PA",
     "note": "电子/节奏",
     "cover": "covers/377.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1981742204&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2601947303&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 378,
@@ -4521,7 +4718,7 @@
     "url": "https://mp.weixin.qq.com/s/AwhcpVLFq0-sJrGdfMku-A",
     "note": "另类/独立",
     "cover": "covers/378.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1934972451&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 379,
@@ -4533,7 +4730,8 @@
     "url": "https://mp.weixin.qq.com/s/AwhcpVLFq0-sJrGdfMku-A",
     "note": "氛围音乐/电子/新世纪-冥想音乐",
     "cover": "covers/379.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2005129018&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2005129018&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 380,
@@ -4545,7 +4743,7 @@
     "url": "https://mp.weixin.qq.com/s/AwhcpVLFq0-sJrGdfMku-A",
     "note": "电子/节奏",
     "cover": "covers/380.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2018612985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 381,
@@ -4557,7 +4755,7 @@
     "url": "https://mp.weixin.qq.com/s/AwhcpVLFq0-sJrGdfMku-A",
     "note": "摇滚/经典",
     "cover": "covers/381.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=25639052&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 382,
@@ -4569,7 +4767,7 @@
     "url": "https://mp.weixin.qq.com/s/AwhcpVLFq0-sJrGdfMku-A",
     "note": "民谣/抒情",
     "cover": "covers/382.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1310105703&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 383,
@@ -4581,7 +4779,8 @@
     "url": "https://mp.weixin.qq.com/s/AwhcpVLFq0-sJrGdfMku-A",
     "note": "女声/另类/独立",
     "cover": "covers/383.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1934970506&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2056881998&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 384,
@@ -4593,7 +4792,7 @@
     "url": "https://mp.weixin.qq.com/s/eFx9hvRTAokQPxllkKHcSA",
     "note": "氛围音乐/民族风情/电子/雨林",
     "cover": "covers/384.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=803985&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 385,
@@ -4617,7 +4816,8 @@
     "url": "",
     "note": "古典跨界",
     "cover": "covers/386.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2038412573&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2038412573&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 387,
@@ -4629,7 +4829,8 @@
     "url": "https://mp.weixin.qq.com/s/MVlv0oOEBlwaKQtqNE-j_A",
     "note": "摇滚/经典/",
     "cover": "covers/387.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=4237923&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=4237923&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 388,
@@ -4641,7 +4842,8 @@
     "url": "",
     "note": "民谣抒情风格",
     "cover": "covers/388.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=563408486&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=563408486&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 389,
@@ -4653,7 +4855,8 @@
     "url": "",
     "note": "动漫原声带",
     "cover": "covers/389.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1992342670&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1992342670&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 390,
@@ -4665,7 +4868,7 @@
     "url": "",
     "note": "摇滚经典/林肯公园",
     "cover": "covers/390.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1364103867&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 391,
@@ -4689,7 +4892,8 @@
     "url": "https://mp.weixin.qq.com/s/1E1359bZpT26TOZtC39qog",
     "note": "抒情民谣",
     "cover": "covers/392.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2021149569&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2021149569&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 393,
@@ -4701,7 +4905,8 @@
     "url": "https://mp.weixin.qq.com/s/1E1359bZpT26TOZtC39qog",
     "note": "钢琴/好听",
     "cover": "covers/393.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=498190&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=498190&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 394,
@@ -4713,7 +4918,8 @@
     "url": "https://mp.weixin.qq.com/s/1E1359bZpT26TOZtC39qog",
     "note": "粤语/经典/哥哥",
     "cover": "covers/394.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=188444&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2153165306&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 395,
@@ -4725,7 +4931,7 @@
     "url": "https://mp.weixin.qq.com/s/1E1359bZpT26TOZtC39qog",
     "note": "粤语/经典/哥哥",
     "cover": "covers/395.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26075336&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 396,
@@ -4761,7 +4967,8 @@
     "url": "https://mp.weixin.qq.com/s/1E1359bZpT26TOZtC39qog",
     "note": "钢琴/女声/经典",
     "cover": "covers/398.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=633056&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=633056&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 399,
@@ -4773,7 +4980,7 @@
     "url": "https://mp.weixin.qq.com/s/1E1359bZpT26TOZtC39qog",
     "note": "氛围音乐",
     "cover": "covers/399.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1882847190&auto=0&height=66"
+    "previewUrl": ""
   },
   {
     "id": 400,
@@ -4785,7 +4992,8 @@
     "url": "https://mp.weixin.qq.com/s/1E1359bZpT26TOZtC39qog",
     "note": "电子/氛围音乐",
     "cover": "covers/400.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2029256400&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=2029256400&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 401,
