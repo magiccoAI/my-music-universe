@@ -33,8 +33,8 @@ const SNOW_BACKGROUNDS = [
     path: '/images/snow-bg.jpg',
     fog: { color: '#dbeafe', density: 0.0045 },
     environment: {
-      ambient: { intensity: 0.6, color: '#e0f2fe' },
-      sun: { intensity: 1.2, color: '#ffffff', position: [20, 30, 10] }
+      ambient: { intensity: 0.3, color: '#e0f2fe' },
+      sun: { intensity: 0.6, color: '#ffffff', position: [20, 30, 10] }
     }
   },
   {
@@ -47,21 +47,21 @@ const SNOW_BACKGROUNDS = [
     }
   },
   {
-    name: '全景 07',
+    name: '极光星空',
     path: '/images/自然风光_期末的延时_07_全景.jpg',
     fog: { color: '#e2e8f0', density: 0.0035 },
     environment: {
-      ambient: { intensity: 0.55, color: '#f1f5f9' },
-      sun: { intensity: 1.15, color: '#fff7ed', position: [26, 28, 6] }
+      ambient: { intensity: 0.3, color: '#f1f5f9' },
+      sun: { intensity: 0.6, color: '#fff7ed', position: [26, 28, 6] }
     }
   },
   {
-    name: '全景 11',
+    name: '日照金山01',
     path: '/images/自然风光_期末的延时_11_全景.jpg',
-    fog: { color: '#e2e8f0', density: 0.0035 },
+    fog: { color: '#ffd700', density: 0.002 },
     environment: {
-      ambient: { intensity: 0.55, color: '#f8fafc' },
-      sun: { intensity: 1.1, color: '#fefce8', position: [18, 30, 12] }
+      ambient: { intensity: 0.4, color: '#64748b' }, // Darker slate blue shadow
+      sun: { intensity: 2.0, color: '#ffd700', position: [25, 5, 20] } // Reduced intensity
     }
   },
   {
@@ -69,17 +69,17 @@ const SNOW_BACKGROUNDS = [
     path: '/images/自然风光_意大利_5_中景.jpg',
     fog: { color: '#e0f2fe', density: 0.003 },
     environment: {
-      ambient: { intensity: 0.6, color: '#e0f2fe' },
-      sun: { intensity: 1.2, color: '#fff7ed', position: [22, 26, 14] }
+      ambient: { intensity: 0.3, color: '#e0f2fe' },
+      sun: { intensity: 0.6, color: '#fff7ed', position: [22, 26, 14] }
     }
   },
   {
-    name: '全景 01',
+    name: '日照金山02',
     path: '/images/自然风光_期末的延时_01_全景.jpg',
-    fog: { color: '#dbeafe', density: 0.004 },
+    fog: { color: '#ffd700', density: 0.0025 }, // Changed to Gold (same as 01)
     environment: {
-      ambient: { intensity: 0.6, color: '#e0f2fe' },
-      sun: { intensity: 1.15, color: '#ffffff', position: [24, 30, 10] }
+      ambient: { intensity: 0.4, color: '#4f46e5' }, // Keep Deep indigo shadow
+      sun: { intensity: 1.8, color: '#ffd700', position: [30, 8, 10] } // Reduced intensity
     }
   }
 ];
@@ -831,7 +831,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                  <RainbowMeadow isRaining={isRaining} isMobile={isMobile} />
               )}
               {dayMode === 'meadow' && (
-                <SnowMountain bgImage={snowBg} environment={snowBgPreset.environment} isMobile={isMobile} />
+                <SnowMountain bgImage={snowBg} environment={snowBgPreset.environment} fog={snowBgPreset.fog} isMobile={isMobile} />
               )}
             </React.Suspense>
           )}

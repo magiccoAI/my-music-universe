@@ -265,8 +265,8 @@
     "url": "https://mp.weixin.qq.com/s/vsbMm3ZFlx3x_ITX0qgq3w",
     "note": "Fav",
     "cover": "covers/21.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/d9/9c/8f/d99c8f63-0b02-98c3-da3a-4780cd0c4df3/mzaf_11200030040169908466.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=420154475&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 22,
@@ -291,8 +291,8 @@
     "url": "https://mp.weixin.qq.com/s/vsbMm3ZFlx3x_ITX0qgq3w",
     "note": "纯音乐/原声带",
     "cover": "covers/23.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/69/cb/2169cb72-ddf0-8a79-7734-274dfec81f52/mzaf_12238077248823254464.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=29774805&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 24,
@@ -393,8 +393,8 @@
     "url": "https://mp.weixin.qq.com/s/5IpKleOZBq4mhhDaapiPdw",
     "note": "原声带",
     "cover": "covers/31.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/3d/e7/f5/3de7f5b1-475f-4c43-f8ef-9cbeee4e7f12/mzaf_6838208580754593443.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=35957377&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 32,
@@ -419,8 +419,8 @@
     "url": "https://mp.weixin.qq.com/s/sBib4Zma7veC4F0WSR0HnA",
     "note": "乐队/Fav",
     "cover": "covers/33.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/74/c1/61/74c161c5-bb6d-a48b-fcb8-ff604cf64e29/mzaf_11818833474303679119.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1823422061&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 34,
@@ -432,7 +432,8 @@
     "url": "https://mp.weixin.qq.com/s/sBib4Zma7veC4F0WSR0HnA",
     "note": "交响乐版",
     "cover": "covers/34.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1896858068&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 35,
@@ -506,8 +507,8 @@
     "url": "https://mp.weixin.qq.com/s/DonlGfUVeNbECnqwAXED7A",
     "note": "吉他弹奏",
     "cover": "covers/40.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/23/eb/f9/23ebf990-4759-f02b-cfcd-710a70c90aa7/mzaf_1089887469044055670.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=39122916&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 41,
@@ -1114,7 +1115,8 @@
     "url": "https://mp.weixin.qq.com/s/efDJw0IX9uMjS3AkyKO-QQ",
     "note": "南美风情/欢快",
     "cover": "covers/88.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=995927&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 89,
@@ -4653,7 +4655,8 @@
     "url": "",
     "note": "好听/循环/治愈/充满希望感",
     "cover": "covers/371.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1409137716&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 372,
@@ -4677,7 +4680,8 @@
     "url": "https://mp.weixin.qq.com/s/-qOi9ArxxxVblBMkjMRqLw",
     "note": "氛围音乐/新世纪-冥想音乐",
     "cover": "covers/373.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1982915376&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 374,
@@ -4689,7 +4693,8 @@
     "url": "https://mp.weixin.qq.com/s/tfMQEYidvhaAUY7L56s5PA",
     "note": "氛围音乐/电子/",
     "cover": "covers/374.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1844816364&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 375,

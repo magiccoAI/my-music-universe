@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect, useLayoutEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
@@ -544,11 +544,13 @@ const EnergyLineShader = {
 
 // --- Stylized Big Tree with Wind Animation & Fake Shadow ---
 
-// Simple wind sway vertex shader injection
+// Shader for InstancedMesh leaves with wind and color variation
 const TreeWindShader = {
   vertexShader: `
+    attribute vec3 instanceColor;
     varying vec2 vUv;
     varying vec3 vNormal;
+    varying vec3 vColor;
     uniform float uTime;
     
     // Simple 3D noise function
@@ -569,70 +571,65 @@ const TreeWindShader = {
     void main() {
       vUv = uv;
       vNormal = normalize(normalMatrix * normal);
+      vColor = instanceColor;
       
       vec3 pos = position;
       
-      // Wind settings
+      // Calculate wind based on world position (approximated)
+      // We apply wind *before* instance matrix to simulate local leaf flutter
+      // OR *after* instance matrix to simulate branch sway.
+      // Let's do a simple flutter effect here.
+      
       float windSpeed = 1.0;
-      float windStrength = 0.15; 
+      float windStrength = 0.1;
       
-      // Calculate wind based on height (pos.y) and time
-      // Higher parts move more
-      float heightFactor = smoothstep(0.0, 5.0, pos.y);
+      // Use instance matrix translation part for phase
+      vec3 instancePos = vec3(instanceMatrix[3][0], instanceMatrix[3][1], instanceMatrix[3][2]);
       
-      // Multi-layered noise for more natural movement
-      float n1 = noise(vec3(pos.x * 0.5 + uTime * windSpeed, pos.z * 0.5, uTime * 0.2));
-      float n2 = noise(vec3(pos.x * 1.5 - uTime * windSpeed * 0.5, pos.y * 1.0, uTime * 0.3));
+      float n = noise(vec3(instancePos.x * 0.5 + uTime * windSpeed, instancePos.z * 0.5, uTime * 0.2));
       
-      // Apply offset
-      pos.x += (n1 - 0.5) * windStrength * heightFactor;
-      pos.z += (n2 - 0.5) * windStrength * heightFactor;
+      pos.x += (n - 0.5) * windStrength;
+      pos.y += (n - 0.5) * windStrength * 0.5;
+      pos.z += (n - 0.5) * windStrength;
       
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(pos, 1.0);
+      gl_Position = projectionMatrix * mvPosition;
     }
   `,
-  // We can reuse a standard material's fragment logic or just use a simple color
-  // But to keep it simple and compatible with R3F's <shaderMaterial>, we'll implement a basic one
-  // However, for better lighting, we might want to use onBeforeCompile with MeshStandardMaterial.
-  // For now, let's use a custom ShaderMaterial that mimics basic lighting to ensure the wind works.
   fragmentShader: `
     varying vec2 vUv;
     varying vec3 vNormal;
+    varying vec3 vColor;
     
-    uniform vec3 uColor;
     uniform vec3 uLightDir;
     
     void main() {
-      // Simple directional lighting
       vec3 norm = normalize(vNormal);
       vec3 lightDir = normalize(uLightDir);
       
-      // Two-tone toon shading
       float diff = max(dot(norm, lightDir), 0.0);
+      // Soft lighting
+      float lightIntensity = smoothstep(0.0, 1.0, diff) * 0.6 + 0.4;
       
-      // Step function for toon look
-      float lightIntensity = smoothstep(0.3, 0.35, diff) * 0.5 + 0.5;
-      
-      // Add a bit of rim light
       float fresnel = pow(1.0 - max(dot(norm, vec3(0.0, 0.0, 1.0)), 0.0), 3.0);
       
-      vec3 finalColor = uColor * lightIntensity;
-      finalColor += vec3(1.0) * fresnel * 0.2;
+      // Use instance color
+      vec3 finalColor = vColor * lightIntensity;
+      finalColor += vec3(1.0) * fresnel * 0.15;
       
       gl_FragColor = vec4(finalColor, 1.0);
     }
   `
 };
 
-// Component for the Stylized Tree
-const StylizedBigTree = ({ position, scale = 1.0 }) => {
+// Component for the Lush Tree with dense foliage
+const LushTree = ({ position, scale = 1.0, isMobile = false }) => {
   const leavesRef = useRef();
-  const trunkRef = useRef();
   const shadowRef = useRef();
+  const dummy = useMemo(() => new THREE.Object3D(), []);
   
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
-    uColor: { value: new THREE.Color('#4ade80') }, // Vibrant Green
     uLightDir: { value: new THREE.Vector3(0.5, 1.0, 0.5) }
   }), []);
 
@@ -648,52 +645,149 @@ const StylizedBigTree = ({ position, scale = 1.0 }) => {
     fragmentShader: `
       varying vec2 vUv;
       void main() {
-        // Radial gradient: center opaque, edge transparent
         vec2 center = vec2(0.5);
         float dist = distance(vUv, center);
         float alpha = 1.0 - smoothstep(0.2, 0.5, dist);
-        
-        // Dark color
-        gl_FragColor = vec4(0.0, 0.1, 0.0, alpha * 0.4); 
+        gl_FragColor = vec4(0.0, 0.1, 0.0, alpha * 0.5); 
       }
     `
   }), []);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    if (leavesRef.current) {
-      leavesRef.current.uniforms.uTime.value = t;
+    if (leavesRef.current && leavesRef.current.material && leavesRef.current.material.uniforms) {
+      leavesRef.current.material.uniforms.uTime.value = t;
     }
-    // Subtle shadow breathing
     if (shadowRef.current) {
        shadowRef.current.scale.setScalar(1.0 + Math.sin(t * 0.5) * 0.05);
     }
   });
 
-  // Generate leaf clusters positions
-  const clusters = useMemo(() => {
-    const pos = [];
-    // Main top cluster
-    pos.push({ position: [0, 3.5, 0], scale: 2.0 });
-    // Side clusters
-    pos.push({ position: [1.2, 2.8, 0.5], scale: 1.5 });
-    pos.push({ position: [-1.2, 2.5, -0.5], scale: 1.6 });
-    pos.push({ position: [0.5, 2.2, 1.2], scale: 1.4 });
-    pos.push({ position: [-0.5, 3.0, -1.0], scale: 1.3 });
-    // Lower small details
-    pos.push({ position: [0.8, 1.5, 0], scale: 0.8 });
-    return pos;
-  }, []);
+  // Procedural generation of trunk and branches
+  const treeStructure = useMemo(() => {
+    let seed = 42; // Fixed seed for deterministic shape
+    const random = () => {
+      seed = (seed * 16807) % 2147483647;
+      return (seed - 1) / 2147483646;
+    };
+
+    const branches = [];
+    const leafPositions = [];
+    
+    // Main Trunk
+    branches.push({ 
+      start: [0, 0, 0], 
+      end: [0, 2.5, 0], 
+      thickness: 1.0 
+    });
+
+    const addBranch = (start, length, angleY, angleX, depth) => {
+      // Leaf generation: Add leaves along branches for the last 2 levels
+      if (depth <= 2) {
+         const clusters = Math.max(1, Math.ceil(length * 2.5));
+         for(let i=0; i<clusters; i++) {
+            const t = i / clusters;
+            const pos = [
+              start[0] + (Math.sin(angleY) * Math.cos(angleX) * length) * t,
+              start[1] + (Math.sin(angleX) * length) * t,
+              start[2] + (Math.cos(angleY) * Math.cos(angleX) * length) * t
+            ];
+            
+            // Add a cloud of leaves around this point
+            // Increase density significantly
+            // Mobile optimization: Reduce leaf count
+            const baseLeafCount = depth === 0 ? 12 : 6;
+            const leafCount = isMobile ? Math.ceil(baseLeafCount * 0.5) : baseLeafCount; 
+
+            for(let j=0; j<leafCount; j++) {
+               leafPositions.push({
+                 pos: [
+                   pos[0] + (random()-0.5) * 1.8,
+                   pos[1] + (random()-0.5) * 1.8,
+                   pos[2] + (random()-0.5) * 1.8
+                 ],
+                 scale: 0.5 + random() * 0.6, // Smaller, more numerous leaves
+                 color: random(),
+                 rotation: [random()*Math.PI, random()*Math.PI, random()*Math.PI]
+               });
+            }
+         }
+      }
+
+      if (depth === 0) return;
+
+      const end = [
+        start[0] + Math.sin(angleY) * Math.cos(angleX) * length,
+        start[1] + Math.sin(angleX) * length,
+        start[2] + Math.cos(angleY) * Math.cos(angleX) * length
+      ];
+
+      branches.push({ start, end, thickness: 1.0 * Math.pow(0.65, 5-depth) });
+
+      // Split into sub-branches
+      const subBranches = 2 + Math.floor(random() * 2.5); // 2 to 4 branches
+      for (let i = 0; i < subBranches; i++) {
+        addBranch(
+          end, 
+          length * 0.75, 
+          angleY + (random() - 0.5) * 2.5, 
+          angleX + (random() - 0.5) * 1.2, 
+          depth - 1
+        );
+      }
+    };
+
+    // Initial Branching - Upward reaching like the photo
+    addBranch([0, 2.5, 0], 3.0, 0, Math.PI/3.5, 4);
+    addBranch([0, 2.5, 0], 3.0, Math.PI, Math.PI/3.5, 4);
+    
+    return { branches, leafPositions };
+  }, [isMobile]);
+
+  // Update InstancedMesh for leaves with colors
+  useLayoutEffect(() => {
+    if (!leavesRef.current) return;
+    
+    // Palette based on the realistic tree image (varied greens)
+    const colors = [
+      new THREE.Color('#4d7c0f'), // Dark moss green
+      new THREE.Color('#15803d'), // Green
+      new THREE.Color('#65a30d'), // Lime green
+      new THREE.Color('#3f6212'), // Dark olive
+      new THREE.Color('#84cc16'), // Bright lime
+    ];
+
+    treeStructure.leafPositions.forEach((leaf, i) => {
+      dummy.position.set(leaf.pos[0], leaf.pos[1], leaf.pos[2]);
+      // Use stored random rotation
+      if (leaf.rotation) {
+        dummy.rotation.set(leaf.rotation[0], leaf.rotation[1], leaf.rotation[2]);
+      } else {
+        // Fallback if not present (should be present now)
+        dummy.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+      }
+      
+      dummy.scale.setScalar(leaf.scale * 1.5); // Increase scale slightly
+      dummy.updateMatrix();
+      leavesRef.current.setMatrixAt(i, dummy.matrix);
+      
+      const colorIndex = Math.floor(leaf.color * colors.length);
+      leavesRef.current.setColorAt(i, colors[colorIndex]);
+    });
+    
+    leavesRef.current.instanceMatrix.needsUpdate = true;
+    if (leavesRef.current.instanceColor) leavesRef.current.instanceColor.needsUpdate = true;
+  }, [treeStructure, dummy]);
 
   return (
     <group position={position} scale={[scale, scale, scale]}>
-      {/* 1. Fake Shadow Blob on the ground */}
+      {/* Shadow */}
       <mesh 
         ref={shadowRef} 
         rotation={[-Math.PI / 2, 0, 0]} 
-        position={[0, 0.1, 0]} // Slightly above ground
+        position={[0, 0.1, 0]} 
       >
-        <planeGeometry args={[7, 7]} />
+        <planeGeometry args={[16, 16]} />
         <shaderMaterial 
           transparent 
           depthWrite={false}
@@ -702,39 +796,32 @@ const StylizedBigTree = ({ position, scale = 1.0 }) => {
         />
       </mesh>
 
-      {/* 2. Trunk (Simple twisted cylinder style) */}
-      <mesh position={[0, 1.5, 0]}>
-        <cylinderGeometry args={[0.3, 0.5, 3, 7]} />
-        <meshStandardMaterial color="#5D4037" roughness={0.9} />
-      </mesh>
-      
-      {/* 3. Leaves (Merged Geometry via Instancing or just Group for simplicity in this scale) */}
-      {/* Since we have few clusters and custom shader, individual meshes are fine for one tree */}
-      <group>
-         {clusters.map((c, i) => (
-           <mesh key={i} position={c.position} scale={[c.scale, c.scale, c.scale]}>
-             <dodecahedronGeometry args={[1, 0]} /> {/* Low poly look */}
-             <shaderMaterial 
-               ref={i === 0 ? leavesRef : null} // Attach ref to at least one to update uTime (or use shared material ref)
-               attach="material"
-               vertexShader={TreeWindShader.vertexShader}
-               fragmentShader={TreeWindShader.fragmentShader}
-               uniforms={uniforms}
-             />
+      {/* Trunk and Branches */}
+      {treeStructure.branches.map((b, i) => {
+         const len = new THREE.Vector3(...b.end).distanceTo(new THREE.Vector3(...b.start));
+         const mid = new THREE.Vector3().addVectors(new THREE.Vector3(...b.start), new THREE.Vector3(...b.end)).multiplyScalar(0.5);
+         const direction = new THREE.Vector3().subVectors(new THREE.Vector3(...b.end), new THREE.Vector3(...b.start)).normalize();
+         const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+         
+         return (
+           <mesh key={i} position={mid} quaternion={quaternion}>
+             <cylinderGeometry args={[b.thickness * 0.7, b.thickness, len, 8]} />
+             <meshStandardMaterial color="#3e2723" roughness={1.0} />
            </mesh>
-         ))}
-      </group>
-      
-      {/* Optional: Fireflies/Sparkles around the tree */}
-      <Sparkles 
-         count={20} 
-         scale={[4, 3, 4]} 
-         position={[0, 2.5, 0]} 
-         size={3} 
-         speed={0.4} 
-         opacity={0.5} 
-         color="#fef3c7"
-      />
+         );
+      })}
+
+      {/* Lush Leaves - Using MeshStandardMaterial for guaranteed visibility */}
+      <instancedMesh 
+        ref={leavesRef} 
+        args={[null, null, treeStructure.leafPositions.length]}
+        frustumCulled={false}
+      >
+         {/* Using Dodecahedron for a leafy cluster look */}
+         <dodecahedronGeometry args={[0.4, 0]} />
+         {/* Use white color so instance colors tint it correctly */}
+         <meshStandardMaterial color="#ffffff" roughness={0.8} metalness={0.1} />
+      </instancedMesh>
     </group>
   );
 };
@@ -1302,7 +1389,7 @@ const RainbowMeadow = ({ isRaining = true, isMobile = false }) => {
 
       <MeadowAnimals />
       
-      <StylizedBigTree position={[15, -15, -20]} scale={2.5} />
+      <LushTree position={[-50, -13.5, -10]} scale={3.0} isMobile={isMobile} />
 
       <FloatingRocks />
       

@@ -208,6 +208,7 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
           color={new Color(placeholderColor).multiplyScalar(globalBrightness)} 
           transparent 
           opacity={dimmed ? 0.1 : 1} 
+          fog={false}
         /> {/* 使用生成的颜色 */}
       </Plane>
     );
@@ -229,6 +230,7 @@ const Cover = memo(({ data, position, rotation, scale, onClick, onVisible, isMob
           color={new Color().setScalar(globalBrightness)} 
           transparent 
           opacity={dimmed ? 0.1 : 1} 
+          fog={false}
         />
       </Plane>
     </>
