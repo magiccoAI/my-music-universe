@@ -8,18 +8,20 @@
 
 ## 🌟 Introduction | 项目简介
 
-**Music Universe** is a personal project that transforms a spreadsheet of music collection data into an interactive 3D web experience. It allows users to explore music tracks as stars in a galaxy, visualize listening habits through word clouds, and rediscover albums through a "slot machine" interface.
+**Music Universe** is a personal project that transforms a spreadsheet of music collection data into an interactive 3D web experience. It allows users to explore music tracks as stars in a galaxy, visualize listening habits through word clouds, and rediscover albums through a "music randomizer" interface.
 
-**Music Universe** 是一个将个人音乐收藏数据转化为交互式 3D 网页体验的项目。它让用户像探索星系一样浏览音乐曲目，通过词云可视化听歌习惯，并通过“音乐老虎机”重新发现那些珍藏的专辑。
+**Music Universe** 是一个将个人音乐收藏数据转化为交互式 3D 网页体验的项目。它让用户像探索星系一样浏览音乐曲目，通过词云可视化听歌习惯，并通过“音乐随机选”重新发现那些珍藏的专辑。
 
 🔗 **Live Demo:** [https://magiccoai.github.io/my-music-universe/](https://magiccoai.github.io/my-music-universe/)
 
 ## ✨ Key Features | 核心功能
 
 *   **🌌 3D Star Map (3D 星图):** Visualizing music tracks as interactive elements in a 3D space using React Three Fiber.
+*   **🎨 Atmospheric Themes (氛围主题):** Three immersive time-based themes (**Day**, **Evening**, **Night**) with multiple habitat scenes like **Snow Mountains**, **Aurora Skies**, and **Sunset Horizons** to create a unique music listening environment.
+    *   在音乐封面宇宙页面中设置了**白昼**、**傍晚**、**深夜**三个主题，以及**日照金山**、**极光星空**、**落日余晖**等多个致力于营造栖息地氛围的场景。
 *   **☁️ Word Cloud Galaxy (词云星系):** Dynamic word clouds showing the distribution of artists and music styles.
 *   **💫 Special Collection (特别收藏):** A curated, carousel-style showcase of memorable albums with detailed stories.
-*   **🎰 Music Slot Machine (音乐老虎机):** A fun, randomized way to pick an album to listen to.
+*   **🎰 Music Randomizer (音乐随机选):** A fun, randomized way to pick an album to listen to.
 *   **📱 Responsive Design (响应式设计):** Optimized for both desktop and mobile experiences, with specific mobile orientation hints.
 *   **🎧 Immersive Audio (沉浸式音频):** Integrated music player with audio previews.
 
