@@ -35,30 +35,30 @@ export const EVENING_PRESETS = {
   lateSunset: {
     id: 'lateSunset',
     name: '紫霞晚照',
-    description: '太阳落山前的浓郁紫红调，色彩强烈',
+    description: '柔和的紫调晚霞，色彩层次自然过渡',
     cssGradient: `linear-gradient(to bottom,
-      #2e1065 0%,   /* Deep Purple */
-      #4c1d95 15%,  /* Purple */
-      #7c3aed 30%,  /* Violet */
-      #c026d3 40%,  /* Fuchsia 600 - 过渡更柔和 */
-      #db2777 45%,  /* Pink/Red */
-      #f97316 50%,  /* Orange - Horizon */
-      #db2777 55%,  /* Pink/Red */
-      #c026d3 60%,  /* Fuchsia 600 */
-      #7c3aed 70%,  /* Violet */
-      #4c1d95 85%,  /* Purple */
-      #2e1065 100%
+      #0f172a 0%,   /* Slate 900 - 深邃夜空基底 */
+      #2e1065 15%,  /* Violet 950 - 深紫 */
+      #581c87 30%,  /* Purple 900 - 醇紫 */
+      #86198f 42%,  /* Fuchsia 900 - 这里的过渡更平滑 */
+      #a21caf 48%,  /* Fuchsia 700 - 柔和紫红 */
+      #ea580c 50%,  /* Orange 600 - 暖橙色地平线 (降低了饱和度与亮度) */
+      #a21caf 52%,  /* Fuchsia 700 */
+      #86198f 58%,  /* Fuchsia 900 */
+      #581c87 70%,  /* Purple 900 */
+      #2e1065 85%,  /* Violet 950 */
+      #0f172a 100%
     )`,
     textColor: 'text-pink-100',
     accentColor: 'text-pink-400',
     // 3D 场景参数
-    fogColor: '#2e1065',
-    ambientIntensity: 0.5,
-    dirLightColor: '#f97316',
-    dirLightIntensity: 1.8,
-    spotLightColor: '#db2777',
-    spotLightIntensity: 7,
-    sparkleColor: '#fbcfe8'
+    fogColor: '#1e1b4b', // 稍微偏蓝一点的雾气，更通透
+    ambientIntensity: 0.45, // 略微降低环境光，增加对比度
+    dirLightColor: '#ea580c', // 对应地平线的暖橙色
+    dirLightIntensity: 1.5, // 降低主光强度，避免过曝
+    spotLightColor: '#c026d3', // 稍微柔和的紫光斑
+    spotLightIntensity: 5, // 降低光斑强度
+    sparkleColor: '#f5d0fe' // 极浅的粉紫
   },
   twilight: {
     id: 'twilight',

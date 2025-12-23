@@ -179,14 +179,23 @@ const UniverseNavigation = ({ className = '' }) => {
   const DesktopNavigation = () => (
     <nav className={`fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-20 backdrop-filter backdrop-blur-xl ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center h-16 space-x-8">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              path={item.path}
-              label={item.label}
-            />
-          ))}
+        <div className="flex items-center justify-between h-16">
+          {/* 左侧 Logo 锚点 */}
+          <Link to="/" className="flex items-center gap-2 no-underline group">
+            <Logo className="w-8 h-8 text-cyan-400 group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+            <span className="text-white/90 text-lg font-bold tracking-wider font-sans group-hover:text-white transition-colors">Music Universe</span>
+          </Link>
+          
+          {/* 右侧导航链接 */}
+          <div className="flex items-center space-x-8">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.path}
+                path={item.path}
+                label={item.label}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </nav>

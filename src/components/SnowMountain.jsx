@@ -491,7 +491,14 @@ const SnowMountain = ({
   useEffect(() => {
     let cancelled = false;
     const loader = new THREE.TextureLoader();
-    const url = (process.env.PUBLIC_URL || '') + bgImage;
+    
+    // Optimization: Use mobile specific image if available for heavy assets
+    let url = (process.env.PUBLIC_URL || '') + bgImage;
+    if (isMobile && (bgImage.includes('snow-bg'))) {
+      // Use the mobile optimized version from optimized-images folder
+      // Check if it's the default snow-bg
+      url = (process.env.PUBLIC_URL || '') + '/optimized-images/snow-bg-mobile.webp';
+    }
 
     loader.load(
       url,

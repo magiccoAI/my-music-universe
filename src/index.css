@@ -128,3 +128,32 @@
   transition: transform 1.5s ease-in-out;
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(34, 211, 238, 0.3);
 }
+
+/* 移动端优化样式 */
+@media screen and (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  canvas {
+    touch-action: none; /* 防止触摸事件冲突 */
+  }
+  
+  /* 优化移动端字体大小 */
+  h1 { font-size: 1.8rem !important; }
+  h2 { font-size: 1.5rem !important; }
+  h3 { font-size: 1.2rem !important; }
+  p, span, div { font-size: 0.95rem !important; }
+}
+
+/* 全局禁用横向滚动条，提升沉浸感 */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.App {
+  text-align: center;
+}

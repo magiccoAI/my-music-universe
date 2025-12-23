@@ -343,21 +343,31 @@ const SearchPage = () => {
               />
             </div>
             
-            <button
-              onClick={() => setSortMethod(prev => prev === 'count' ? 'name' : 'count')}
-              className="p-2 rounded-md bg-white/20 hover:bg-white/30 text-white transition-colors flex-shrink-0"
-              title={sortMethod === 'count' ? "当前按数量排序，点击切换为按首字母排序" : "当前按字母排序，点击切换为按数量排序"}
-            >
-              {sortMethod === 'count' ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-                </svg>
-              )}
-            </button>
+            <div className="relative group flex-shrink-0">
+              <button
+                onClick={() => setSortMethod(prev => prev === 'count' ? 'name' : 'count')}
+                className="p-2 rounded-md bg-white/20 hover:bg-white/30 text-white transition-colors flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-white/50"
+                aria-label={sortMethod === 'count' ? "当前按数量排序，点击切换为按首字母排序" : "当前按字母排序，点击切换为按数量排序"}
+              >
+                {sortMethod === 'count' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                  </svg>
+                )}
+              </button>
+              {/* Tooltip - Accessible & Visual */}
+              <div 
+                className="absolute bottom-full right-0 mb-3 px-3 py-1.5 bg-gray-900/95 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-200 whitespace-nowrap pointer-events-none z-50 border border-white/10 backdrop-blur-md transform translate-y-2 group-hover:translate-y-0 group-focus-within:translate-y-0"
+                role="tooltip"
+              >
+                {sortMethod === 'count' ? "切换为按首字母排序" : "切换为按数量排序"}
+                <div className="absolute -bottom-1 right-3 w-2 h-2 bg-gray-900/95 border-b border-r border-white/10 transform rotate-45"></div>
+              </div>
+            </div>
           </div>
           <div className="mt-3 flex gap-2">
             <button 

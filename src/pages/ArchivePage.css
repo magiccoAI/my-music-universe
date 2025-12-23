@@ -1,7 +1,21 @@
 /* 基础样式重置 */
 .archive-page {
+  /* 定义统一色盘 - 霓虹时空体系 */
+  --accent-cyan: #00f2ea;
+  --accent-violet: #b000ff;
+  --accent-rose: #ff0055;
+  --accent-amber: #ff9900;
+  
+  /* 品牌渐变 */
+  --brand-gradient-primary: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-violet) 100%);
+  --brand-gradient-secondary: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%);
+  
   min-height: 100vh;
-  background: linear-gradient(135deg, #0c0c2b 0%, #1a1a3e 50%, #2d1b69 100%);
+  background-color: #050511;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
   color: white;
   position: relative;
   overflow-x: hidden;
@@ -22,6 +36,7 @@
     radial-gradient(2px 2px at 160px 30px, #eee, transparent);
   background-size: 200px 200px;
   animation: starsShift 100s linear infinite;
+  will-change: transform;
   z-index: 0;
 }
 
@@ -140,24 +155,37 @@
 }
 
 .title-main {
-  background: linear-gradient(135deg, #89F7FE 0%, #66A6FF 100%);
+  background: var(--brand-gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-size: 3rem; /* Increased font size with rem */
+  font-size: 3.5rem; /* Upgraded to ~56px for clear hierarchy */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  filter: drop-shadow(0 0 20px rgba(0, 242, 234, 0.3));
 }
 
 .title-sub {
-  font-size: 1rem; /* Decreased font size with rem */
+  font-size: 1rem; /* 16px */
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.7); 
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.05em;
 }
 
-.subtitle-update {
-  font-size: 1.2rem;
-  color: rgba(255, 217, 0, 0); /* 略带金色的色调 */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.hero-subtitle {
+  display: block;
+  font-size: 1.1rem; /* ~18px, slightly larger than body */
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 300;
   margin-bottom: 3rem;
+  max-width: 800px;
 }
 
 /* 统计卡片优化 */
@@ -286,7 +314,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #fff, #a8edea);
+  background: var(--brand-gradient-secondary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -370,19 +398,60 @@
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: 2.25rem; /* ~36px, distinct from hero title */
+  line-height: 1.2;
   font-weight: 700;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #fff, #a8edea);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  /* 移除渐变，改为单色 + 外发光，避免视觉抢夺 */
+  color: #fff;
+  text-shadow: 0 0 15px var(--accent-cyan);
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+/* Emoji 统一风格 */
+.emoji-icon {
+  display: inline-block;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.stat-icon .emoji-icon {
+  font-size: 3rem;
+}
+
+.section-icon .emoji-icon {
+  font-size: 3rem;
+}
+
+.stat-card:hover .emoji-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.galaxy-btn .emoji-icon {
+  font-size: 1.4em;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .section-subtitle {
-  font-size: 1.1rem;
+  font-size: 0.9rem; /* ~14px, auxiliary info */
   color: rgba(255, 255, 255, 0.8);
   font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Word Cloud Container (Missing class) */
+.wordcloud-container {
+  width: 100%;
+  min-height: 400px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  /* Optional: visual boundary for debugging/structure */
+  /* background: rgba(255, 255, 255, 0.01); */
+  /* border-radius: 20px; */
 }
 
 /* 星系控制按钮优化 */
@@ -550,99 +619,182 @@
 /* 页脚优化 */
 .footer {
   position: relative;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.5) 0%, rgba(118, 75, 162, 0.5) 50%, rgba(137, 247, 254, 0.5) 100%);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 3rem 2rem;
+  /* 更深邃的背景，增加底部重量感 */
+  background: linear-gradient(180deg, rgba(12, 12, 43, 0.8) 0%, rgba(5, 5, 17, 1) 100%);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 4rem 2rem 6rem; /* 增加底部 padding，为 back-to-top 留出空间 */
   text-align: center;
-  z-index: 1;
+  z-index: 10;
   color: white;
+  margin-top: 4rem;
+}
+
+.footer::before {
+  /* 顶部光晕线条 */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0.5;
 }
 
 .footer-content {
-  max-width: 600px; /* Limit footer width */
+  max-width: 900px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column; /* Single column layout */
-  gap: 1rem; /* Adjusted gap */
-  text-align: center; /* Center text */
-  padding: 0 1rem; /* Add horizontal padding */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 三栏布局 */
+  gap: 3rem;
+  text-align: left;
 }
 
 .footer-section {
   display: flex;
   flex-direction: column;
+  gap: 1.2rem;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: var(--brand-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.footer-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
   gap: 0.8rem;
 }
 
-.footer-section h4 {
-  font-size: 1.1rem;
-  color: #89F7FE;
-  margin-bottom: 1rem;
-}
-
-.footer-section p,
-.footer-section a {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-section a:hover {
-  color: #66A6FF;
-}
-
-.footer-section strong {
-  font-size: 1rem;
-  color: #89F7FE;
-}
-
-.footer-section .disclaimer {
-  font-size: 0.7rem;
+.footer-link {
   color: rgba(255, 255, 255, 0.6);
-  margin-top: 1rem;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.footer-text {
+.footer-link:hover {
+  color: var(--accent-cyan);
+  transform: translateX(5px);
+}
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
-  background: linear-gradient(135deg, #89F7FE 0%, #66A6FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
-.footer-decoration {
-  font-size: 0.7rem;
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
-.footer-subtext {
-  font-size: 0.7rem;
-  background: linear-gradient(135deg, #89F7FE 0%, #66A6FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-icon:hover {
+  background: var(--accent-violet);
+  border-color: var(--accent-violet);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(176, 0, 255, 0.3);
+}
+
+.footer-bottom {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.disclaimer-tooltip {
+  position: relative;
+  cursor: help;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.3s;
+}
+
+.disclaimer-tooltip:hover {
+  color: var(--accent-cyan);
 }
 
 @media (max-width: 768px) {
-  /* Removed specific footer-content media queries as it's now single column by default */
-  .footer-section h4 {
-    margin-bottom: 0.5rem;
+  .footer {
+    padding: 3rem 1.5rem 6rem;
   }
-
-  .footer-section p,
-  .footer-section a {
-    font-size: 0.8rem;
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
   }
-
-  .footer-section strong {
-    font-size: 0.9rem;
+  
+  .footer-section {
+    align-items: center;
   }
-
-  .footer-section .disclaimer {
-    font-size: 0.5rem;
+  
+  .footer-link:hover {
+    transform: translateX(0) scale(1.05);
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .footer-bottom-links {
+    gap: 1.5rem;
   }
 }
 
@@ -650,36 +802,118 @@
 
   .back-to-top-btn {
     position: fixed;
-    bottom: 60px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background */
-    color: #cccccc;
-    border: none;
-    border-radius: 4px; /* Rounded corners */
-    padding: 6px 10px; /* Padding around text */
+    bottom: 90px; /* Positioned above the Music Player */
+    right: 20px;
+    background-color: rgba(12, 12, 43, 0.7);
+    backdrop-filter: blur(12px);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 242, 234, 0.4);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
     cursor: pointer;
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
     visibility: hidden;
-    z-index: 20;
+    z-index: 40; /* Lower than MusicPlayer (z-50) */
     font-size: 14px;
-    width: auto; /* Adjust width based on content */
-    height: auto; /* Adjust height based on content */
-    display: flex; /* Use flexbox for centering */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 242, 234, 0.2);
   }
 
-.back-to-top-btn.show {
-  opacity: 1;
-  visibility: visible;
+  .back-to-top-btn.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .back-to-top-btn:hover {
+    background-color: rgba(0, 242, 234, 0.15);
+    box-shadow: 0 0 20px rgba(0, 242, 234, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .back-to-top-btn:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    .back-to-top-btn {
+      right: 12px; /* Closer to scroll bar on mobile */
+      bottom: 85px;
+      width: 36px;
+      height: 36px;
+      font-size: 12px;
+    }
+  }
+
+/* User Experience Optimization - Desktop Layout & Hover Effects */
+
+/* Hero Subtitle Style (Missing in original CSS) */
+.hero-subtitle {
+  display: block;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+  margin-bottom: 3rem;
+  max-width: 800px;
 }
 
-.back-to-top-btn:hover {
-  background-color: rgba(120, 120, 120, 0.9);
+/* Section Container Hover Effect (Pure CSS replacement for React state) */
+.section-container:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+  transition: all 0.3s ease;
 }
 
-.back-to-top-btn:active {
-  background-color: #667eea;
-  transform: translateY(1px);
+/* Desktop Specific F-shaped Layout */
+@media (min-width: 769px) {
+  /* Left align hero section for F-shaped reading pattern */
+  .hero-section {
+    text-align: left;
+    align-items: flex-start;
+  }
+  
+  .hero-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* padding: 0 2rem; already has padding in hero-section, but hero-content might need to be width constrained */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-titles {
+    text-align: left;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .hero-title {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 1.5rem;
+    align-items: baseline;
+  }
+  
+  /* Left align section headers */
+  .section-header {
+    text-align: left;
+    padding-left: 2rem;
+    border-left: 4px solid var(--accent-cyan);
+    margin-left: 0;
+  }
+  
+  .section-header::after {
+    margin: 1.5rem 0 0; /* Left align underline */
+  }
+  
+  /* Adjust stats grid alignment */
+  .stats-grid {
+    margin-left: 0;
+    /* Reset auto margin from base style if needed, though grid gap usually handles spacing */
+  }
 }

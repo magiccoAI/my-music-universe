@@ -385,32 +385,8 @@ function SpecialCollection() {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ flex: 1 }}>
-                    <p style={{
-                      margin: 0,
-                      color: '#e6e6e6',
-                      fontSize: '0.95rem',
-                      lineHeight: '1.4'
-                    }}>
-                      <strong style={{ color: '#ffffff' }}>{item.music}</strong> 
-                      {' - '}
-                      <span style={{ opacity: 0.9 }}>{item.artist}</span>
-                      {' - '}
-                      <span style={{ opacity: 0.8, fontSize: '0.9rem' }}>{item.album}</span>
-                    </p>
-                    {item.note && item.note.includes('Fav') && (
-                      <span style={{
-                        display: 'inline-block',
-                        background: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                        color: '#000',
-                        fontSize: '0.7rem',
-                        padding: '2px 8px',
-                        borderRadius: '10px',
-                        marginTop: '5px',
-                        fontWeight: 'bold'
-                      }}>
-                        Fav
-                      </span>
-                    )}
+                    <div className="song-title" style={{ fontWeight: 'bold', color: '#fff', fontSize: '0.9rem' }}>{item.music}</div>
+                    <div className="artist-name" style={{ color: '#ccc', fontSize: '0.8rem' }}>{item.artist}</div>
                   </div>
                   <button
                     onClick={(e) => handleFavPlay(e, item)}
@@ -538,112 +514,110 @@ function SpecialCollection() {
                 ))}
               </div>
 
-              {/* 导航按钮 */}
-              <button 
+            {/* 底部控制栏 - 移出图片区域 */}
+            <div style={{
+              position: 'absolute',
+              bottom: '10px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '20px',
+              padding: '5px 15px',
+              background: 'rgba(0, 0, 0, 0.4)',
+              borderRadius: '20px',
+              backdropFilter: 'blur(5px)'
+            }}>
+              {/* 上一张按钮 - Moved to control bar */}
+              <button
                 onClick={prevSlide}
-                className="slider-nav prev"
                 aria-label="上一张"
                 style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: isMobile ? '5px' : '15px',
-                  transform: 'translateY(-50%)',
-                  background: 'rgba(178, 204, 244, 0.2)',
+                  background: 'transparent',
                   border: 'none',
-                  width: isMobile ? '40px' : '50px',
-                  height: isMobile ? '40px' : '50px',
-                  borderRadius: '50%',
-                  color: 'white',
+                  color: 'rgba(255,255,255,0.7)',
                   cursor: 'pointer',
-                  backdropFilter: 'blur(10px)',
-                  transition: 'all 0.3s ease',
+                  padding: '8px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  zIndex: 10
+                  transition: 'all 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
                   if (isMobile) return;
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+                  e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.transform = 'scale(1.1)';
                 }}
                 onMouseLeave={(e) => {
                   if (isMobile) return;
-                  e.currentTarget.style.background = 'rgba(178, 204, 244, 0.2)';
-                  e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                  e.currentTarget.style.transform = 'scale(1)';
                 }}
               >
-                <ChevronLeftIcon className="w-6 h-6" />
-              </button>
-              {/* 下一张按钮 */}
-              <button
-                onClick={nextSlide}
-                aria-label="下一张"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  right: isMobile ? '5px' : '15px',
-                  transform: 'translateY(-50%)',
-                  background: 'rgba(143, 187, 243, 0.44)',
-                  border: 'none',
-                  width: isMobile ? '40px' : '50px',
-                  height: isMobile ? '40px' : '50px',
-                  borderRadius: '50%',
-                  color: 'white',
-                  cursor: 'pointer',
-                  backdropFilter: 'blur(10px)',
-                  transition: 'all 0.3s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  zIndex: 10
-                }}
-                onMouseEnter={(e) => {
-                  if (isMobile) return;
-                  e.currentTarget.style.background = 'rgba(197, 216, 243, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-                }}
-                onMouseLeave={(e) => {
-                  if (isMobile) return;
-                  e.currentTarget.style.background = 'rgba(143, 187, 243, 0.44)';
-                  e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-                }}
-              >
-                <ChevronRightIcon className="w-6 h-6" />
+                <ChevronLeftIcon className="w-8 h-8" />
               </button>
 
-              {/* 指示器点 */}
-              <div className="slider-dots" style={{
-                position: 'absolute',
-                bottom: '20px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                gap: isMobile ? '14px' : '10px'
-              }}>
-                {musicReports.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    aria-label={`前往幻灯片 ${index + 1}`}
-                    style={{
-                      width: isMobile ? '16px' : '14px',
-                      height: isMobile ? '16px' : '14px',
-                      borderRadius: '50%',
-                      border: 'none',
-                      background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.65)',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  />
-                ))}
+                {/* 指示器点 */}
+                <div className="slider-dots" style={{
+                  display: 'flex',
+                  gap: isMobile ? '14px' : '10px',
+                  alignItems: 'center'
+                }}>
+                  {musicReports.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToSlide(index)}
+                      aria-label={`前往幻灯片 ${index + 1}`}
+                      style={{
+                        width: isMobile ? '16px' : '12px',
+                        height: isMobile ? '16px' : '12px',
+                        borderRadius: '50%',
+                        border: 'none',
+                        background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.4)',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease'
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* 下一张按钮 - Moved to control bar */}
+                <button
+                  onClick={nextSlide}
+                  aria-label="下一张"
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'rgba(255,255,255,0.7)',
+                    cursor: 'pointer',
+                    padding: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (isMobile) return;
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (isMobile) return;
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <ChevronRightIcon className="w-8 h-8" />
+                </button>
               </div>
             </div>
 
             {/* 幻灯片信息 */}
             <div style={{
               textAlign: 'center',
-              marginTop: '20px',
+              marginTop: '15px',
               color: '#cccccc',
               fontSize: '0.9rem'
             }}>
@@ -656,11 +630,11 @@ function SpecialCollection() {
       {/* 图片放大模态框 */}
       {showModal && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[1000] p-4"
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[9999] p-4"
           onClick={closeModal} // 点击背景关闭模态框
         >
           <div 
-            className="relative max-w-full max-h-full flex items-center justify-center"
+            className="relative max-w-full max-h-full flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()} // 阻止点击图片时关闭模态框
           >
             {isImageLoading && (
@@ -671,7 +645,7 @@ function SpecialCollection() {
             <img 
               src={selectedImage}
               alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
-              className={`max-w-full max-h-full object-contain rounded-lg shadow-lg transition-opacity duration-300 ${isImageLoading ? 'opacity-50' : 'opacity-100'}`}
+              className={`w-auto max-w-full h-auto object-contain rounded-lg shadow-lg transition-opacity duration-300 ${isImageLoading ? 'opacity-50' : 'opacity-100'}`}
               onLoad={() => setIsImageLoading(false)} // 加载完成
               onError={(e) => {
                 console.log('Image onError triggered for src:', e.target.src);
@@ -685,78 +659,83 @@ function SpecialCollection() {
                 }
               }}
             />
-            {/* 上一张按钮 */}
-            <button
-              onClick={goToPreviousImage}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: isMobile ? '5px' : '15px',
-                transform: 'translateY(-50%)',
-                background: 'rgba(178, 204, 244, 0.2)',
-                border: 'none',
-                width: isMobile ? '40px' : '50px',
-                height: isMobile ? '40px' : '50px',
-                borderRadius: '50%',
-                color: 'white',
-                cursor: 'pointer',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 20
-              }}
-              onMouseEnter={(e) => {
-                if (isMobile) return;
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-              }}
-              onMouseLeave={(e) => {
-                if (isMobile) return;
-                e.currentTarget.style.background = 'rgba(178, 204, 244, 0.2)';
-                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-              }}
-            >
-              <ChevronLeftIcon className="w-6 h-6" />
-            </button>
-            {/* 下一张按钮 */}
-            <button
-              onClick={goToNextImage}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                right: isMobile ? '5px' : '15px',
-                transform: 'translateY(-50%)',
-                background: 'rgba(143, 187, 243, 0.44)',
-                border: 'none',
-                width: isMobile ? '40px' : '50px',
-                height: isMobile ? '40px' : '50px',
-                borderRadius: '50%',
-                color: 'white',
-                cursor: 'pointer',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 20
-              }}
-              onMouseEnter={(e) => {
-                if (isMobile) return;
-                e.currentTarget.style.background = 'rgba(197, 216, 243, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-              }}
-              onMouseLeave={(e) => {
-                if (isMobile) return;
-                e.currentTarget.style.background = 'rgba(143, 187, 243, 0.44)';
-                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-              }}
-            >
-              <ChevronRightIcon className="w-6 h-6" />
-            </button>
-            <button 
-              onClick={closeModal}
+            {/* 底部控制栏 - 移出图片区域 */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '20px',
+              marginTop: '15px',
+              padding: '10px',
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px',
+              backdropFilter: 'blur(5px)'
+            }}>
+              {/* 上一张按钮 - Moved to control bar */}
+              <button
+                onClick={goToPreviousImage}
+                aria-label="上一张"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'rgba(255,255,255,0.7)',
+                  cursor: 'pointer',
+                  padding: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  if (isMobile) return;
+                  e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                }}
+                onMouseLeave={(e) => {
+                  if (isMobile) return;
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                <ChevronLeftIcon className="w-8 h-8" />
+              </button>
+
+              {/* 放大图片信息 */}
+                <span className="text-white/80 text-sm">
+                  {selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}
+                </span>
+  
+                {/* 下一张按钮 - Moved to control bar */}
+                <button
+                  onClick={goToNextImage}
+                  aria-label="下一张"
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'rgba(255,255,255,0.7)',
+                    cursor: 'pointer',
+                    padding: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (isMobile) return;
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (isMobile) return;
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <ChevronRightIcon className="w-8 h-8" />
+                </button>
+              </div>
+              <button 
+                onClick={closeModal}
               className="absolute top-4 right-4 text-white font-bold bg-gray-800 bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-75 transition-all duration-200"
               style={{ zIndex: 20, width: isMobile ? '44px' : '40px', height: isMobile ? '44px' : '40px' }}
             >

@@ -104,23 +104,23 @@ const useMusicData = () => {
 
       const base = process.env.PUBLIC_URL || '';
       
-      // 优化：确保 musicCandidates 和 aggregatedCandidates 指向不同的主要数据
-      const musicCandidates = [
-        `${base}/data/data.json`,
-        // 添加 fallback 路径
-        `/data/data.json`
-      ];
-      
-      const aggregatedCandidates = [
-        `${base}/data/aggregated_data.json`,
-        `/data/aggregated_data.json`
-      ];
+      // Deduplicate candidates
+      const getCandidates = (filename) => {
+        const candidates = [`${base}/data/${filename}`];
+        if (base && !candidates.includes(`/data/${filename}`)) {
+             candidates.push(`/data/${filename}`);
+        }
+        return [...new Set(candidates)];
+      };
+
+      const musicCandidates = getCandidates('data.json');
+      const aggregatedCandidates = getCandidates('aggregated_data.json');
 
       /**
        * 尝试从多个 URL 候选列表中获取 JSON 数据，直到成功为止。
        */
       const fetchJsonFromCandidates = async (candidates, options = {}) => {
-        const { timeout = 8000 } = options;
+        const { timeout = 5000 } = options; // Reduced timeout from 8000 to 5000
         
         for (const url of candidates) {
           try {

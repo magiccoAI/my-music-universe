@@ -815,8 +815,8 @@
     "url": "https://mp.weixin.qq.com/s/ptnhwxx71Tj8z-lb_r0f-w",
     "note": "Fav",
     "cover": "covers/64.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e5/6b/b8/e56bb864-824b-c427-9d59-ddb110697bdf/mzaf_1026393920142855163.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1358187559&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 65,
@@ -1844,7 +1844,7 @@
     "url": "https://mp.weixin.qq.com/s/yiVNVbyHcHutFoI7kY0LOQ",
     "note": "Fav/人生之曲",
     "cover": "covers/145.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206784&auto=0&height=66",
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1206790&auto=0&height=66",
     "previewSource": "netease"
   },
   {
@@ -2287,7 +2287,8 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "国风",
     "cover": "covers/180.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=471404038&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 181,
@@ -2544,7 +2545,8 @@
     "url": "https://mp.weixin.qq.com/s/tiN9zRm4EoVNRh5k9rhrvg",
     "note": "有点像是音乐剧",
     "cover": "covers/201.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1981799679&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 202,
@@ -2581,7 +2583,8 @@
     "url": "https://mp.weixin.qq.com/s/a1QOeJJZqdXyRLQTAR8qvA",
     "note": "特别的风格/耳目一新/大爱/封面抽象",
     "cover": "covers/204.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1388185891&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 206,
@@ -2593,7 +2596,8 @@
     "url": "https://mp.weixin.qq.com/s/M2413vDlDhzHixxIFOAlDw",
     "note": "Fav/欢快",
     "cover": "covers/206.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1470906286&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 207,
@@ -3534,7 +3538,8 @@
     "url": "https://mp.weixin.qq.com/s/UMBzGZO_vBSqfWSSElBHag",
     "note": "独立摇滚/乐队/人生阶段记忆曲",
     "cover": "covers/281.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=381760&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 282,

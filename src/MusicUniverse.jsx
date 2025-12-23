@@ -16,6 +16,7 @@ const Evening = React.lazy(() => import('./components/EveningAssets'));
 const Snowfall = React.lazy(() => import('./components/Snowfall'));
 const SnowMountain = React.lazy(() => import('./components/SnowMountain'));
 const RainbowMeadow = React.lazy(() => import('./components/RainbowMeadow'));
+const CloudFloor = React.lazy(() => import('./components/CloudFloor'));
 const DayMeadowLakeScene = React.lazy(() => import('./components/DayMeadowLakeScene'));
 const Aurora = React.lazy(() => import('./components/Aurora'));
 const Planets = React.lazy(() => import('./components/Planets'));
@@ -30,7 +31,7 @@ import InfoCard from './components/InfoCard';
 const SNOW_BACKGROUNDS = [
   {
     name: '默认雪景',
-    path: '/images/snow-bg.jpg',
+    path: '/images/snow-bg.webp',
     fog: { color: '#dbeafe', density: 0.0045 },
     environment: {
       ambient: { intensity: 0.3, color: '#e0f2fe' },
@@ -563,6 +564,20 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
     import('./components/EveningAssets');
   }, []);
 
+  // Preload snow backgrounds when entering meadow mode to prevent lag during switching
+  useEffect(() => {
+    if (currentTheme === 'day' && dayMode === 'meadow') {
+      const loader = new THREE.TextureLoader();
+      SNOW_BACKGROUNDS.forEach(bg => {
+        // Preload image
+        loader.load(bg.path, undefined, undefined, (err) => {
+           // Ignore errors for preload, or log gently
+           // console.debug(`Failed to preload background: ${bg.path}`);
+        });
+      });
+    }
+  }, [currentTheme, dayMode]);
+
   // Wallpaper Mode Logic
   useEffect(() => {
     // Check URL params for wallpaper mode
@@ -579,6 +594,16 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // 隐藏滚动条以增强沉浸感
+  useEffect(() => {
+    // 隐藏垂直滚动条
+    document.body.style.overflow = 'hidden';
+    return () => {
+      // 恢复滚动条
+      document.body.style.overflow = 'auto';
+    };
   }, []);
 
   useEffect(() => {
@@ -816,6 +841,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
               {dayMode === 'normal' && (
                 <>
                   <Clouds isMobile={isMobile} />
+                  <CloudFloor />
                   <PaperPlanes 
                     count={4} 
                     musicData={musicData} 
@@ -900,22 +926,32 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
           {/* 白天模式子选项 */}
           {currentTheme === 'day' && (
             <div className="absolute bottom-full left-0 mb-4 flex gap-2 z-20">
-              <button
-                onClick={() => handleDayModeSelect('normal')}
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'normal' ? 'bg-white text-orange-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="晴空模式"
-                title="晴空"
-              >
-                <SunIcon className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => handleDayModeSelect('snow')}
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'snow' ? 'bg-white text-blue-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="飘雪"
-                title="飘雪"
-              >
-                <div className="w-5 h-5 flex items-center justify-center">❄️</div>
-              </button>
+              <div className="relative group">
+                <button
+                  onClick={() => handleDayModeSelect('normal')}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'normal' ? 'bg-white text-orange-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                  aria-label="晴空模式"
+                >
+                  <SunIcon className="w-5 h-5" />
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                  晴空
+                </div>
+              </div>
+
+              <div className="relative group">
+                <button
+                  onClick={() => handleDayModeSelect('snow')}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'snow' ? 'bg-white text-blue-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                  aria-label="飘雪"
+                >
+                  <div className="w-5 h-5 flex items-center justify-center">❄️</div>
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                  飘雪
+                </div>
+              </div>
+
               <div className="relative group">
                 {dayMode === 'rainbow' && (
                   <button
@@ -933,49 +969,70 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                   onClick={() => handleDayModeSelect('rainbow')}
                   className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'rainbow' ? 'bg-white text-green-500 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
                   aria-label="彩虹草地"
-                  title="彩虹草地"
                 >
                    <div className="w-5 h-5 flex items-center justify-center">🌈</div>
                 </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                  彩虹
+                </div>
               </div>
-              <button
-                onClick={() => handleDayModeSelect('meadow')}
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'meadow' ? 'bg-white text-green-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="雪山"
-                title="雪山"
-              >
-                <div className="w-5 h-5 flex items-center justify-center">🏔️</div>
-              </button>
+
+              <div className="relative group">
+                <button
+                  onClick={() => handleDayModeSelect('meadow')}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'meadow' ? 'bg-white text-green-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                  aria-label="雪山"
+                >
+                  <div className="w-5 h-5 flex items-center justify-center">🏔️</div>
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                  雪山
+                </div>
+              </div>
             </div>
           )}
 
           {/* 夜晚模式子选项 */}
           {currentTheme === 'night' && (
             <div className="absolute bottom-full right-0 mb-4 flex gap-2 z-20 justify-end">
-              <button
-                onClick={() => setNightMode('stars')}
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'stars' ? 'bg-white text-indigo-900 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="纯净星空"
-                title="纯净星空"
-              >
-                <StarIcon className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setNightMode('aurora')}
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'aurora' ? 'bg-white text-purple-600 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="极光之夜"
-                title="极光之夜"
-              >
-                <SparklesIcon className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setNightMode('deepspace')}
-                className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'deepspace' ? 'bg-white text-blue-600 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
-                aria-label="深空星球"
-                title="深空星球"
-              >
-                <GlobeAltIcon className="w-5 h-5" />
-              </button>
+              <div className="relative group">
+                <button
+                  onClick={() => setNightMode('stars')}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'stars' ? 'bg-white text-indigo-900 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                  aria-label="纯净星空"
+                >
+                  <StarIcon className="w-5 h-5" />
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                  纯净星空
+                </div>
+              </div>
+
+              <div className="relative group">
+                <button
+                  onClick={() => setNightMode('aurora')}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'aurora' ? 'bg-white text-purple-600 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                  aria-label="极光之夜"
+                >
+                  <SparklesIcon className="w-5 h-5" />
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                  极光
+                </div>
+              </div>
+
+              <div className="relative group">
+                <button
+                  onClick={() => setNightMode('deepspace')}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${nightMode === 'deepspace' ? 'bg-white text-blue-600 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
+                  aria-label="深空星球"
+                >
+                  <GlobeAltIcon className="w-5 h-5" />
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                  深空
+                </div>
+              </div>
             </div>
           )}
           
@@ -1042,10 +1099,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </button>
             
             {/* Tooltip 提示 */}
-            <div className="absolute bottom-full right-0 mb-3 w-32 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
+            <div className="absolute bottom-full left-0 mb-3 w-32 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
                 <span className="font-bold block mb-1 text-sky-400">重置视角</span>
                 回到初始位置
-                <div className="absolute bottom-[-6px] right-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
+                <div className="absolute bottom-[-6px] left-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
             </div>
         </div>
 
@@ -1063,10 +1120,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </button>
             
             {/* Tooltip 提示 */}
-            <div className="absolute bottom-full right-0 mb-3 w-48 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
                 <span className="font-bold block mb-1 text-sky-400">沉浸模式</span>
                 隐藏所有界面元素，享受纯净的视觉体验。适合截图或作为动态壁纸。
-                <div className="absolute bottom-[-6px] right-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
+                <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
             </div>
         </div>
 
@@ -1101,16 +1158,17 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
       </div>
       )}
 
-      {/* 退出沉浸模式的隐藏按钮 (仅在移动鼠标时显示，或者一直显示一个非常淡的退出提示) */}
+      {/* 退出沉浸模式的按钮 */}
       {wallpaperMode && (
          <button
-            className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/30 text-white/50 hover:bg-black/60 hover:text-white transition-all"
+            className="absolute top-6 right-6 z-50 px-4 py-2 rounded-full bg-black/60 text-white hover:bg-black/80 hover:scale-105 transition-all flex items-center gap-2 backdrop-blur-md border border-white/10 shadow-lg group"
             onClick={() => setWallpaperMode(false)}
             title="退出沉浸模式"
          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
+            <span className="font-medium text-sm">退出沉浸模式</span>
          </button>
       )}
 

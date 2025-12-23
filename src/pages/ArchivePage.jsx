@@ -1,20 +1,21 @@
 import React, { useEffect, useState, useRef, Suspense, lazy } from 'react';
+import { Link } from 'react-router-dom';
 import useIsMobile from '../hooks/useIsMobile';
 import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
-
-import { Link, useLocation } from 'react-router-dom';
-
 
 import SpecialCollection from '../components/SpecialCollection';
 import MusicSlotMachine from '../components/MusicSlotMachine';
 import MouseParticleEffect from '../components/MouseParticleEffect';
-import StarBackground from '../components/StarBackground';
 import UniverseNavigation from '../components/UniverseNavigation';
 import MusicPlayer from '../components/MusicPlayer'; // Import MusicPlayer
 import TerminalText from '../components/TerminalText';
+import PageIndicator from '../components/PageIndicator'; // Import PageIndicator
 
 import './ArchivePage.css';
+import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
+import WeChatIcon from '../assets/icons/wechat-icon.webp';
 
+const WeChatQRCode = process.env.PUBLIC_URL + '/images/wechat-qrcode.png';
 const WordCloudDisplay = lazy(() => import('../components/WordCloudDisplay'));
 
 const terminalLines = [
@@ -46,22 +47,35 @@ const parseDate = (dateString) => {
 const ArchivePage = () => {
   const { musicData, aggregatedData, loading, error } = useMusicData(); // Use the custom hook
   const [activeGalaxy, setActiveGalaxy] = useState('artist');
-  const [hoveredSection, setHoveredSection] = useState(null);
+  // Removed hoveredSection state for performance
   const [musicJourneyDays, setMusicJourneyDays] = useState(0);
   const [totalMusicCount, setTotalMusicCount] = useState(0);
   const [uniqueStylesCount, setUniqueStylesCount] = useState(0);
   const [uniqueArtistsCount, setUniqueArtistsCount] = useState(0);
-  const location = useLocation();
   const isMobile = useIsMobile();
 
-  const [isPlaying, setIsPlaying] = useState(true); // New state for music playback
+  // Audio State
+  const [isPlaying, setIsPlaying] = useState(false); // Default to false for performance
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(0.5);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null); // Ref for the audio element
   const [showBackToTopButton, setShowBackToTopButton] = useState(false); // State for back to top button visibility
+
+  // Page navigation anchor configuration
+  const pageSections = [
+    { id: 'hero', label: '时光机' },
+    { id: 'galaxy', label: '词云星系' },
+    { id: 'special', label: '特别收藏' },
+    { id: 'music-slot-machine', label: '随机选' }
+  ];
 
   // Effect to play/pause music when isPlaying changes
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
+          // User interaction required policy might block this initially, handled by catch
           audioRef.current.play().catch(e => console.error("Error playing audio:", e));
         } else {
           audioRef.current.pause();
@@ -73,17 +87,66 @@ const ArchivePage = () => {
     setIsPlaying(prev => !prev);
   };
 
-  // Effect to handle scroll for back to top button
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+      audioRef.current.volume = volume;
+    }
+  };
+
+  const handleVolumeChange = (newVolume) => {
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+    setIsMuted(newVolume === 0);
+  };
+
+  const handleToggleMute = () => {
+    if (isMuted) {
+      const newVolume = 0.5;
+      setVolume(newVolume);
+      setIsMuted(false);
+      if (audioRef.current) audioRef.current.volume = newVolume;
+    } else {
+      setVolume(0);
+      setIsMuted(true);
+      if (audioRef.current) audioRef.current.volume = 0;
+    }
+  };
+
+  const handleSeek = (time) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
+
+  // Effect to handle scroll for back to top button with throttle
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      if (window.pageYOffset > 300) { // Show button after scrolling down 300px
-        setShowBackToTopButton(true);
-      } else {
-        setShowBackToTopButton(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.pageYOffset > 300) {
+            setShowBackToTopButton(true);
+          } else {
+            setShowBackToTopButton(false);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -125,15 +188,6 @@ const ArchivePage = () => {
     }
   }, [musicData]);
 
-  // 鼠标悬置处理函数
-  const handleSectionHover = (section) => {
-    setHoveredSection(section);
-  };
-
-  const handleSectionLeave = () => {
-    setHoveredSection(null);
-  };
-
   const handleArtistClick = (artistName) => {
     console.log(`Artist clicked: ${artistName}`);
     // 可以添加跳转到艺术家详情页或筛选功能
@@ -146,15 +200,15 @@ const ArchivePage = () => {
 
   // 统计卡片数据
   const statsData = [
-    { icon: '👂', number: totalMusicCount.toString(), label: `共${totalMusicCount}首音乐收藏`, color: '#ff6b6b' },
+    { icon: <span className="emoji-icon">👂</span>, number: totalMusicCount.toString(), label: `共${totalMusicCount}首音乐收藏`, color: 'var(--accent-rose)' },
     { 
-      icon: '🌈', 
+      icon: <span className="emoji-icon">🌈</span>, 
       number: uniqueStylesCount > 30 ? '30+' : uniqueStylesCount.toString(), 
       label: uniqueStylesCount > 30 ? '涵盖30+种音乐风格' : `涵盖${uniqueStylesCount}种音乐风格`, 
-      color: '#4ecdc4' 
+      color: 'var(--accent-cyan)' 
     },
-    { icon: '🌟', number: uniqueArtistsCount.toString(), label: `与${uniqueArtistsCount}位艺术家相遇`, color: '#45b7d1' },
-    { icon: '📅', number: musicJourneyDays.toString(), label: `跨越${musicJourneyDays}天的音乐旅程`, color: '#96ceb4' }
+    { icon: <span className="emoji-icon">🌟</span>, number: uniqueArtistsCount.toString(), label: `与${uniqueArtistsCount}位艺术家相遇`, color: 'var(--accent-violet)' },
+    { icon: <span className="emoji-icon">📅</span>, number: musicJourneyDays.toString(), label: `跨越${musicJourneyDays}天的音乐旅程`, color: 'var(--accent-amber)' }
   ];
 
   if (loading) {
@@ -170,7 +224,7 @@ const ArchivePage = () => {
   if (error) {
     return (
       <div className="error-container">
-        <div className="error-icon">🎵</div>
+        <div className="error-icon"><span className="emoji-icon">🎵</span></div>
         <div className="error-text">音乐数据加载失败</div>
         <div className="error-details">{error}</div>
         <button className="retry-btn" onClick={() => window.location.reload()}>
@@ -201,8 +255,17 @@ const ArchivePage = () => {
       {/* 导航栏 */}
       <UniverseNavigation />
 
+      {/* 侧边时间轴导航 */}
+      <PageIndicator sections={pageSections} />
+
       {/* Music Player */}
-      <audio ref={audioRef} loop preload="auto">
+      <audio 
+        ref={audioRef} 
+        loop 
+        preload="metadata"
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+      >
         <source src={process.env.PUBLIC_URL + "/audio/Preview_Yotto-_Lone_Machine.ogg"} type="audio/ogg" />
         您的浏览器不支持音频播放。
       </audio>
@@ -211,10 +274,17 @@ const ArchivePage = () => {
         onTogglePlayPause={togglePlayPause}
         songTitle="Lone Machine"
         artistName="Yotto (Preview)"
+        currentTime={currentTime}
+        duration={duration}
+        volume={volume}
+        isMuted={isMuted}
+        onVolumeChange={handleVolumeChange}
+        onToggleMute={handleToggleMute}
+        onSeek={handleSeek}
       />
 
       {/* 英雄区域 */}
-      <section className="hero-section">
+      <section id="hero" className="hero-section">
         <div className="hero-content">
           <div className="hero-titles">
             <div className="hero-title">
@@ -231,9 +301,6 @@ const ArchivePage = () => {
               <div 
                 key={stat.label}
                 className="stat-card"
-                onMouseEnter={() => handleSectionHover(`stat-${stat.label}`)}
-                onMouseLeave={handleSectionLeave}
-                data-hovered={hoveredSection === `stat-${stat.label}`}
               >
                 <div 
                   className="stat-icon"
@@ -258,10 +325,8 @@ const ArchivePage = () => {
 
       {/* 音乐词云星系 */}
       <section 
+        id="galaxy"
         className="section-container galaxy-section"
-        onMouseEnter={() => handleSectionHover('galaxy')}
-        onMouseLeave={handleSectionLeave}
-        data-hovered={hoveredSection === 'galaxy'}
       >
         <div className="section-header">
           <div className="section-icon">🌠</div>
@@ -319,10 +384,8 @@ const ArchivePage = () => {
 
       {/* 特别收藏 */}
       <section 
+        id="special"
         className="section-container special-section"
-        onMouseEnter={() => handleSectionHover('special')}
-        onMouseLeave={handleSectionLeave}
-        data-hovered={hoveredSection === 'special'}
       >
         <div className="section-header">
           <div className="section-icon">💫</div>
@@ -338,10 +401,8 @@ const ArchivePage = () => {
 
       {/* 音乐专辑老虎机 */}
       <section
+        id="music-slot-machine"
         className="section-container music-slot-machine-section"
-        onMouseEnter={() => handleSectionHover('music-slot-machine')}
-        onMouseLeave={handleSectionLeave}
-        data-hovered={hoveredSection === 'music-slot-machine'}
       >
         <div className="section-header">
           <div className="section-icon">🎰</div>
@@ -352,52 +413,90 @@ const ArchivePage = () => {
         <div className="section-glow"></div>
       </section>
 
-      {/* 页脚 */}
-      <div className="footer"> 
-        <div className="footer-content"> 
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-content">
           <div className="footer-section">
-            <p><strong>🎵 Music Universe</strong></p>
-            <p>网站设计、代码实现与用户体验由「D小调片段记录」公众号作者与AI技术共同打造</p>
+            <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'white' }}>🎵 Music Universe</p>
+            <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>网站设计、代码实现与用户体验由「D小调片段记录」公众号作者与AI技术共同打造</p>
           </div>
-          <div className="footer-section">    
-          </div>
+          
           <div className="footer-section">
-            <p className="disclaimer relative group inline-block cursor-help">
+            <div className="disclaimer" style={{ opacity: 0.7, fontSize: '0.85rem', lineHeight: '1.6' }}>
+              <p style={{ marginBottom: '0.5rem' }}><strong>免责声明：</strong></p>
               本网站仅作为个人音乐收藏的可视化展示与技术探索，非商业用途。<br />
               所有音乐专辑封面、艺术家名称及音频试听片段版权归其合法所有者所有。<br />
-              如有侵权，请联系<span className="text-sky-400 border-b border-sky-400/30 hover:text-sky-300 transition-colors">公众号「D小调片段记录」</span>删除。
-              
-              {/* Hover Popup */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-56 p-2 bg-indigo-950/95 backdrop-filter backdrop-blur-xl border border-sky-500/30 rounded-xl shadow-[0_0_30px_rgba(14,165,233,0.2)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0 z-50">
-                <div className="relative w-full rounded-lg overflow-hidden bg-white mb-2">
-                   <img 
-                    src={process.env.PUBLIC_URL + "/images/wechat-qrcode.png"} 
-                    alt="公众号二维码" 
-                    className="w-full h-auto block"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.parentNode.innerHTML = '<div class="flex items-center justify-center h-20 text-gray-500 text-xs text-center p-2">请将二维码图片保存为<br/>public/images/wechat-qrcode.png</div>';
-                    }}
-                  />
+              如有侵权，请联系
+              <span className="group relative inline-block cursor-help" style={{ color: 'var(--accent-cyan)', borderBottom: '1px solid rgba(0, 242, 234, 0.3)' }}>
+                公众号「D小调片段记录」
+                {/* Tooltip */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 pointer-events-none">
+                  <img src={WeChatQRCode} alt="公众号二维码" className="w-full h-auto rounded-lg"/>
+                  <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
+                 
                 </div>
-                <div className="text-center">
-                  <p className="text-[10px] text-sky-300 font-mono">SCAN TO CONNECT</p>
-                </div>
-                {/* Arrow */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-8 border-transparent border-t-indigo-950/95 filter drop-shadow-lg"></div>
-              </div>
-            </p>
-            <p>感谢每一段旋律的陪伴</p>
-            <p>© 2025 音乐歌单可视化探索</p>
+              </span>
+              删除。
+            </div>
+            <div style={{ marginTop: '1.5rem', opacity: 0.6, fontSize: '0.8rem' }}>
+              <p>感谢每一段旋律的陪伴</p>
+              <p>© 2025 音乐歌单可视化探索</p>
+            </div>
           </div>
-        </div> 
-      </div>
 
-      {showBackToTopButton && (
-        <button className={`back-to-top-btn ${showBackToTopButton ? 'show' : ''}`} onClick={scrollToTop} aria-label="返回顶部">
-            ↑返回顶部
-          </button>
-      )}
+          <div className="footer-section items-end">
+            <div className="flex gap-6 mt-6">
+                {/* NetEase */}
+                <a 
+                  href="https://music.163.com/playlist?id=14356909162&uct2=U2FsdGVkX1/gFqE4/o/Ao72aJFZQeOfU4v1DPeNGiAE="
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group relative flex flex-col items-center gap-2"
+                >
+                  <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-red-500/30 group-hover:scale-110 transition-all duration-300">
+                    <img src={NetEaseCloudMusicIcon} alt="网易云" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                  </div>
+                  <span className="text-[10px] text-gray-500 group-hover:text-red-400 transition-colors">网易云歌单</span>
+                </a>
+
+                {/* WeChat */}
+                <a 
+                  href="https://mp.weixin.qq.com/s/P-UimdNlkT5cUGt572dBAQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative cursor-pointer flex flex-col items-center gap-2"
+                >
+                  <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-green-500/30 group-hover:scale-110 transition-all duration-300">
+                    <img src={WeChatIcon} alt="微信" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                  </div>
+                  <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors">公众号</span>
+                  
+                  {/* QR Code Tooltip */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 p-2 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
+                    <img src={WeChatQRCode} alt="公众号二维码" className="w-full h-auto rounded-lg"/>
+                    <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
+                    <p className="text-[10px] text-gray-800 text-center mt-1 font-bold">扫码关注</p>
+                  </div>
+                </a>
+
+                {/* GitHub */}
+                <a 
+                  href="https://github.com/magiccoai/my-music-universe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex flex-col items-center gap-2"
+                >
+                  <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-gray-400/30 group-hover:scale-110 transition-all duration-300">
+                    <svg className="w-5 h-5 opacity-70 group-hover:opacity-100 fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.05-.015-2.055-3.33.72-4.035-1.605-4.035-1.605-.54-1.38-1.335-1.755-1.335-1.755-1.087-.75.075-.735.075-.735 1.2.09 1.83 1.245 1.83 1.245 1.065 1.815 2.805 1.29 3.495.99.105-.78.42-1.29.765-1.59-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405 1.02 0 2.04.135 3 .405 2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                  </div>
+                  <span className="text-[10px] text-gray-500 group-hover:text-gray-300 transition-colors">项目源码</span>
+                </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

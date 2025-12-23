@@ -14,7 +14,8 @@ const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
 
   // For mobile, always try to load optimized webp images
   if (isMobile) {
-    return `${publicUrl}/optimized-images/${name}.webp`;
+    // Try mobile-specific optimized image first
+    return `${publicUrl}/optimized-images/${name}-mobile.webp`;
   }
 
   // For desktop, if the original is already webp, use it. Otherwise, use optimized webp.
@@ -57,7 +58,7 @@ const gMatrix = new Matrix4();
 // Texture loading queue manager
 const textureQueue = [];
 let activeLoads = 0;
-const MAX_CONCURRENT_LOADS = 4; // Limit concurrent loads
+const MAX_CONCURRENT_LOADS = 16; // Limit concurrent loads
 
 const processQueue = () => {
   if (activeLoads >= MAX_CONCURRENT_LOADS || textureQueue.length === 0) return;
