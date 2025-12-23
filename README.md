@@ -4,7 +4,7 @@
 > 
 > 一个沉浸式的 3D 音乐收藏可视化项目。在星河中漫游，发现旋律与记忆的共鸣。
 
-![Project Banner](public/images/musicstyle-cloud2.webp)
+![Project Banner](image-1.png)
 
 ## 🌟 Introduction | 项目简介
 
@@ -17,8 +17,8 @@
 ## ✨ Key Features | 核心功能
 
 *   **🌌 3D Star Map (3D 星图):** Visualizing music tracks as interactive elements in a 3D space using React Three Fiber.
-*   **🎨 Atmospheric Themes (氛围主题):** Three immersive time-based themes (**Day**, **Evening**, **Night**) with multiple habitat scenes like **Snow Mountains**, **Aurora Skies**, and **Sunset Horizons** to create a unique music listening environment.
-    *   在音乐封面宇宙页面中设置了**白昼**、**傍晚**、**深夜**三个主题，以及**日照金山**、**极光星空**、**落日余晖**等多个致力于营造栖息地氛围的场景。
+*   **🎨 Atmospheric Themes (氛围主题):** Three immersive time-based themes (**Day**, **Evening**, **Night**) with multiple habitat scenes like **Cloud and Flying Dreams**, **Sunset Horizons**, **Aurora Skies**, and **Snow Mountains** to create a unique music listening environment.
+    *   在音乐封面宇宙页面中设置了**白昼**、**傍晚**、**深夜**三个主题，以及**云端飞翔之梦**、**落日余晖**、**极光星空**，以及**雪山**等多个致力于营造栖息地氛围的场景。
 *   **☁️ Word Cloud Galaxy (词云星系):** Dynamic word clouds showing the distribution of artists and music styles.
 *   **💫 Special Collection (特别收藏):** A curated, carousel-style showcase of memorable albums with detailed stories.
 *   **🎰 Music Randomizer (音乐随机选):** A fun, randomized way to pick an album to listen to.
