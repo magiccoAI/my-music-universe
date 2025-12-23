@@ -4,7 +4,7 @@
 > 
 > 一个沉浸式的 3D 音乐收藏可视化项目。在星河中漫游，发现旋律与记忆的共鸣。
 
-![Project Banner](image-1.png)
+![Project Banner](public/images/readme.md-websitepreview.png)
 
 ## 🌟 Introduction | 项目简介
 
