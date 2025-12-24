@@ -12,6 +12,24 @@
 
 **Music Universe** 是一个将个人音乐收藏数据转化为交互式 3D 网页体验的项目。它让用户像探索星系一样浏览音乐曲目，通过词云可视化听歌习惯，并通过“音乐随机选”重新发现那些珍藏的专辑。
 
+### 🎨 Origin & Credits | 原创声明
+
+This project is a 3-month personal exploration journey, designed and developed by **MagicCoAI** (Author of WeChat Official Account "D小调片段记录") in collaboration with AI technology.
+
+*   **Primary AI Assistant:** TraeAI
+*   **Code & Logic Support:** DeepSeek, ChatGPT, Gemini
+
+**✨ Inspiration | 灵感致谢**
+
+The visual concept of exploring archives in a 3D space is inspired by [Studio Olafur Eliasson: Your uncertain archive](https://olafureliasson.net/uncertain). This project interprets that concept through a personalized music universe, built with a distinct technical stack and design language.
+
+本项目的“3D 档案漫游”交互形式受到 Olafur Eliasson 工作室网站 *Your uncertain archive* 的启发。在此基础上，我结合个人音乐数据，使用完全独立的技术栈与视觉设计语言进行了重新演绎。
+
+While the code is open source, the design philosophy and the curated music data structure represent a significant personal investment.
+
+本项目历时3个月，由 **MagicCoAI**（公众号「D小调片段记录」作者）与 AI 协同完成。
+核心编程工具为 **TraeAI**，并在 **DeepSeek**, **ChatGPT**, **Gemini** 的协助下完成了各个复杂场景的建设。虽然代码开源，但项目的设计理念与数据结构凝聚了作者大量心血，请尊重原创。
+
 🔗 **Live Demo:** [https://magiccoai.github.io/my-music-universe/](https://magiccoai.github.io/my-music-universe/)
 
 ## ✨ Key Features | 核心功能
@@ -34,7 +52,7 @@
 *   **Styling:** Tailwind CSS, Styled-jsx
 *   **Build Tool:** Create React App (via Craco)
 *   **Deployment:** GitHub Pages (Automated via GitHub Actions)
-*   **Analytics:** Google Analytics 4 (GA4), Microsoft Clarity
+*   **Analytics:** Google Analytics 4 (GA4)
 
 ## 🚀 Getting Started | 快速开始
 
@@ -91,15 +109,35 @@ npm run deploy
 Contributions, issues, and feature requests are welcome!
 欢迎提交 Issue 和 Pull Request！
 
-## 📄 License | 许可
+## 📄 License & Disclaimer | 许可与免责
 
-This project is for personal learning and showcase purposes. All music cover arts and audio snippets belong to their respective copyright holders.
+### License
+This project is licensed under the **CC BY-NC-SA 4.0** (Attribution-NonCommercial-ShareAlike 4.0 International) License.
 
-本项目仅作为个人展示与技术探索。所有专辑封面及音频片段版权归原作者所有。
+*   ✅ **Share:** You are free to copy and redistribute the material in any medium or format.
+*   ✅ **Adapt:** You are free to remix, transform, and build upon the material.
+*   ❌ **NonCommercial:** You may **NOT** use the material for commercial purposes.
+*   ⚠️ **Attribution:** You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+
+本项目采用 **CC BY-NC-SA 4.0** 知识共享许可协议。您可以自由分享和演绎，但**禁止用于任何商业用途**，且必须注明原作者（MagicCoAI / D小调片段记录）。
+
+### Disclaimer | 免责声明
+
+*   **Music Data:** The `data.json` and playlist content serve as a personal music collection archive.
+*   **Audio Assets:**
+    *   **Local Previews:** Audio files hosted within this repository are short, low-quality snippets used solely for visual demonstration and UI interaction.
+    *   **External Links:** Full tracks accessible via external platforms (e.g., NetEase Cloud Music) are subject to the terms and copyright policies of their respective service providers. This project does not host or distribute full copyrighted tracks.
+*   **Images:** Album art belongs to the respective copyright holders.
+
+*   **数据属性：** 本项目的歌单数据（`data.json`）为个人听歌记录，仅供分享与交流。
+*   **音频资源：**
+    *   **本地预览：** 仓库内托管的音频文件均为低音质短片段，仅用于 UI 交互演示。
+    *   **外部链接：** 通过外部平台（如网易云音乐）播放的完整曲目，其版权遵循各平台协议。本项目不存储也不分发完整的版权音乐文件。
+    *   如有侵权请联系删除。
 
 ---
 
 <div align="center">
-  <p>Built with ❤️ by <a href="https://github.com/magiccoai">MagicCoAI</a> & D小调片段记录</p>
+  <p>Built with ❤️ by <a href="https://github.com/magiccoai">MagiccoAI</a> & D小调片段记录</p>
   <p>2025 Music Universe</p>
 </div>

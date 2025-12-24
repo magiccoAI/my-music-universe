@@ -1,0 +1,18 @@
+  /* TEAM */
+  Creator: magiccoAI (D小调片段记录)
+  Contact: 公众号「D小调片段记录」
+  Site: https://magiccoai.github.io/my-music-universe/
+
+  /* AI COLLABORATORS */
+  Primary Assistant: TraeAI
+  Code & Logic Support: DeepSeek, ChatGPT, Gemini
+  
+  /* THANKS */
+  To all the musicians who created the melodies that fill this universe.
+  To the open source community for the amazing tools.
+
+  /* SITE */
+  Last update: 2025/12/24
+  Standards: HTML5, CSS3, ES6+
+  Components: React, Three.js, Tailwind CSS
+  Software: VS Code, Trae

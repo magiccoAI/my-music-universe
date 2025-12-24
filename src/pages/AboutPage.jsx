@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UniverseNavigation from '../components/UniverseNavigation';
 import StarBackground from '../components/StarBackground';
@@ -7,11 +7,111 @@ import { aboutContent } from '../data/aboutContent';
 const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
 const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 
+const AUDIO_MAP = {
+  zh: null,
+  en: null,
+  wuu: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-wuu.mp3',
+  yue: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-yue.mp3',
+  fr: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-fr.mp3',
+  it: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-it.mp3',
+  es: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-es.mp3',
+  de: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-de.mp3',
+  ja: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-ja.mp3',
+  ko: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-ko.mp3',
+};
+
+const LANG_LABELS = {
+  zh: '简中',
+  en: 'EN',
+  wuu: '沪语',
+  yue: '粤语',
+  fr: 'FR',
+  it: 'IT',
+  es: 'ES',
+  de: 'DE',
+  ja: 'JP',
+  ko: 'KR'
+};
+
 const AboutPage = () => {
   const navigate = useNavigate();
   const [lang, setLang] = useState('zh');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+  const progressBarRef = useRef(null);
+  const [progress, setProgress] = useState(0);
 
-  const t = aboutContent[lang];
+  useEffect(() => {
+    audioRef.current = new Audio();
+    
+    const updateProgress = () => {
+      if (audioRef.current && audioRef.current.duration) {
+        setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+      }
+    };
+
+    audioRef.current.addEventListener('timeupdate', updateProgress);
+    audioRef.current.onended = () => {
+        setIsPlaying(false);
+        setProgress(0);
+    };
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener('timeupdate', updateProgress);
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
+  }, []);
+
+  const handleLangChange = (newLang) => {
+    if (newLang === lang) return;
+    
+    setLang(newLang);
+    
+    // Stop current audio and reset progress
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      setProgress(0);
+    }
+  };
+
+  const toggleAudio = () => {
+    if (!audioRef.current || !AUDIO_MAP[lang]) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.src = AUDIO_MAP[lang];
+      audioRef.current.play().catch(e => {
+        console.error("Audio playback failed:", e);
+        setIsPlaying(false);
+      });
+      setIsPlaying(true);
+    }
+  };
+
+  const handleProgressClick = (e) => {
+    if (!audioRef.current || !isPlaying) return;
+    
+    const progressBar = progressBarRef.current;
+    if (progressBar) {
+        const rect = progressBar.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const width = rect.width;
+        const percentage = Math.max(0, Math.min(1, x / width));
+        
+        if (audioRef.current.duration) {
+            audioRef.current.currentTime = percentage * audioRef.current.duration;
+            setProgress(percentage * 100);
+        }
+    }
+  };
+
+  const t = aboutContent[lang] || aboutContent['en']; // Fallback
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden font-sans selection:bg-sky-500/30">
@@ -31,14 +131,80 @@ const AboutPage = () => {
          </button>
       </div>
 
-      {/* Language Switcher */}
-      <div className="fixed top-24 right-4 md:right-12 z-50 animate-fade-in-down">
-         <button 
-           onClick={() => setLang(l => l === 'zh' ? 'en' : 'zh')}
-           className="px-4 py-2 rounded-full border border-sky-500/30 bg-black/40 backdrop-blur text-sky-400 hover:bg-sky-500/10 hover:border-sky-500/60 transition-all font-mono text-xs md:text-sm tracking-widest shadow-[0_0_15px_rgba(14,165,233,0.1)]"
-         >
-           {lang === 'zh' ? 'EN' : '中文'}
-         </button>
+      {/* Language Switcher & Audio Player */}
+      <div className="fixed top-24 right-4 md:right-12 z-50 animate-fade-in-down flex flex-col items-end gap-4">
+         <div className="bg-black/40 backdrop-blur rounded-2xl p-2 border border-sky-500/20 shadow-[0_0_15px_rgba(14,165,233,0.1)]">
+             <div className="text-[10px] text-sky-500/50 font-mono text-right mb-2 pr-2 tracking-widest">SIGNAL FREQUENCY</div>
+             <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+                {Object.keys(aboutContent).map(l => (
+                   <button 
+                     key={l}
+                     onClick={() => handleLangChange(l)}
+                     className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition-all duration-300 ${
+                       lang === l 
+                       ? 'bg-sky-500/20 border-sky-500 text-sky-300 shadow-[0_0_10px_rgba(14,165,233,0.3)] scale-105' 
+                       : 'bg-transparent border-sky-500/10 text-gray-500 hover:text-sky-400 hover:border-sky-500/40'
+                     }`}
+                   >
+                     {LANG_LABELS[l] || l.toUpperCase()}
+                   </button>
+                ))}
+             </div>
+         </div>
+
+         {/* Audio Player Control */}
+         {AUDIO_MAP[lang] && (
+            <div className="flex flex-col gap-2 w-full items-end">
+                <button
+                onClick={toggleAudio}
+                className={`flex items-center gap-3 px-5 py-2.5 rounded-full border transition-all duration-500 group backdrop-blur-md ${
+                    isPlaying 
+                    ? 'bg-sky-900/40 border-sky-400/60 text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.2)]' 
+                    : 'bg-black/60 border-sky-500/30 text-sky-400/80 hover:bg-sky-500/10 hover:border-sky-500/60 hover:text-sky-300'
+                }`}
+                >
+                {isPlaying ? (
+                    <>
+                        <div className="relative flex h-3 w-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                        </div>
+                        <span className="text-xs font-mono tracking-widest animate-pulse">TRANSMITTING...</span>
+                        {/* Animated Bars */}
+                        <div className="flex gap-0.5 items-end h-3 ml-1">
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.5s_ease-in-out_infinite] h-full"></span>
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.7s_ease-in-out_infinite] h-2/3"></span>
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.4s_ease-in-out_infinite] h-full"></span>
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.6s_ease-in-out_infinite] h-1/2"></span>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                            <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-xs font-mono tracking-widest">PLAY AUDIO</span>
+                    </>
+                )}
+                </button>
+
+                {/* Progress Bar */}
+                {isPlaying && (
+                    <div 
+                        className="w-full max-w-[200px] h-1.5 bg-sky-900/30 rounded-full overflow-hidden cursor-pointer group"
+                        ref={progressBarRef}
+                        onClick={handleProgressClick}
+                    >
+                        <div 
+                            className="h-full bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.5)] transition-all duration-100 ease-linear relative"
+                            style={{ width: `${progress}%` }}
+                        >
+                            <div className="absolute right-0 top-0 bottom-0 w-2 bg-white/50 shadow-[0_0_10px_rgba(255,255,255,0.8)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                    </div>
+                )}
+            </div>
+         )}
       </div>
       
       <div className="relative z-10 container mx-auto px-4 py-24 md:py-32 max-w-4xl">

@@ -335,15 +335,17 @@ const WordCloudDisplay = ({
           style={{ width: '100%', height: 'auto', maxHeight: '600px', objectFit: 'contain' }} 
         />
       ) : (
-        !isLoading && (
-          <svg
-            ref={svgRef}
-            className="wordcloud-svg"
-            width={dimensions.width}
-            height={dimensions.height}
-            style={{ overflow: 'visible' }} // 防止放大时被裁剪
-          />
-        )
+        <svg
+          ref={svgRef}
+          className="wordcloud-svg"
+          width={dimensions.width}
+          height={dimensions.height}
+          style={{ 
+            overflow: 'visible',
+            opacity: isLoading && layoutData.length === 0 ? 0 : 1, // Only hide if loading AND no data
+            transition: 'opacity 0.3s ease'
+          }} 
+        />
       )}
 
       {/* Tooltip (绝对定位) */}

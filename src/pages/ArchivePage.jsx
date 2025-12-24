@@ -418,7 +418,7 @@ const ArchivePage = () => {
         <div className="footer-content">
           <div className="footer-section">
             <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'white' }}>🎵 Music Universe</p>
-            <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>网站设计、代码实现与用户体验由「D小调片段记录」公众号作者与AI技术共同打造</p>
+            <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>网站设计、代码实现与用户体验由 MagiccoAI & 「D小调片段记录」公众号作者与 AI 技术共同打造</p>
           </div>
           
           <div className="footer-section">
@@ -440,7 +440,7 @@ const ArchivePage = () => {
             </div>
             <div style={{ marginTop: '1.5rem', opacity: 0.6, fontSize: '0.8rem' }}>
               <p>感谢每一段旋律的陪伴</p>
-              <p>© 2025 音乐歌单可视化探索</p>
+              <p>© 2025 MagiccoAI & D小调片段记录. All Rights Reserved.</p>
             </div>
           </div>
 

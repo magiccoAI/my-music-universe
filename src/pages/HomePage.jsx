@@ -173,6 +173,10 @@ const HomePage = () => {
             <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors font-mono">公众号</span>
           </a>
         </div>
+
+        <div className="mt-6 text-[10px] text-gray-600 font-mono opacity-60">
+          © 2025 MagicCoAI (D小调片段记录)
+        </div>
       </footer>
 
       {/* modal */}
