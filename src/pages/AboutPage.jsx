@@ -37,6 +37,7 @@ const AboutPage = () => {
   const navigate = useNavigate();
   const [lang, setLang] = useState('zh');
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false); // Mobile collapsible menu state
   const audioRef = useRef(null);
   const progressBarRef = useRef(null);
   const [progress, setProgress] = useState(0);

@@ -25,7 +25,7 @@ const WordCloudDisplay = ({
   
   // 状态管理
   // 初始 loading 状态取决于是否已经有外部数据传入
-  const [isLoading, setIsLoading] = useState(type !== 'style' && (!externalData || Object.keys(externalData).length === 0));
+  const [isLoading, setIsLoading] = useState(!externalData || Object.keys(externalData).length === 0);
   const [dimensions, setDimensions] = useState({ width, height });
   const [data, setData] = useState(externalData || []); // 优先使用 externalData
   const [layoutData, setLayoutData] = useState([]);
@@ -72,9 +72,9 @@ const WordCloudDisplay = ({
     };
   }, []);
 
-  // 2. 获取数据 (仅在非 style 模式下运行，且没有外部数据时)
+  // 2. 获取数据 (仅在没有外部数据时)
   useEffect(() => {
-    if (type === 'style' || (externalData && Object.keys(externalData).length > 0)) return;
+    if (externalData && Object.keys(externalData).length > 0) return;
 
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -98,7 +98,7 @@ const WordCloudDisplay = ({
     fetchData();
 
     return () => abortController.abort();
-  }, [type]);
+  }, [externalData]);
 
   // 3. 数据清洗与处理 (Memoized)
   const processData = useCallback(() => {
@@ -148,7 +148,6 @@ const WordCloudDisplay = ({
 
   // 4. Worker 布局计算 (修复核心：Worker 在 Effect 内部实例化)
   useEffect(() => {
-    if (type === 'style') return;
     // FIX: 正确检查 data 是否为空（兼容数组和对象）
     const isDataEmpty = !data || (Array.isArray(data) && data.length === 0) || (typeof data === 'object' && Object.keys(data).length === 0);
     if (isDataEmpty) {
@@ -197,7 +196,7 @@ const WordCloudDisplay = ({
   // 6. 超时处理 (防止 Worker 卡死)
   useEffect(() => {
     let timeoutId;
-    if (isLoading && type !== 'style') {
+    if (isLoading) {
       timeoutId = setTimeout(() => {
         console.warn('WordCloud generation timed out.');
         setIsLoading(false);
@@ -205,11 +204,11 @@ const WordCloudDisplay = ({
       }, 8000); // 8秒超时
     }
     return () => clearTimeout(timeoutId);
-  }, [isLoading, type]);
+  }, [isLoading]);
 
   // 5. D3 渲染逻辑
   useEffect(() => {
-    if (type === 'style' || !svgRef.current || layoutData.length === 0) return;
+    if (!svgRef.current || layoutData.length === 0) return;
 
     const svg = select(svgRef.current);
     
@@ -315,7 +314,7 @@ const WordCloudDisplay = ({
     <div className="wordcloud-display" ref={containerRef} style={{ position: 'relative', width: '100%', minHeight: '300px' }}>
       
       {/* Loading 状态 */}
-      {isLoading && type !== 'style' && (
+      {isLoading && (
         <div className="wordcloud-loading">
           <div className="loading-spinner"></div>
           <div className="loading-text">正在生成词云星系...</div>
@@ -323,33 +322,20 @@ const WordCloudDisplay = ({
       )}
 
       {/* 主要内容区 */}
-      {type === 'style' ? (
-        <img 
-          src={`${process.env.PUBLIC_URL}/optimized-images/musicstyle-cloud2.png`} 
-          alt="Music Style Word Cloud" 
-          onError={(e) => {
-            e.target.onerror = null;
-            // Fallback to webp if png doesn't exist
-            e.target.src = `${process.env.PUBLIC_URL}/optimized-images/musicstyle-cloud2.webp`;
-          }}
-          style={{ width: '100%', height: 'auto', maxHeight: '600px', objectFit: 'contain' }} 
-        />
-      ) : (
-        <svg
-          ref={svgRef}
-          className="wordcloud-svg"
-          width={dimensions.width}
-          height={dimensions.height}
-          style={{ 
-            overflow: 'visible',
-            opacity: isLoading && layoutData.length === 0 ? 0 : 1, // Only hide if loading AND no data
-            transition: 'opacity 0.3s ease'
-          }} 
-        />
-      )}
+      <svg
+        ref={svgRef}
+        className="wordcloud-svg"
+        width={dimensions.width}
+        height={dimensions.height}
+        style={{ 
+          overflow: 'visible',
+          opacity: isLoading && layoutData.length === 0 ? 0 : 1, // Only hide if loading AND no data
+          transition: 'opacity 0.3s ease'
+        }} 
+      />
 
       {/* Tooltip (绝对定位) */}
-      {hoveredWord && type !== 'style' && (
+      {hoveredWord && (
         <div 
           className="wordcloud-tooltip"
           style={{
@@ -381,4 +367,4 @@ WordCloudDisplay.propTypes = {
   height: PropTypes.number
 };
 
-export default WordCloudDisplay;
+export default React.memo(WordCloudDisplay);

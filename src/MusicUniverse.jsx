@@ -841,7 +841,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
               {dayMode === 'normal' && (
                 <>
                   <Clouds isMobile={isMobile} />
-                  <CloudFloor />
+                  {!isMobile && <CloudFloor />}
                   <PaperPlanes 
                     count={4} 
                     musicData={musicData} 
