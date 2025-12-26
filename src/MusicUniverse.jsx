@@ -31,7 +31,7 @@ import InfoCard from './components/InfoCard';
 const SNOW_BACKGROUNDS = [
   {
     name: '默认雪景',
-    path: '/images/snow-bg.webp',
+    path: process.env.PUBLIC_URL + '/images/snow-bg.webp',
     fog: { color: '#dbeafe', density: 0.0045 },
     environment: {
       ambient: { intensity: 0.3, color: '#e0f2fe' },
@@ -40,7 +40,7 @@ const SNOW_BACKGROUNDS = [
   },
   {
     name: '星空雪景',
-    path: '/images/stars-snow.jpg',
+    path: process.env.PUBLIC_URL + '/images/stars-snow.jpg',
     fog: { color: '#0b1b3a', density: 0.002 },
     environment: {
       ambient: { intensity: 0.35, color: '#c7d2fe' },
@@ -49,7 +49,7 @@ const SNOW_BACKGROUNDS = [
   },
   {
     name: '极光星空',
-    path: '/images/自然风光_期末的延时_07_全景.jpg',
+    path: process.env.PUBLIC_URL + '/images/自然风光_期末的延时_07_全景.jpg',
     fog: { color: '#e2e8f0', density: 0.0035 },
     environment: {
       ambient: { intensity: 0.3, color: '#f1f5f9' },
@@ -58,7 +58,7 @@ const SNOW_BACKGROUNDS = [
   },
   {
     name: '日照金山01',
-    path: '/images/自然风光_期末的延时_11_全景.jpg',
+    path: process.env.PUBLIC_URL + '/images/自然风光_期末的延时_11_全景.jpg',
     fog: { color: '#ffd700', density: 0.002 },
     environment: {
       ambient: { intensity: 0.4, color: '#64748b' }, // Darker slate blue shadow
@@ -67,7 +67,7 @@ const SNOW_BACKGROUNDS = [
   },
   {
     name: '意大利',
-    path: '/images/自然风光_意大利_5_中景.jpg',
+    path: process.env.PUBLIC_URL + '/images/自然风光_意大利_5_中景.jpg',
     fog: { color: '#e0f2fe', density: 0.003 },
     environment: {
       ambient: { intensity: 0.3, color: '#e0f2fe' },
@@ -76,7 +76,7 @@ const SNOW_BACKGROUNDS = [
   },
   {
     name: '日照金山02',
-    path: '/images/自然风光_期末的延时_01_全景.jpg',
+    path: process.env.PUBLIC_URL + '/images/自然风光_期末的延时_01_全景.jpg',
     fog: { color: '#ffd700', density: 0.0025 }, // Changed to Gold (same as 01)
     environment: {
       ambient: { intensity: 0.4, color: '#4f46e5' }, // Keep Deep indigo shadow

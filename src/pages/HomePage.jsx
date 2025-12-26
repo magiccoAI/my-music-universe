@@ -24,6 +24,11 @@ const HomePage = () => {
   const isMobile = useIsMobile();
   const [showBackground, setShowBackground] = useState(false);
 
+  // Update HTML lang attribute when aboutLang changes
+  useEffect(() => {
+    document.documentElement.lang = aboutLang;
+  }, [aboutLang]);
+
   const t = aboutContent[aboutLang];
 
   const { handleMouseMove, MeteorRenderer } = useMeteorTrail();

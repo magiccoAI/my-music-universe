@@ -270,6 +270,8 @@ function SpecialCollection() {
                   <img
                     src={`${process.env.PUBLIC_URL}/${album.cover.replace(/\.(png|jpg|jpeg)$/i, '.webp')}`}
                     alt={album.music}
+                    width="150"
+                    height="150"
                     loading="lazy"
                     style={{
                       width: '100%',
@@ -496,6 +498,8 @@ function SpecialCollection() {
                     <img 
                       src={`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.webp`}
                       alt={report.name}
+                      width="900"
+                      height="600"
                       loading="lazy" // Add lazy loading
                       onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.webp`, index)}
                       style={{
@@ -645,6 +649,8 @@ function SpecialCollection() {
             <img 
               src={selectedImage}
               alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
+              width="1280"
+              height="720"
               className={`w-auto max-w-full h-auto object-contain rounded-lg shadow-lg transition-opacity duration-300 ${isImageLoading ? 'opacity-50' : 'opacity-100'}`}
               onLoad={() => setIsImageLoading(false)} // 加载完成
               onError={(e) => {

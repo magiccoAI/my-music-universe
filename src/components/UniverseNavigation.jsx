@@ -19,7 +19,7 @@ const UniverseNavigation = ({ className = '' }) => {
     { 
       path: '/about', 
       label: (
-        <span className="flex items-center opacity-80 hover:opacity-100" title="关于这个宇宙">
+        <span className="flex items-center opacity-90 hover:opacity-100" title="关于这个宇宙">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
           </svg>
@@ -130,7 +130,7 @@ const UniverseNavigation = ({ className = '' }) => {
       {/* 全屏移动菜单 */}
       {menuOpen && (
         <motion.div 
-          className="fixed inset-0 z-40 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center"
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-3xl flex flex-col items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

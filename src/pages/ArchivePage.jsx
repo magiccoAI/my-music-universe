@@ -236,7 +236,7 @@ const ArchivePage = () => {
 
   return (
     <div className="archive-page">
-      <MouseParticleEffect />
+      {!isMobile && <MouseParticleEffect />}
 
       
       {/* 背景星空效果 */}
@@ -431,7 +431,7 @@ const ArchivePage = () => {
                 公众号「D小调片段记录」
                 {/* Tooltip */}
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 pointer-events-none">
-                  <img src={WeChatQRCode} alt="公众号二维码" className="w-full h-auto rounded-lg"/>
+                  <img src={WeChatQRCode} alt="公众号二维码" width="192" height="192" className="w-full h-auto rounded-lg"/>
                   <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
                  
                 </div>
@@ -454,7 +454,7 @@ const ArchivePage = () => {
                   className="group relative flex flex-col items-center gap-2"
                 >
                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-red-500/30 group-hover:scale-110 transition-all duration-300">
-                    <img src={NetEaseCloudMusicIcon} alt="网易云" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                    <img src={NetEaseCloudMusicIcon} alt="网易云" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
                   </div>
                   <span className="text-[10px] text-gray-500 group-hover:text-red-400 transition-colors">网易云歌单</span>
                 </a>
@@ -467,13 +467,13 @@ const ArchivePage = () => {
                   className="group relative cursor-pointer flex flex-col items-center gap-2"
                 >
                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-green-500/30 group-hover:scale-110 transition-all duration-300">
-                    <img src={WeChatIcon} alt="微信" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                    <img src={WeChatIcon} alt="微信" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
                   </div>
                   <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors">公众号</span>
                   
                   {/* QR Code Tooltip */}
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 p-2 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
-                    <img src={WeChatQRCode} alt="公众号二维码" className="w-full h-auto rounded-lg"/>
+                    <img src={WeChatQRCode} alt="公众号二维码" width="192" height="192" className="w-full h-auto rounded-lg"/>
                     <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
                     <p className="text-[10px] text-gray-800 text-center mt-1 font-bold">扫码关注</p>
                   </div>

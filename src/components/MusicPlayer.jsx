@@ -56,7 +56,9 @@ const MusicPlayer = ({
               </svg>
             )}
           </button>
+          <label htmlFor="volume-slider" className="sr-only">音量</label>
           <input
+            id="volume-slider"
             type="range"
             min="0"
             max="1"
@@ -64,6 +66,7 @@ const MusicPlayer = ({
             value={isMuted ? 0 : volume}
             onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
             className="w-20 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer"
+            aria-label="音量控制"
           />
         </div>
         

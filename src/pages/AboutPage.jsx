@@ -9,7 +9,7 @@ const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table
 
 const AUDIO_MAP = {
   zh: null,
-  en: null,
+  en: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-en.mp3',
   wuu: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-wuu.mp3',
   yue: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-yue.mp3',
   fr: process.env.PUBLIC_URL + '/audio/aboutpage-multilang/about-fr.mp3',
@@ -43,6 +43,9 @@ const AboutPage = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    // Set initial lang attribute
+    document.documentElement.lang = lang;
+
     audioRef.current = new Audio();
     
     const updateProgress = () => {
@@ -70,6 +73,8 @@ const AboutPage = () => {
     if (newLang === lang) return;
     
     setLang(newLang);
+    // Update HTML lang attribute for accessibility and Lighthouse
+    document.documentElement.lang = newLang;
     
     // Stop current audio and reset progress
     if (audioRef.current) {
@@ -134,18 +139,40 @@ const AboutPage = () => {
 
       {/* Language Switcher & Audio Player */}
       <div className="fixed top-24 right-4 md:right-12 z-50 animate-fade-in-down flex flex-col items-end gap-4">
-         <div className="bg-black/40 backdrop-blur rounded-2xl p-2 border border-sky-500/20 shadow-[0_0_15px_rgba(14,165,233,0.1)]">
-             <div className="text-[10px] text-sky-500/50 font-mono text-right mb-2 pr-2 tracking-widest">SIGNAL FREQUENCY</div>
-             <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+         <div className="bg-black/40 backdrop-blur rounded-2xl p-2 border border-sky-500/20 shadow-[0_0_15px_rgba(14,165,233,0.1)] flex flex-col items-end">
+             <button 
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                className={`text-[10px] font-mono text-right mb-2 pr-2 tracking-widest transition-all duration-300 flex items-center gap-2 group ${
+                   isLangMenuOpen ? 'text-sky-300' : 'text-sky-400/70 hover:text-sky-300'
+                }`}
+                aria-expanded={isLangMenuOpen}
+             >
+                <span>SIGNAL FREQUENCY</span>
+                <svg 
+                   xmlns="http://www.w3.org/2000/svg" 
+                   viewBox="0 0 20 20" 
+                   fill="currentColor" 
+                   className={`w-3 h-3 transition-transform duration-300 md:hidden ${isLangMenuOpen ? 'rotate-180' : ''}`}
+                >
+                   <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                </svg>
+             </button>
+             
+             <div className={`${isLangMenuOpen ? 'grid' : 'hidden md:grid'} grid-cols-3 md:grid-cols-5 gap-2 animate-in fade-in slide-in-from-top-2 duration-300`}>
                 {Object.keys(aboutContent).map(l => (
                    <button 
                      key={l}
-                     onClick={() => handleLangChange(l)}
+                     onClick={() => {
+                        handleLangChange(l);
+                        if (window.innerWidth < 768) setIsLangMenuOpen(false);
+                     }}
                      className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition-all duration-300 ${
                        lang === l 
                        ? 'bg-sky-500/20 border-sky-500 text-sky-300 shadow-[0_0_10px_rgba(14,165,233,0.3)] scale-105' 
-                       : 'bg-transparent border-sky-500/10 text-gray-500 hover:text-sky-400 hover:border-sky-500/40'
+                       : 'bg-transparent border-sky-500/10 text-gray-400 hover:text-sky-300 hover:border-sky-500/40'
                      }`}
+                     aria-label={`Switch language to ${LANG_LABELS[l] || l}`}
+                     aria-pressed={lang === l}
                    >
                      {LANG_LABELS[l] || l.toUpperCase()}
                    </button>
@@ -234,7 +261,7 @@ const AboutPage = () => {
                       }
                     }}
                     />
-                    <figcaption className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-xs text-sky-300/70 text-center font-mono tracking-widest">
+                    <figcaption className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-xs text-sky-200 text-center font-mono tracking-widest">
                     {t.imageCaption1}
                     </figcaption>
                 </figure>
@@ -265,7 +292,7 @@ const AboutPage = () => {
                             &#125;
                         </div>
                     </div>
-                    <figcaption className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-xs text-sky-300/70 text-center font-mono tracking-widest">
+                    <figcaption className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-xs text-sky-200 text-center font-mono tracking-widest">
                     {t.imageCaption2}
                     </figcaption>
                 </figure>
@@ -306,7 +333,7 @@ const AboutPage = () => {
             </div>
         </div>
         
-        <div className="text-center mt-16 text-gray-600 text-sm font-mono">
+        <div className="text-center mt-16 text-gray-500 text-sm font-mono">
              Music Universe Collection · Powered by TraeAI
         </div>
       </div>

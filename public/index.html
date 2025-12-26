@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -16,13 +16,21 @@
     <meta name="author" content="D小调片段记录" />
     
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SLYJM145ZF"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      // 仅在非本地环境加载 Google Analytics
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-SLYJM145ZF";
+        document.head.appendChild(script);
 
-      gtag('config', 'G-SLYJM145ZF');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SLYJM145ZF', {
+          'cookie_flags': 'SameSite=None;Secure'
+        });
+      }
     </script>
     
     <!-- Open Graph / Facebook -->

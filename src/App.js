@@ -42,6 +42,9 @@ function App() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
+    // Set default language for Lighthouse and accessibility
+    document.documentElement.lang = 'zh';
+
     // 延迟预加载，优先保证首屏加载速度
     // 3秒后再开始加载其他页面资源
     const timer = setTimeout(() => {
