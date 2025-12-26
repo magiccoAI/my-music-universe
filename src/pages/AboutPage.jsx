@@ -120,7 +120,7 @@ const AboutPage = () => {
   const t = aboutContent[lang] || aboutContent['en']; // Fallback
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden font-sans selection:bg-sky-500/30">
+    <div className="relative min-h-screen bg-black text-white overflow-x-hidden font-sans selection:bg-sky-500/30">
       <StarBackground count={3000} />
       <UniverseNavigation />
       

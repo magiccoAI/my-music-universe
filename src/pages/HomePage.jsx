@@ -58,7 +58,7 @@ const HomePage = () => {
 
   return (
     <div
-      className="relative min-h-screen w-full text-white overflow-hidden flex flex-col"
+      className="relative min-h-screen w-full text-white overflow-x-hidden flex flex-col"
       onMouseMove={!isMobile ? handleMouseMove : undefined}
     >
       {showBackground && <StarBackground starCount={isMobile ? 500 : 5000} />}
