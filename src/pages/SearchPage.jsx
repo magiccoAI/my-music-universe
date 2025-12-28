@@ -37,6 +37,28 @@ const SearchPage = () => {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [focusedSuggestionIndex, setFocusedSuggestionIndex] = useState(-1);
   const [sortMethod, setSortMethod] = useState('count'); // 'count' | 'name'
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // 监听滚动显示回到顶部按钮
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   const suggestionsRef = useRef(null);
   const searchInputRef = useRef(null);
@@ -542,6 +564,26 @@ const SearchPage = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* 回到顶部按钮 */}
+      <button
+        onClick={scrollToTop}
+        className={`
+          fixed bottom-8 right-8 z-50
+          p-4 rounded-full
+          bg-indigo-600/80 hover:bg-indigo-500
+          text-white shadow-lg shadow-indigo-500/30
+          backdrop-blur-sm border border-indigo-400/30
+          transition-all duration-300 transform
+          ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}
+          flex items-center justify-center
+        `}
+        aria-label="回到顶部"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+      </button>
     </div>
   );
 };

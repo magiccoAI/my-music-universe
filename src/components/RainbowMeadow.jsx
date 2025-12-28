@@ -623,6 +623,7 @@ const TreeWindShader = {
 };
 
 // Component for the Lush Tree with dense foliage
+
 const LushTree = ({ position, scale = 1.0, isMobile = false }) => {
   const leavesRef = useRef();
   const shadowRef = useRef();

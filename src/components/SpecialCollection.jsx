@@ -634,119 +634,69 @@ function SpecialCollection() {
       {/* 图片放大模态框 */}
       {showModal && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[9999] p-4"
+          className="fixed inset-0 md:right-24 pt-16 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[9999]"
           onClick={closeModal} // 点击背景关闭模态框
         >
+          {/* 左侧导航按钮 - 绝对定位 */}
+          <button
+            aria-label="上一张"
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-4 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-50 focus:outline-none"
+            onClick={(e) => { e.stopPropagation(); goToPreviousImage(e); }}
+          >
+            <ChevronLeftIcon className="w-10 h-10" />
+          </button>
+
+          {/* 右侧导航按钮 - 绝对定位 */}
+          <button
+            aria-label="下一张"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-4 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-50 focus:outline-none"
+            onClick={(e) => { e.stopPropagation(); goToNextImage(e); }}
+          >
+            <ChevronRightIcon className="w-10 h-10" />
+          </button>
+
+          {/* 关闭按钮 - 绝对定位 (增加 top 距离以避开刘海屏/导航栏) */}
+          <button 
+            onClick={closeModal}
+            className="absolute top-6 right-6 p-2 text-white/80 hover:text-white bg-black/50 hover:bg-black/70 rounded-full transition-all z-50 focus:outline-none"
+            aria-label="关闭"
+          >
+            <XMarkIcon className="w-8 h-8" />
+          </button>
+
           <div 
-            className="relative max-w-full max-h-full flex flex-col items-center justify-center"
-            onClick={(e) => e.stopPropagation()} // 阻止点击图片时关闭模态框
+            className="relative w-full h-full flex flex-col items-center justify-center p-4"
+            onClick={(e) => e.stopPropagation()} // 阻止点击图片区域时关闭模态框
           >
             {isImageLoading && (
-              <div className="absolute z-10 flex items-center justify-center">
+              <div className="absolute z-10 flex items-center justify-center pointer-events-none">
                  <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
               </div>
             )}
+            
             <img 
               src={selectedImage}
               alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
-              width="1280"
-              height="720"
-              className={`w-auto max-w-full h-auto object-contain rounded-lg shadow-lg transition-opacity duration-300 ${isImageLoading ? 'opacity-50' : 'opacity-100'}`}
+              className={`max-w-full max-h-[85vh] object-contain shadow-2xl transition-opacity duration-300 ${isImageLoading ? 'opacity-50' : 'opacity-100'}`}
               onLoad={() => setIsImageLoading(false)} // 加载完成
               onError={(e) => {
                 console.log('Image onError triggered for src:', e.target.src);
-                setIsImageLoading(false); // 错误也视为结束加载状态，避免一直转圈
+                setIsImageLoading(false); 
                 if (selectedImageIndex !== null && musicReports[selectedImageIndex]) {
                   e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[selectedImageIndex].id}.png`;
-                  console.log('Image onError: Fallback to', e.target.src);
                 } else {
                   e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-placeholder.png`;
-                  console.log('Image onError: Fallback to placeholder', e.target.src);
                 }
               }}
             />
-            {/* 底部控制栏 - 移出图片区域 */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '20px',
-              marginTop: '15px',
-              padding: '10px',
-              background: 'rgba(255, 255, 255, 0.03)',
-              borderRadius: '12px',
-              backdropFilter: 'blur(5px)'
-            }}>
-              {/* 上一张按钮 - Moved to control bar */}
-              <button
-                onClick={goToPreviousImage}
-                aria-label="上一张"
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'rgba(255,255,255,0.7)',
-                  cursor: 'pointer',
-                  padding: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  if (isMobile) return;
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                }}
-                onMouseLeave={(e) => {
-                  if (isMobile) return;
-                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
-                  e.currentTarget.style.transform = 'scale(1)';
-                }}
-              >
-                <ChevronLeftIcon className="w-8 h-8" />
-              </button>
-
-              {/* 放大图片信息 */}
-                <span className="text-white/80 text-sm">
-                  {selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}
-                </span>
-  
-                {/* 下一张按钮 - Moved to control bar */}
-                <button
-                  onClick={goToNextImage}
-                  aria-label="下一张"
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'rgba(255,255,255,0.7)',
-                    cursor: 'pointer',
-                    padding: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (isMobile) return;
-                    e.currentTarget.style.color = 'white';
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (isMobile) return;
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                >
-                  <ChevronRightIcon className="w-8 h-8" />
-                </button>
-              </div>
-              <button 
-                onClick={closeModal}
-              className="absolute top-4 right-4 text-white font-bold bg-gray-800 bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-75 transition-all duration-200"
-              style={{ zIndex: 20, width: isMobile ? '44px' : '40px', height: isMobile ? '44px' : '40px' }}
-            >
-              <XMarkIcon className="w-6 h-6" />
-            </button>
+            
+            {/* 底部信息指示器 */}
+            <div className="absolute bottom-6 px-4 py-2 bg-black/50 backdrop-blur-md rounded-full text-white/90 text-sm font-medium tracking-wide pointer-events-none">
+               {selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}
+               <span className="mx-2 opacity-50">|</span>
+               {selectedImageIndex !== null ? musicReports[selectedImageIndex].name : ''}
+               <span className="hidden md:inline"><span className="mx-2 opacity-50">|</span> 按 ESC 键退出</span>
+            </div>
           </div>
         </div>
       )}

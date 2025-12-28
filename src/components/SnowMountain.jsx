@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useMemo, useState } from 'react';
-import { useTexture, useGLTF } from '@react-three/drei';
+import { useTexture, useGLTF, Html } from '@react-three/drei';
 import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import Snowfall from './Snowfall';
@@ -474,7 +474,7 @@ const Snowman = ({ position, scale = 1, rotation = [0, 0, 0], scarfColor = "#ff4
 };
 
 const SnowMountain = ({
-  bgImage = '/images/snow-bg.jpg',
+  bgImage = '/images/snow-bg.webp',
   environment,
   fog,
   isMobile = false,
@@ -484,6 +484,7 @@ const SnowMountain = ({
   const snowTex = useTexture(snowPath); 
   const [bgTexture, setBgTexture] = useState(null);
   const [prevBgTexture, setPrevBgTexture] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const fadeT = useRef(1);
   const bgMatRef = useRef(null);
   const prevBgMatRef = useRef(null);
@@ -492,13 +493,32 @@ const SnowMountain = ({
     let cancelled = false;
     const loader = new THREE.TextureLoader();
     
-    // Optimization: Use mobile specific image if available for heavy assets
-    let url = (process.env.PUBLIC_URL || '') + bgImage;
-    if (isMobile && (bgImage.includes('snow-bg'))) {
-      // Use the mobile optimized version from optimized-images folder
-      // Check if it's the default snow-bg
-      url = (process.env.PUBLIC_URL || '') + '/optimized-images/snow-bg-mobile.webp';
+    // 修复路径拼接逻辑：避免 PUBLIC_URL 重复
+    const publicPath = process.env.PUBLIC_URL || '';
+    let url = bgImage;
+    
+    // 如果 bgImage 已经包含了 publicPath，则不再重复添加
+    if (!url.startsWith(publicPath) && !url.startsWith('http')) {
+      url = publicPath + url;
     }
+    
+    // 确保路径中没有重复的斜杠
+    url = url.replace(/\/+/g, '/');
+    if (url.startsWith('/') && publicPath.startsWith('http')) {
+        // 如果是绝对 URL 且路径以 / 开头，可能需要特殊处理，但通常 replace 就够了
+    }
+
+    // Auto-switch to webp if it's the default snow-bg.jpg
+    if (url.endsWith('snow-bg.jpg')) {
+      url = url.replace('snow-bg.jpg', 'snow-bg.webp');
+    }
+
+    if (isMobile && (bgImage.includes('snow-bg'))) {
+      url = publicPath + '/optimized-images/snow-bg-mobile.webp';
+      url = url.replace(/\/+/g, '/');
+    }
+
+    setIsLoading(true);
 
     loader.load(
       url,
@@ -516,15 +536,31 @@ const SnowMountain = ({
           if (current) setPrevBgTexture(current);
           return tex;
         });
+        setIsLoading(false);
       },
       undefined,
-      () => {}
+      (err) => {
+        console.error('Failed to load background image:', url, err);
+        setIsLoading(false);
+        // Fallback to jpg if webp fails
+        if (url.endsWith('.webp')) {
+          const fallbackUrl = url.replace('.webp', '.jpg');
+          loader.load(fallbackUrl, (tex) => {
+            if (cancelled) {
+              tex.dispose();
+              return;
+            }
+            tex.colorSpace = THREE.SRGBColorSpace;
+            setBgTexture(tex);
+          });
+        }
+      }
     );
 
     return () => {
       cancelled = true;
     };
-  }, [bgImage]);
+  }, [bgImage, isMobile]);
 
   useFrame((_, delta) => {
     if (!bgTexture) return;
@@ -609,6 +645,21 @@ const SnowMountain = ({
 
   return (
     <group>
+      {isLoading && (
+        <Html center>
+          <div style={{
+            color: 'white',
+            background: 'rgba(0,0,0,0.5)',
+            padding: '10px 20px',
+            borderRadius: '20px',
+            fontSize: '14px',
+            pointerEvents: 'none',
+            whiteSpace: 'nowrap'
+          }}>
+            正在加载背景...
+          </div>
+        </Html>
+      )}
       {prevBgTexture && (
         <Backdrop
           texture={prevBgTexture}

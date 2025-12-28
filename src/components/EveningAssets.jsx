@@ -90,6 +90,7 @@ const SimpleWater = () => {
 
 const DynamicWaveWater = () => {
   const meshRef = useRef();
+  const { gl } = useThree();
   // 增加分段数以支持顶点动画
   // 700x700 大小，96x96 分段 - 减小尺寸以降低性能压力
   const geometry = useMemo(() => new THREE.PlaneGeometry(700, 700, 96, 96), []);
@@ -98,8 +99,12 @@ const DynamicWaveWater = () => {
     THREE.TextureLoader,
     process.env.PUBLIC_URL + '/images/textures/water_normal.jpg'
   );
-  waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
-  waterNormals.repeat.set(10, 10); // 增加纹理重复，避免拉伸
+  
+  useMemo(() => {
+    waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+    waterNormals.repeat.set(10, 10); // 增加纹理重复，避免拉伸
+    waterNormals.anisotropy = gl.capabilities.getMaxAnisotropy(); // 开启各向异性过滤，减少远处波浪的闪烁/噪点
+  }, [waterNormals, gl]);
 
   const materialRef = useRef();
 
@@ -162,9 +167,9 @@ const DynamicWaveWater = () => {
         ref={materialRef}
         color="#2a3055" // 稍微调亮一点的基础色，偏紫
         normalMap={waterNormals}
-        normalScale={new THREE.Vector2(1.5, 1.5)} // 再次增强波浪细节，让反光更细碎
-        roughness={0.1} // 稍微增加粗糙度，防止过曝
-        metalness={0.9} // 稍微降低金属度
+        normalScale={new THREE.Vector2(0.8, 0.8)} // 降低法线强度，减少过于锐利的反光导致的频闪
+        roughness={0.3} // 增加粗糙度，让反光更柔和，减少亮点跳动
+        metalness={0.8} // 稍微降低金属度
         emissive="#7c3aed" // 自发光改为紫色，呼应晚霞
         emissiveIntensity={0.2} // 降低发光强度
         transparent={true}
@@ -768,9 +773,9 @@ const EveningAssets = ({ isMobile, config }) => {
       {!isMobile && (
         <EffectComposer disableNormalPass>
           <Bloom 
-            luminanceThreshold={0.8} // 降低阈值，让发光更稳定，避免在临界值反复跳动
+            luminanceThreshold={0.9} // 提高阈值，仅对极亮部分产生辉光，防止水面普通反光引起频闪
             mipmapBlur 
-            intensity={0.6} // 进一步降低强度，配合低阈值
+            intensity={0.4} // 降低强度，使辉光更自然
             radius={0.4}
           />
         </EffectComposer>

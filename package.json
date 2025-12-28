@@ -44,7 +44,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cross-env PORT=3012 NODE_OPTIONS=--max_old_space_size=4096 craco start",
+    "start": "react-scripts start",
     "fix-deps": "node scripts/fix-dependencies.js",
     "reset": "npm run clean-install && npm run build",
     "clean-install": "rd /s /q node_modules && del package-lock.json && npm install",

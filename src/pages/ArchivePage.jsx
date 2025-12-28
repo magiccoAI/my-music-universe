@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, Suspense, lazy, useCallback } from 'react';
+import React, { useEffect, useState, useRef, Suspense, lazy, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import useIsMobile from '../hooks/useIsMobile';
 import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
@@ -188,15 +188,37 @@ const ArchivePage = () => {
     }
   }, [musicData]);
 
-  const handleArtistClick = (artistName) => {
+  const handleArtistClick = useCallback((artistName) => {
     console.log(`Artist clicked: ${artistName}`);
     // 可以添加跳转到艺术家详情页或筛选功能
-  };
+  }, []);
 
-  const handleStyleClick = (styleName) => {
+  const handleStyleClick = useCallback((styleName) => {
     console.log(`Music style clicked: ${styleName}`);
     // 可以添加跳转到风格详情页或筛选功能
-  };
+  }, []);
+
+  const memoizedWordCloud = useMemo(() => {
+    return activeGalaxy === 'artist' ? (
+      <Suspense fallback={<div>加载词云中...</div>}>
+        <WordCloudDisplay 
+          data={aggregatedData.artist_counts} 
+          type="artist"
+          maxWords={50}
+          onWordClick={handleArtistClick}
+        />
+      </Suspense>
+    ) : (
+      <Suspense fallback={<div>加载词云中...</div>}>
+        <WordCloudDisplay 
+          data={aggregatedData.style_counts} 
+          type="style"
+          maxWords={50}
+          onWordClick={handleStyleClick}
+        />
+      </Suspense>
+    );
+  }, [activeGalaxy, aggregatedData, handleArtistClick, handleStyleClick]);
 
   // 统计卡片数据
   const statsData = [
@@ -357,26 +379,7 @@ const ArchivePage = () => {
         </div>
 
         <div className="wordcloud-container">
-          {activeGalaxy === 'artist' && (
-            <Suspense fallback={<div>加载词云中...</div>}>
-              <WordCloudDisplay 
-                data={aggregatedData.artist_counts} 
-                type="artist"
-                maxWords={50}
-                onWordClick={handleArtistClick}
-              />
-            </Suspense>
-          )}
-          {activeGalaxy === 'style' && (
-            <Suspense fallback={<div>加载词云中...</div>}>
-              <WordCloudDisplay 
-                data={aggregatedData.style_counts} 
-                type="style"
-                maxWords={50}
-                onWordClick={handleStyleClick}
-              />
-            </Suspense>
-          )}
+          {memoizedWordCloud}
         </div>
 
       </section>
@@ -392,7 +395,7 @@ const ArchivePage = () => {
           <h2 className="section-title">特别收藏</h2>
           <p className="section-subtitle">那些触动心灵的珍贵旋律</p>
         </div>
-        <div className="special-collection-container">
+        <div className="special-collection-container md:mr-24">
           <SpecialCollection musicData={musicData} />
         </div>
 
