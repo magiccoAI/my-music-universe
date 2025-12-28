@@ -146,23 +146,34 @@ const ShootingStars = () => {
   const timeoutRef = useRef();
 
   useEffect(() => {
-    const spawnStar = () => {
-        // 如果标签页不可见，可能不需要生成？(useFrame 会暂停，但 setTimeout 不会)
-        // 不过 React 状态更新是安全的。
-        
-        const id = nextId.current++;
-        setStars(prev => [...prev, { id }]);
-        
-        // 随机下次生成时间 (2秒 - 8秒)
-        const nextDelay = 2000 + Math.random() * 6000; 
-        timeoutRef.current = setTimeout(spawnStar, nextDelay);
+    const spawnShower = () => {
+      const showerSize = 3 + Math.floor(Math.random() * 5); // 3 to 7 stars
+      for (let i = 0; i < showerSize; i++) {
+        setTimeout(() => {
+          const id = nextId.current++;
+          setStars(prev => [...prev, { id }]);
+        }, i * (50 + Math.random() * 150)); // Staggered spawn
+      }
     };
 
-    // 初始延迟
-    timeoutRef.current = setTimeout(spawnStar, 2000);
-    
+    const scheduleNextShower = () => {
+      // 随机下次流星雨时间 (4秒 - 10秒)
+      const nextDelay = 4000 + Math.random() * 6000;
+      timeoutRef.current = setTimeout(() => {
+        spawnShower();
+        scheduleNextShower();
+      }, nextDelay);
+    };
+
+    // 初始延迟后开始
+    const initialDelay = 2000 + Math.random() * 3000;
+    timeoutRef.current = setTimeout(() => {
+      spawnShower();
+      scheduleNextShower();
+    }, initialDelay);
+
     return () => {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
 
