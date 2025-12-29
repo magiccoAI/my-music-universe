@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import SpecialCollectionCSS from './SpecialCollection.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
 import useIsMobile from '../hooks/useIsMobile';
 import AudioPreview from './AudioPreview';
 import useMusicData from '../hooks/useMusicData';
@@ -147,11 +147,25 @@ function SpecialCollection() {
   };
 
   const closeModal = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(err => console.error(err));
+    }
     setShowModal(false);
     setSelectedImage(null);
     setSelectedImageIndex(null);
     setIsImageLoading(false);
   }, []);
+
+  const toggleFullscreen = (e) => {
+    e.stopPropagation();
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
 
   // 抽离核心切换逻辑，不依赖 event 对象
   const navigateImage = useCallback((direction) => {
@@ -577,7 +591,7 @@ function SpecialCollection() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '20px',
-              marginTop: '12px'
+              marginTop: '0'
             }}>
               <button
                 onClick={prevSlide}
@@ -637,7 +651,7 @@ function SpecialCollection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md"
+            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black backdrop-blur-xl"
             style={{ touchAction: 'none' }} // 显式禁用触摸动作，防止背景滚动
             onClick={closeModal}
           >
@@ -646,14 +660,14 @@ function SpecialCollection() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="relative w-full h-full max-w-[95vw] max-h-[95vh] mx-auto p-2 md:p-6 flex flex-col items-center justify-center"
+              className="relative w-full h-full max-w-[98vw] max-h-[98vh] mx-auto p-4 md:p-12 flex flex-col items-center justify-center"
               style={{
-                marginRight: isMobile ? '0' : '60px', // 为右侧导航点留出空间
+                marginRight: isMobile ? '0' : '100px', // 进一步增加右侧避让空间
               }}
               onClick={(e) => e.stopPropagation()} 
             >
               {/* Image Container with Border and Shadow */}
-              <div className="relative w-full h-full flex items-center justify-center bg-transparent rounded-xl overflow-hidden shadow-2xl">
+              <div className="relative w-full h-full flex items-center justify-center bg-transparent rounded-2xl overflow-hidden">
                 {isImageLoading && (
                   <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 backdrop-blur-sm">
                     <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
@@ -671,30 +685,46 @@ function SpecialCollection() {
                   }}
                 />
                 
-                {/* Close Button - Moved inside image container for better visibility */}
-                <button
-                  onClick={closeModal}
-                  className="absolute top-4 right-4 z-50 p-2 text-white/80 bg-black/40 hover:bg-black/70 rounded-full transition-all duration-300 border border-white/10 backdrop-blur-md"
-                  aria-label="关闭图片预览"
-                >
-                  <XMarkIcon className="w-8 h-8" />
-                </button>
+                {/* Action Buttons Container */}
+                <div className="absolute top-6 right-6 z-50 flex gap-4">
+                  {/* Fullscreen Button */}
+                  {!isMobile && (
+                    <button
+                      onClick={toggleFullscreen}
+                      className="p-3 text-white/80 bg-black/40 hover:bg-black/70 rounded-full transition-all duration-300 border border-white/10 backdrop-blur-md hover:scale-110"
+                      aria-label="切换全屏"
+                      title="全屏浏览"
+                    >
+                      <ArrowsPointingOutIcon className="w-8 h-8" />
+                    </button>
+                  )}
+                  
+                  {/* Close Button */}
+                  <button
+                    onClick={closeModal}
+                    className="p-3 text-white/80 bg-black/40 hover:bg-black/70 rounded-full transition-all duration-300 border border-white/10 backdrop-blur-md hover:scale-110"
+                    aria-label="关闭图片预览"
+                    title="退出预览"
+                  >
+                    <XMarkIcon className="w-8 h-8" />
+                  </button>
+                </div>
               </div>
 
-              {/* Navigation Buttons - Adjusted for spacing and mobile visibility */}
+              {/* Navigation Buttons - Significantly increased spacing from edges */}
               <button
                 onClick={goToPreviousImage}
-                className={`absolute ${isMobile ? 'left-2 p-2' : 'left-6 p-3'} top-1/2 -translate-y-1/2 text-white/50 bg-black/20 hover:bg-black/40 rounded-full hover:text-white transition-all duration-300 backdrop-blur-sm z-30`}
+                className={`absolute ${isMobile ? 'left-4 p-2' : 'left-12 p-4'} top-1/2 -translate-y-1/2 text-white/50 bg-black/30 hover:bg-black/60 rounded-full hover:text-white transition-all duration-300 backdrop-blur-md z-30 hover:scale-110`}
                 aria-label="上一张"
               >
-                <ChevronLeftIcon className={isMobile ? "w-6 h-6" : "w-10 h-10"} />
+                <ChevronLeftIcon className={isMobile ? "w-8 h-8" : "w-12 h-12"} />
               </button>
               <button
                 onClick={goToNextImage}
-                className={`absolute ${isMobile ? 'right-2 p-2' : 'right-6 p-3'} top-1/2 -translate-y-1/2 text-white/50 bg-black/20 hover:bg-black/40 rounded-full hover:text-white transition-all duration-300 backdrop-blur-sm z-30`}
+                className={`absolute ${isMobile ? 'right-4 p-2' : 'right-12 p-4'} top-1/2 -translate-y-1/2 text-white/50 bg-black/30 hover:bg-black/60 rounded-full hover:text-white transition-all duration-300 backdrop-blur-md z-30 hover:scale-110`}
                 aria-label="下一张"
               >
-                <ChevronRightIcon className={isMobile ? "w-6 h-6" : "w-10 h-10"} />
+                <ChevronRightIcon className={isMobile ? "w-8 h-8" : "w-12 h-12"} />
               </button>
 
               {/* Bottom Info */}

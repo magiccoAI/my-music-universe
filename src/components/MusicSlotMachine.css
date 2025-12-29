@@ -32,7 +32,10 @@
     radial-gradient(circle at 40% 80%, #fffb7d 0%, transparent 40%),
     radial-gradient(circle at 70% 70%, #85ffbd 0%, transparent 40%);
   filter: blur(80px);
-  animation: meshRotate 20s linear infinite;
+  animation: meshRotate 60s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .music-slot-machine::after {
@@ -41,7 +44,10 @@
     radial-gradient(circle at 90% 80%, #ff00ff 0%, transparent 40%),
     radial-gradient(circle at 30% 20%, #00d2ff 0%, transparent 40%);
   filter: blur(100px);
-  animation: meshRotate 25s linear infinite reverse;
+  animation: meshRotate 80s linear infinite reverse;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 @keyframes meshRotate {
@@ -199,20 +205,20 @@ h1 {
   padding: 15px 50px;
   font-size: 1.2rem;
   font-weight: 600;
-  background: linear-gradient(90deg, #ff1b6b, #45caff, #993cf7, #ff1b6b);
-  background-size: 300% 100%;
+  background: linear-gradient(90deg, #ff8a00, #e52e71, #ff8a00);
+  background-size: 200% 100%;
   border: none;
   border-radius: 50px;
   color: white;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(153, 60, 247, 0.3);
+  box-shadow: 0 10px 20px rgba(255, 138, 0, 0.3);
   transition: all 0.3s ease;
-  animation: buttonGradient 5s linear infinite;
+  animation: buttonGradient 10s linear infinite;
 }
 
 .spin-btn:hover:not(:disabled) {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 15px 30px rgba(153, 60, 247, 0.5);
+  box-shadow: 0 15px 30px rgba(255, 138, 0, 0.5);
 }
 
 .spin-btn:active:not(:disabled) {
