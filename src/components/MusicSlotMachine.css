@@ -1,9 +1,9 @@
 /* MusicSlotMachine.css */
 .music-slot-machine {
   min-height: 100vh;
-  background: linear-gradient(270deg, #0f0c29, #302b63, #24243e);
-  background-size: 400% 400%;
-  animation: gradientFlow 15s ease infinite;
+  background-color: #0a0a0c;
+  position: relative;
+  overflow: hidden;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -12,22 +12,49 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-@keyframes gradientFlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+/* 弥散渐变背景层 */
+.music-slot-machine::before,
+.music-slot-machine::after {
+  content: '';
+  position: absolute;
+  width: 150vmax;
+  height: 150vmax;
+  top: -25vmax;
+  left: -25vmax;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.music-slot-machine::before {
+  background: 
+    radial-gradient(circle at 20% 30%, #ff1b6b 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, #45caff 0%, transparent 40%),
+    radial-gradient(circle at 40% 80%, #fffb7d 0%, transparent 40%),
+    radial-gradient(circle at 70% 70%, #85ffbd 0%, transparent 40%);
+  filter: blur(80px);
+  animation: meshRotate 20s linear infinite;
+}
+
+.music-slot-machine::after {
+  background: 
+    radial-gradient(circle at 10% 70%, #993cf7 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, #ff00ff 0%, transparent 40%),
+    radial-gradient(circle at 30% 20%, #00d2ff 0%, transparent 40%);
+  filter: blur(100px);
+  animation: meshRotate 25s linear infinite reverse;
+}
+
+@keyframes meshRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .container {
   max-width: 900px;
   width: 100%;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 h1 {
@@ -47,12 +74,12 @@ h1 {
 }
 
 .player-container {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 40px;
   position: relative;
   overflow: hidden;
@@ -166,54 +193,41 @@ h1 {
 .controls {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
 }
 
 .spin-btn {
-  background: linear-gradient(90deg, #ff8a00, #e52e71);
+  padding: 15px 50px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #ff1b6b, #45caff, #993cf7, #ff1b6b);
+  background-size: 300% 100%;
   border: none;
   border-radius: 50px;
   color: white;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 15px 40px;
   cursor: pointer;
+  box-shadow: 0 10px 20px rgba(153, 60, 247, 0.3);
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(229, 46, 113, 0.4);
-  position: relative;
-  overflow: hidden;
+  animation: buttonGradient 5s linear infinite;
 }
 
-.spin-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+.spin-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(153, 60, 247, 0.5);
 }
 
-.spin-btn:hover::before {
-  left: 100%;
-}
-
-.spin-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(229, 46, 113, 0.6);
-}
-
-.spin-btn:active {
-  transform: translateY(1px);
+.spin-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
 }
 
 .spin-btn:disabled {
-  background: linear-gradient(90deg, #666, #888);
+  background: #444;
   cursor: not-allowed;
-  transform: none;
   box-shadow: none;
+}
+
+@keyframes buttonGradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 .spin-btn.spinning {

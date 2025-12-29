@@ -520,7 +520,26 @@ const DayAtmosphere = ({ mode, meadowPreset }) => {
   return null;
 };
 
+const useAppHeight = () => {
+  useEffect(() => {
+    const handleResize = () => {
+      // 使用 window.innerHeight 获取实际可用高度
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
+};
+
 const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlightedTag }) => {
+  useAppHeight();
   const { musicData, loading, error } = useMusicData();
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
   const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night');
@@ -785,8 +804,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
   return (
     <div 
-      className={`w-screen h-screen relative ${currentTheme === 'evening' ? '' : themes[currentTheme]}`}
-      style={themeStyle}
+      className={`w-screen relative ${currentTheme === 'evening' ? '' : themes[currentTheme]}`}
+      style={{ ...themeStyle, height: 'var(--app-height, 100vh)' }}
       role="main"
       aria-label="音乐宇宙三维可视化"
     >

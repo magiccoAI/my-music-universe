@@ -95,8 +95,37 @@ function SpecialCollection() {
   const [showMusicReport, setShowMusicReport] = useState(true); // 新增状态变量
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-  const [isImageLoading, setIsImageLoading] = useState(false); // 新增：图片加载状态
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  // 处理模态框打开/关闭时的背景滚动
+  useEffect(() => {
+    if (showModal) {
+      // 保存原始样式以便恢复
+      const originalBodyStyle = window.getComputedStyle(document.body).overflow;
+      const originalHtmlStyle = window.getComputedStyle(document.documentElement).overflow;
+      
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      
+      // 针对 iOS Safari 的额外处理：防止触摸滚动
+      const preventDefault = (e) => {
+        // 如果点击的是模态框背景或其内部非滚动元素，则阻止默认行为
+        if (showModal) {
+          e.preventDefault();
+        }
+      };
+      
+      // 仅在移动端添加触摸锁定，或者全局添加以确保安全
+      document.addEventListener('touchmove', preventDefault, { passive: false });
+      
+      return () => {
+        document.body.style.overflow = originalBodyStyle || 'auto';
+        document.documentElement.style.overflow = originalHtmlStyle || 'auto';
+        document.removeEventListener('touchmove', preventDefault);
+      };
+    }
+  }, [showModal]);
   const [playingFavId, setPlayingFavId] = useState(null);
 
   const handleFavPlay = (e, item) => {
@@ -439,16 +468,24 @@ function SpecialCollection() {
       </div>
       {/* 新增：音乐报告幻灯片查看器 */}
       <div className="music-report-slider" style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: '20px',
-        padding: '30px',
+        background: `
+          radial-gradient(circle at 10% 10%, rgba(153, 60, 247, 0.15) 0%, transparent 40%),
+          radial-gradient(circle at 90% 15%, rgba(255, 107, 107, 0.15) 0%, transparent 40%),
+          radial-gradient(circle at 50% 50%, rgba(56, 135, 246, 0.1) 0%, transparent 60%),
+          radial-gradient(circle at 80% 85%, rgba(255, 230, 109, 0.1) 0%, transparent 40%),
+          rgba(255, 255, 255, 0.03)
+        `,
+        borderRadius: '24px',
+        padding: isMobile ? '15px' : '25px 25px 15px 25px', 
         marginBottom: '30px',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
         <h3 
-          onClick={() => setShowMusicReport(!showMusicReport)} // 添加点击事件
+          onClick={() => setShowMusicReport(!showMusicReport)}
           style={{
             cursor: 'pointer',
             color: '#ffffff',
@@ -456,43 +493,55 @@ function SpecialCollection() {
             fontSize: '1.3rem',
             fontWeight: '600',
             textShadow: '0 2px 4px rgba(0,0,0,0.5)',
-            display: 'flex', // 使内容居中
-            alignItems: 'center', // 垂直居中
-            justifyContent: 'space-between', // 确保左对齐和箭头右侧
-            gap: '10px' // 标题和箭头之间的间距
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '10px'
           }}
         >
           <span>🎵 歌词图景 music report</span>
-          <span style={{ fontSize: '1.5rem' }}>{showMusicReport ? '▲' : '▼'}</span> {/* 添加折叠/展开指示 */}
+          <span style={{ fontSize: '1.5rem' }}>{showMusicReport ? '▲' : '▼'}</span>
         </h3>
         
         {showMusicReport && ( // 根据状态变量条件渲染
-          <>
+          <div className="slider-wrapper animate-fade-in">
             <div className="slider-container" style={{
               position: 'relative',
-              maxWidth: '900px',
+              maxWidth: isMobile ? '100%' : '1000px', // 桌面端增加最大宽度
+              width: '100%',
+              aspectRatio: isMobile ? 'auto' : '3/2', 
+              maxHeight: isMobile ? '70vh' : '620px', 
               margin: '0 auto',
-              overflow: 'hidden',
               borderRadius: '15px',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)'
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)',
+              overflow: 'hidden',
+              background: 'rgba(0, 0, 0, 0.15)'
             }}>
               {/* 幻灯片轨道 */}
-              <div className="slides-track" style={{
-                display: 'flex',
-                transition: 'transform 0.5s ease-in-out',
-                transform: `translateX(-${currentSlide * 100}%)`
-              }}>
+              <div 
+                className="slider-track"
+                style={{
+                  display: 'flex',
+                  width: '100%',
+                  height: '100%',
+                  flexWrap: 'nowrap',
+                  transition: 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                  transform: `translateX(-${currentSlide * 100}%)`
+                }}
+              >
                 {musicReports.map((report, index) => (
                   <div 
                     key={report.id}
                     className="slide"
                     style={{
-                      minWidth: '100%',
-                      height: 'auto',
+                      width: '100%',
+                      flex: '0 0 100%',
+                      height: '100%',
+                      minHeight: isMobile ? '50vh' : 'auto',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      background: 'rgba(0, 0, 0, 0.3)'
+                      padding: isMobile ? '10px' : '0'
                     }}
                   >
                     <img 
@@ -500,206 +549,165 @@ function SpecialCollection() {
                       alt={report.name}
                       width="900"
                       height="600"
-                      loading="lazy" // Add lazy loading
+                      loading="lazy"
                       onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.webp`, index)}
                       style={{
+                        display: 'block',
                         maxWidth: '100%',
                         maxHeight: '100%',
+                        width: 'auto',
+                        height: 'auto',
                         objectFit: 'contain',
-                        borderRadius: '8px',
-                        cursor: 'pointer' // 添加手型光标表示可点击
+                        cursor: 'pointer',
+                        borderRadius: '8px'
                       }}
                       onError={(e) => {
-                        e.target.onerror = null; // Prevent infinite loop
+                        e.target.onerror = null;
                         e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.png`;
                       }}
                     />
                   </div>
                 ))}
               </div>
+            </div>
 
-            {/* 底部控制栏 - 移出图片区域 */}
+            {/* 底部控制栏 */}
             <div style={{
-              position: 'absolute',
-              bottom: '10px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '20px',
-              padding: '5px 15px',
-              background: 'rgba(0, 0, 0, 0.4)',
-              borderRadius: '20px',
-              backdropFilter: 'blur(5px)'
+              marginTop: '12px'
             }}>
-              {/* 上一张按钮 - Moved to control bar */}
               <button
                 onClick={prevSlide}
                 aria-label="上一张"
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'rgba(255,255,255,0.7)',
-                  cursor: 'pointer',
-                  padding: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  if (isMobile) return;
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                }}
-                onMouseLeave={(e) => {
-                  if (isMobile) return;
-                  e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
-                  e.currentTarget.style.transform = 'scale(1)';
-                }}
+                className="p-2 text-white/70 hover:text-white transition-colors"
               >
                 <ChevronLeftIcon className="w-8 h-8" />
               </button>
 
-                {/* 指示器点 */}
-                <div className="slider-dots" style={{
-                  display: 'flex',
-                  gap: isMobile ? '14px' : '10px',
-                  alignItems: 'center'
-                }}>
-                  {musicReports.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToSlide(index)}
-                      aria-label={`前往幻灯片 ${index + 1}`}
-                      style={{
-                        width: isMobile ? '16px' : '12px',
-                        height: isMobile ? '16px' : '12px',
-                        borderRadius: '50%',
-                        border: 'none',
-                        background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.4)',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease'
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* 下一张按钮 - Moved to control bar */}
-                <button
-                  onClick={nextSlide}
-                  aria-label="下一张"
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'rgba(255,255,255,0.7)',
-                    cursor: 'pointer',
-                    padding: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (isMobile) return;
-                    e.currentTarget.style.color = 'white';
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (isMobile) return;
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.7)';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                >
-                  <ChevronRightIcon className="w-8 h-8" />
-                </button>
+              <div className="slider-dots" style={{ display: 'flex', gap: isMobile ? '14px' : '10px', alignItems: 'center' }}>
+                {musicReports.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    aria-label={`前往幻灯片 ${index + 1}`}
+                    className="transition-all duration-300"
+                    style={{
+                      width: isMobile ? '16px' : '10px',
+                      height: isMobile ? '16px' : '10px',
+                      borderRadius: '50%',
+                      border: 'none',
+                      background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.4)',
+                      cursor: 'pointer',
+                      transform: currentSlide === index ? 'scale(1.2)' : 'scale(1)'
+                    }}
+                  />
+                ))}
               </div>
+
+              <button
+                onClick={nextSlide}
+                aria-label="下一张"
+                className="p-2 text-white/70 hover:text-white transition-colors"
+              >
+                <ChevronRightIcon className="w-8 h-8" />
+              </button>
             </div>
 
             {/* 幻灯片信息 */}
             <div style={{
               textAlign: 'center',
-              marginTop: '15px',
+              marginTop: '8px',
               color: '#cccccc',
-              fontSize: '0.9rem'
+              fontSize: '0.85rem',
+              opacity: 0.8
             }}>
               第 {currentSlide + 1} / {musicReports.length} 张 - {musicReports[currentSlide].name}
             </div>
-          </>
+          </div>
         )}
       </div>
 
       {/* 图片放大模态框 */}
-      {showModal && (
-        <div 
-          className="fixed inset-0 md:right-24 pt-16 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[9999]"
-          onClick={closeModal} // 点击背景关闭模态框
-        >
-          {/* 左侧导航按钮 - 绝对定位 */}
-          <button
-            aria-label="上一张"
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-4 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-50 focus:outline-none"
-            onClick={(e) => { e.stopPropagation(); goToPreviousImage(e); }}
-          >
-            <ChevronLeftIcon className="w-10 h-10" />
-          </button>
-
-          {/* 右侧导航按钮 - 绝对定位 */}
-          <button
-            aria-label="下一张"
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-4 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-50 focus:outline-none"
-            onClick={(e) => { e.stopPropagation(); goToNextImage(e); }}
-          >
-            <ChevronRightIcon className="w-10 h-10" />
-          </button>
-
-          {/* 关闭按钮 - 绝对定位 (增加 top 距离以避开刘海屏/导航栏) */}
-          <button 
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md"
+            style={{ touchAction: 'none' }} // 显式禁用触摸动作，防止背景滚动
             onClick={closeModal}
-            className="absolute top-6 right-6 p-2 text-white/80 hover:text-white bg-black/50 hover:bg-black/70 rounded-full transition-all z-50 focus:outline-none"
-            aria-label="关闭"
           >
-            <XMarkIcon className="w-8 h-8" />
-          </button>
-
-          <div 
-            className="relative w-full h-full flex flex-col items-center justify-center p-4"
-            onClick={(e) => e.stopPropagation()} // 阻止点击图片区域时关闭模态框
-          >
-            {isImageLoading && (
-              <div className="absolute z-10 flex items-center justify-center pointer-events-none">
-                 <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
-              </div>
-            )}
-            
-            <img 
-              src={selectedImage}
-              alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
-              className={`max-w-full max-h-[85vh] object-contain shadow-2xl transition-opacity duration-300 ${isImageLoading ? 'opacity-50' : 'opacity-100'}`}
-              onLoad={() => setIsImageLoading(false)} // 加载完成
-              onError={(e) => {
-                console.log('Image onError triggered for src:', e.target.src);
-                setIsImageLoading(false); 
-                if (selectedImageIndex !== null && musicReports[selectedImageIndex]) {
-                  e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${musicReports[selectedImageIndex].id}.png`;
-                } else {
-                  e.target.src = `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-placeholder.png`;
-                }
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="relative w-full h-full max-w-[95vw] max-h-[95vh] mx-auto p-2 md:p-6 flex flex-col items-center justify-center"
+              style={{
+                marginRight: isMobile ? '0' : '60px', // 为右侧导航点留出空间
               }}
-            />
-            
-            {/* 底部信息指示器 */}
-            <div className="absolute bottom-6 px-4 py-2 bg-black/50 backdrop-blur-md rounded-full text-white/90 text-sm font-medium tracking-wide pointer-events-none">
-               {selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}
-               <span className="mx-2 opacity-50">|</span>
-               {selectedImageIndex !== null ? musicReports[selectedImageIndex].name : ''}
-               <span className="hidden md:inline"><span className="mx-2 opacity-50">|</span> 按 ESC 键退出</span>
-            </div>
-          </div>
-        </div>
-      )}
+              onClick={(e) => e.stopPropagation()} 
+            >
+              {/* Image Container with Border and Shadow */}
+              <div className="relative w-full h-full flex items-center justify-center bg-transparent rounded-xl overflow-hidden shadow-2xl">
+                {isImageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 backdrop-blur-sm">
+                    <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                  </div>
+                )}
+                <img
+                  src={selectedImage}
+                  alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
+                  className={`object-contain w-full h-full transition-all duration-500 ease-out ${isImageLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+                  onLoad={() => setIsImageLoading(false)}
+                  onError={(e) => {
+                    setIsImageLoading(false); 
+                    const pngImage = selectedImage.replace('.webp', '.png');
+                    e.target.src = pngImage;
+                  }}
+                />
+                
+                {/* Close Button - Moved inside image container for better visibility */}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-4 z-50 p-2 text-white/80 bg-black/40 hover:bg-black/70 rounded-full transition-all duration-300 border border-white/10 backdrop-blur-md"
+                  aria-label="关闭图片预览"
+                >
+                  <XMarkIcon className="w-8 h-8" />
+                </button>
+              </div>
+
+              {/* Navigation Buttons - Adjusted for spacing and mobile visibility */}
+              <button
+                onClick={goToPreviousImage}
+                className={`absolute ${isMobile ? 'left-2 p-2' : 'left-6 p-3'} top-1/2 -translate-y-1/2 text-white/50 bg-black/20 hover:bg-black/40 rounded-full hover:text-white transition-all duration-300 backdrop-blur-sm z-30`}
+                aria-label="上一张"
+              >
+                <ChevronLeftIcon className={isMobile ? "w-6 h-6" : "w-10 h-10"} />
+              </button>
+              <button
+                onClick={goToNextImage}
+                className={`absolute ${isMobile ? 'right-2 p-2' : 'right-6 p-3'} top-1/2 -translate-y-1/2 text-white/50 bg-black/20 hover:bg-black/40 rounded-full hover:text-white transition-all duration-300 backdrop-blur-sm z-30`}
+                aria-label="下一张"
+              >
+                <ChevronRightIcon className={isMobile ? "w-6 h-6" : "w-10 h-10"} />
+              </button>
+
+              {/* Bottom Info */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 text-white/90 rounded-lg text-sm text-center">
+                <span>{selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}</span>
+                <span className="mx-2 opacity-50">|</span>
+                <span>{selectedImageIndex !== null ? musicReports[selectedImageIndex]?.name || '' : ''}</span>
+                {!isMobile && <span className="inline"><span className="mx-2 opacity-50">|</span> 按 ESC 键退出</span>}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

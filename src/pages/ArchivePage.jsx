@@ -417,7 +417,7 @@ const ArchivePage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      <footer className="footer" style={{ '--footer-bg': `url(${process.env.PUBLIC_URL}/images/footer-bg.png)` }}>
         <div className="footer-content">
           <div className="footer-section">
             <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'white' }}>🎵 Music Universe</p>
@@ -475,10 +475,13 @@ const ArchivePage = () => {
                   <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors">公众号</span>
                   
                   {/* QR Code Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 p-2 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50">
-                    <img src={WeChatQRCode} alt="公众号二维码" width="192" height="192" className="w-full h-auto rounded-lg"/>
-                    <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
-                    <p className="text-[10px] text-gray-800 text-center mt-1 font-bold">扫码关注</p>
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-6 w-56 p-3 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 z-[100]">
+                    <div className="relative">
+                      <img src={WeChatQRCode} alt="公众号二维码" width="200" height="200" className="w-full h-auto rounded-xl"/>
+                      <div className="absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)]"></div>
+                    </div>
+                    <div className="absolute bottom-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 shadow-[4px_4px_10px_rgba(0,0,0,0.1)]"></div>
+                    <p className="text-[11px] text-gray-800 text-center mt-2 font-bold tracking-wider">扫码关注 D小调片段记录</p>
                   </div>
                 </a>
 

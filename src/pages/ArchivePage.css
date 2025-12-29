@@ -620,7 +620,7 @@
 .footer {
   position: relative;
   /* 更深邃的背景，增加底部重量感 */
-  background: linear-gradient(180deg, rgba(12, 12, 43, 0.8) 0%, rgba(5, 5, 17, 1) 100%);
+  background: linear-gradient(180deg, rgba(12, 12, 43, 0.9) 0%, rgba(5, 5, 17, 1) 100%);
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: 4rem 2rem 6rem; /* 增加底部 padding，为 back-to-top 留出空间 */
@@ -628,9 +628,65 @@
   z-index: 10;
   color: white;
   margin-top: 4rem;
+  overflow: visible; /* 允许二维码弹窗超出页脚边界显示 */
 }
 
-.footer::before {
+.footer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--footer-bg);
+   background-size: cover;
+   background-position: center 30%;
+   background-repeat: no-repeat;
+   opacity: 0.12; /* 稍微降低透明度，更加隐约 */
+   mix-blend-mode: lighten; /* 换成 lighten 模式，让亮部（如黑胶边缘）透出来 */
+   mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+   -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+   pointer-events: none;
+   z-index: -1;
+   transition: opacity 0.5s ease;
+ }
+ 
+ .footer:hover::after {
+    opacity: 0.2; /* 鼠标悬停时稍微清晰一点点 */
+  }
+
+  /* 针对桌面端的特别适配：将图片放在右侧，保持比例完整 */
+  @media (min-width: 1024px) {
+    .footer::after {
+      background-size: contain;
+      background-position: right center;
+      width: 45%;
+      left: auto;
+      right: 2%;
+      opacity: 0.18;
+       /* 使用多阶段线性渐变遮罩，让左侧边缘极度柔化，彻底消除边界感 */
+       mask-image: linear-gradient(to right, 
+         transparent 0%, 
+         rgba(0, 0, 0, 0.05) 15%, 
+         rgba(0, 0, 0, 0.3) 40%, 
+         rgba(0, 0, 0, 0.8) 75%, 
+         black 100%
+       );
+       -webkit-mask-image: linear-gradient(to right, 
+         transparent 0%, 
+         rgba(0, 0, 0, 0.05) 15%, 
+         rgba(0, 0, 0, 0.3) 40%, 
+         rgba(0, 0, 0, 0.8) 75%, 
+         black 100%
+       );
+     }
+    
+    .footer:hover::after {
+      opacity: 0.25;
+    }
+  }
+  
+  .footer::before {
   /* 顶部光晕线条 */
   content: '';
   position: absolute;
