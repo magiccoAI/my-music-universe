@@ -3,12 +3,14 @@ import SpecialCollectionCSS from './SpecialCollection.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
 import useIsMobile from '../hooks/useIsMobile';
+import useWindowOrientation from '../hooks/useWindowOrientation';
 import AudioPreview from './AudioPreview';
 import useMusicData from '../hooks/useMusicData';
 
 function SpecialCollection() {
   const { musicData: allMusicData, loading: isLoading, error } = useMusicData();
   const isMobile = useIsMobile();
+  const orientation = useWindowOrientation();
   const [activeTab, setActiveTab] = useState('featured');
   const [hoveredItem, setHoveredItem] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -249,6 +251,26 @@ function SpecialCollection() {
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
+  };
+
+  const modalButtonStyle = {
+    background: 'rgba(0, 0, 0, 0.4)',
+    color: 'white',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '50%',
+    width: isMobile ? '48px' : '56px',
+    height: isMobile ? '48px' : '56px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backdropFilter: 'blur(8px)',
+    transition: 'all 0.3s ease',
+  };
+
+  const modalIconStyle = {
+    width: isMobile ? '28px' : '32px',
+    height: isMobile ? '28px' : '32px',
   };
 
   return (
@@ -521,7 +543,7 @@ function SpecialCollection() {
           <div className="slider-wrapper animate-fade-in">
             <div className="slider-container" style={{
               position: 'relative',
-              maxWidth: isMobile ? '100%' : '1000px', // 桌面端增加最大宽度
+              maxWidth: isMobile ? '100%' : '1000px',
               width: '100%',
               aspectRatio: isMobile ? 'auto' : '3/2', 
               maxHeight: isMobile ? '70vh' : '620px', 
@@ -529,7 +551,8 @@ function SpecialCollection() {
               borderRadius: '15px',
               boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)',
               overflow: 'hidden',
-              background: 'rgba(0, 0, 0, 0.15)'
+              background: 'rgba(0, 0, 0, 0.15)',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
               {/* 幻灯片轨道 */}
               <div 
@@ -555,7 +578,7 @@ function SpecialCollection() {
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      padding: isMobile ? '10px' : '0'
+                      padding: '0'
                     }}
                   >
                     <img 
@@ -587,58 +610,63 @@ function SpecialCollection() {
 
             {/* 底部控制栏 */}
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '20px',
-              marginTop: '0'
+              maxWidth: isMobile ? '100%' : '1000px',
+              margin: '10px auto 0 auto',
+              padding: '0'
             }}>
-              <button
-                onClick={prevSlide}
-                aria-label="上一张"
-                className="p-2 text-white/70 hover:text-white transition-colors"
-              >
-                <ChevronLeftIcon className="w-8 h-8" />
-              </button>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '20px',
+              }}>
+                <button
+                  onClick={prevSlide}
+                  aria-label="上一张"
+                  className="p-2 text-white/70 hover:text-white transition-colors"
+                >
+                  <ChevronLeftIcon className="w-8 h-8" />
+                </button>
 
-              <div className="slider-dots" style={{ display: 'flex', gap: isMobile ? '14px' : '10px', alignItems: 'center' }}>
-                {musicReports.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    aria-label={`前往幻灯片 ${index + 1}`}
-                    className="transition-all duration-300"
-                    style={{
-                      width: isMobile ? '16px' : '10px',
-                      height: isMobile ? '16px' : '10px',
-                      borderRadius: '50%',
-                      border: 'none',
-                      background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.4)',
-                      cursor: 'pointer',
-                      transform: currentSlide === index ? 'scale(1.2)' : 'scale(1)'
-                    }}
-                  />
-                ))}
+                <div className="slider-dots" style={{ display: 'flex', gap: isMobile ? '14px' : '10px', alignItems: 'center' }}>
+                  {musicReports.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToSlide(index)}
+                      aria-label={`前往幻灯片 ${index + 1}`}
+                      className="transition-all duration-300"
+                      style={{
+                        width: isMobile ? '16px' : '10px',
+                        height: isMobile ? '16px' : '10px',
+                        borderRadius: '50%',
+                        border: 'none',
+                        background: currentSlide === index ? '#993cf7ff' : 'rgba(56, 135, 246, 0.4)',
+                        cursor: 'pointer',
+                        transform: currentSlide === index ? 'scale(1.2)' : 'scale(1)'
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={nextSlide}
+                  aria-label="下一张"
+                  className="p-2 text-white/70 hover:text-white transition-colors"
+                >
+                  <ChevronRightIcon className="w-8 h-8" />
+                </button>
               </div>
 
-              <button
-                onClick={nextSlide}
-                aria-label="下一张"
-                className="p-2 text-white/70 hover:text-white transition-colors"
-              >
-                <ChevronRightIcon className="w-8 h-8" />
-              </button>
-            </div>
-
-            {/* 幻灯片信息 */}
-            <div style={{
-              textAlign: 'center',
-              marginTop: '8px',
-              color: '#cccccc',
-              fontSize: '0.85rem',
-              opacity: 0.8
-            }}>
-              第 {currentSlide + 1} / {musicReports.length} 张 - {musicReports[currentSlide].name}
+              {/* 幻灯片信息 */}
+              <div style={{
+                textAlign: 'center',
+                marginTop: '8px',
+                color: '#cccccc',
+                fontSize: '0.85rem',
+                opacity: 0.8
+              }}>
+                第 {currentSlide + 1} / {musicReports.length} 张 - {musicReports[currentSlide].name}
+              </div>
             </div>
           </div>
         )}
@@ -661,12 +689,9 @@ function SpecialCollection() {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               className="relative w-full h-full max-w-[98vw] max-h-[98vh] mx-auto p-4 md:p-12 flex flex-col items-center justify-center"
-              style={{
-                marginRight: isMobile ? '0' : '100px', // 进一步增加右侧避让空间
-              }}
-              onClick={(e) => e.stopPropagation()} 
+              onClick={(e) => e.stopPropagation()}
             >
-              {/* Image Container with Border and Shadow */}
+              {/* Image Container */}
               <div className="relative w-full h-full flex items-center justify-center bg-transparent rounded-2xl overflow-hidden">
                 {isImageLoading && (
                   <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 backdrop-blur-sm">
@@ -679,62 +704,78 @@ function SpecialCollection() {
                   className={`object-contain w-full h-full transition-all duration-500 ease-out ${isImageLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
                   onLoad={() => setIsImageLoading(false)}
                   onError={(e) => {
-                    setIsImageLoading(false); 
+                    setIsImageLoading(false);
                     const pngImage = selectedImage.replace('.webp', '.png');
                     e.target.src = pngImage;
                   }}
                 />
-                
-                {/* Action Buttons Container */}
-                <div className="absolute top-6 right-6 z-50 flex gap-4">
-                  {/* Fullscreen Button */}
-                  {!isMobile && (
-                    <button
-                      onClick={toggleFullscreen}
-                      className="p-3 text-white/80 bg-black/40 hover:bg-black/70 rounded-full transition-all duration-300 border border-white/10 backdrop-blur-md hover:scale-110"
-                      aria-label="切换全屏"
-                      title="全屏浏览"
-                    >
-                      <ArrowsPointingOutIcon className="w-8 h-8" />
-                    </button>
-                  )}
-                  
-                  {/* Close Button */}
-                  <button
-                    onClick={closeModal}
-                    className="p-3 text-white/80 bg-black/40 hover:bg-black/70 rounded-full transition-all duration-300 border border-white/10 backdrop-blur-md hover:scale-110"
-                    aria-label="关闭图片预览"
-                    title="退出预览"
-                  >
-                    <XMarkIcon className="w-8 h-8" />
-                  </button>
-                </div>
               </div>
 
-              {/* Navigation Buttons - Significantly increased spacing from edges */}
-              <button
-                onClick={goToPreviousImage}
-                className={`absolute ${isMobile ? 'left-4 p-2' : 'left-12 p-4'} top-1/2 -translate-y-1/2 text-white/50 bg-black/30 hover:bg-black/60 rounded-full hover:text-white transition-all duration-300 backdrop-blur-md z-30 hover:scale-110`}
-                aria-label="上一张"
-              >
-                <ChevronLeftIcon className={isMobile ? "w-8 h-8" : "w-12 h-12"} />
-              </button>
-              <button
-                onClick={goToNextImage}
-                className={`absolute ${isMobile ? 'right-4 p-2' : 'right-12 p-4'} top-1/2 -translate-y-1/2 text-white/50 bg-black/30 hover:bg-black/60 rounded-full hover:text-white transition-all duration-300 backdrop-blur-md z-30 hover:scale-110`}
-                aria-label="下一张"
-              >
-                <ChevronRightIcon className={isMobile ? "w-8 h-8" : "w-12 h-12"} />
-              </button>
+
 
               {/* Bottom Info */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 text-white/90 rounded-lg text-sm text-center">
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 text-white/90 rounded-lg text-sm text-center pointer-events-none">
                 <span>{selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}</span>
                 <span className="mx-2 opacity-50">|</span>
                 <span>{selectedImageIndex !== null ? musicReports[selectedImageIndex]?.name || '' : ''}</span>
                 {!isMobile && <span className="inline"><span className="mx-2 opacity-50">|</span> 按 ESC 键退出</span>}
               </div>
             </motion.div>
+
+            {/* Modal Control Buttons */}
+            <div style={{
+              position: 'absolute',
+              bottom: isMobile && orientation === 'landscape' ? '10px' : (isMobile ? '20px' : '30px'),
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: isMobile && orientation === 'landscape' ? '8px' : (isMobile ? '12px' : '20px'),
+              zIndex: 1010,
+            }}>
+              <motion.button
+                whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={goToPreviousImage}
+                style={modalButtonStyle}
+                aria-label="Previous image"
+              >
+                <ChevronLeftIcon style={modalIconStyle} />
+              </motion.button>
+
+              {!isMobile && (
+                <motion.button
+                  whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={toggleFullscreen}
+                  style={modalButtonStyle}
+                  aria-label="Toggle fullscreen"
+                >
+                  <ArrowsPointingOutIcon style={modalIconStyle} />
+                </motion.button>
+              )}
+
+              <motion.button
+                whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={closeModal}
+                style={modalButtonStyle}
+                aria-label="Close modal"
+              >
+                <XMarkIcon style={modalIconStyle} />
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={goToNextImage}
+                style={modalButtonStyle}
+                aria-label="Next image"
+              >
+                <ChevronRightIcon style={modalIconStyle} />
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

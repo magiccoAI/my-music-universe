@@ -150,6 +150,7 @@ const MusicSlotMachine = () => {
 
   return (
     <div className="music-slot-machine">
+      <div className="noise-overlay"></div>
       <div className="container">
         
         <p className="subtitle">点击旋转按钮，发现三张随机音乐专辑</p>

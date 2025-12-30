@@ -192,7 +192,7 @@ const HomePage = () => {
             <h3 className="text-lg font-bold text-sky-300 mb-4">欢迎来到音乐封面宇宙！</h3>
             <p className="text-gray-300 text-sm mb-6 leading-relaxed">
               首次加载需要准备大量图像与3D资源，可能需要一点时间。
-              加载完成后，你可以用方向键或鼠标移动来探索星空。
+              加载完成后，{isMobile ? '你可以通过触摸拖拽来探索星空。' : '你可以用方向键或鼠标移动来探索星空。'}
             </p>
             <button
               onClick={handleConfirmNavigation}
