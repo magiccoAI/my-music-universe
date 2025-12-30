@@ -53,6 +53,7 @@ const ArchivePage = () => {
   const [uniqueStylesCount, setUniqueStylesCount] = useState(0);
   const [uniqueArtistsCount, setUniqueArtistsCount] = useState(0);
   const isMobile = useIsMobile();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Audio State
   const [isPlaying, setIsPlaying] = useState(false); // Default to false for performance
@@ -292,6 +293,7 @@ const ArchivePage = () => {
         您的浏览器不支持音频播放。
       </audio>
       <MusicPlayer
+        isModalOpen={isModalOpen}
         isPlaying={isPlaying}
         onTogglePlayPause={togglePlayPause}
         songTitle="Lone Machine"
@@ -396,7 +398,7 @@ const ArchivePage = () => {
           <p className="section-subtitle">那些触动心灵的珍贵旋律</p>
         </div>
         <div className="special-collection-container md:mr-24">
-          <SpecialCollection musicData={musicData} />
+          <SpecialCollection musicData={musicData} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         </div>
 
       </section>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const MusicPlayer = ({ 
+  isModalOpen, // Add this prop
   isPlaying, 
   onTogglePlayPause, 
   songTitle, 
@@ -22,8 +23,10 @@ const MusicPlayer = ({
   const strokeDashoffset = circumference - progress * circumference;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
-      {songTitle && artistName && isHovered && (
+    <div className={`fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2 transition-all duration-500 ease-in-out ${
+      isModalOpen ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'
+    }`}>
+      {songTitle && artistName && isHovered && !isModalOpen && (
         <div className="text-white text-right animate-fade-in pr-3 py-1 bg-black/40 backdrop-blur-md rounded-lg border border-white/5 mb-1">
           <div className="text-sm font-bold shadow-black drop-shadow-md text-cyan-300">{songTitle}</div>
           <div className="text-xs opacity-75 shadow-black drop-shadow-md">{artistName}</div>

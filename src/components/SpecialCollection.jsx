@@ -7,7 +7,7 @@ import useWindowOrientation from '../hooks/useWindowOrientation';
 import AudioPreview from './AudioPreview';
 import useMusicData from '../hooks/useMusicData';
 
-function SpecialCollection() {
+function SpecialCollection({ isModalOpen, setIsModalOpen }) {
   const { musicData: allMusicData, loading: isLoading, error } = useMusicData();
   const isMobile = useIsMobile();
   const orientation = useWindowOrientation();
@@ -95,14 +95,14 @@ function SpecialCollection() {
   }, [allMusicData]);
   const [showAllCollections, setShowAllCollections] = useState(false);
   const [showMusicReport, setShowMusicReport] = useState(true); // 新增状态变量
-  const [showModal, setShowModal] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   // 处理模态框打开/关闭时的背景滚动
   useEffect(() => {
-    if (showModal) {
+    if (isModalOpen) {
       // 保存原始样式以便恢复
       const originalBodyStyle = window.getComputedStyle(document.body).overflow;
       const originalHtmlStyle = window.getComputedStyle(document.documentElement).overflow;
@@ -113,7 +113,7 @@ function SpecialCollection() {
       // 针对 iOS Safari 的额外处理：防止触摸滚动
       const preventDefault = (e) => {
         // 如果点击的是模态框背景或其内部非滚动元素，则阻止默认行为
-        if (showModal) {
+        if (isModalOpen) {
           e.preventDefault();
         }
       };
@@ -127,7 +127,7 @@ function SpecialCollection() {
         document.removeEventListener('touchmove', preventDefault);
       };
     }
-  }, [showModal]);
+  }, [isModalOpen]);
   const [playingFavId, setPlayingFavId] = useState(null);
 
   const handleFavPlay = (e, item) => {
@@ -145,14 +145,14 @@ function SpecialCollection() {
     setSelectedImage(imageSrc);
     setSelectedImageIndex(index);
     setIsImageLoading(true); // 打开时设为加载中
-    setShowModal(true);
+    setIsModalOpen(true);
   };
 
   const closeModal = useCallback(() => {
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(err => console.error(err));
     }
-    setShowModal(false);
+    setIsModalOpen(false);
     setSelectedImage(null);
     setSelectedImageIndex(null);
     setIsImageLoading(false);
@@ -204,7 +204,7 @@ function SpecialCollection() {
 
   // 键盘事件监听
   useEffect(() => {
-    if (!showModal) return;
+    if (!isModalOpen) return;
 
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') {
@@ -219,7 +219,7 @@ function SpecialCollection() {
     // 使用 document 监听更保险，虽然 window 也可以
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showModal, navigateImage, closeModal]);
+  }, [isModalOpen, navigateImage, closeModal]);
 
 
   const handleTabClick = (tab) => {
@@ -674,7 +674,7 @@ function SpecialCollection() {
 
       {/* 图片放大模态框 */}
       <AnimatePresence>
-        {showModal && (
+        {isModalOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -711,15 +711,12 @@ function SpecialCollection() {
                 />
               </div>
 
-
-
-              {/* Bottom Info */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 text-white/90 rounded-lg text-sm text-center pointer-events-none">
-                <span>{selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}</span>
-                <span className="mx-2 opacity-50">|</span>
-                <span>{selectedImageIndex !== null ? musicReports[selectedImageIndex]?.name || '' : ''}</span>
-                {!isMobile && <span className="inline"><span className="mx-2 opacity-50">|</span> 按 ESC 键退出</span>}
-              </div>
+              {/* Desktop ESC Hint */}
+              {!isMobile && (
+                <div className="absolute top-6 right-6 text-white/40 text-xs font-light tracking-widest pointer-events-none">
+                  PRESS ESC TO CLOSE
+                </div>
+              )}
             </motion.div>
 
             {/* Modal Control Buttons */}
@@ -734,6 +731,19 @@ function SpecialCollection() {
               gap: isMobile && orientation === 'landscape' ? '8px' : (isMobile ? '12px' : '20px'),
               zIndex: 1010,
             }}>
+              {/* Minimal Progress Indicator */}
+              <div style={{
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontSize: '11px',
+                marginRight: isMobile ? '4px' : '12px',
+                fontFamily: 'monospace',
+                letterSpacing: '1px',
+                userSelect: 'none',
+                transform: 'translateY(9px)' // 稍微下移，避免与主体重叠
+              }}>
+                {selectedImageIndex !== null ? `${selectedImageIndex + 1}/${musicReports.length}` : ''}
+              </div>
+
               <motion.button
                 whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
                 whileTap={{ scale: 0.95 }}
