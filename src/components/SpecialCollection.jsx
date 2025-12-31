@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import SpecialCollectionCSS from './SpecialCollection.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
@@ -129,6 +129,17 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
     }
   }, [isModalOpen]);
   const [playingFavId, setPlayingFavId] = useState(null);
+  const closeButtonRef = useRef(null);
+
+  // Focus close button when modal opens
+  useEffect(() => {
+    if (isModalOpen) {
+      const timer = setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isModalOpen]);
 
   const handleFavPlay = (e, item) => {
     e.stopPropagation();
@@ -682,6 +693,9 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
             className="fixed inset-0 z-[10000] flex items-center justify-center bg-black backdrop-blur-xl"
             style={{ touchAction: 'none' }} // 显式禁用触摸动作，防止背景滚动
             onClick={closeModal}
+            role="dialog"
+            aria-modal="true"
+            aria-label="图片查看器"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -767,6 +781,7 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
               )}
 
               <motion.button
+                ref={closeButtonRef}
                 whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
                 whileTap={{ scale: 0.95 }}
                 onClick={closeModal}

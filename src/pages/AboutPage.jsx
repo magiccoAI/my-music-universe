@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import UniverseNavigation from '../components/UniverseNavigation';
+
 import StarBackground from '../components/StarBackground';
 import { aboutContent } from '../data/aboutContent';
 
@@ -121,11 +121,11 @@ const AboutPage = () => {
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-x-hidden font-sans selection:bg-sky-500/30">
-      <StarBackground count={3000} />
-      <UniverseNavigation />
+      <StarBackground count={1000} />
+      
       
       {/* Back Button */}
-      <div className="fixed top-24 left-4 md:left-12 z-50 animate-fade-in-down">
+      <div className="fixed top-24 left-4 md:left-12 z-40 animate-fade-in-down">
          <button 
            onClick={() => navigate(-1)}
            className="p-2 rounded-full border border-sky-500/30 bg-black/40 backdrop-blur text-sky-400 hover:bg-sky-500/10 hover:border-sky-500/60 transition-all shadow-[0_0_15px_rgba(14,165,233,0.1)] group"
@@ -138,7 +138,7 @@ const AboutPage = () => {
       </div>
 
       {/* Language Switcher & Audio Player */}
-      <div className="fixed top-24 right-4 md:right-12 z-50 animate-fade-in-down flex flex-col items-end gap-4">
+      <div className="fixed top-24 right-4 md:right-12 z-40 animate-fade-in-down flex flex-col items-end gap-4">
          <div className="bg-black/40 backdrop-blur rounded-2xl p-2 border border-sky-500/20 shadow-[0_0_15px_rgba(14,165,233,0.1)] flex flex-col items-end">
              <button 
                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
@@ -185,25 +185,25 @@ const AboutPage = () => {
             <div className="flex flex-col gap-2 w-full items-end">
                 <button
                 onClick={toggleAudio}
-                className={`flex items-center gap-3 px-5 py-2.5 rounded-full border transition-all duration-500 group backdrop-blur-md ${
+                className={`flex items-center gap-3 px-5 py-2.5 rounded-full border transition-all duration-500 group backdrop-blur-md will-change-transform transform-gpu ${
                     isPlaying 
-                    ? 'bg-sky-900/40 border-sky-400/60 text-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.2)]' 
+                    ? 'bg-sky-900/40 border-sky-400/60 text-sky-300' 
                     : 'bg-black/60 border-sky-500/30 text-sky-400/80 hover:bg-sky-500/10 hover:border-sky-500/60 hover:text-sky-300'
                 }`}
                 >
                 {isPlaying ? (
                     <>
                         <div className="relative flex h-3 w-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                            <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-50"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.8)]"></span>
                         </div>
-                        <span className="text-xs font-mono tracking-widest animate-pulse">TRANSMITTING...</span>
+                        <span className="text-xs font-mono tracking-widest animate-pulse will-change-opacity">TRANSMITTING...</span>
                         {/* Animated Bars */}
-                        <div className="flex gap-0.5 items-end h-3 ml-1">
-                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.5s_ease-in-out_infinite] h-full"></span>
-                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.7s_ease-in-out_infinite] h-2/3"></span>
-                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.4s_ease-in-out_infinite] h-full"></span>
-                            <span className="w-0.5 bg-sky-400 animate-[pulse_0.6s_ease-in-out_infinite] h-1/2"></span>
+                        <div className="flex gap-0.5 items-end h-3 ml-1 will-change-transform transform-gpu">
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_1.5s_ease-in-out_infinite] h-full"></span>
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_2.1s_ease-in-out_infinite] h-2/3"></span>
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_1.8s_ease-in-out_infinite] h-full"></span>
+                            <span className="w-0.5 bg-sky-400 animate-[pulse_2.0s_ease-in-out_infinite] h-1/2"></span>
                         </div>
                     </>
                 ) : (

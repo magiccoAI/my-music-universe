@@ -146,7 +146,7 @@ const ConnectionsPage = () => {
          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,theme(colors.slate.950)_120%)] pointer-events-none" />
       </div>
 
-      <UniverseNavigation className="relative z-20 border-b border-slate-800/50 backdrop-blur-sm" />
+      
 
       <main className="relative z-10 container mx-auto p-4 pt-24">
         

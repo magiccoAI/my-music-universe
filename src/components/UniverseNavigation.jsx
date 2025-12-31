@@ -1,7 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
+
+// 导航项配置 - 统一管理
+const NAV_ITEMS = [
+  { path: '/', label: '首页' },
+  { path: '/music-universe', label: '音乐封面宇宙' },
+  { path: '/music-universe/connections', label: '音乐风格' },
+  { path: '/music-universe/search', label: '搜索' },
+  { path: '/archive', label: '我的音乐时光机' },
+  { 
+    path: '/about', 
+    label: (
+      <span className="flex items-center opacity-90 hover:opacity-100" title="关于这个宇宙" aria-label="关于这个宇宙">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+        </svg>
+      </span>
+    ) 
+  },
+];
 
 const UniverseNavigation = ({ className = '' }) => {
   const location = useLocation();
@@ -9,24 +28,7 @@ const UniverseNavigation = ({ className = '' }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   
-  // 导航项配置 - 统一管理
-  const navItems = [
-    { path: '/', label: '首页' },
-    { path: '/music-universe', label: '音乐封面宇宙' },
-    { path: '/music-universe/connections', label: '音乐风格' },
-    { path: '/music-universe/search', label: '搜索' },
-    { path: '/archive', label: '我的音乐时光机' },
-    { 
-      path: '/about', 
-      label: (
-        <span className="flex items-center opacity-90 hover:opacity-100" title="关于这个宇宙">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-          </svg>
-        </span>
-      ) 
-    },
-  ];
+  // 使用 NAV_ITEMS 替代 navItems
 
   // 优化响应式检测 - 使用防抖
   useEffect(() => {
@@ -103,7 +105,7 @@ const UniverseNavigation = ({ className = '' }) => {
   // 移动端导航
   const MobileNavigation = () => (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-filter backdrop-blur-xl p-4 border-b border-white/10 ${className}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-[100] bg-black/40 backdrop-filter backdrop-blur-xl p-4 border-b border-white/10 transition-all duration-300 ${className}`}>
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 no-underline group">
             <Logo className="w-8 h-8 text-cyan-400 group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
@@ -128,17 +130,22 @@ const UniverseNavigation = ({ className = '' }) => {
       </nav>
 
       {/* 全屏移动菜单 */}
-      {menuOpen && (
-        <motion.div 
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-3xl flex flex-col items-center justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="flex flex-col space-y-8 text-center w-full px-8">
-            {navItems.map((item, index) => {
-              const active = isActive(item.path);
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div 
+            className="fixed inset-0 z-[150] bg-[#050505] flex flex-col items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-menu-title"
+          >
+            <h2 id="mobile-menu-title" className="sr-only">导航菜单</h2>
+            <div className="flex flex-col space-y-8 text-center w-full px-8">
+              {NAV_ITEMS.map((item, index) => {
+                const active = isActive(item.path);
               return (
                 <motion.div
                   key={item.path}
@@ -170,14 +177,15 @@ const UniverseNavigation = ({ className = '' }) => {
               );
             })}
           </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 
   // 桌面端导航
   const DesktopNavigation = () => (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-20 backdrop-filter backdrop-blur-xl ${className}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-20 backdrop-filter backdrop-blur-xl transition-all duration-300 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* 左侧 Logo 锚点 */}
@@ -188,7 +196,7 @@ const UniverseNavigation = ({ className = '' }) => {
           
           {/* 右侧导航链接 */}
           <div className="flex items-center space-x-8">
-            {navItems.map((item) => (
+            {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.path}
                 path={item.path}

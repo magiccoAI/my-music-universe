@@ -22,7 +22,7 @@ const Aurora = React.lazy(() => import('./components/Aurora'));
 const Planets = React.lazy(() => import('./components/Planets'));
 const Spaceship = React.lazy(() => import('./components/Spaceship'));
 const ShootingStars = React.lazy(() => import('./components/ShootingStars'));
-import UniverseNavigation from './components/UniverseNavigation';
+
 
 import { UniverseContext } from './UniverseContext';
 import Cover from './components/Cover';

@@ -5,6 +5,7 @@ import { LoadingScreen } from './components/LoadingScreen';
 import { GlobalSuspenseFallback } from './components/GlobalSuspenseFallback';
 import OrientationHint from './components/OrientationHint';
 import { motion, AnimatePresence } from 'framer-motion';
+import UniverseNavigation from './components/UniverseNavigation'; // 导入导航组件
 import './transitions.css';
 
 // Lazy Loading 页面组件
@@ -74,6 +75,7 @@ function App() {
           使用 opacity 控制显隐，确保加载动画结束时内容已经准备好了，实现无缝过渡 
       */}
       <div className={`App transition-opacity duration-1000 ${isInitialLoading ? 'opacity-0' : 'opacity-100'}`}>
+        <UniverseNavigation /> {/* 在这里渲染导航组件 */}
         
         {/* 使用深色 Loading 占位符防止页面切换白屏 */}
         <Suspense fallback={<GlobalSuspenseFallback />}> 

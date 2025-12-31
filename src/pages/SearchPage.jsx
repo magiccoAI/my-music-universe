@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import UniverseNavigation from '../components/UniverseNavigation';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import MouseParticleEffect from '../components/MouseParticleEffect';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -63,6 +63,18 @@ const SearchPage = () => {
   const suggestionsRef = useRef(null);
   const searchInputRef = useRef(null);
   const backgroundCoverRefs = useRef([]);
+  const detailCloseButtonRef = useRef(null);
+
+  // 当选中歌曲详情时，自动聚焦到关闭按钮以便键盘操作
+  useEffect(() => {
+    if (selected) {
+      // 使用 setTimeout 确保 DOM 已经渲染并完成动画进入
+      const timer = setTimeout(() => {
+        detailCloseButtonRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [selected]);
 
   // 使用 IntersectionObserver 监控背景图片
   useEffect(() => {
@@ -286,7 +298,7 @@ const SearchPage = () => {
         </motion.div>
       ))}
 
-      <UniverseNavigation className="relative z-10" />
+      
 
       <div className="pt-24 px-6 grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
         {/* 搜索输入部分 */}
@@ -519,13 +531,14 @@ const SearchPage = () => {
                 exit={{ opacity: 0, y: -20 }}
                 className="mt-6 bg-white/10 rounded-xl p-4"
                 role="dialog"
-                aria-label="歌曲详情"
+                aria-labelledby="song-details-title"
                 aria-modal="true"
               >
                 <div className="flex justify-between mb-2">
-                  <h4 className="text-lg font-semibold">歌曲详情</h4>
+                  <h4 id="song-details-title" className="text-lg font-semibold">歌曲详情</h4>
                   <button 
-                    className="px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors" 
+                    ref={detailCloseButtonRef}
+                    className="px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500" 
                     onClick={() => setSelected(null)}
                     aria-label="关闭详情"
                   >

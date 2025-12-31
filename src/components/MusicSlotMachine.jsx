@@ -6,6 +6,7 @@ const MusicSlotMachine = () => {
   const { musicData: albums, loading: isLoading, error } = useMusicData();
   // const [selectedAlbums, setSelectedAlbums] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [ariaStatus, setAriaStatus] = useState('准备就绪');
   // const [showResult, setShowResult] = useState(false);
   const reelRefs = [useRef(null), useRef(null), useRef(null)];
   const spinTimeoutRef = useRef(null);
@@ -118,6 +119,7 @@ const MusicSlotMachine = () => {
     spinTimeoutRef.current = setTimeout(() => {
       // setSelectedAlbums(newSelectedAlbums); // 动画结束后更新 selectedAlbums
       setIsSpinning(false);
+      setAriaStatus('旋转完成，已为您随机选择三张专辑');
       // setShowResult(true);
 
       // 添加脉冲动画

@@ -219,10 +219,13 @@ const CustomSelect = ({
                     transition={{ type: "spring", damping: 25, stiffness: 300 }}
                     className="w-full bg-white rounded-t-2xl overflow-hidden flex flex-col h-[85vh]" // Fixed height for mobile
                     onClick={e => e.stopPropagation()}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="mobile-artist-select-title"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white z-10 flex-shrink-0">
-                            <h3 className="text-lg font-semibold text-gray-800">选择艺术家</h3>
+                            <h3 id="mobile-artist-select-title" className="text-lg font-semibold text-gray-800">选择艺术家</h3>
                             <button 
                                 onClick={() => setIsOpen(false)}
                                 className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -243,6 +246,7 @@ const CustomSelect = ({
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-gray-800"
+                                    autoFocus
                                 />
                             </div>
                         </div>

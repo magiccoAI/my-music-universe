@@ -275,8 +275,7 @@ const ArchivePage = () => {
 
       
 
-      {/* 导航栏 */}
-      <UniverseNavigation />
+      
 
       {/* 侧边时间轴导航 */}
       <PageIndicator sections={pageSections} />
@@ -457,6 +456,7 @@ const ArchivePage = () => {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group relative flex flex-col items-center gap-2"
+                  aria-label="查看网易云音乐歌单"
                 >
                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-red-500/30 group-hover:scale-110 transition-all duration-300">
                     <img src={NetEaseCloudMusicIcon} alt="网易云" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
@@ -470,6 +470,7 @@ const ArchivePage = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative cursor-pointer flex flex-col items-center gap-2"
+                  aria-label="关注微信公众号"
                 >
                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-green-500/30 group-hover:scale-110 transition-all duration-300">
                     <img src={WeChatIcon} alt="微信" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
@@ -477,7 +478,7 @@ const ArchivePage = () => {
                   <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors">公众号</span>
                   
                   {/* QR Code Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-6 w-56 p-3 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 z-[100]">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-6 w-56 p-3 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus:opacity-100 group-focus:visible transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 group-focus:translate-y-0 z-[100]">
                     <div className="relative">
                       <img src={WeChatQRCode} alt="公众号二维码" width="200" height="200" className="w-full h-auto rounded-xl"/>
                       <div className="absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)]"></div>
@@ -493,6 +494,7 @@ const ArchivePage = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative flex flex-col items-center gap-2"
+                  aria-label="查看 GitHub 源代码"
                 >
                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-gray-400/30 group-hover:scale-110 transition-all duration-300">
                     <svg className="w-5 h-5 opacity-70 group-hover:opacity-100 fill-current text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
