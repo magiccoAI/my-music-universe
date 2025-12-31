@@ -6,7 +6,6 @@ import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
 import SpecialCollection from '../components/SpecialCollection';
 import MusicSlotMachine from '../components/MusicSlotMachine';
 import MouseParticleEffect from '../components/MouseParticleEffect';
-import UniverseNavigation from '../components/UniverseNavigation';
 import MusicPlayer from '../components/MusicPlayer'; // Import MusicPlayer
 import TerminalText from '../components/TerminalText';
 import PageIndicator from '../components/PageIndicator'; // Import PageIndicator

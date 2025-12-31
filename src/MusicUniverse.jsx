@@ -814,7 +814,6 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
         <p>这是一个三维音乐专辑浏览界面。{isMobile ? '你可以通过触摸拖拽来浏览，双指缩放调整距离。' : '使用键盘方向键可以环绕浏览，空格键重置视角。'}</p>
       </div>
 
-      {showNavigation && !wallpaperMode && <UniverseNavigation />}
       {ambientEnabled && (currentTheme === 'evening' || currentTheme === 'day') && <AmbientSound enabled={true} volume={ambientVolume} theme={currentTheme} />}
       {musicData.length > 0 && positionedMusicData.length > 0 && (
         <Canvas

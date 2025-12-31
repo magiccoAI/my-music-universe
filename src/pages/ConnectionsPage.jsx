@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext, useMemo, useCallback } from 'react';
 import MusicUniverse from '../MusicUniverse';
 import { UniverseContext } from '../UniverseContext';
-import UniverseNavigation from '../components/UniverseNavigation';
 import useMusicData from '../hooks/useMusicData';
 import useSamplePlayer from '../hooks/useSamplePlayer';
 import MusicCard from '../components/MusicCard';
