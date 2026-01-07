@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, Suspense, lazy, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import useIsMobile from '../hooks/useIsMobile';
 import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
 
@@ -59,10 +58,8 @@ const ArchivePage = () => {
   const [isPlaying, setIsPlaying] = useState(false); // Default to false for performance
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.5);
-  const [isMuted, setIsMuted] = useState(false);
+  const [volume] = useState(0.5);
   const audioRef = useRef(null); // Ref for the audio element
-  const [showBackToTopButton, setShowBackToTopButton] = useState(false); // State for back to top button visibility
 
   // Page navigation anchor configuration
   const pageSections = [
@@ -153,12 +150,7 @@ const ArchivePage = () => {
     };
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
+
 
   useEffect(() => {
     document.documentElement.classList.add('custom-scrollbar-page-active');
@@ -189,9 +181,8 @@ const ArchivePage = () => {
     }
   }, [musicData]);
 
-  const handleArtistClick = useCallback((artistName) => {
-    console.log(`Artist clicked: ${artistName}`);
-    // 可以添加跳转到艺术家详情页或筛选功能
+  const handleArtistClick = useCallback((artist) => {
+    // console.log("Artist clicked:", artist);
   }, []);
 
   const handleStyleClick = useCallback((styleName) => {

@@ -24,3 +24,4 @@ jobs:
       run: npm run build
       env:
         REACT_APP_NODE_ENV: production
+        CI: false

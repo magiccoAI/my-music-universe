@@ -8,14 +8,11 @@ import { useMusicSearch } from '../hooks/useMusicSearch';
 import { getOptimizedImagePath } from '../utils/imageUtils';
 import useMusicData from '../hooks/useMusicData';
 import MusicCard from '../components/MusicCard';
-import SmartWaveformPlayer from '../components/SmartWaveformPlayer';
-
-
 
 import { pinyin } from 'pinyin-pro';
 
 const SearchPage = () => {
-  const { musicData, loading: musicDataLoading, error: musicDataError } = useMusicData();
+  const { musicData } = useMusicData();
   const {
     isLoading,
     error,
@@ -91,18 +88,20 @@ const SearchPage = () => {
     );
 
     // 确保在观察之前元素已经存在
-    backgroundCoverRefs.current.forEach(el => {
+    const currentRefs = backgroundCoverRefs.current;
+    currentRefs.forEach(el => {
       if (el) {
         observer.observe(el);
       }
     });
 
     return () => {
-      backgroundCoverRefs.current.forEach(el => {
+      currentRefs.forEach(el => {
         if (el) {
           observer.unobserve(el);
         }
       });
+      observer.disconnect();
     };
   }, [results]); // 依赖 results，当 results 变化时重新观察
 

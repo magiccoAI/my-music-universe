@@ -39,10 +39,7 @@ const customStyles = `
 const ConnectionsPage = () => {
   const { setIsConnectionsPageActive } = useContext(UniverseContext);
   const [selectedTag, setSelectedTag] = useState('');
-  const [hovered, setHovered] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [relatedTags, setRelatedTags] = useState([]); // 保留原有状态，尽管此处未深入使用
-  const [error, setError] = useState(null);
   const [playingCardId, setPlayingCardId] = useState(null);
   
   const { playSound: playPianoSound, isLoaded: areSoundsLoaded } = useSamplePlayer(pianoNotes);
@@ -73,20 +70,8 @@ const ConnectionsPage = () => {
 
   const splitNote = (note) => {
     if (!note) return [];
-    return note.split(/\s*[,;\/]\s*|\s+and\s+/);
+    return note.split(/\s*[,;/]\s*|\s+and\s+/);
   };
-
-  // 保留原有的逻辑
-  const findRelatedTags = useCallback((hoveredTag) => {
-    if (!hoveredTag) {
-      setRelatedTags([]);
-      return;
-    }
-    const related = tagRelationships.get(hoveredTag);
-    setRelatedTags(related ? Array.from(related) : []);
-  }, [tagRelationships]);
-
-
 
   useEffect(() => {
     setIsConnectionsPageActive(true);
@@ -119,9 +104,8 @@ const ConnectionsPage = () => {
     return pianoNotes[index % pianoNotes.length];
   };
 
-  if (error) {
-    // ... 错误处理代码保持不变 ...
-    return <div className="text-white">Error: {error.message}</div>; 
+  if (isLoading) {
+    return <div className="text-white">加载中...</div>; 
   }
 
   return (

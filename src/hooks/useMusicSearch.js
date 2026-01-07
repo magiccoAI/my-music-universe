@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 export const useMusicSearch = (musicData = []) => {
   // 如果没有数据，则视为正在加载。
   const isLoading = !musicData || musicData.length === 0;
-  const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
   const [artistFilter, setArtistFilter] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -11,7 +10,6 @@ export const useMusicSearch = (musicData = []) => {
   // Global Search State
   const [globalResults, setGlobalResults] = useState([]);
   const [isSearchingGlobal, setIsSearchingGlobal] = useState(false);
-  const [globalError, setGlobalError] = useState(null);
 
   // 搜索防抖
   useEffect(() => {
@@ -141,7 +139,6 @@ export const useMusicSearch = (musicData = []) => {
   return {
     musicData,
     isLoading,
-    error,
     query,
     setQuery,
     artistFilter,
