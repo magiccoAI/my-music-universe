@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './MusicSlotMachine.css';
 import useMusicData from '../hooks/useMusicData';
 
+import logger from '../utils/logger';
 const MusicSlotMachine = () => {
   const { musicData: albums, loading: isLoading, error } = useMusicData();
   // const [selectedAlbums, setSelectedAlbums] = useState([]);
@@ -27,7 +28,7 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${process.env.PUBLIC_URL}/optimized-images/${randomAlbum.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${randomAlbum.title}" width="200" height="200" class="album-cover" onerror="this.onerror=null;console.error('Image failed to load:', this.src)" onload="console.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/optimized-images/${randomAlbum.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${randomAlbum.title}" width="200" height="200" class="album-cover" onerror="this.onerror=null;logger.error('Image failed to load:', this.src)" onload="logger.log('Image loaded:', this.src)">
             <div class="album-info">
              
               <div class="album-artist">${randomAlbum.artist}</div>
@@ -87,7 +88,7 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${process.env.PUBLIC_URL}/optimized-images/${albumToDisplay.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${albumToDisplay.title}" width="200" height="200" class="album-cover" onerror="this.onerror=null;console.error('Image failed to load:', this.src)" onLoad="console.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/optimized-images/${albumToDisplay.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${albumToDisplay.title}" width="200" height="200" class="album-cover" onerror="this.onerror=null;logger.error('Image failed to load:', this.src)" onload="logger.log('Image loaded:', this.src)">
             <div class="album-info">
               <div class="album-title" title="${albumToDisplay.music}">${albumToDisplay.music}</div>
               <div class="album-artist">${albumToDisplay.artist}</div>
@@ -183,7 +184,7 @@ const MusicSlotMachine = () => {
           <div className="result-albums">
             {selectedAlbums.map((album, index) => (
               <div key={index} className="result-album">
-                <img src={`${process.env.PUBLIC_URL}/${album.cover}`} alt={album.title} onError={(e) => console.error('Image failed to load:', e.target.src)} onLoad={(e) => console.log('Image loaded:', e.target.src)} />
+                <img src={`${process.env.PUBLIC_URL}/${album.cover}`} alt={album.title} onError={(e) => logger.error('Image failed to load:', e.target.src)} onLoad={(e) => logger.log('Image loaded:', e.target.src)} />
                 <div className="album-title">{album.title}</div>
                 <div className="album-artist">{album.artist}</div>
               </div>

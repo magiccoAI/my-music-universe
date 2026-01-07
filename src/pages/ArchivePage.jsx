@@ -11,6 +11,7 @@ import TerminalText from '../components/TerminalText';
 import PageIndicator from '../components/PageIndicator'; // Import PageIndicator
 
 import './ArchivePage.css';
+import logger from '../utils/logger';
 import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
 import WeChatIcon from '../assets/icons/wechat-icon.webp';
 
@@ -31,12 +32,12 @@ const terminalLines = [
 
 const parseDate = (dateString) => {
   if (typeof dateString !== 'string' || !dateString) {
-    console.error("日期格式不匹配：传入的日期字符串无效或为空", dateString);
+    logger.error("日期格式不匹配：传入的日期字符串无效或为空", dateString);
     return new Date(); // 返回一个默认日期，避免程序崩溃
   }
   const match = dateString.match(/(\d{4})年(\d{2})月(\d{2})日 (\d{2}):(\d{2})/);
   if (!match) {
-    console.error("日期格式不匹配，原始字符串:", dateString);
+    logger.error("日期格式不匹配，原始字符串:", dateString);
     return new Date(); // 返回一个默认日期，避免程序崩溃
   }
   const [year, month, day, hour, minute] = match.slice(1);

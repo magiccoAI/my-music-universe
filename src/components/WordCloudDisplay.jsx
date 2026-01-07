@@ -12,6 +12,7 @@ import { color } from 'd3-color';
 
 import './WordCloudDisplay.css';
 
+import logger from '../utils/logger';
 const WordCloudDisplay = ({
   type = 'artist',
   data: externalData, // 接收外部传入的数据
@@ -37,7 +38,7 @@ const WordCloudDisplay = ({
   // 监听外部数据变化
   useEffect(() => {
     if (externalData && Object.keys(externalData).length > 0) {
-      console.log('Using external data for word cloud');
+      logger.log('Using external data for word cloud');
       setData(externalData);
       setIsLoading(false); // 有数据了，取消 fetch loading（Worker loading 后面会单独处理）
     }

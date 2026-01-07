@@ -235,10 +235,7 @@ const ConnectionsPage = () => {
             <div className="text-center mt-20">
                {sortedTags.length > 20 && (
                   <button
-                    onClick={() => {
-                      setIsExpanded(!isExpanded);
-                      if (areSoundsLoaded) playPianoSound(pianoNotes[3]); // Play a fixed note (G4)
-                    }}
+                    onClick={() => setIsExpanded(!isExpanded)}
                     className="
                       group inline-flex items-center gap-2 px-6 py-2 rounded-full
                       text-sm text-slate-400 hover:text-indigo-300

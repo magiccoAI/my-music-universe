@@ -1,6 +1,7 @@
 // hooks/usePianoSounds.js
 import { useCallback, useRef, useMemo } from 'react';
 
+import logger from '../utils/logger';
 const usePianoSounds = () => {
   const majoritySoundFiles = useMemo(() => [
     `${process.env.PUBLIC_URL}/audio/a6-82015.mp3`,
@@ -31,7 +32,7 @@ const usePianoSounds = () => {
 
   const loadAudioOnDemand = useCallback(async (soundFile) => {
     if (!audioContextRef.current) {
-      console.error("AudioContext not initialized. Cannot load audio.");
+      logger.error("AudioContext not initialized. Cannot load audio.");
       return null;
     }
 

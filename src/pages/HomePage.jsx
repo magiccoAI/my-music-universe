@@ -10,11 +10,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
 import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
 import WeChatIcon from '../assets/icons/wechat-icon.webp';
-const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
-const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 import useMeteorTrail from '../hooks/useMeteorTrail';
 import useIsMobile from '../hooks/useIsMobile';
 import { aboutContent } from '../data/aboutContent';
+const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
+const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 
 const HomePage = () => {
   const navigate = useNavigate();

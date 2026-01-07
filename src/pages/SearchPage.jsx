@@ -8,6 +8,7 @@ import { useMusicSearch } from '../hooks/useMusicSearch';
 import { getOptimizedImagePath } from '../utils/imageUtils';
 import useMusicData from '../hooks/useMusicData';
 import MusicCard from '../components/MusicCard';
+import SmartWaveformPlayer from '../components/SmartWaveformPlayer';
 
 
 
@@ -529,47 +530,77 @@ const SearchPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="mt-6 bg-white/10 rounded-xl p-4"
+                className="mt-6 bg-white/10 rounded-xl p-6 backdrop-blur-md border border-white/10 shadow-2xl"
                 role="dialog"
                 aria-labelledby="song-details-title"
                 aria-modal="true"
               >
-                <div className="flex justify-between mb-2">
-                  <h4 id="song-details-title" className="text-lg font-semibold">歌曲详情</h4>
+                <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                  <h4 id="song-details-title" className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">
+                    歌曲详情
+                  </h4>
                   <button 
                     ref={detailCloseButtonRef}
-                    className="px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                    className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:text-indigo-200" 
                     onClick={() => setSelected(null)}
                     aria-label="关闭详情"
                   >
-                    关闭
+                    关闭面板
                   </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                  <img
-                    src={getOptimizedImagePath(selected.cover)}
-                    alt={`${selected.album}的封面`}
-                    className="w-full rounded-md shadow"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="md:col-span-2 text-sm">
-                    <p><strong>歌曲:</strong> {selected.music}</p>
-                    <p><strong>艺术家:</strong> {selected.artist}</p>
-                    <p><strong>专辑:</strong> {selected.album}</p>
-                    <p><strong>标签:</strong> {selected.note}</p>
-                    <p><strong>分享日期:</strong> {selected.date}</p>
-                    {selected.url && (
-                      <a 
-                        href={selected.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-blue-300 hover:underline hover:text-blue-400 transition-colors"
-                        aria-label={`在新窗口查看${selected.music}的原分享`}
-                      >
-                        查看原分享
-                      </a>
-                    )}
+
+                <div className="space-y-8">
+                  {/* 顶部：基本信息与波形 */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="md:col-span-1">
+                      <div className="relative group rounded-xl overflow-hidden shadow-2xl aspect-square">
+                        <img
+                          src={getOptimizedImagePath(selected.cover)}
+                          alt={`${selected.album}的封面`}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
+                    </div>
+                    
+                    <div className="md:col-span-2 flex flex-col">
+                      <div className="mb-6">
+                         <h2 className="text-4xl font-black mb-2 tracking-tight">{selected.music}</h2>
+                         <p className="text-2xl text-indigo-300 font-light mb-6 flex items-center gap-2">
+                           {selected.artist}
+                         </p>
+                         
+                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-300 bg-black/20 p-4 rounded-lg border border-white/5">
+                           <div className="flex items-center gap-2">
+                             <span className="text-indigo-400">专辑:</span> 
+                             <span className="font-medium text-white">{selected.album}</span>
+                           </div>
+                           <div className="flex items-center gap-2">
+                             <span className="text-indigo-400">风格:</span>
+                             <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-200 text-xs border border-indigo-500/30">
+                               {selected.note}
+                             </span>
+                           </div>
+                           <div className="flex items-center gap-2">
+                             <span className="text-indigo-400">分享日期:</span>
+                             <span className="font-mono">{selected.date}</span>
+                           </div>
+                           {selected.url && (
+                             <div className="flex items-center gap-2">
+                               <span className="text-indigo-400">链接:</span>
+                               <a 
+                                href={selected.url} 
+                                className="text-blue-300 hover:text-blue-200 hover:underline truncate max-w-[200px]"
+                              >
+                                跳转至原分享 &rarr;
+                              </a>
+                             </div>
+                           )}
+                         </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>

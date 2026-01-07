@@ -9,6 +9,9 @@ import * as THREE from 'three';
 import EveningThemeControl, { EVENING_PRESETS } from './components/EveningThemeControl';
 import SceneErrorBoundary from './components/SceneErrorBoundary';
 
+import { UniverseContext } from './UniverseContext';
+import Cover from './components/Cover';
+import InfoCard from './components/InfoCard';
 const Stars = React.lazy(() => import('./components/StarsOnly'));
 const Clouds = React.lazy(() => import('./components/CloudsOnly'));
 const PaperPlanes = React.lazy(() => import('./components/PaperPlanes'));
@@ -22,11 +25,6 @@ const Aurora = React.lazy(() => import('./components/Aurora'));
 const Planets = React.lazy(() => import('./components/Planets'));
 const Spaceship = React.lazy(() => import('./components/Spaceship'));
 const ShootingStars = React.lazy(() => import('./components/ShootingStars'));
-
-
-import { UniverseContext } from './UniverseContext';
-import Cover from './components/Cover';
-import InfoCard from './components/InfoCard';
 
 const SNOW_BACKGROUNDS = [
   {

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { forceSimulation, forceManyBody, forceCenter, forceCollide, forceX, forceY } from 'd3-force';
 
 self.onmessage = (e) => {
