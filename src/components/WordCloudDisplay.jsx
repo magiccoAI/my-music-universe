@@ -6,7 +6,6 @@ import 'd3-transition';
 
 import { scaleOrdinal, scaleLinear } from 'd3-scale';
 import { schemeTableau10, schemeSet3 } from 'd3-scale-chromatic';
-import { extent } from 'd3-array';
 import { color } from 'd3-color';
 
 
@@ -103,9 +102,9 @@ const WordCloudDisplay = ({
 
   // 3. 数据清洗与处理 (Memoized)
   const processData = useCallback(() => {
-    console.log('Entering processData: data =', data, 'type =', type);
+    logger.log('Entering processData: data =', data, 'type =', type);
     if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
-      console.log('processData: data invalid or empty');
+      logger.log('processData: data invalid or empty');
       return [];
     }
 
@@ -117,7 +116,7 @@ const WordCloudDisplay = ({
       relevantCounts = data.style_counts || data;
     }
     
-    console.log('processData: relevantCounts keys =', Object.keys(relevantCounts).length);
+    logger.log('processData: relevantCounts keys =', Object.keys(relevantCounts).length);
 
     if (Object.keys(relevantCounts).length === 0) return [];
 
@@ -127,7 +126,7 @@ const WordCloudDisplay = ({
       .slice(0, maxWords)
       .map(([text, value]) => ({ text, value }));
     
-    console.log('processData: sortedData length =', sortedData.length);
+    logger.log('processData: sortedData length =', sortedData.length);
 
     if (sortedData.length === 0) return [];
 
@@ -152,14 +151,14 @@ const WordCloudDisplay = ({
     // FIX: 正确检查 data 是否为空（兼容数组和对象）
     const isDataEmpty = !data || (Array.isArray(data) && data.length === 0) || (typeof data === 'object' && Object.keys(data).length === 0);
     if (isDataEmpty) {
-       console.log('WordCloud Effect: Data is empty, returning');
+       logger.log('WordCloud Effect: Data is empty, returning');
        return;
     }
 
-    console.log('WordCloud Effect: Starting processing');
+    logger.log('WordCloud Effect: Starting processing');
     const processedData = processData();
     if (processedData.length === 0) {
-      console.log('WordCloud Effect: processedData is empty');
+      logger.log('WordCloud Effect: processedData is empty');
       setIsLoading(false);
       return;
     }
@@ -169,20 +168,20 @@ const WordCloudDisplay = ({
     // FIX: 在此处实例化 Worker，避免顶层调用的 undefined 错误
     const worker = new Worker(new URL('../workers/wordcloud-layout.worker.js', import.meta.url));
 
-    console.log('Sending data to worker: processedData length =', processedData.length, 'dimensions =', dimensions);
+    logger.log('Sending data to worker: processedData length =', processedData.length, 'dimensions =', dimensions);
     worker.postMessage({ 
       data: processedData, 
       dimensions: { width: dimensions.width, height: dimensions.height } 
     });
 
     worker.onmessage = (e) => {
-        console.log('Data received from worker:', e.data);
+        logger.log('Data received from worker:', e.data);
         setLayoutData(e.data);
         setIsLoading(false);
       };
 
     worker.onerror = (e) => {
-        console.error('WordCloud Worker Error:', e);
+        logger.error('WordCloud Worker Error:', e);
         setIsLoading(false);
       };
 

@@ -4,7 +4,7 @@ import useMusicData from '../hooks/useMusicData';
 
 import logger from '../utils/logger';
 const MusicSlotMachine = () => {
-  const { musicData: albums, loading: isLoading, error } = useMusicData();
+  const { musicData: albums } = useMusicData();
   // const [selectedAlbums, setSelectedAlbums] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [ariaStatus, setAriaStatus] = useState('准备就绪');
@@ -140,7 +140,7 @@ const MusicSlotMachine = () => {
       initializeReels();
       initialized.current = true;
     }
-  }, [albums, initializeReels, reelRefs]);
+  }, [albums, initializeReels]);
 
   // 清理定时器
   useEffect(() => {

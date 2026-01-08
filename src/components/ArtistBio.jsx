@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import logger from '../utils/logger';
 
 const ArtistBio = ({ artist }) => {
   const [bio, setBio] = useState(null);
@@ -50,7 +51,7 @@ const ArtistBio = ({ artist }) => {
           // 失败处理：尝试分割艺术家名称
           const firstArtist = artist.split(/[,&]/)[0].trim();
           if (firstArtist && firstArtist !== artist) {
-            console.log(`完整名称搜索失败，尝试搜索首位艺术家: ${firstArtist}`);
+            logger.log(`完整名称搜索失败，尝试搜索首位艺术家: ${firstArtist}`);
             const { data, lang } = await fetchBioData(firstArtist);
             if (data && (data.extract || data.description)) {
               setBio({
@@ -69,7 +70,7 @@ const ArtistBio = ({ artist }) => {
           }
         }
       } catch (err) {
-        console.error('Fetch bio error:', err);
+        logger.error('Fetch bio error:', err);
         setError('无法加载艺术家简介');
       } finally {
         setLoading(false);

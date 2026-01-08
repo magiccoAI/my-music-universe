@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import StarBackground from '../components/StarBackground';
 import { aboutContent } from '../data/aboutContent';
+import logger from '../utils/logger';
 
 const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
 const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
@@ -67,14 +68,13 @@ const AboutPage = () => {
         audioRef.current.src = '';
       }
     };
-  }, []);
+  }, [lang]);
 
   const handleLangChange = (newLang) => {
     if (newLang === lang) return;
     
     setLang(newLang);
-    // Update HTML lang attribute for accessibility and Lighthouse
-    document.documentElement.lang = newLang;
+    // lang state change will trigger useEffect due to [lang] dependency
     
     // Stop current audio and reset progress
     if (audioRef.current) {
@@ -93,7 +93,7 @@ const AboutPage = () => {
     } else {
       audioRef.current.src = AUDIO_MAP[lang];
       audioRef.current.play().catch(e => {
-        console.error("Audio playback failed:", e);
+        logger.error("Audio playback failed:", e);
         setIsPlaying(false);
       });
       setIsPlaying(true);

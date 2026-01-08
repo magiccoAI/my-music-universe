@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useCallback, memo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Plane } from '@react-three/drei';
 import { Frustum, Box3, TextureLoader, LinearFilter, Matrix4, Color } from 'three'; // Import THREE
+import logger from '../utils/logger';
 
 const getOptimizedImageUrl = (originalCoverPath, isMobile) => {
   if (!originalCoverPath) return null; // Handle null or undefined paths
@@ -82,7 +83,7 @@ const processQueue = () => {
     }
 
     if (!textureUrl) {
-      console.warn('No texture URL generated for item:', currentItem);
+      logger.warn('No texture URL generated for item:', currentItem);
       setIsLoading(false);
       activeLoads--;
       processQueue();
@@ -103,12 +104,12 @@ const processQueue = () => {
       },
       undefined,
       (error) => {
-        console.error('Error loading texture:', textureUrl, error);
+        logger.error('Error loading texture:', textureUrl, error);
         if (!currentUseOriginal && currentRetryCount < maxRetries) {
-          console.log(`Retrying with original image (${currentRetryCount + 1}/${maxRetries}):`, baseCoverPath);
+          logger.log(`Retrying with original image (${currentRetryCount + 1}/${maxRetries}):`, baseCoverPath);
           setTimeout(() => load(currentItem, currentRetryCount + 1, true), 500);
         } else if (currentUseOriginal && currentRetryCount < maxRetries) {
-          console.log(`Retrying original image (${currentRetryCount + 1}/${maxRetries}):`, baseCoverPath);
+          logger.log(`Retrying original image (${currentRetryCount + 1}/${maxRetries}):`, baseCoverPath);
           setTimeout(() => load(currentItem, currentRetryCount + 1, true), 500);
         } else {
           setIsLoading(false);

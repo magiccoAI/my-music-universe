@@ -10,6 +10,7 @@ export const useMusicSearch = (musicData = []) => {
   // Global Search State
   const [globalResults, setGlobalResults] = useState([]);
   const [isSearchingGlobal, setIsSearchingGlobal] = useState(false);
+  const [globalError, setGlobalError] = useState(null);
 
   // 搜索防抖
   useEffect(() => {

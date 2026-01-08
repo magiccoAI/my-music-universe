@@ -1128,7 +1128,7 @@
     "url": "https://mp.weixin.qq.com/s/efDJw0IX9uMjS3AkyKO-QQ",
     "note": "原声带/音乐剧",
     "cover": "covers/89.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1888089765&auto=0&height=66",
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1884740806&auto=0&height=66",
     "previewSource": "netease"
   },
   {
@@ -2324,7 +2324,8 @@
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "中文",
     "cover": "covers/183.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=27876927&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 184,
@@ -4453,7 +4454,8 @@
     "url": "https://mp.weixin.qq.com/s/xFrDn0_O-ij0_jZjjQUrgA",
     "note": "原声带/游戏/人生沧桑感",
     "cover": "covers/354.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1341138867&auto=0&height=66"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1341138867&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 355,

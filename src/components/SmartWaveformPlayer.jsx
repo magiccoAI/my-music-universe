@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import WaveformPlayer from './WaveformPlayer';
+import logger from '../utils/logger';
 
 const SmartWaveformPlayer = ({ artist, title, initialUrl }) => {
   const [audioUrl, setAudioUrl] = useState(null);
@@ -60,7 +61,7 @@ const SmartWaveformPlayer = ({ artist, title, initialUrl }) => {
            const firstArtist = artist.split(/[,&]/)[0].trim();
            
            if (firstArtist && firstArtist !== artist) {
-              console.log(`音频搜索重试: ${firstArtist} ${title}`);
+              logger.log(`音频搜索重试: ${firstArtist} ${title}`);
               data = await searchItunes(`${firstArtist} ${title}`);
               
               if (data.resultCount > 0 && data.results[0].previewUrl) {
@@ -73,7 +74,7 @@ const SmartWaveformPlayer = ({ artist, title, initialUrl }) => {
            }
         }
       } catch (err) {
-        console.error("Error fetching audio preview:", err);
+        logger.error("Error fetching audio preview:", err);
         setError('加载音频失败');
       } finally {
         setLoading(false);

@@ -52,7 +52,7 @@ const usePianoSounds = () => {
       audioBuffers.current[soundFile] = audioBuffer; // Cache the buffer
       return audioBuffer;
     } catch (error) {
-      console.error(`Failed to load or decode audio: ${soundFile}`, error);
+      logger.error(`Failed to load or decode audio: ${soundFile}`, error);
       return null;
     }
   }, []);
@@ -61,9 +61,9 @@ const usePianoSounds = () => {
     if (!audioContextRef.current) {
       try {
         audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-        console.log('AudioContext initialized.');
+        logger.log('AudioContext initialized.');
       } catch (e) {
-        console.error("AudioContext is not supported on this browser.", e);
+        logger.error("AudioContext is not supported on this browser.", e);
       }
     }
   }, []);
@@ -97,9 +97,9 @@ const usePianoSounds = () => {
       source.connect(audioContextRef.current.destination);
       source.start(0);
     } catch (error) {
-      console.error('Error playing sound:', error);
+      logger.error('Error playing sound:', error);
     }
-  }, [loadAudioOnDemand]);
+  }, [majoritySoundFiles, minoritySoundFiles, pianoSoundFiles, loadAudioOnDemand]);
 
   const preloadSounds = useCallback((count = 3) => {
     console.log(`Preloading ${count} piano sounds...`);

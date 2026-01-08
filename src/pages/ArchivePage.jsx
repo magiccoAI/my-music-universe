@@ -58,7 +58,8 @@ const ArchivePage = () => {
   const [isPlaying, setIsPlaying] = useState(false); // Default to false for performance
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume] = useState(0.5);
+  const [volume, setVolume] = useState(0.5);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null); // Ref for the audio element
 
   // Page navigation anchor configuration
@@ -74,7 +75,7 @@ const ArchivePage = () => {
     if (audioRef.current) {
       if (isPlaying) {
           // User interaction required policy might block this initially, handled by catch
-          audioRef.current.play().catch(e => console.error("Error playing audio:", e));
+          audioRef.current.play().catch(e => logger.error("Error playing audio:", e));
         } else {
           audioRef.current.pause();
         }
@@ -125,30 +126,6 @@ const ArchivePage = () => {
       setCurrentTime(time);
     }
   };
-
-  // Effect to handle scroll for back to top button with throttle
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (window.pageYOffset > 300) {
-            setShowBackToTopButton(true);
-          } else {
-            setShowBackToTopButton(false);
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
 
 

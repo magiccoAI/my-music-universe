@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useMemo } from 'react';
 import MusicUniverse from '../MusicUniverse';
 import { UniverseContext } from '../UniverseContext';
 import useMusicData from '../hooks/useMusicData';
@@ -43,7 +43,7 @@ const ConnectionsPage = () => {
   const [playingCardId, setPlayingCardId] = useState(null);
   
   const { playSound: playPianoSound, isLoaded: areSoundsLoaded } = useSamplePlayer(pianoNotes);
-  const { musicData, tagCounts, tagRelationships, loading: isLoading } = useMusicData();
+  const { musicData, tagCounts, loading: isLoading } = useMusicData();
 
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -66,11 +66,6 @@ const ConnectionsPage = () => {
       top: 0,
       behavior: 'smooth'
     });
-  };
-
-  const splitNote = (note) => {
-    if (!note) return [];
-    return note.split(/\s*[,;/]\s*|\s+and\s+/);
   };
 
   useEffect(() => {
@@ -282,8 +277,6 @@ const ConnectionsPage = () => {
                   item={item}
                   playingCardId={playingCardId}
                   setPlayingCardId={setPlayingCardId}
-                  onHover={setHovered}
-                  onLeave={() => setHovered(null)}
                 />
               ))}
             </div>

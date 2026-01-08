@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import EveningThemeControl, { EVENING_PRESETS } from './components/EveningThemeControl';
 import SceneErrorBoundary from './components/SceneErrorBoundary';
 
+import logger from './utils/logger';
 import { UniverseContext } from './UniverseContext';
 import Cover from './components/Cover';
 import InfoCard from './components/InfoCard';
@@ -163,7 +164,7 @@ const AmbientSound = memo(({ enabled, volume = 1, theme = 'evening' }) => {
     gainRef.current = mainGain;
     userGainRef.current = userGain;
 
-    console.log(`[AmbientSound] Setting up theme: ${theme}`);
+    logger.log(`[AmbientSound] Setting up theme: ${theme}`);
 
     if (theme === 'day') {
       // Day Theme: Brian Eno Style (Continuous)
@@ -416,11 +417,11 @@ const WebGLContextHandler = memo(() => {
   useEffect(() => {
     const handleContextLost = (event) => {
       event.preventDefault();
-      console.warn('WebGL Context Lost. Attempting to restore...');
+      logger.warn('WebGL Context Lost. Attempting to restore...');
     };
 
     const handleContextRestored = () => {
-      console.log('WebGL Context Restored!');
+      logger.log('WebGL Context Restored!');
     };
 
     gl.domElement.addEventListener('webglcontextlost', handleContextLost, false);
@@ -444,7 +445,7 @@ const CameraLogger = memo(() => {
       if (event.key.toLowerCase() === 'p') {
         const { x, y, z } = camera.position;
         const info = `Camera Position: [${x.toFixed(2)}, ${y.toFixed(2)}, ${z.toFixed(2)}]`;
-        console.log(info);
+        logger.log(info);
       }
     };
     
