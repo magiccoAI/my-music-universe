@@ -44,14 +44,14 @@ function App() {
 
   useEffect(() => {
     // Set default language for Lighthouse and accessibility
-    document.documentElement.lang = 'zh';
+    document.documentElement.lang = 'zh-CN';
 
     // 延迟预加载，优先保证首屏加载速度
-    // 3秒后再开始加载其他页面资源
+    // 缩短预加载延迟，从 3s 改为 1.5s，平衡首屏和后续页面的加载速度
     const timer = setTimeout(() => {
       const preloadComponents = [HomePage, MusicUniverse, ArchivePage, ConnectionsPage, SearchPage, AboutPage];
       preloadComponents.forEach(component => component.preload?.());
-    }, 3000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);

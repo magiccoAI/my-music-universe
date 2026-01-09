@@ -44,7 +44,8 @@ jobs:
         npm run build
       env:
         CI: false
-        PUBLIC_URL: ${{ github.job == 'deploy-vercel' && '' || '/my-music-universe' }}
+        # smart-build.js 会自动处理 PUBLIC_URL，此处设为 /my-music-universe 保持与 Pages 路径一致
+        PUBLIC_URL: /my-music-universe
     
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3

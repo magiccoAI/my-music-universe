@@ -542,6 +542,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   const { musicData, loading, error } = useMusicData();
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
   const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night');
+  const [isPending, startTransition] = React.useTransition();
   const [dayMode, setDayMode] = useState('normal');
   const [nightMode, setNightMode] = useState('aurora'); // 'stars', 'aurora'
   const [showHint, setShowHint] = useState(universeState.hasSeenHint === undefined ? true : !universeState.hasSeenHint);
@@ -556,16 +557,18 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   const isMobile = useIsMobile();
 
   const handleDayModeSelect = useCallback((mode) => {
-    if (mode === 'meadow') {
-      if (dayMode === 'meadow') {
-        setShowBgMenu((v) => !v);
+    startTransition(() => {
+      if (mode === 'meadow') {
+        if (dayMode === 'meadow') {
+          setShowBgMenu((v) => !v);
+          return;
+        }
+        setDayMode('meadow');
+        setShowBgMenu(true);
         return;
       }
-      setDayMode('meadow');
-      setShowBgMenu(true);
-      return;
-    }
-    setDayMode(mode);
+      setDayMode(mode);
+    });
   }, [dayMode]);
 
   // Define isWallMode to control album wall display and camera constraints
@@ -801,9 +804,15 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
     return {};
   }, [currentTheme, eveningConfig]);
 
+  const handleThemeChange = (newTheme) => {
+    startTransition(() => {
+      setCurrentTheme(newTheme);
+    });
+  };
+
   return (
     <div 
-      className={`w-screen relative ${currentTheme === 'evening' ? '' : themes[currentTheme]}`}
+      className={`w-screen relative ${currentTheme === 'evening' ? '' : themes[currentTheme]} ${isPending ? 'opacity-80 transition-opacity' : ''}`}
       style={{ ...themeStyle, height: 'var(--app-height, 100vh)' }}
       role="main"
       aria-label="音乐宇宙三维可视化"
@@ -1057,7 +1066,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             <button
             key="day-theme-button"
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${currentTheme === 'day' ? 'bg-blue-500 text-white shadow-md' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}
-            onClick={() => setCurrentTheme('day')}
+            onClick={() => handleThemeChange('day')}
             aria-pressed={currentTheme === 'day'}
             aria-label="切换到白天主题"
             >
@@ -1066,7 +1075,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             <button
             key="evening-theme-button"
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${currentTheme === 'evening' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}
-            onClick={() => setCurrentTheme('evening')}
+            onClick={() => handleThemeChange('evening')}
             aria-pressed={currentTheme === 'evening'}
             aria-label="切换到傍晚主题"
             >
@@ -1075,7 +1084,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             <button
             key="night-theme-button"
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${currentTheme === 'night' ? 'bg-purple-600 text-white shadow-md' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}
-            onClick={() => setCurrentTheme('night')}
+            onClick={() => handleThemeChange('night')}
             aria-pressed={currentTheme === 'night'}
             aria-label="切换到夜晚主题"
             >

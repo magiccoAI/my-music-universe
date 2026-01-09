@@ -51,7 +51,15 @@ const Stars = ({ count = 5000 }) => {
 const StarBackground = ({ starCount = 5000 }) => {
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}>
-      <Canvas camera={{ position: [0, 0, 1], fov: 75 }} style={{ background: '#000000' }}>
+      <Canvas 
+        camera={{ position: [0, 0, 1], fov: 75 }} 
+        style={{ background: '#000000' }}
+        gl={{ 
+          antialias: false, // 移动端关闭抗锯齿以提升性能
+          powerPreference: "high-performance"
+        }}
+        dpr={[1, 1.5]} // 限制移动端的高 DPR 渲染，1.5 足够清晰且省电
+      >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <Stars count={starCount} />

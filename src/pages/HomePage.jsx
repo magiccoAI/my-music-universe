@@ -12,6 +12,7 @@ import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
 import WeChatIcon from '../assets/icons/wechat-icon.webp';
 import useMeteorTrail from '../hooks/useMeteorTrail';
 import useIsMobile from '../hooks/useIsMobile';
+import useMusicData from '../hooks/useMusicData'; // 引入数据钩子用于预取
 import { aboutContent } from '../data/aboutContent';
 const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
 const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
@@ -21,12 +22,17 @@ const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const [aboutLang, setAboutLang] = useState('zh');
+
   const isMobile = useIsMobile();
   const [showBackground, setShowBackground] = useState(false);
 
+  // 在首页静默预取音乐数据，利用 UniverseContext 缓存
+  // 这样当用户点击进入“音乐封面宇宙”时，数据已经准备好了
+  useMusicData(); 
+
   // Update HTML lang attribute when aboutLang changes
   useEffect(() => {
-    document.documentElement.lang = aboutLang;
+    document.documentElement.lang = aboutLang === 'zh' ? 'zh-CN' : aboutLang;
   }, [aboutLang]);
 
   const t = aboutContent[aboutLang];

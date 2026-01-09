@@ -45,7 +45,7 @@ const AboutPage = () => {
 
   useEffect(() => {
     // Set initial lang attribute
-    document.documentElement.lang = lang;
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
 
     audioRef.current = new Audio();
     

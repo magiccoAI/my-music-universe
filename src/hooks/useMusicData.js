@@ -184,7 +184,20 @@ const useMusicData = () => {
       }
       
       // 验证和处理主数据
-      const processedMusicData = validateMusicData(musicJson);
+      const rawMusicData = validateMusicData(musicJson);
+      
+      // 预先计算 3D 坐标以减少 MusicUniverse 挂载时的计算量
+      // 利用种子随机或简单映射确保在同一次会话中位置一致
+      const processedMusicData = rawMusicData.map(item => {
+        if (!item.position) {
+          const x = (Math.random() - 0.5) * 20;
+          const y = (Math.random() - 0.5) * 20;
+          const z = (Math.random() - 0.5) * 20;
+          return { ...item, position: [x, y, z] };
+        }
+        return item;
+      });
+
       setMusicData(processedMusicData);
 
       // 计算标签统计和关系

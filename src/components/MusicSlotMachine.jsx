@@ -28,11 +28,9 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${process.env.PUBLIC_URL}/optimized-images/${randomAlbum.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${randomAlbum.title}" width="200" height="200" class="album-cover" onerror="this.onerror=null;logger.error('Image failed to load:', this.src)" onload="logger.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/optimized-images/${randomAlbum.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${randomAlbum.title}" width="200" height="200" class="album-cover" loading="lazy">
             <div class="album-info">
-             
               <div class="album-artist">${randomAlbum.artist}</div>
-             
             </div>
           `;
           reelRef.current.appendChild(albumElement);
@@ -88,7 +86,7 @@ const MusicSlotMachine = () => {
           const albumElement = document.createElement('div');
           albumElement.className = 'album-item';
           albumElement.innerHTML = `
-            <img src="${process.env.PUBLIC_URL}/optimized-images/${albumToDisplay.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${albumToDisplay.title}" width="200" height="200" class="album-cover" onerror="this.onerror=null;logger.error('Image failed to load:', this.src)" onload="logger.log('Image loaded:', this.src)">
+            <img src="${process.env.PUBLIC_URL}/optimized-images/${albumToDisplay.cover.split('/').pop().replace(/\.(png|jpg|jpeg)$/i, '')}.webp" alt="${albumToDisplay.title}" width="200" height="200" class="album-cover" loading="lazy">
             <div class="album-info">
               <div class="album-title" title="${albumToDisplay.music}">${albumToDisplay.music}</div>
               <div class="album-artist">${albumToDisplay.artist}</div>

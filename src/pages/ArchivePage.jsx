@@ -30,14 +30,15 @@ const terminalLines = [
 ];
 
 const parseDate = (dateString) => {
-  if (typeof dateString !== 'string' || !dateString) {
-    logger.error("日期格式不匹配：传入的日期字符串无效或为空", dateString);
-    return new Date(); // 返回一个默认日期，避免程序崩溃
+  if (typeof dateString !== 'string' || !dateString || dateString.trim() === '') {
+    // 允许空日期，不记录为错误，因为数据中确实存在空日期项
+    return new Date(0); // 返回 Unix 元年，避免影响“音乐旅程天数”计算
   }
   const match = dateString.match(/(\d{4})年(\d{2})月(\d{2})日 (\d{2}):(\d{2})/);
   if (!match) {
-    logger.error("日期格式不匹配，原始字符串:", dateString);
-    return new Date(); // 返回一个默认日期，避免程序崩溃
+    // 仅在格式确实错误时记录警告
+    logger.warn("日期格式不匹配，原始字符串:", dateString);
+    return new Date(0);
   }
   const [year, month, day, hour, minute] = match.slice(1);
   return new Date(year, month - 1, day, hour, minute);
@@ -138,10 +139,14 @@ const ArchivePage = () => {
 
   useEffect(() => {
     if (musicData.length > 0) {
-      const firstMusicDate = musicData.reduce((minDate, currentMusic) => {
-        const currentDate = currentMusic.date ? parseDate(currentMusic.date) : new Date();
-        return currentDate < minDate ? currentDate : minDate;
-      }, musicData[0].date ? parseDate(musicData[0].date) : new Date());
+      // 过滤掉无效日期后再寻找最早日期
+      const validDates = musicData
+        .map(music => music.date ? parseDate(music.date) : null)
+        .filter(date => date && date.getTime() > 0);
+
+      const firstMusicDate = validDates.length > 0 
+        ? new Date(Math.min(...validDates))
+        : new Date();
 
       const today = new Date();
       const diffTime = Math.abs(today.getTime() - firstMusicDate.getTime());
