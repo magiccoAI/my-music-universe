@@ -46,12 +46,19 @@ function App() {
     // Set default language for Lighthouse and accessibility
     document.documentElement.lang = 'zh-CN';
 
-    // 延迟预加载，优先保证首屏加载速度
-    // 缩短预加载延迟，从 3s 改为 1.5s，平衡首屏和后续页面的加载速度
+    // 更加智能的预加载策略：优先预加载最可能的下一个页面
     const timer = setTimeout(() => {
-      const preloadComponents = [HomePage, MusicUniverse, ArchivePage, ConnectionsPage, SearchPage, AboutPage];
-      preloadComponents.forEach(component => component.preload?.());
-    }, 1500);
+      // 只有 MusicUniverse 是最高优先级的，它是“封面墙”
+      MusicUniverse.preload?.();
+      
+      // 其他页面在更晚的时间点预加载，或者不预加载以节省资源
+      const secondaryTimer = setTimeout(() => {
+        ArchivePage.preload?.();
+        AboutPage.preload?.();
+      }, 2000);
+
+      return () => clearTimeout(secondaryTimer);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -72,9 +79,9 @@ function App() {
       <OrientationHint />
       
       {/* 2. 主应用内容
-          使用 opacity 控制显隐，确保加载动画结束时内容已经准备好了，实现无缝过渡 
+          使用更快的渐变过渡，并确保内容在后台静默准备
       */}
-      <div className={`App transition-opacity duration-1000 ${isInitialLoading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`App transition-all duration-700 ease-out ${isInitialLoading ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
         <UniverseNavigation /> {/* 在这里渲染导航组件 */}
         
         {/* 使用深色 Loading 占位符防止页面切换白屏 */}

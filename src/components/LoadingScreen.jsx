@@ -27,10 +27,10 @@ export const LoadingScreen = ({ onFinished }) => {
       setTextIndex((prev) => (prev + 1) % loadingTexts.length);
     }, 500);
 
-    // 模拟初始化耗时（优化为0.5秒，提升 LCP）
+    // 模拟初始化耗时（进一步优化耗时，提升用户感知性能）
     const finishLoadingTimer = setTimeout(() => {
       handleLoadingComplete();
-    }, 500);
+    }, 300); // 从 500ms 缩短至 300ms
 
     return () => {
       clearInterval(textInterval);

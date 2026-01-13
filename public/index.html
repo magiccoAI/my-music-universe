@@ -58,8 +58,11 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-    <!-- Preload Critical Assets -->
-    <link rel="preload" href="%PUBLIC_URL%/data.json" as="fetch" crossorigin="anonymous" />
+    <!-- Performance Hints -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.clarity.ms" />
+    
+    <!-- Preload Critical Assets (Optimized for Mobile) -->
     <link rel="preload" href="%PUBLIC_URL%/images/snow-bg.webp" as="image" />
 
     <title>Music Universe - 音乐宇宙可视化</title>

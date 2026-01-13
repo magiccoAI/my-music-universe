@@ -68,7 +68,7 @@ const normalizeAndSplitTags = (note) => {
 
 // --- 自定义 Hook ---
 
-const useMusicData = () => {
+const useMusicData = (shouldFetch = true) => {
   const { globalMusicCache, setGlobalMusicCache } = useContext(UniverseContext);
   const [musicData, setMusicData] = useState([]);
   const [aggregatedData, setAggregatedData] = useState({ artist_counts: {}, style_counts: {} });
@@ -76,15 +76,17 @@ const useMusicData = () => {
   // 使用 useRef 存储标签关系，因为它不需要触发组件重新渲染
   const tagRelationshipsRef = useRef(new Map()); 
   const [fetchState, setFetchState] = useState({
-    loading: true,
+    loading: shouldFetch,
     error: null,
     retryCount: 0,
     lastSuccessfulFetch: null,
   });
 
   const fetchData = useCallback(async (signal) => {
+    if (!shouldFetch) return;
+    
     // Check cache first
-    if (globalMusicCache && globalMusicCache.musicData.length > 0) {
+    if (globalMusicCache && globalMusicCache.musicData && globalMusicCache.musicData.length > 0) {
       setMusicData(globalMusicCache.musicData);
       setAggregatedData(globalMusicCache.aggregatedData);
       setTagCounts(globalMusicCache.tagCounts);
@@ -271,7 +273,7 @@ const useMusicData = () => {
         loading: false,
       }));
     }
-  }, [globalMusicCache, setGlobalMusicCache]);
+  }, [shouldFetch, globalMusicCache, setGlobalMusicCache]);
 
   useEffect(() => {
     // 使用 AbortController 管理整个 useEffect 的生命周期

@@ -54,6 +54,80 @@ While the code is open source, the design philosophy and the curated music data 
 *   **Deployment:** GitHub Pages (Automated via GitHub Actions)
 *   **Analytics:** Google Analytics 4 (GA4)
 
+## � Project Architecture | 项目架构
+
+The project follows a standard React application structure, organized for clarity and scalability.
+
+```
+my-music-universe/
+├── public/
+│   ├── data/         # 音乐数据 (Music data, JSON)
+│   ├── audio/        # 音频预览 (Audio previews)
+│   ├── images/       # 专辑封面与UI图片 (Album art and UI images)
+│   └── index.html    # HTML 入口文件 (Main HTML entry point)
+│
+└── src/
+    ├── assets/       # 静态资源，如图标 (Static assets like icons)
+    ├── components/   # 可复用的UI组件 (3D & 2D Reusable UI components)
+    ├── hooks/        # 封装共享逻辑的自定义钩子 (Custom React hooks)
+    ├── pages/        # 应用的主要页面 (Top-level page components)
+    ├── utils/        # 通用工具函数 (Utility functions)
+    ├── workers/      # 后台任务处理 (Web workers for background tasks)
+    ├── App.js        # 根组件与路由配置 (Root component with routing)
+    ├── MusicUniverse.jsx # 核心3D场景调度器 (Core 3D scene orchestrator)
+    ├── UniverseContext.jsx # 全局状态管理 (Global state management)
+    └── index.js      # 应用入口文件 (Application entry point)
+```
+
+*   **`src/`**: The main source code directory.
+    *   **`components/`**: Contains all reusable React components, from simple UI elements to complex 3D scene components.
+    *   **`pages/`**: Each file corresponds to a major view of the application (e.g., `HomePage`, `ArchivePage`).
+    *   **`hooks/`**: Custom React hooks for managing shared logic, such as `useMusicData` for data fetching or `useIsMobile` for responsive checks.
+    *   **`utils/`**: Utility functions for common tasks like data transformation (`dataTransformUtils.js`) and image handling (`imageUtils.js`).
+    *   **`workers/`**: Background scripts for performance-intensive tasks. For example, `wordcloud-layout.worker.js` computes the word cloud layout without blocking the main thread.
+    *   **`assets/`**: Static assets like icons and images.
+    *   **`App.js`**: The root component that sets up routing and global context.
+    *   **`MusicUniverse.jsx`**: A key component that orchestrates the main 3D music visualization experience.
+    *   **`UniverseContext.jsx`**: A React Context to provide global state (like theme and music data) throughout the component tree.
+
+*   **`public/`**: Contains static files, including the core `index.html`, music data (`data/`), and media assets (`audio/`, `images/`). This separation ensures that large data files are not bundled with the JavaScript code.
+
+This architecture separates concerns effectively, making the codebase easier to navigate, maintain, and extend.
+
+## 📱 Responsive Design & Accessibility | 响应式设计与无障碍访问
+
+User experience is at the heart of Music Universe. While the 3D scenes are best enjoyed on a desktop, significant effort was invested to ensure a seamless and intuitive experience on mobile devices, alongside a strong commitment to web accessibility.
+
+用户体验是“音乐宇宙”项目的核心。尽管 3D 场景在桌面端能获得最佳效果，我们仍投入了大量精力来确保移动设备也能拥有流畅、直观的体验，并坚定地致力于提升网站的无障碍访问性。
+
+### Mobile-First Approach & Optimization | 移动端优先与优化
+
+*   **Responsive Layouts:** The application uses a combination of Tailwind CSS's responsive utilities and custom hooks like `useIsMobile` to adapt layouts, font sizes, and component behaviors for smaller screens.
+    *   **响应式布局:** 项目结合了 Tailwind CSS 的响应式工具类和自定义钩子（如 `useIsMobile`），以适配不同尺寸屏幕下的布局、字体和组件行为。
+*   **Performance Tuning:** Mobile performance was a key focus. We iteratively tested pages using Lighthouse, optimizing asset loading, reducing bundle size, and leveraging techniques like code splitting and lazy loading to ensure fast initial load times on mobile networks.
+    *   **性能调优:** 移动端性能是优化的重点。我们使用 Lighthouse 对页面进行迭代测试，通过优化资源加载、缩减构建包体积、代码分割和懒加载等技术，确保在移动网络下也能实现快速的首次加载。
+*   **Touch-Friendly Interactions:** All interactive elements, including the 3D scene navigation and music player, are designed to be easily controllable via touch.
+    *   **触控友好交互:** 所有交互元素，包括 3D 场景导航和音乐播放器，都为触控操作进行了优化设计。
+*   **Orientation Hint:** For the best 3D experience on mobile, a dedicated `OrientationHint` component was created to gently guide users to landscape mode, which is better suited for immersive exploration.
+    *   **横屏提示:** 为了在移动端获得最佳的 3D 体验，我们创建了一个专门的 `OrientationHint` 组件，友好地引导用户切换到更适合沉浸式探索的横屏模式。
+
+### Accessibility (a11y) Commitment | 对无障碍访问的承诺
+
+This project was an enlightening journey into the importance of accessibility. Guided by AI-powered coding tools that highlighted best practices, we integrated ARIA (Accessible Rich Internet Applications) attributes and semantic HTML to make the site usable for everyone, including those who rely on screen readers.
+
+这个项目也是一次关于“无障碍访问”重要性的启发之旅。在 AI 编程工具对最佳实践的指导下，我们集成了 ARIA (Accessible Rich Internet Applications) 属性和语义化 HTML，以确保网站对包括屏幕阅读器用户在内的所有人都是可用的。
+
+*   **Semantic HTML:** Using tags like `<main>`, `<nav>`, and `<button>` correctly provides a meaningful structure for assistive technologies.
+    *   **语义化 HTML:** 正确使用 `<main>`, `<nav>`, `<button>` 等标签，为辅助技术提供了有意义的页面结构。
+*   **ARIA Attributes:** We've implemented `aria-label`, `aria-hidden`, and other ARIA roles and properties to provide context to interactive elements, such as labeling buttons and controls within the music player and 3D navigation.
+    *   **ARIA 属性:** 我们广泛应用了 `aria-label`, `aria-hidden` 等 ARIA 角色和属性，为交互元素（如音乐播放器和 3D 导航中的按钮）提供上下文，增强了可访问性。
+*   **Focus Management:** Careful attention was paid to keyboard navigation, ensuring all interactive elements are focusable and that the focus order is logical.
+    *   **焦点管理:** 我们同样关注键盘导航，确保所有交互元素都是可聚焦的，并且焦点顺序符合逻辑。
+
+This focus on user experience, from mobile optimization to accessibility, reflects a core philosophy: technology should be inclusive and built for humans first.
+
+这种从移动端优化到无障碍访问对用户体验的关注，反映了项目的核心理念：技术应具备包容性，并以人为本。
+
 ## 🚀 Getting Started | 快速开始
 
 ### Prerequisites | 前置要求

@@ -25,10 +25,20 @@ const HomePage = () => {
 
   const isMobile = useIsMobile();
   const [showBackground, setShowBackground] = useState(false);
+  const [shouldPrefetch, setShouldPrefetch] = useState(false);
 
   // 在首页静默预取音乐数据，利用 UniverseContext 缓存
-  // 这样当用户点击进入“音乐封面宇宙”时，数据已经准备好了
-  useMusicData(); 
+  // 优化：将预取逻辑延迟到首页完全加载后，避免阻塞首屏资源（LCP 优化）
+  useEffect(() => {
+    const prefetchTimer = setTimeout(() => {
+      setShouldPrefetch(true);
+    }, 3500); // 延迟 3.5s 再开始获取大数据文件
+    return () => clearTimeout(prefetchTimer);
+  }, []);
+
+  // 仅在 shouldPrefetch 为 true 时才激活钩子逻辑
+  // 注意：useMusicData 内部已经处理了缓存，所以这里延迟调用是安全的
+  useMusicData(shouldPrefetch); 
 
   // Update HTML lang attribute when aboutLang changes
   useEffect(() => {
@@ -43,7 +53,7 @@ const HomePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowBackground(true);
-    }, 100); // Small delay to let main content paint first
+    }, 500); // 增加延迟，确保文字 LCP 优先渲染
     return () => clearTimeout(timer);
   }, []);
 
