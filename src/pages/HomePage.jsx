@@ -8,8 +8,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import StarBackground from '../components/StarBackground';
-import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
-import WeChatIcon from '../assets/icons/wechat-icon.webp';
+import NetEaseCloudMusicIconWebP from '../assets/icons/netcloud-icon.webp';
+import WeChatIconWebP from '../assets/icons/wechat-icon.webp';
+import NetEaseCloudMusicIconPng from '../assets/icons/netcloud-icon.png';
+import WeChatIconPng from '../assets/icons/wechat-icon.png';
 import useMeteorTrail from '../hooks/useMeteorTrail';
 import useIsMobile from '../hooks/useIsMobile';
 import useMusicData from '../hooks/useMusicData'; // 引入数据钩子用于预取
@@ -176,7 +178,11 @@ const HomePage = () => {
             title="「D小调片段记录」过往公众号推文歌单合集"
           >
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:bg-white/10 group-hover:border-sky-500/30 group-hover:scale-110 transition-all duration-300 backdrop-blur-sm">
-              <img src={NetEaseCloudMusicIcon} alt="网易云音乐" className="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity" />
+              <picture>
+                <source srcSet={NetEaseCloudMusicIconWebP} type="image/webp" />
+                <source srcSet={NetEaseCloudMusicIconPng} type="image/png" />
+                <img src={NetEaseCloudMusicIconPng} alt="网易云音乐" className="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity" />
+              </picture>
             </div>
             <span className="text-[10px] text-gray-500 group-hover:text-sky-400 transition-colors font-mono">网易云歌单</span>
           </a>
@@ -189,7 +195,11 @@ const HomePage = () => {
             title="关注公众号：D小调片段记录"
           >
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:bg-white/10 group-hover:border-green-500/30 group-hover:scale-110 transition-all duration-300 backdrop-blur-sm">
-              <img src={WeChatIcon} alt="微信公众号" className="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity" />
+              <picture>
+                <source srcSet={WeChatIconWebP} type="image/webp" />
+                <source srcSet={WeChatIconPng} type="image/png" />
+                <img src={WeChatIconPng} alt="微信公众号" className="w-6 h-6 opacity-70 group-hover:opacity-100 transition-opacity" />
+              </picture>
             </div>
             <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors font-mono">公众号</span>
           </a>

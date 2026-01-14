@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import SpecialCollectionCSS from './SpecialCollection.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
@@ -103,28 +104,32 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
   // 处理模态框打开/关闭时的背景滚动
   useEffect(() => {
     if (isModalOpen) {
-      // 保存原始样式以便恢复
-      const originalBodyStyle = window.getComputedStyle(document.body).overflow;
-      const originalHtmlStyle = window.getComputedStyle(document.documentElement).overflow;
+      // 记录当前滚动位置
+      const scrollY = window.scrollY;
       
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
+      // 锁定滚动 - 使用 position: fixed 方案防止跳动
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflowY = 'hidden';
       
-      // 针对 iOS Safari 的额外处理：防止触摸滚动
-      const preventDefault = (e) => {
-        // 如果点击的是模态框背景或其内部非滚动元素，则阻止默认行为
-        if (isModalOpen) {
-          e.preventDefault();
-        }
-      };
-      
-      // 仅在移动端添加触摸锁定，或者全局添加以确保安全
+      // 针对 iOS 的额外处理
+      const preventDefault = (e) => e.preventDefault();
       document.addEventListener('touchmove', preventDefault, { passive: false });
       
       return () => {
-        document.body.style.overflow = originalBodyStyle || 'auto';
-        document.documentElement.style.overflow = originalHtmlStyle || 'auto';
+        // 恢复滚动
+        const savedScrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflowY = '';
         document.removeEventListener('touchmove', preventDefault);
+        
+        // 恢复滚动位置
+        if (savedScrollY) {
+          window.scrollTo(0, parseInt(savedScrollY || '0') * -1);
+        }
       };
     }
   }, [isModalOpen]);
@@ -152,7 +157,11 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
     }
   };
 
-  const handleImageClick = (imageSrc, index) => {
+  const handleImageClick = (e, imageSrc, index) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setSelectedImage(imageSrc);
     setSelectedImageIndex(index);
     setIsImageLoading(true); // 打开时设为加载中
@@ -269,8 +278,8 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
     color: 'white',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '50%',
-    width: isMobile ? '48px' : '56px',
-    height: isMobile ? '48px' : '56px',
+    width: isMobile ? (orientation === 'landscape' ? '36px' : '48px') : '56px',
+    height: isMobile ? (orientation === 'landscape' ? '36px' : '48px') : '56px',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
@@ -280,8 +289,8 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
   };
 
   const modalIconStyle = {
-    width: isMobile ? '28px' : '32px',
-    height: isMobile ? '28px' : '32px',
+    width: isMobile ? (orientation === 'landscape' ? '20px' : '28px') : '32px',
+    height: isMobile ? (orientation === 'landscape' ? '20px' : '28px') : '32px',
   };
 
   return (
@@ -598,7 +607,7 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
                       width="900"
                       height="600"
                       loading="lazy"
-                      onClick={() => handleImageClick(`${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.webp`, index)}
+                      onClick={(e) => handleImageClick(e, `${process.env.PUBLIC_URL}/images/music-report-spcl-1026/music-report-spcl-1029-${report.id}.webp`, index)}
                       style={{
                         display: 'block',
                         maxWidth: '100%',
@@ -683,127 +692,146 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
         )}
       </div>
 
-      {/* 图片放大模态框 */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black backdrop-blur-xl"
-            style={{ touchAction: 'none' }} // 显式禁用触摸动作，防止背景滚动
-            onClick={closeModal}
-            role="dialog"
-            aria-modal="true"
-            aria-label="图片查看器"
-          >
+      {/* 图片放大模态框 - 使用 Portal 渲染到 body 顶层，避免堆叠上下文问题 */}
+      {createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="relative w-full h-full max-w-[98vw] max-h-[98vh] mx-auto p-4 md:p-12 flex flex-col items-center justify-center"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 backdrop-blur-2xl"
+              style={{ touchAction: 'none' }}
+              onClick={closeModal}
+              role="dialog"
+              aria-modal="true"
+              aria-label="图片查看器"
             >
-              {/* Image Container */}
-              <div className="relative w-full h-full flex items-center justify-center bg-transparent rounded-2xl overflow-hidden">
-                {isImageLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 backdrop-blur-sm">
-                    <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                className={`relative w-full h-full flex items-center justify-center ${isMobile && orientation === 'landscape' ? 'flex-row p-2 pr-16' : 'flex-col p-4 md:p-12'}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Image Container */}
+                <div className={`relative flex items-center justify-center bg-transparent overflow-hidden ${isMobile && orientation === 'landscape' ? 'w-full h-full' : 'w-full h-full'}`}>
+                  {isImageLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 backdrop-blur-sm">
+                      <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                  <img
+                    src={selectedImage}
+                    alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
+                    className={`object-contain max-w-full max-h-full transition-all duration-500 ease-out ${isImageLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+                    onLoad={() => setIsImageLoading(false)}
+                    onError={(e) => {
+                      setIsImageLoading(false);
+                      const pngImage = selectedImage.replace('.webp', '.png');
+                      e.target.src = pngImage;
+                    }}
+                  />
+                </div>
+
+                {/* Desktop ESC Hint */}
+                {!isMobile && (
+                  <div className="absolute top-6 right-6 text-white/40 text-xs font-light tracking-widest pointer-events-none">
+                    PRESS ESC TO CLOSE
                   </div>
                 )}
-                <img
-                  src={selectedImage}
-                  alt={selectedImageIndex !== null ? musicReports[selectedImageIndex].name : "Enlarged Music Report"}
-                  className={`object-contain w-full h-full transition-all duration-500 ease-out ${isImageLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
-                  onLoad={() => setIsImageLoading(false)}
-                  onError={(e) => {
-                    setIsImageLoading(false);
-                    const pngImage = selectedImage.replace('.webp', '.png');
-                    e.target.src = pngImage;
-                  }}
-                />
-              </div>
+                
+                {/* Mobile Landscape Progress Indicator */}
+                {isMobile && orientation === 'landscape' && (
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 text-white/60 text-[10px] font-mono bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm z-[1020]">
+                    {selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}
+                  </div>
+                )}
+              </motion.div>
 
-              {/* Desktop ESC Hint */}
-              {!isMobile && (
-                <div className="absolute top-6 right-6 text-white/40 text-xs font-light tracking-widest pointer-events-none">
-                  PRESS ESC TO CLOSE
-                </div>
-              )}
-            </motion.div>
-
-            {/* Modal Control Buttons */}
-            <div style={{
-              position: 'absolute',
-              bottom: isMobile && orientation === 'landscape' ? '10px' : (isMobile ? '20px' : '30px'),
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: isMobile && orientation === 'landscape' ? '8px' : (isMobile ? '12px' : '20px'),
-              zIndex: 1010,
-            }}>
-              {/* Minimal Progress Indicator */}
+              {/* Modal Control Buttons */}
               <div style={{
-                color: 'rgba(255, 255, 255, 0.5)',
-                fontSize: '11px',
-                marginRight: isMobile ? '4px' : '12px',
-                fontFamily: 'monospace',
-                letterSpacing: '1px',
-                userSelect: 'none',
-                transform: 'translateY(9px)' // 稍微下移，避免与主体重叠
+                position: 'absolute',
+                bottom: isMobile && orientation === 'landscape' ? 'auto' : (isMobile ? '30px' : '40px'),
+                right: isMobile && orientation === 'landscape' ? '12px' : 'auto',
+                top: isMobile && orientation === 'landscape' ? '50%' : 'auto',
+                left: isMobile && orientation === 'landscape' ? 'auto' : '50%',
+                transform: isMobile && orientation === 'landscape' ? 'translateY(-50%)' : 'translateX(-50%)',
+                display: 'flex',
+                flexDirection: isMobile && orientation === 'landscape' ? 'column' : 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: isMobile && orientation === 'landscape' ? '12px' : (isMobile ? '16px' : '24px'),
+                zIndex: 1010,
               }}>
-                {selectedImageIndex !== null ? `${selectedImageIndex + 1}/${musicReports.length}` : ''}
-              </div>
+                {/* Minimal Progress Indicator (Non-landscape) */}
+                {!(isMobile && orientation === 'landscape') && (
+                  <div style={{
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    fontSize: '11px',
+                    marginRight: isMobile ? '4px' : '12px',
+                    fontFamily: 'monospace',
+                    letterSpacing: '1px',
+                    userSelect: 'none',
+                    transform: isMobile ? 'translateY(0)' : 'translateY(9px)'
+                  }}>
+                    {selectedImageIndex !== null ? `${selectedImageIndex + 1}/${musicReports.length}` : ''}
+                  </div>
+                )}
 
-              <motion.button
-                whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
-                whileTap={{ scale: 0.95 }}
-                onClick={goToPreviousImage}
-                style={modalButtonStyle}
-                aria-label="Previous image"
-              >
-                <ChevronLeftIcon style={modalIconStyle} />
-              </motion.button>
-
-              {!isMobile && (
                 <motion.button
                   whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={toggleFullscreen}
+                  onClick={goToPreviousImage}
                   style={modalButtonStyle}
-                  aria-label="Toggle fullscreen"
+                  aria-label="Previous image"
                 >
-                  <ArrowsPointingOutIcon style={modalIconStyle} />
+                  <ChevronLeftIcon style={modalIconStyle} />
                 </motion.button>
-              )}
 
-              <motion.button
-                ref={closeButtonRef}
-                whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
-                whileTap={{ scale: 0.95 }}
-                onClick={closeModal}
-                style={modalButtonStyle}
-                aria-label="Close modal"
-              >
-                <XMarkIcon style={modalIconStyle} />
-              </motion.button>
+                {!isMobile && (
+                  <motion.button
+                    whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={toggleFullscreen}
+                    style={modalButtonStyle}
+                    aria-label="Toggle fullscreen"
+                  >
+                    <ArrowsPointingOutIcon style={modalIconStyle} />
+                  </motion.button>
+                )}
 
-              <motion.button
-                whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
-                whileTap={{ scale: 0.95 }}
-                onClick={goToNextImage}
-                style={modalButtonStyle}
-                aria-label="Next image"
-              >
-                <ChevronRightIcon style={modalIconStyle} />
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <motion.button
+                  ref={closeButtonRef}
+                  whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={closeModal}
+                  style={{
+                    ...modalButtonStyle,
+                    background: 'rgba(255, 59, 48, 0.4)', // Reddish background for close button
+                    border: '1px solid rgba(255, 59, 48, 0.2)'
+                  }}
+                  aria-label="Close modal"
+                >
+                  <XMarkIcon style={modalIconStyle} />
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.1, filter: 'brightness(1.2)' }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={goToNextImage}
+                  style={modalButtonStyle}
+                  aria-label="Next image"
+                >
+                  <ChevronRightIcon style={modalIconStyle} />
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }

@@ -1020,14 +1020,6 @@
 /* Horizontal mobile layout fixes */
 @media (max-width: 900px) and (orientation: landscape) {
   .archive-page {
-    padding-top: 5rem; /* Add padding to push content down */
-  }
-
-  .modal .navigation-button.next {
-    right: 3rem; /* Adjust next button position */
-  }
-
-  .modal .navigation-button.prev {
-    left: 3rem; /* Adjust prev button position */
+    padding-top: 3rem; /* Reduced from 5rem to avoid pushing content off-screen */
   }
 }

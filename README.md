@@ -54,7 +54,7 @@ While the code is open source, the design philosophy and the curated music data 
 *   **Deployment:** GitHub Pages (Automated via GitHub Actions)
 *   **Analytics:** Google Analytics 4 (GA4)
 
-## � Project Architecture | 项目架构
+## 🌳 Project Architecture | 项目架构
 
 The project follows a standard React application structure, organized for clarity and scalability.
 

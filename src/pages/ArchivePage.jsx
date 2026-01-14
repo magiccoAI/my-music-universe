@@ -1,21 +1,22 @@
 import React, { useEffect, useState, useRef, Suspense, lazy, useCallback, useMemo } from 'react';
 import useIsMobile from '../hooks/useIsMobile';
-import useMusicData from '../hooks/useMusicData'; // Import useMusicData hook
-
-import SpecialCollection from '../components/SpecialCollection';
-import MusicSlotMachine from '../components/MusicSlotMachine';
+import useMusicData from '../hooks/useMusicData';
 import MouseParticleEffect from '../components/MouseParticleEffect';
-import MusicPlayer from '../components/MusicPlayer'; // Import MusicPlayer
+import MusicPlayer from '../components/MusicPlayer';
 import TerminalText from '../components/TerminalText';
-import PageIndicator from '../components/PageIndicator'; // Import PageIndicator
-
-import './ArchivePage.css';
+import PageIndicator from '../components/PageIndicator';
 import logger from '../utils/logger';
-import NetEaseCloudMusicIcon from '../assets/icons/netcloud-icon.webp';
-import WeChatIcon from '../assets/icons/wechat-icon.webp';
+import NetEaseCloudMusicIconWebP from '../assets/icons/netcloud-icon.webp';
+import WeChatIconWebP from '../assets/icons/wechat-icon.webp';
+import NetEaseCloudMusicIconPng from '../assets/icons/netcloud-icon.png';
+import WeChatIconPng from '../assets/icons/wechat-icon.png';
+import './ArchivePage.css';
+
+const SpecialCollection = lazy(() => import('../components/SpecialCollection'));
+const MusicSlotMachine = lazy(() => import('../components/MusicSlotMachine'));
+const WordCloudDisplay = lazy(() => import('../components/WordCloudDisplay'));
 
 const WeChatQRCode = process.env.PUBLIC_URL + '/images/wechat-qrcode.png';
-const WordCloudDisplay = lazy(() => import('../components/WordCloudDisplay'));
 
 const terminalLines = [
   "> Establishing connection...",
@@ -251,7 +252,7 @@ const ArchivePage = () => {
       
 
       {/* 侧边时间轴导航 */}
-      <PageIndicator sections={pageSections} />
+      {!isModalOpen && <PageIndicator sections={pageSections} />}
 
       {/* Music Player */}
       <audio 
@@ -370,7 +371,9 @@ const ArchivePage = () => {
           <p className="section-subtitle">那些触动心灵的珍贵旋律</p>
         </div>
         <div className="special-collection-container md:mr-24">
-          <SpecialCollection musicData={musicData} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+          <Suspense fallback={<div className="loading-placeholder">加载特别收藏中...</div>}>
+            <SpecialCollection musicData={musicData} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+          </Suspense>
         </div>
 
       </section>
@@ -386,7 +389,9 @@ const ArchivePage = () => {
           <h2 className="section-title">音乐专辑随机选</h2>
           <p className="section-subtitle">发现惊喜</p>
         </div>
-        <MusicSlotMachine />
+        <Suspense fallback={<div className="loading-placeholder">加载随机选模块中...</div>}>
+          <MusicSlotMachine />
+        </Suspense>
         <div className="section-glow"></div>
       </section>
 
@@ -432,7 +437,11 @@ const ArchivePage = () => {
                   aria-label="查看网易云音乐歌单"
                 >
                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-red-500/30 group-hover:scale-110 transition-all duration-300">
-                    <img src={NetEaseCloudMusicIcon} alt="网易云" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                    <picture>
+                      <source srcSet={NetEaseCloudMusicIconWebP} type="image/webp" />
+                      <source srcSet={NetEaseCloudMusicIconPng} type="image/png" />
+                      <img src={NetEaseCloudMusicIconPng} alt="网易云" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                    </picture>
                   </div>
                   <span className="text-[10px] text-gray-500 group-hover:text-red-400 transition-colors">网易云歌单</span>
                 </a>
@@ -446,7 +455,11 @@ const ArchivePage = () => {
                   aria-label="关注微信公众号"
                 >
                   <div className="p-3 bg-white/5 rounded-xl border border-white/10 group-hover:bg-white/10 group-hover:border-green-500/30 group-hover:scale-110 transition-all duration-300">
-                    <img src={WeChatIcon} alt="微信" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                    <picture>
+                      <source srcSet={WeChatIconWebP} type="image/webp" />
+                      <source srcSet={WeChatIconPng} type="image/png" />
+                      <img src={WeChatIconPng} alt="微信" width="20" height="20" className="w-5 h-5 opacity-70 group-hover:opacity-100"/>
+                    </picture>
                   </div>
                   <span className="text-[10px] text-gray-500 group-hover:text-green-400 transition-colors">公众号</span>
                   
