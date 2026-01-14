@@ -718,8 +718,9 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
                 {/* Image Container */}
                 <div className={`relative flex items-center justify-center bg-transparent overflow-hidden ${isMobile && orientation === 'landscape' ? 'w-full h-full' : 'w-full h-full'}`}>
                   {isImageLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 backdrop-blur-sm">
+                    <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 backdrop-blur-sm" role="status" aria-live="polite">
                       <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                      <span className="sr-only">正在加载图片...</span>
                     </div>
                   )}
                   <img
@@ -737,14 +738,14 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
 
                 {/* Desktop ESC Hint */}
                 {!isMobile && (
-                  <div className="absolute top-6 right-6 text-white/40 text-xs font-light tracking-widest pointer-events-none">
+                  <div className="absolute top-6 right-6 text-white/40 text-xs font-light tracking-widest">
                     PRESS ESC TO CLOSE
                   </div>
                 )}
                 
                 {/* Mobile Landscape Progress Indicator */}
                 {isMobile && orientation === 'landscape' && (
-                  <div className="absolute top-2 left-1/2 -translate-x-1/2 text-white/60 text-[10px] font-mono bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm z-[1020]">
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 text-white/60 text-[10px] font-mono bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm z-[1020]" aria-live="polite">
                     {selectedImageIndex !== null ? `${selectedImageIndex + 1} / ${musicReports.length}` : ''}
                   </div>
                 )}
@@ -775,7 +776,7 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
                     letterSpacing: '1px',
                     userSelect: 'none',
                     transform: isMobile ? 'translateY(0)' : 'translateY(9px)'
-                  }}>
+                  }} aria-live="polite">
                     {selectedImageIndex !== null ? `${selectedImageIndex + 1}/${musicReports.length}` : ''}
                   </div>
                 )}

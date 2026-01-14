@@ -166,6 +166,7 @@ const WordCloudDisplay = ({
     setIsLoading(true);
 
     // FIX: 在此处实例化 Worker，避免顶层调用的 undefined 错误
+    // The d3-cloud layout logic is handled within this worker.
     const worker = new Worker(new URL('../workers/wordcloud-layout.worker.js', import.meta.url));
 
     logger.log('Sending data to worker: processedData length =', processedData.length, 'dimensions =', dimensions);
