@@ -100,16 +100,17 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
   }, [audioUrl, autoPlay]);
 
   const isNetEase = audioUrl && audioUrl.includes('music.163.com/outchain/player');
+  const isSoundCloud = audioUrl && (audioUrl.includes('soundcloud.com') || audioUrl.includes('w.soundcloud.com/player'));
 
   useEffect(() => {
     let timer;
-    if (isNetEase && !iframeLoaded && !useAppleFallback) {
+    if ((isNetEase || isSoundCloud) && !iframeLoaded && !useAppleFallback) {
       timer = setTimeout(() => {
         setShowSlowLoadingWarning(true);
       }, 3000);
     }
     return () => clearTimeout(timer);
-  }, [isNetEase, iframeLoaded, useAppleFallback]);
+  }, [isNetEase, isSoundCloud, iframeLoaded, useAppleFallback]);
 
   const togglePlay = (e) => {
     e.stopPropagation(); // Prevent closing the card
@@ -130,9 +131,9 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
   if (loading) return <div className={`text-xs ${darkMode ? 'text-slate-400' : 'text-gray-400'} mt-2`}>正在寻找试听片段...</div>;
   if (!audioUrl) return null; // Hide if no audio found
 
-  if (isNetEase && !useAppleFallback) {
+  if ((isNetEase || isSoundCloud) && !useAppleFallback) {
       // Extract height from URL params if present, default to 86
-      let iframeHeight = 86;
+      let iframeHeight = isSoundCloud ? 166 : 86; // SoundCloud widget is usually taller
       try {
         const urlObj = new URL(audioUrl.startsWith('//') ? 'https:' + audioUrl : audioUrl);
         const heightParam = urlObj.searchParams.get('height');
@@ -145,6 +146,11 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
       } catch (e) {
         // Ignore parsing errors
       }
+
+      // If it's a raw SoundCloud URL, wrap it in the widget URL
+      const finalIframeUrl = isSoundCloud && !audioUrl.includes('w.soundcloud.com/player')
+        ? `https://w.soundcloud.com/player/?url=${encodeURIComponent(audioUrl)}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false`
+        : audioUrl;
 
       return (
           <div 
@@ -168,15 +174,16 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
                   marginHeight="0" 
                   width="100%" 
                   height={iframeHeight}
-                  src={audioUrl}
-                  title="Netease Music Player"
+                  src={finalIframeUrl}
+                  title={isSoundCloud ? "SoundCloud Player" : "Netease Music Player"}
                   onLoad={() => setIframeLoaded(true)}
                   className={`transition-opacity duration-500 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  scrolling="no"
               ></iframe>
 
               <div className="flex justify-between items-center px-2 pb-1">
                 <div className={`text-[10px] ${darkMode ? 'text-slate-500' : 'text-gray-300'}`}>
-                    Provided by Netease Cloud Music
+                    Provided by {isSoundCloud ? 'SoundCloud' : 'Netease Cloud Music'}
                 </div>
                 {applePreviewUrl && (
                     <button 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
@@ -105,7 +106,7 @@ const UniverseNavigation = ({ className = '' }) => {
   // 移动端导航
   const MobileNavigation = () => (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[100] bg-black/40 backdrop-filter backdrop-blur-xl p-4 border-b border-white/10 transition-all duration-300 ${className}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-[2000] bg-black/60 backdrop-blur-xl p-4 border-b border-white/10 transition-all duration-300 ${className}`}>
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 no-underline group">
             <Logo className="w-8 h-8 text-cyan-400 group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
@@ -113,7 +114,7 @@ const UniverseNavigation = ({ className = '' }) => {
           </Link>
           <button 
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-white/80 p-2 hover:text-white transition-colors focus:outline-none"
+            className="text-white/80 p-2 hover:text-white transition-colors focus:outline-none relative z-[2001]"
             aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
           >
             {menuOpen ? (
@@ -130,45 +131,62 @@ const UniverseNavigation = ({ className = '' }) => {
       </nav>
 
       {/* 全屏移动菜单 */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div 
-            className="fixed inset-0 z-[150] bg-[#050505] flex flex-col items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="mobile-menu-title"
-          >
+      {createPortal(
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div 
+              className="fixed inset-0 z-[2100] bg-black/90 backdrop-blur-2xl flex flex-col items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mobile-menu-title"
+            >
+            <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center border-b border-white/5">
+              <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-2">
+                <Logo className="w-8 h-8 text-cyan-400" />
+                <span className="text-white/90 text-lg font-bold tracking-wider">Music Universe</span>
+              </Link>
+              <button 
+                onClick={() => setMenuOpen(false)}
+                className="text-white/80 p-2 hover:text-white transition-colors"
+                aria-label="关闭菜单"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
             <h2 id="mobile-menu-title" className="sr-only">导航菜单</h2>
-            <div className="flex flex-col space-y-8 text-center w-full px-8">
+            <div className="flex flex-col space-y-5 text-center w-full px-8 mt-8">
               {NAV_ITEMS.map((item, index) => {
                 const active = isActive(item.path);
               return (
                 <motion.div
-                  key={item.path}
-                  initial={{ opacity: 0, y: 20 }}
+                  key={typeof item.label === 'string' ? item.path : index}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 + 0.1 }}
+                  transition={{ delay: index * 0.04 + 0.1 }}
                 >
                   <Link
                     to={item.path}
                     onClick={() => setMenuOpen(false)}
                     className={`
-                      block text-xl font-sans font-medium tracking-wider py-2
-                      transition-all duration-300 relative
+                      block text-xl font-sans font-medium tracking-widest py-3
+                      transition-all duration-300 relative rounded-xl
                       ${active 
-                        ? 'text-cyan-400 font-bold scale-110 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' 
-                        : 'text-gray-300 hover:text-white hover:scale-105'
+                        ? 'text-cyan-400 font-bold bg-white/5 shadow-[0_0_20px_rgba(34,211,238,0.1)]' 
+                        : 'text-gray-300 hover:text-white hover:bg-white/5'
                       }
                     `}
                   >
                     {item.label}
                     {active && (
                       <motion.div
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+                        className="absolute bottom-1 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.6)]"
                         layoutId="mobileUnderline"
                       />
                     )}
@@ -177,15 +195,21 @@ const UniverseNavigation = ({ className = '' }) => {
               );
             })}
           </div>
+
+          <div className="absolute bottom-12 text-white/20 text-xs font-mono tracking-[0.2em]">
+            MUSIC UNIVERSE · 2026
+          </div>
           </motion.div>
         )}
-      </AnimatePresence>
-    </>
-  );
+      </AnimatePresence>,
+      document.body
+    )}
+  </>
+);
 
   // 桌面端导航
   const DesktopNavigation = () => (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-20 backdrop-filter backdrop-blur-xl transition-all duration-300 ${className}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-[1000] bg-black bg-opacity-20 backdrop-filter backdrop-blur-xl transition-all duration-300 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* 左侧 Logo 锚点 */}

@@ -513,11 +513,6 @@ const SnowMountain = ({
       url = url.replace('snow-bg.jpg', 'snow-bg.webp');
     }
 
-    if (isMobile && (bgImage.includes('snow-bg'))) {
-      url = publicPath + '/optimized-images/snow-bg-mobile.webp';
-      url = url.replace(/\/+/g, '/');
-    }
-
     setIsLoading(true);
 
     loader.load(

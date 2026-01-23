@@ -45,14 +45,30 @@ While the code is open source, the design philosophy and the curated music data 
 
 ## 🛠️ Tech Stack | 技术栈
 
-*   **Core:** React 18, React Router 6
-*   **3D & Graphics:** Three.js, React Three Fiber (@react-three/fiber), @react-three/drei
-*   **Animation:** Framer Motion, React Spring
-*   **Visualization:** D3.js, ECharts (echarts-wordcloud)
-*   **Styling:** Tailwind CSS, Styled-jsx
-*   **Build Tool:** Create React App (via Craco)
-*   **Deployment:** GitHub Pages (Automated via GitHub Actions)
-*   **Analytics:** Google Analytics 4 (GA4)
+*   **Core Framework:** React 18, React Router 6
+*   **3D Graphics & Animation:**
+    *   **Engine:** Three.js
+    *   **React Abstraction:** React Three Fiber (`@react-three/fiber`), `@react-three/drei`
+    *   **Animation:** Framer Motion, React Spring (`@react-spring/three`)
+*   **Data Visualization:**
+    *   **Charts & Word Clouds:** ECharts, `echarts-wordcloud`
+    *   **DOM Manipulation:** D3.js
+*   **Styling:**
+    *   **Utility-First CSS:** Tailwind CSS
+    *   **Component-Scoped CSS:** Styled-jsx
+*   **State Management & Logic:**
+    *   **React Hooks:** For component-level state and logic.
+    *   **React Context:** For global state (e.g., theme, music data).
+*   **Build & Development:**
+    *   **Toolkit:** Create React App (customized with Craco)
+    *   **Testing:** React Testing Library, Jest
+*   **Deployment & CI/CD:**
+    *   **Platform:** GitHub Pages
+    *   **Automation:** GitHub Actions
+*   **Utilities:**
+    *   **HTTP Client:** Axios
+    *   **Virtualization:** `@tanstack/react-virtual`, `react-window` (For rendering large lists efficiently)
+    *   **Image Optimization:** Sharp (Used in build scripts)
 
 ## 🌳 Project Architecture | 项目架构
 

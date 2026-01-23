@@ -65,9 +65,7 @@ function App() {
 
   return (
     <UniverseProvider>
-      {/* 1. 首次加载屏幕 (Boot Screen) 
-          onFinished 回调会在动画结束后触发，将 isInitialLoading 设为 false
-      */}
+      {/* 1. 首次加载屏幕 (Boot Screen) */}
       {isInitialLoading && (
         <LoadingScreen onFinished={() => setIsInitialLoading(false)} />
       )}
@@ -78,11 +76,8 @@ function App() {
       {/* 移动端横屏提示 */}
       <OrientationHint />
       
-      {/* 2. 主应用内容
-          使用更快的渐变过渡，并确保内容在后台静默准备
-      */}
+      {/* 2. 主应用内容 */}
       <div className={`App transition-all duration-700 ease-out ${isInitialLoading ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
-        <UniverseNavigation /> {/* 在这里渲染导航组件 */}
         
         {/* 使用深色 Loading 占位符防止页面切换白屏 */}
         <Suspense fallback={<GlobalSuspenseFallback />}> 
@@ -107,6 +102,9 @@ function App() {
           </AnimatePresence>
         </Suspense>
       </div>
+
+      {/* 导航组件放在 App 容器外，且在 DOM 顺序最后，确保 z-index 生效且不被 transform 影响 */}
+      <UniverseNavigation />
     </UniverseProvider>
   );
 }
