@@ -4,6 +4,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
 import Aurora from './Aurora';
+import DesktopBoat from './DesktopBoat';
 
 const SimpleWater = () => {
   // 移动端水面：增加纹理细节，但保持低几何复杂度
@@ -272,7 +273,7 @@ const Seagull = ({ position, speed = 1, scale = 1, isMobile = false }) => {
 const Tree = ({ position }) => {
   // 🌲 程序化生成分形树 (Fractal Tree)
   // 模拟参考图中多枝干、细碎叶片的形态
-  const { branches, leaves } = useMemo(() => {
+  const { branches, leaves, fruits } = useMemo(() => {
     // 简单的伪随机数生成器 (Linear Congruential Generator)
     // 保证每次刷新页面时生成的树形状一致
     let seed = 67890; // 更换种子以获得更好看的初始形态
@@ -283,6 +284,7 @@ const Tree = ({ position }) => {
 
     const _branches = [];
     const _leaves = [];
+    const _fruits = [];
     
     // 递归生成树枝
     // start: 起始点, angle: 生长角度(Euler), length: 长度, radius: 粗细, depth: 剩余深度
@@ -311,6 +313,11 @@ const Tree = ({ position }) => {
                 )
             );
             _leaves.push({ pos: leafPos, scale: random() * 0.4 + 0.3 });
+            
+            // 🍎 氛围感：在某些叶片处增加“发光果实”
+            if (random() > 0.85) {
+              _fruits.push({ pos: leafPos.clone().add(new THREE.Vector3(0, -0.2, 0)) });
+            }
         }
       }
 
@@ -348,7 +355,7 @@ const Tree = ({ position }) => {
     // 增加初始高度，增加递归深度
     grow(new THREE.Vector3(0, 0, 0), new THREE.Euler(0, 0, 0), 4.0, 0.7, 5);
 
-    return { branches: _branches, leaves: _leaves, random };
+    return { branches: _branches, leaves: _leaves, fruits: _fruits, random };
   }, []);
 
   // 使用 InstancedMesh 渲染叶子以优化性能
@@ -415,6 +422,18 @@ const Tree = ({ position }) => {
             roughness={1}
           />
       </instancedMesh>
+
+      {/* 🏮 渲染发光果实/小灯笼 */}
+      {fruits.map((f, i) => (
+        <mesh key={i} position={f.pos}>
+          <sphereGeometry args={[0.15, 8, 8]} />
+          <meshStandardMaterial 
+            color="#fb923c" 
+            emissive="#f97316" 
+            emissiveIntensity={2} 
+          />
+        </mesh>
+      ))}
     </group>
   );
 };
@@ -593,6 +612,28 @@ const Mountains = () => {
             <meshStandardMaterial color="#0f172a" roughness={1} />
         </mesh>
       </group>
+    </group>
+  );
+};
+
+// 🏝️ 新增：微型孤岛/礁石组件
+const MiniIsland = ({ position }) => {
+  return (
+    <group position={position}>
+      {/* 礁石底座 */}
+      <mesh position={[0, -0.5, 0]} rotation={[0, Math.PI / 4, 0]}>
+        <cylinderGeometry args={[4, 5, 1.5, 6]} />
+        <meshStandardMaterial color="#1e293b" roughness={1} />
+      </mesh>
+      {/* 旁边的小石块 */}
+      <mesh position={[3, -0.8, 2]} scale={[0.8, 0.5, 0.8]}>
+        <dodecahedronGeometry args={[1.5, 0]} />
+        <meshStandardMaterial color="#334155" roughness={1} />
+      </mesh>
+      <mesh position={[-2, -0.9, -3]} scale={[0.6, 0.4, 0.6]} rotation={[1, 0, 1]}>
+        <dodecahedronGeometry args={[2, 0]} />
+        <meshStandardMaterial color="#0f172a" roughness={1} />
+      </mesh>
     </group>
   );
 };
@@ -828,7 +869,30 @@ const EveningAssets = ({ isMobile, config }) => {
       {/* 🏝️ 远景：一座孤山 */}
       <Mountains />
 
-      {isMobile ? <MobileBoat position={[15, -5.2, -25]} /> : <Tree position={[20, -5, -30]} />}
+      {/* 🏝️ 桌面端：树与帆船的意境组合 */}
+      {isMobile ? (
+        <MobileBoat position={[15, -5.2, -25]} />
+      ) : (
+        <group position={[25, -5, -40]}>
+          
+          {/* 树生长在岛上 */}
+          <Tree position={[0, 0, 0]} />
+          
+          {/* 🕯️ 氛围光源：给树和船增加一个暖色局部光，模拟灯笼或奇幻氛围 */}
+          <pointLight position={[0, 5, 0]} intensity={20} distance={25} color="#fb923c" decay={2} />
+          
+          {/* ✨ 专属萤火虫粒子：环绕树木 */}
+          <Sparkles 
+            count={40}
+            scale={[8, 12, 8]} 
+            position={[0, 5, 0]} 
+            size={4}
+            speed={0.5} 
+            opacity={0.8}
+            color="#fde047" // 明亮的萤火虫黄
+          />
+        </group>
+      )}
 
       {/* 🕊️ 点缀：傍晚归巢的海鸥 */}
       {birds.map((bird, index) => (
@@ -845,6 +909,19 @@ const EveningAssets = ({ isMobile, config }) => {
         opacity={0.1} // 极低透明度，若有若无
         color={themeConfig.sparkleColor} 
       />
+
+      {/* 🌫️ 新增：海面薄雾 (Sea Mist) - 增强远景深度感 */}
+      {!isMobile && (
+        <Sparkles 
+          count={100}
+          scale={[100, 5, 100]} 
+          position={[0, -4, -40]} 
+          size={20} // 较大的粒子模拟雾团
+          speed={0.1} 
+          opacity={0.03} 
+          color="#a5b4fc" // 淡紫色雾气
+        />
+      )}
 
       {/* 移动端水面波光增强 */}
       {isMobile && <WaterGlints config={themeConfig} />}

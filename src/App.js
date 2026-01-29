@@ -77,7 +77,7 @@ function App() {
       <OrientationHint />
       
       {/* 2. 主应用内容 */}
-      <div className={`App transition-all duration-700 ease-out ${isInitialLoading ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
+      <div className={`App transition-all duration-700 ease-out ${isInitialLoading ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 blur-0'}`}>
         
         {/* 使用深色 Loading 占位符防止页面切换白屏 */}
         <Suspense fallback={<GlobalSuspenseFallback />}> 

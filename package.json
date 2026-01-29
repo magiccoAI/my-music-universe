@@ -47,7 +47,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "craco start",
     "fix-deps": "node scripts/fix-dependencies.js",
     "reset": "npm run clean-install && npm run build",
     "test": "craco test",

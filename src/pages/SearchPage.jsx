@@ -259,7 +259,7 @@ const SearchPage = () => {
 
   return (
     <div 
-      className="min-h-screen w-screen bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 text-white relative"
+      className="min-h-full w-full bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-700 text-white relative"
       role="main"
       aria-label="音乐搜索页面"
     >

@@ -1,13 +1,14 @@
 import React, { useRef, useState, useEffect, useContext, useCallback, memo } from 'react';
 import useMusicData from './hooks/useMusicData';
 import useIsMobile from './hooks/useIsMobile';
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
-import { OrbitControls, Plane, Html, useTexture } from '@react-three/drei';
-import { SunIcon, CloudIcon, AdjustmentsHorizontalIcon, SparklesIcon, StarIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import { SunIcon, SparklesIcon, StarIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import * as THREE from 'three';
 // import Stars from './components/StarsOnly';
 import EveningThemeControl, { EVENING_PRESETS } from './components/EveningThemeControl';
 import SceneErrorBoundary from './components/SceneErrorBoundary';
+import AuroraEssence from './components/AuroraEssence';
 
 import logger from './utils/logger';
 import { UniverseContext } from './UniverseContext';
@@ -21,7 +22,6 @@ const Snowfall = React.lazy(() => import('./components/Snowfall'));
 const SnowMountain = React.lazy(() => import('./components/SnowMountain'));
 const RainbowMeadow = React.lazy(() => import('./components/RainbowMeadow'));
 const CloudFloor = React.lazy(() => import('./components/CloudFloor'));
-const DayMeadowLakeScene = React.lazy(() => import('./components/DayMeadowLakeScene'));
 const Aurora = React.lazy(() => import('./components/Aurora'));
 const Planets = React.lazy(() => import('./components/Planets'));
 const Spaceship = React.lazy(() => import('./components/Spaceship'));
@@ -276,7 +276,7 @@ const AmbientSound = memo(({ enabled, volume = 1, theme = 'evening' }) => {
     
     // Ensure context is running (double check)
     if (ctx.state === 'suspended') ctx.resume();
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, theme]); // Re-run when theme changes, but reuse context
 
   // Volume update
@@ -298,7 +298,7 @@ const AmbientSound = memo(({ enabled, volume = 1, theme = 'evening' }) => {
     const onStop = () => {
       if (!ctxRef.current || !gainRef.current) return;
       const t = ctxRef.current.currentTime;
-      const targetVal = theme === 'day' ? 0.08 : 0.25; // Note: Day uses lower base gain in this graph
+      // const targetVal = theme === 'day' ? 0.08 : 0.25; // Note: Day uses lower base gain in this graph
       // Actually, in the graph above:
       // Day mainGain = 0.5. 
       // Evening mainGain = 0.25.
@@ -505,7 +505,14 @@ const DayAtmosphere = ({ mode, meadowPreset }) => {
         targetColor.set('#f1f5f9'); // Slate-100 (Snowy white/gray)
     } else if (mode === 'meadow' && meadowPreset?.fog) {
         targetDensity = meadowPreset.fog.density ?? 0.0045;
-        targetColor.set(meadowPreset.fog.color ?? '#dbeafe');
+        // Force light fog color in day mode to avoid black shadow effect, ignoring preset darkness if any
+        const presetColor = new THREE.Color(meadowPreset.fog.color ?? '#dbeafe');
+        // If preset color is too dark (luminance < 0.2), use default light snow color
+        if (presetColor.getHSL({}).l < 0.2) {
+             targetColor.set('#e0f2fe');
+        } else {
+             targetColor.copy(presetColor);
+        }
     } else {
         targetDensity = 0.002; // Clear
         targetColor.set('#dbeafe');
@@ -539,12 +546,13 @@ const useAppHeight = () => {
 
 const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlightedTag }) => {
   useAppHeight();
-  const { musicData, loading, error } = useMusicData();
+  const { musicData } = useMusicData();
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
   const [currentTheme, setCurrentTheme] = useState(universeState.currentTheme || 'night');
   const [isPending, startTransition] = React.useTransition();
   const [dayMode, setDayMode] = useState('normal');
   const [nightMode, setNightMode] = useState('aurora'); // 'stars', 'aurora'
+  const [auroraVariant, setAuroraVariant] = useState('simple'); // 'simple', 'simulation'
   const [showHint, setShowHint] = useState(universeState.hasSeenHint === undefined ? true : !universeState.hasSeenHint);
   const [hoveredMusic, setHoveredMusic] = useState(null);
   const [wallpaperMode, setWallpaperMode] = useState(false);
@@ -553,6 +561,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   const [isRaining, setIsRaining] = useState(true);
   const [snowBg, setSnowBg] = useState(SNOW_BACKGROUNDS[0].path);
   const [showBgMenu, setShowBgMenu] = useState(false);
+  const [showExitHint, setShowExitHint] = useState(false);
+  const [isIdle, setIsIdle] = useState(false);
   // const [positionedMusicData, setPositionedMusicData] = useState([]);
   const isMobile = useIsMobile();
 
@@ -617,13 +627,68 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Handle Idle State for Immersive Mode
+  useEffect(() => {
+    if (!wallpaperMode) {
+      setIsIdle(false);
+      return;
+    }
+
+    let idleTimer;
+    const resetIdle = () => {
+      if (isIdle) setIsIdle(false);
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        setIsIdle(true);
+      }, 3000); // 3 seconds of inactivity triggers idle state
+    };
+
+    // Initial trigger
+    resetIdle();
+
+    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'touchmove', 'click'];
+    events.forEach(e => window.addEventListener(e, resetIdle));
+
+    return () => {
+      clearTimeout(idleTimer);
+      events.forEach(e => window.removeEventListener(e, resetIdle));
+    };
+  }, [wallpaperMode, isIdle]);
+
+  // Sync is-idle class to body
+  useEffect(() => {
+    if (wallpaperMode && isIdle) {
+      document.body.classList.add('is-idle');
+    } else {
+      document.body.classList.remove('is-idle');
+    }
+  }, [wallpaperMode, isIdle]);
+
+  // Show exit hint when entering wallpaper mode
+  useEffect(() => {
+    if (wallpaperMode) {
+      document.body.classList.add('immersive-mode');
+      setShowExitHint(true);
+      const timer = setTimeout(() => {
+        setShowExitHint(false);
+      }, 4000);
+      return () => {
+        clearTimeout(timer);
+        document.body.classList.remove('immersive-mode');
+      };
+    } else {
+      document.body.classList.remove('immersive-mode');
+      setShowExitHint(false);
+    }
+  }, [wallpaperMode]);
+
   // 隐藏滚动条以增强沉浸感
   useEffect(() => {
     // 隐藏垂直滚动条
     document.body.style.overflow = 'hidden';
     return () => {
-      // 恢复滚动条
-      document.body.style.overflow = 'auto';
+      // 恢复滚动条 - 移除内联样式，让 index.css 的全局设置生效 (overflow: hidden)
+      document.body.style.overflow = '';
     };
   }, []);
 
@@ -812,8 +877,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
   return (
     <div 
-      className={`w-screen relative ${currentTheme === 'evening' ? '' : themes[currentTheme]} ${isPending ? 'opacity-80 transition-opacity' : ''}`}
-      style={{ ...themeStyle, height: 'var(--app-height, 100vh)' }}
+      className={`absolute inset-0 w-full h-full overflow-hidden m-0 p-0 ${currentTheme === 'evening' ? '' : themes[currentTheme]} ${isPending ? 'opacity-80 transition-opacity' : ''}`}
+      style={{ ...themeStyle }}
       role="main"
       aria-label="音乐宇宙三维可视化"
     >
@@ -825,9 +890,9 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
       {ambientEnabled && (currentTheme === 'evening' || currentTheme === 'day') && <AmbientSound enabled={true} volume={ambientVolume} theme={currentTheme} />}
       {musicData.length > 0 && positionedMusicData.length > 0 && (
         <Canvas
-          style={{ width: '100%', height: '100%', touchAction: 'none' }} // 禁用浏览器默认触摸行为
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', touchAction: 'none', display: 'block' }} // 禁用浏览器默认触摸行为，使用绝对定位消除间隙
           camera={{ fov: 75, near: 0.1, far: 1000 }}
-          className={isConnectionsPageActive && !highlightedTag ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'}
+          className={`${isConnectionsPageActive && !highlightedTag ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'} music-universe-canvas`}
           // 移动端强制使用 1.0 DPR 以防止内存崩溃，尤其是纹理加载较多时
           dpr={isMobile ? [1, 1] : [1, 2]}
         >
@@ -841,14 +906,17 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             makeDefault
             enabled={isInteractive}
             enableRotate
+            enableDamping={true}
+            dampingFactor={0.05}
+            rotateSpeed={0.5}
             enableZoom={!isWallMode}
             enablePan={!isWallMode}
-            minAzimuthAngle={isWallMode ? -Math.PI / 6 : undefined}
-            maxAzimuthAngle={isWallMode ? Math.PI / 8 : undefined}
-            minPolarAngle={isWallMode ? Math.PI / 3 : 0}
-            maxPolarAngle={isWallMode ? Math.PI / 2.2 : Math.PI}
-            minDistance={5}
-            maxDistance={50}
+            minAzimuthAngle={isWallMode ? -Math.PI / 6 : (currentTheme === 'night' && nightMode === 'aurora' ? -Infinity : -Math.PI / 2)}
+            maxAzimuthAngle={isWallMode ? Math.PI / 8 : (currentTheme === 'night' && nightMode === 'aurora' ? Infinity : Math.PI / 2)}
+            minPolarAngle={isWallMode ? Math.PI / 3 : Math.PI / 4}
+            maxPolarAngle={isWallMode ? Math.PI / 2.2 : Math.PI / 1.5}
+            minDistance={8}
+            maxDistance={60}
           />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
@@ -856,7 +924,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             <React.Suspense fallback={null}>
               <Stars isMobile={isMobile} />
               {nightMode !== 'aurora' && <ShootingStars />}
-              {nightMode === 'aurora' && <Aurora isMobile={isMobile} position={[0, 10, -50]} scale={[3, 3, 1]} />}
+              {nightMode === 'aurora' && <Aurora isMobile={isMobile} variant={auroraVariant} position={[0, 10, -50]} scale={[3, 3, 1]} />}
               {nightMode === 'deepspace' && <Planets isMobile={isMobile} />}
               {nightMode === 'deepspace' && <Spaceship isMobile={isMobile} />}
             </React.Suspense>
@@ -1047,6 +1115,18 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 </div>
               </div>
 
+              {nightMode === 'aurora' && (
+                <div className="relative group">
+                  <AuroraEssence 
+                    mode={auroraVariant} 
+                    onToggle={() => setAuroraVariant(v => v === 'simple' ? 'simulation' : 'simple')} 
+                  />
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/90 text-white text-[10px] rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap backdrop-blur-sm border border-white/10">
+                    {auroraVariant === 'simple' ? '切换到灵动极光' : '切换到柔光极光'}
+                  </div>
+                </div>
+              )}
+
               <div className="relative group">
                 <button
                   onClick={() => setNightMode('deepspace')}
@@ -1186,16 +1266,23 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
       {/* 退出沉浸模式的按钮 */}
       {wallpaperMode && (
-         <button
-            className="absolute top-6 right-6 z-50 px-4 py-2 rounded-full bg-black/60 text-white hover:bg-black/80 hover:scale-105 transition-all flex items-center gap-2 backdrop-blur-md border border-white/10 shadow-lg group"
-            onClick={() => setWallpaperMode(false)}
-            title="退出沉浸模式"
-         >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span className="font-medium text-sm">退出沉浸模式</span>
-         </button>
+         <>
+           <button
+              className="absolute top-6 right-6 z-50 px-4 py-2 rounded-full bg-black/40 text-white/90 hover:bg-black/60 hover:text-white hover:scale-105 transition-all flex items-center gap-2 backdrop-blur-md border border-white/10 hover:border-white/20 shadow-lg group"
+              onClick={() => setWallpaperMode(false)}
+              title="退出沉浸模式"
+           >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <span className="font-medium text-sm">退出</span>
+           </button>
+           
+           {/* 沉浸模式退出提示 (Toast) */}
+           <div className={`absolute top-20 left-1/2 -translate-x-1/2 z-40 px-6 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/90 text-sm shadow-xl pointer-events-none transition-opacity duration-1000 ${showExitHint ? 'opacity-100' : 'opacity-0'}`}>
+              按 <span className="font-bold text-white">Esc</span> 或 <span className="font-bold text-white">H</span> 退出沉浸模式
+           </div>
+         </>
       )}
 
       {/* 傍晚主题控制面板 */}
