@@ -10,8 +10,8 @@ console.log('Environment:', isVercel ? 'Vercel' : 'Standard / GitHub Pages');
 // For Vercel: Force PUBLIC_URL to '/' to ensure SPA routing works correctly
 // For GitHub Pages: Use default behavior (respects "homepage" in package.json)
 const command = isVercel 
-  ? 'cross-env NODE_ENV=production PUBLIC_URL=/ craco build'
-  : 'cross-env NODE_ENV=production craco build';
+  ? 'cross-env CI=false NODE_ENV=production PUBLIC_URL=/ craco build'
+  : 'cross-env CI=false NODE_ENV=production craco build';
 
 console.log('Executing:', command);
 console.log('---------------------------------------------------');
