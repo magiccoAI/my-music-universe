@@ -49,8 +49,10 @@
   "scripts": {
     "start": "craco start",
     "fix-deps": "node scripts/fix-dependencies.js",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "reset": "npm run clean-install && npm run build",
     "test": "craco test",
+    "test:e2e": "playwright test",
     "eject": "react-scripts eject",
     "build": "node scripts/smart-build.js",
     "predeploy": "npm run build",
