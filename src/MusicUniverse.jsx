@@ -563,8 +563,36 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
   const [showBgMenu, setShowBgMenu] = useState(false);
   const [showExitHint, setShowExitHint] = useState(false);
   const [isIdle, setIsIdle] = useState(false);
+  const [showMobileAmbientControl, setShowMobileAmbientControl] = useState(false);
+  const ambientControlRef = useRef(null);
+  const ambientButtonRef = useRef(null);
   // const [positionedMusicData, setPositionedMusicData] = useState([]);
   const isMobile = useIsMobile();
+
+  // 监听点击外部关闭环境音控制面板
+  useEffect(() => {
+    if (!isMobile || !showMobileAmbientControl) return;
+
+    const handleClickOutside = (event) => {
+      // 如果点击的是控制面板内部，或者触发按钮本身，则不关闭
+      if (
+        ambientControlRef.current && 
+        !ambientControlRef.current.contains(event.target) &&
+        ambientButtonRef.current &&
+        !ambientButtonRef.current.contains(event.target)
+      ) {
+        setShowMobileAmbientControl(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isMobile, showMobileAmbientControl]);
 
   const handleDayModeSelect = useCallback((mode) => {
     startTransition(() => {
@@ -911,8 +939,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             rotateSpeed={0.5}
             enableZoom={!isWallMode}
             enablePan={!isWallMode}
-            minAzimuthAngle={isWallMode ? -Math.PI / 6 : (currentTheme === 'night' && nightMode === 'aurora' ? -Infinity : -Math.PI / 2)}
-            maxAzimuthAngle={isWallMode ? Math.PI / 8 : (currentTheme === 'night' && nightMode === 'aurora' ? Infinity : Math.PI / 2)}
+            minAzimuthAngle={isWallMode ? -Math.PI / 6 : ((currentTheme === 'night' && nightMode === 'aurora') || (currentTheme === 'day' && dayMode === 'normal') ? -Infinity : -Math.PI / 2)}
+            maxAzimuthAngle={isWallMode ? Math.PI / 8 : ((currentTheme === 'night' && nightMode === 'aurora') || (currentTheme === 'day' && dayMode === 'normal') ? Infinity : Math.PI / 2)}
             minPolarAngle={isWallMode ? Math.PI / 3 : Math.PI / 4}
             maxPolarAngle={isWallMode ? Math.PI / 2.2 : Math.PI / 1.5}
             minDistance={8}
@@ -982,10 +1010,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
       )}
 
       {!wallpaperMode && (
-      <div className="absolute bottom-4 right-4 z-10 flex flex-col items-end space-y-3">
-        <div className="flex items-center space-x-3">
+      <div className={`absolute z-50 transition-all duration-300 pointer-events-none ${isMobile ? 'inset-0' : 'bottom-4 right-4 flex flex-col items-end'}`}>
+        <div className={`${isMobile ? 'w-full h-full' : 'flex items-center space-x-3 pointer-events-auto'}`}>
         {/* 主题切换组 */}
-        <div className="relative z-30">
+        <div className={`${isMobile ? 'absolute bottom-8 landscape:bottom-4 left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
           {/* Snow Mountain Background Switcher */}
           {currentTheme === 'day' && dayMode === 'meadow' && (
             showBgMenu && (
@@ -1173,6 +1201,9 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
         </div>
         </div>
         
+        {/* 功能按钮组：移动端垂直排列，桌面端水平排列 */}
+        <div className={`${isMobile ? 'absolute bottom-24 landscape:bottom-8 right-4 flex flex-col space-y-3 pointer-events-auto' : 'flex items-center space-x-3'}`}>
+        
         {/* 傍晚主题调色板按钮 */}
         {currentTheme === 'evening' && (
           <div className="relative group">
@@ -1205,10 +1236,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </button>
             
             {/* Tooltip 提示 */}
-            <div className="absolute bottom-full left-0 mb-3 w-32 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
+            <div className="absolute bottom-full right-0 mb-3 w-32 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
                 <span className="font-bold block mb-1 text-sky-400">重置视角</span>
                 回到初始位置
-                <div className="absolute bottom-[-6px] left-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
+                <div className="absolute bottom-[-6px] right-5 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
             </div>
         </div>
 
@@ -1226,23 +1257,78 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </button>
             
             {/* Tooltip 提示 */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
+            <div className="absolute bottom-full right-0 mb-3 w-48 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
                 <span className="font-bold block mb-1 text-sky-400">沉浸模式</span>
                 隐藏所有界面元素，享受纯净的视觉体验。适合截图或作为动态壁纸。
-                <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
+                <div className="absolute bottom-[-6px] right-5 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
             </div>
         </div>
 
         <div className="relative group">
             <button
-              className={`p-2.5 rounded-full border border-white/10 backdrop-blur-md transition-all shadow-lg ${(currentTheme === 'evening' || currentTheme === 'day') ? 'bg-gray-900/50 text-gray-300 hover:bg-emerald-500/80 hover:text-white hover:scale-110' : 'bg-gray-800/40 text-gray-500 cursor-not-allowed'}`}
-              onClick={() => { if (currentTheme === 'evening' || currentTheme === 'day') setAmbientEnabled(v => !v); }}
+              ref={ambientButtonRef}
+              className={`p-2.5 rounded-full border border-white/10 backdrop-blur-md transition-all shadow-lg ${(currentTheme === 'evening' || currentTheme === 'day') ? 'bg-gray-900/50 text-gray-300 hover:bg-emerald-500/80 hover:text-white hover:scale-110' : 'bg-gray-800/40 text-gray-500 cursor-not-allowed'} ${isMobile && ambientEnabled && showMobileAmbientControl ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-black/50' : ''}`}
+              onClick={() => {
+                if (currentTheme !== 'evening' && currentTheme !== 'day') return;
+                
+                if (isMobile) {
+                    if (!ambientEnabled) {
+                        setAmbientEnabled(true);
+                        setShowMobileAmbientControl(true);
+                    } else {
+                        setShowMobileAmbientControl(prev => !prev);
+                    }
+                } else {
+                    setAmbientEnabled(v => !v);
+                }
+              }}
               aria-label="环境声"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5a1 1 0 012 0v14a1 1 0 01-2 0V5zM5 9a1 1 0 012 0v6a1 1 0 01-2 0V9zm12-2a1 1 0 012 0v10a1 1 0 01-2 0V7z" />
               </svg>
             </button>
+
+            {/* 移动端专属控制面板 - 点击展开 */}
+            {isMobile && ambientEnabled && showMobileAmbientControl && (
+                <div 
+                  ref={ambientControlRef}
+                  className="absolute bottom-[-4px] right-14 mb-0 flex items-center gap-3 p-3 bg-gray-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl animate-in fade-in slide-in-from-right-4 duration-200 z-50 min-w-[200px]"
+                >
+                    <div className="flex flex-col gap-1 flex-1">
+                        <div className="flex justify-between items-center">
+                             <span className="text-xs font-bold text-emerald-400">环境音量</span>
+                             <span className="text-[10px] text-gray-400">{Math.round(ambientVolume * 100)}%</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="1" 
+                            step="0.01" 
+                            value={ambientVolume} 
+                            onChange={(e) => setAmbientVolume(parseFloat(e.target.value))} 
+                            className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                        />
+                    </div>
+                    <div className="w-px h-8 bg-white/10 mx-1"></div>
+                    <button 
+                        onClick={() => {
+                            setAmbientEnabled(false);
+                            setShowMobileAmbientControl(false);
+                        }}
+                        className="p-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-colors flex-shrink-0"
+                        aria-label="关闭环境音效面板"
+                        title="关闭环境音效面板"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                    </button>
+                    {/* 小三角指向按钮 */}
+                    <div className="absolute right-[-6px] bottom-4 w-3 h-3 bg-gray-900/95 transform rotate-45 border-r border-t border-white/10 rounded-tr-sm"></div>
+                </div>
+            )}
+
             {/* 仅在非移动端显示提示框，并增加延迟防止误触 */}
             {!isMobile && (
               <div className="absolute bottom-full right-0 mb-3 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-500 backdrop-blur-sm border border-white/10 z-10">
@@ -1259,6 +1345,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                   <div className="absolute bottom-[-6px] right-4 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
               </div>
             )}
+        </div>
         </div>
         </div>
       </div>
@@ -1296,7 +1383,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
       {showHint && !wallpaperMode && (
         <div 
-          className="absolute bottom-4 left-4 z-10 p-3 bg-gray-800/90 backdrop-blur-sm text-white rounded-lg shadow-lg text-sm opacity-90 max-w-xs md:max-w-md"
+          className={`absolute left-4 z-10 p-3 bg-gray-800/90 backdrop-blur-sm text-white rounded-lg shadow-lg text-sm opacity-90 max-w-xs md:max-w-md transition-all duration-300 pointer-events-none ${isMobile ? 'bottom-32' : 'bottom-4'}`}
           role="status"
           aria-live="polite"
         >
