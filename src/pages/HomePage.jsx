@@ -233,8 +233,8 @@ const HomePage = () => {
       {showAbout && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAbout(false)} />
-          <div className="relative bg-gray-900/80 p-8 rounded-xl shadow-[0_0_50px_rgba(14,165,233,0.15)] max-w-xl w-full mx-4 text-left border border-sky-500/30 backdrop-blur-md animate-in fade-in zoom-in duration-300">
-            <div className="flex items-center justify-between mb-6 border-b border-sky-500/20 pb-4">
+          <div className="relative bg-gray-900/80 p-8 rounded-xl shadow-[0_0_50px_rgba(14,165,233,0.15)] max-w-xl w-full mx-4 text-left border border-sky-500/30 backdrop-blur-md animate-in fade-in zoom-in duration-300 flex flex-col max-h-[85vh]">
+            <div className="flex items-center justify-between mb-6 border-b border-sky-500/20 pb-4 shrink-0">
               <div className="flex items-center gap-3">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
@@ -252,7 +252,7 @@ const HomePage = () => {
               </button>
             </div>
             
-            <div className="space-y-6 text-gray-300 text-sm leading-8 max-h-[60vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-sky-500/30 scrollbar-track-transparent font-sans">
+            <div className="space-y-6 text-gray-300 text-sm leading-8 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-sky-500/30 scrollbar-track-transparent font-sans flex-1 min-h-0">
               <p className="tracking-wide first-letter:text-2xl first-letter:text-sky-400 first-letter:mr-1 first-letter:font-bold">
                 {t.intro}
               </p>
@@ -331,7 +331,7 @@ const HomePage = () => {
                 </p>
               )}
             </div>
-            <div className="mt-8 pt-6 border-t border-sky-500/20 flex justify-end">
+            <div className="mt-8 pt-6 border-t border-sky-500/20 flex justify-end shrink-0">
               <button
                 type="button"
                 onClick={() => setShowAbout(false)}
