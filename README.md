@@ -32,16 +32,33 @@ While the code is open source, the design philosophy and the curated music data 
 
 🔗 **Live Demo:** [https://magiccoai.github.io/my-music-universe/](https://magiccoai.github.io/my-music-universe/)
 
-## ✨ Key Features | 核心功能
+## ✨ Key Features | 核心亮点
 
-*   **🌌 3D Star Map (3D 星图):** Visualizing music tracks as interactive elements in a 3D space using React Three Fiber.
-*   **🎨 Atmospheric Themes (氛围主题):** Three immersive time-based themes (**Day**, **Evening**, **Night**) with multiple habitat scenes like **Cloud and Flying Dreams**, **Sunset Horizons**, **Aurora Skies**, and **Snow Mountains** to create a unique music listening environment.
-    *   在音乐封面宇宙页面中设置了**白昼**、**傍晚**、**深夜**三个主题，以及**云端飞翔之梦**、**落日余晖**、**极光星空**，以及**雪山**等多个致力于营造栖息地氛围的场景。
-*   **☁️ Word Cloud Galaxy (词云星系):** Dynamic word clouds showing the distribution of artists and music styles.
-*   **💫 Special Collection (特别收藏):** A curated, carousel-style showcase of memorable albums with detailed stories.
-*   **🎰 Music Randomizer (音乐随机选):** A fun, randomized way to pick an album to listen to.
-*   **📱 Responsive Design (响应式设计):** Optimized for both desktop and mobile experiences, with specific mobile orientation hints.
-*   **🎧 Immersive Audio (沉浸式音频):** Integrated music player with audio previews.
+*   **🌌 3D Star Map (3D 星图)**
+    *   *Visualizing music tracks as interactive celestial bodies in a 3D space.*
+    *   基于 React Three Fiber 构建的三维星图，将音乐曲目转化为可交互的星体，在虚拟空间中重构音乐检索体验。
+
+*   **🎨 Atmospheric Themes (氛围栖息地)**
+    *   *Immersive time-based themes featuring diverse habitat scenes—creating a resonant listening environment.*
+    *   沉浸式氛围主题。包含**白昼、傍晚、深夜**三个时间维度，并构建了**云端飞梦、落日余晖、极光星空、雪山**等“栖息地”场景，为音乐聆听营造独特的视听场域。
+
+*   **☁️ Word Cloud Galaxy (词云星系)**
+    *   *Dynamic visualization of musical preferences, mapping artist and genre distributions.*
+    *   动态可视化的听歌偏好分布，将艺术家与流派风格以星云形态直观呈现，一目了然地回顾音乐品味。
+
+*   **💫 Special Collection (特别收藏)**
+    *   *A curated carousel archiving significant albums and their accompanying narratives.*
+    *   以 3D 旋转木马形式存档具有特殊意义的专辑及其背后的记忆故事，打造个人情感的时间胶囊。
+
+*   **🎰 Music Randomizer (音乐随机选)**
+    *   *A serendipitous selector for music discovery, breaking decision paralysis.*
+    *   打破选择困难的随机播放机制，模拟老虎机交互，为重温旧专辑创造“不期而遇”的惊喜感。
+
+*   **📱 Responsive Design (多端适配)**
+    *   *Fully responsive architecture optimized for both desktop exploration and mobile interaction.*
+    *   全端响应式设计。针对桌面端与移动端差异化优化交互体验，并集成了设备方向自适应引导。
+
+
 
 ## 🛠️ Tech Stack | 技术栈
 
