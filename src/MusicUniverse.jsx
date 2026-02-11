@@ -544,7 +544,7 @@ const useAppHeight = () => {
   }, []);
 };
 
-const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlightedTag }) => {
+const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlightedTag, disableAmbientSound = false }) => {
   useAppHeight();
   const { musicData } = useMusicData();
   const { isConnectionsPageActive, universeState, setUniverseState } = useContext(UniverseContext);
@@ -905,8 +905,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
   return (
     <div 
-      className={`absolute inset-0 w-full h-full overflow-hidden m-0 p-0 ${currentTheme === 'evening' ? '' : themes[currentTheme]} ${isPending ? 'opacity-80 transition-opacity' : ''}`}
-      style={{ ...themeStyle }}
+      className={`absolute inset-0 w-full overflow-hidden m-0 p-0 ${currentTheme === 'evening' ? '' : themes[currentTheme]} ${isPending ? 'opacity-80 transition-opacity' : ''}`}
+      style={{ ...themeStyle, height: 'var(--app-height, 100vh)' }}
       role="main"
       aria-label="音乐宇宙三维可视化"
     >
@@ -915,10 +915,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
         <p>这是一个三维音乐专辑浏览界面。{isMobile ? '你可以通过触摸拖拽来浏览，双指缩放调整距离。' : '使用键盘方向键可以环绕浏览，空格键重置视角。'}</p>
       </div>
 
-      {ambientEnabled && (currentTheme === 'evening' || currentTheme === 'day') && <AmbientSound enabled={true} volume={ambientVolume} theme={currentTheme} />}
+      {ambientEnabled && !disableAmbientSound && (currentTheme === 'evening' || currentTheme === 'day') && <AmbientSound enabled={true} volume={ambientVolume} theme={currentTheme} />}
       {musicData.length > 0 && positionedMusicData.length > 0 && (
         <Canvas
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', touchAction: 'none', display: 'block' }} // 禁用浏览器默认触摸行为，使用绝对定位消除间隙
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'var(--app-height, 100vh)', touchAction: 'none', display: 'block' }} // 禁用浏览器默认触摸行为，使用绝对定位消除间隙
           camera={{ fov: 75, near: 0.1, far: 1000 }}
           className={`${isConnectionsPageActive && !highlightedTag ? 'filter blur-lg scale-90 transition-all duration-500' : 'transition-all duration-500'} music-universe-canvas`}
           // 移动端强制使用 1.0 DPR 以防止内存崩溃，尤其是纹理加载较多时
@@ -939,10 +939,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             rotateSpeed={0.5}
             enableZoom={!isWallMode}
             enablePan={!isWallMode}
-            minAzimuthAngle={isWallMode ? -Math.PI / 6 : ((currentTheme === 'night' && nightMode === 'aurora') || (currentTheme === 'day' && dayMode === 'normal') ? -Infinity : -Math.PI / 2)}
-            maxAzimuthAngle={isWallMode ? Math.PI / 8 : ((currentTheme === 'night' && nightMode === 'aurora') || (currentTheme === 'day' && dayMode === 'normal') ? Infinity : Math.PI / 2)}
-            minPolarAngle={isWallMode ? Math.PI / 3 : Math.PI / 4}
-            maxPolarAngle={isWallMode ? Math.PI / 2.2 : Math.PI / 1.5}
+            minAzimuthAngle={isWallMode ? -Math.PI / 6 : (currentTheme === 'night' || (currentTheme === 'day' && dayMode === 'normal') ? -Infinity : -Math.PI / 2)}
+            maxAzimuthAngle={isWallMode ? Math.PI / 8 : (currentTheme === 'night' || (currentTheme === 'day' && dayMode === 'normal') ? Infinity : Math.PI / 2)}
+            minPolarAngle={isWallMode ? Math.PI / 3 : (currentTheme === 'night' ? 0 : Math.PI / 4)}
+            maxPolarAngle={isWallMode ? Math.PI / 2.2 : (currentTheme === 'night' ? Math.PI : Math.PI / 1.5)}
             minDistance={8}
             maxDistance={60}
           />
@@ -1013,7 +1013,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
       <div className={`absolute z-50 transition-all duration-300 pointer-events-none ${isMobile ? 'inset-0' : 'bottom-4 right-4 flex flex-col items-end'}`}>
         <div className={`${isMobile ? 'w-full h-full' : 'flex items-center space-x-3 pointer-events-auto'}`}>
         {/* 主题切换组 */}
-        <div className={`${isMobile ? 'absolute bottom-8 landscape:bottom-4 left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
+        <div className={`${isMobile ? 'absolute bottom-[max(3rem,env(safe-area-inset-bottom))] landscape:bottom-auto landscape:top-20 left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
           {/* Snow Mountain Background Switcher */}
           {currentTheme === 'day' && dayMode === 'meadow' && (
             showBgMenu && (
@@ -1202,7 +1202,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
         </div>
         
         {/* 功能按钮组：移动端垂直排列，桌面端水平排列 */}
-        <div className={`${isMobile ? 'absolute bottom-24 landscape:bottom-8 right-4 flex flex-col space-y-3 pointer-events-auto' : 'flex items-center space-x-3'}`}>
+        <div className={`${isMobile ? 'absolute bottom-[max(7rem,env(safe-area-inset-bottom))] landscape:bottom-[max(2rem,env(safe-area-inset-bottom))] right-4 flex flex-col space-y-3 pointer-events-auto' : 'flex items-center space-x-3'}`}>
         
         {/* 傍晚主题调色板按钮 */}
         {currentTheme === 'evening' && (
