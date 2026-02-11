@@ -1255,8 +1255,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "法语经典/人生",
     "cover": "covers/99.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1383639&auto=0&height=66",
-    "previewSource": "netease"
+    "previewUrl": "https://soundcloud.com/user-930169578/gerard-darmon-and-the-winner-is-1",
+    "previewSource": "soundcloud"
   },
   {
     "id": 100,
@@ -3324,7 +3324,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "电子氛围/栖息",
     "cover": "covers/264.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=&auto=0&height=66"
+    "previewUrl": "https://soundcloud.com/danielcaesar/superposition-feat-john-mayer",
+    "previewSource": "soundcloud"
   },
   {
     "id": 265,
