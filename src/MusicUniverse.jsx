@@ -1013,7 +1013,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
       <div className={`absolute z-50 transition-all duration-300 pointer-events-none ${isMobile ? 'inset-0' : 'bottom-4 right-4 flex flex-col items-end'}`}>
         <div className={`${isMobile ? 'w-full h-full' : 'flex items-center space-x-3 pointer-events-auto'}`}>
         {/* 主题切换组 */}
-        <div className={`${isMobile ? 'absolute bottom-[max(3rem,env(safe-area-inset-bottom))] landscape:bottom-auto landscape:top-20 left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
+        <div className={`${isMobile ? 'absolute bottom-[max(3rem,env(safe-area-inset-bottom))] landscape:bottom-[max(2rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
           {/* Snow Mountain Background Switcher */}
           {currentTheme === 'day' && dayMode === 'meadow' && (
             showBgMenu && (

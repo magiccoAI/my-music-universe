@@ -25,6 +25,12 @@ data.json
 covers/
 
 # reports
+lighthouse-report.html
 lighthouse-reports/
 playwright-report/
 test-results/
+e2e/screenshots/
+actions_history.json
+npm_start_output.log
+check_itunes.js
+scripts/fetch_actions_analysis.js

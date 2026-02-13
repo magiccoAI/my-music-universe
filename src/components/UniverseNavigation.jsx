@@ -106,23 +106,23 @@ const UniverseNavigation = ({ className = '' }) => {
   // 移动端导航
   const MobileNavigation = () => (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[2000] bg-black/60 backdrop-blur-xl p-4 border-b border-white/10 transition-all duration-300 ${className}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-[2000] bg-black/60 backdrop-blur-xl p-4 landscape:p-2 border-b border-white/10 transition-all duration-300 ${className}`}>
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 no-underline group">
-            <Logo className="w-8 h-8 text-cyan-400 group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
-            <span className="text-white/90 text-lg font-bold tracking-wider font-sans group-hover:text-white transition-colors">Music Universe</span>
+            <Logo className="w-8 h-8 landscape:w-6 landscape:h-6 text-cyan-400 group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+            <span className="text-white/90 text-lg landscape:text-base font-bold tracking-wider font-sans group-hover:text-white transition-colors">Music Universe</span>
           </Link>
           <button 
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-white/80 p-2 hover:text-white transition-colors focus:outline-none relative z-[2001]"
+            className="text-white/80 p-2 landscape:p-1 hover:text-white transition-colors focus:outline-none relative z-[2001]"
             aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
           >
             {menuOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 landscape:w-5 landscape:h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 landscape:w-5 landscape:h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
             )}

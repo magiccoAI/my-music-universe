@@ -25,6 +25,10 @@ export const aboutContent = {
         也愿这里成为一个温暖的连接点——在<span className="text-sky-200 font-semibold">音乐的无界时空</span>中，愿你的每一次浏览，都能听到遥远的共鸣。
       </>
     ),
+    authorSection: {
+      title: "关于构建者",
+      content: "关于我，其实没有什么特定的标签。我不是职业程序员，也没什么响亮的头衔。就像我在 GitHub 上写的：我只是一个正在学习 AI 编程的新手，刚刚开始探索创造的乐趣。我不追求被定义，只着迷于将想象力转化为现实的过程。这个网站，就是我追寻 Creative Creation 的一次小小实践。如果这里的星光曾为你闪烁，那便是我最开心的事。"
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -52,6 +56,10 @@ export const aboutContent = {
         亦都希望呢度，可以成为一个温暖嘅连接点。喺<span className="text-sky-200 font-semibold">音乐呢个无边无际嘅时空</span>入面，愿你每一次浏览，都可以听到一阵远方嘅回响。
       </>
     ),
+    authorSection: {
+      title: "关于构建者",
+      content: "其实我冇咩特定嘅标签。我唔系职业程序员，亦冇咩响当当嘅头衔。就好似我喺 GitHub 上写嘅：我只系一个学紧 AI 编程嘅新手，刚刚开始探索创造嘅乐趣。我唔追求被定义，只系着迷于将想象力变成现实嘅过程。呢个网站，就系我追寻 Creative Creation 嘅一次小小实践。如果呢度嘅星光曾经为你闪烁，咁就系我最开心嘅事。"
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -79,6 +87,10 @@ export const aboutContent = {
         Puissiez-vous trouver ici un point de connexion. Dans le temps et l’espace sans frontières de la musique, que chaque visite fasse résonner un écho lointain.
       </>
     ),
+    authorSection: {
+      title: "À PROPOS DU CRÉATEUR",
+      content: "Je n'ai pas d'étiquette particulière, ni de titre ronflant. Je ne suis pas un développeur professionnel. Comme je l'ai écrit sur GitHub : je suis simplement un novice qui apprend à coder avec l'IA, explorant tout juste le plaisir de créer. Ce site est mon terrain de jeu pour poursuivre l'imagination et la « Création Créative ». Si une ligne de code ou une mélodie ici résonne en vous, c'est là notre plus belle connexion."
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -106,6 +118,10 @@ export const aboutContent = {
         Che questo luogo diventi anche per te un punto di connessione. Nel tempo e nello spazio senza confini della musica, che ogni visita possa far nascere una risonanza lontana.
       </>
     ),
+    authorSection: {
+      title: "SUL COSTRUTTORE",
+      content: "Non ho un'etichetta specifica, né sono un programmatore professionista. Come ho scritto su GitHub: sono semplicemente un principiante che sta imparando a programmare con l'IA, iniziando appena a esplorare il divertimento della creazione. Questo sito è il mio parco giochi per inseguire l'immaginazione. Non definisco chi sono; mi importa solo di ciò che posso creare. Se una stella qui ha brillato per te, questa è la mia gioia più grande."
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -133,6 +149,10 @@ export const aboutContent = {
         Ojalá este lugar sea también un punto de encuentro para ti. En el tiempo y el espacio sin fronteras de la música, que cada visita despierte una resonancia lejana.
       </>
     ),
+    authorSection: {
+      title: "SOBRE EL CREADOR",
+      content: "No tengo una etiqueta específica ni soy un programador profesional. Como dice mi biografía en GitHub: soy simplemente un novato aprendiendo a programar con IA, empezando a explorar la diversión de crear. Este sitio es mi patio de recreo para perseguir la imaginación. No busco definirme, solo me fascina el proceso de convertir la imaginación en realidad. Si alguna estrella aquí ha brillado para ti, esa es mi mayor alegría."
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -160,6 +180,10 @@ export const aboutContent = {
         也希望这里，能成为一个温暖个连接点。在<span className="text-sky-200 font-semibold">音乐这个没边没界个时空</span>里，愿侬每一趟来，都能听见一声远远个回响。
       </>
     ),
+    authorSection: {
+      title: "关于构建者",
+      content: "讲起来，我其实没啥特别个标签。我不是职业程序员，也没啥大名头。像我在 GitHub 上写个：我只是一个勒许学习 AI 编程个新手，刚刚开始探索创造个乐趣。我不追求被定义，只欢喜拿想象力变成现实个过程。个网站，就是我追寻 Creative Creation 个一次小小实践。如果此处个星光曾经为侬闪烁，那就是我顶开心个事体了。"
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -187,6 +211,10 @@ export const aboutContent = {
         Möge dieser Ort auch für dich ein Verbindungspunkt sein. Im grenzenlosen Raum und in der Zeit der Musik möge jeder Besuch eine ferne Resonanz hörbar machen.
       </>
     ),
+    authorSection: {
+      title: "ÜBER DEN ERBAUER",
+      content: "Ich habe kein bestimmtes Label und bin kein professioneller Programmierer. Wie in meiner GitHub-Bio steht: Ich bin einfach ein Neuling, der gerade lernt, mit KI zu programmieren, und den Spaß am Erschaffen entdeckt. Diese Website ist mein Spielplatz für Fantasie und „Creative Creation“. Ich definiere mich nicht darüber, wer ich bin, sondern darüber, was ich erschaffen kann. Wenn ein Stern hier für dich geleuchtet hat, ist das meine größte Freude."
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -214,6 +242,10 @@ export const aboutContent = {
         ここが、あなたにとってもひとつの接点になりますように。音楽という境界のない時空のなかで、訪れるたびに、遠くの共鳴が聞こえてきますように。
       </>
     ),
+    authorSection: {
+      title: "構築者について",
+      content: "私には特定の肩書きも、プロのプログラマーという称号もありません。GitHubに書いている通り、私は「AIプログラミングを学んでいる初心者」に過ぎず、創造の楽しさを探索し始めたばかりです。私は自分が何者であるか定義することよりも、想像力を現実に変えるプロセスに夢中です。このサイトは、私の「Creative Creation」への小さな実践です。もしここの星明かりがあなたのために瞬いたなら、それこそが私にとって最高の喜びです。"
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -241,6 +273,10 @@ export const aboutContent = {
         이 공간이 또한 연결과 공명의 장소가 되기를 바랍니다. 음악이라는 무한한 시간과 공간 속에서, 당신의 방문마다 먼 메아리가 울려 퍼지길 바랍니다.
       </>
     ),
+    authorSection: {
+      title: "제작자에 대하여",
+      content: "저에게는 특별한 라벨이 없습니다. 저는 전문 프로그래머도 아니고, 거창한 타이틀도 없습니다. GitHub에 적은 것처럼, 저는 그저 'AI 코딩을 배우고 있는 초보자'일 뿐이며, 이제 막 창작의 즐거움을 탐험하기 시작했습니다. 저는 제가 누구인지 정의하기보다, 상상력을 현실로 바꾸는 과정 그 자체에 매료되어 있습니다. 이 웹사이트는 저의 'Creative Creation'을 향한 작은 실천입니다. 만약 이곳의 별빛이 당신을 위해 반짝였다면, 그것이 저에게는 가장 큰 기쁨입니다."
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   },
@@ -269,6 +305,10 @@ export const aboutContent = {
         May this space be a place of connection and shared resonance. In this <span className="text-sky-200 font-semibold">boundless musical spacetime</span>, may your every visit find a distant echo.
       </>
     ),
+    authorSection: {
+      title: "ABOUT THE BUILDER",
+      content: "I have no specific label, nor am I a professional programmer. As stated in my GitHub bio: I am simply 'A newbie who is currently learning AI coding.' This website is my playground for pursuing imagination and creative creation. I don't define who I am; I only care about what I can create. If a line of code or a melody here resonates with you, that is the truest connection between us."
+    },
     imageCaption1: "STEP 1: RAW DATA COLLECTION",
     imageCaption2: "STEP 2: STRUCTURED JSON DATA"
   }

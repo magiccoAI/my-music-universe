@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import SpecialCollectionCSS from './SpecialCollection.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
 import useIsMobile from '../hooks/useIsMobile';
@@ -9,7 +8,7 @@ import AudioPreview from './AudioPreview';
 import useMusicData from '../hooks/useMusicData';
 
 function SpecialCollection({ isModalOpen, setIsModalOpen }) {
-  const { musicData: allMusicData, loading: isLoading, error } = useMusicData();
+  const { musicData: allMusicData } = useMusicData();
   const isMobile = useIsMobile();
   const orientation = useWindowOrientation();
   const [activeTab, setActiveTab] = useState('featured');
@@ -242,12 +241,7 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
   }, [isModalOpen, navigateImage, closeModal]);
 
 
-  const handleTabClick = (tab) => {
-    if (tab === 'fav') {
-      return;
-    }
-    setActiveTab(tab);
-  };
+
 
   const playAlbum = (album) => {
     if (album.url) {
@@ -300,6 +294,17 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
       padding: '20px',
       color: '#e6e6e6'
     }}>
+      <style>
+        {`
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          .vinyl-disc.spinning .vinyl-cover {
+            animation: spin 3s linear infinite;
+          }
+        `}
+      </style>
       
       {/* 黑胶展示区 - 保持不变 */}
       <div className="vinyl-showcase" style={{
@@ -341,7 +346,9 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
                   height: '150px',
                   margin: '0 auto 15px',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  borderRadius: '50%',
+                  boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)'
                 }}
               >
                 <div className="vinyl-cover" style={{
@@ -349,7 +356,6 @@ function SpecialCollection({ isModalOpen, setIsModalOpen }) {
                   height: '100%',
                   borderRadius: '50%',
                   overflow: 'hidden',
-                  boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)',
                   border: '3px solid rgba(255, 255, 255, 0.2)'
                 }}>
                   <img

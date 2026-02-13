@@ -320,6 +320,26 @@ const AboutPage = () => {
                 )}
             </div>
 
+            {/* Author Section */}
+            {t.authorSection && (
+                <div className="mt-12 pt-8 border-t border-sky-500/20 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    <h3 className="text-xl md:text-2xl font-bold text-sky-400 mb-6 font-mono tracking-wider flex items-center gap-3">
+                        <span className="text-2xl filter drop-shadow-[0_0_5px_rgba(14,165,233,0.5)]">🛠️</span>
+                        {t.authorSection.title}
+                    </h3>
+                    <div className="bg-sky-900/10 border border-sky-500/10 rounded-xl p-6 md:p-8 relative overflow-hidden group hover:bg-sky-900/20 transition-colors duration-500">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                            </svg>
+                        </div>
+                        <p className="leading-loose italic text-gray-300 relative z-10 font-light">
+                            {t.authorSection.content}
+                        </p>
+                    </div>
+                </div>
+            )}
+
             {/* Close Button (Bottom) */}
             <div className="mt-8 pt-6 border-t border-sky-500/20 flex justify-end">
               <button

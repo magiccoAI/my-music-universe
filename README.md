@@ -47,8 +47,8 @@ While the code is open source, the design philosophy and the curated music data 
     *   动态可视化的听歌偏好分布，将艺术家与流派风格以星云形态直观呈现，一目了然地回顾音乐品味。
 
 *   **💫 Special Collection (特别收藏)**
-    *   *A curated carousel archiving significant albums and their accompanying narratives.*
-    *   以 3D 旋转木马形式存档具有特殊意义的专辑及其背后的记忆故事，打造个人情感的时间胶囊。
+    *   *A curated visual gallery archiving significant albums and their accompanying narratives.*
+    *   以**交互式画廊**的形式，陈列那些具有特殊意义的专辑与记忆切片。这不仅是音乐的存档，更是封存个人情感的时间胶囊。
 
 *   **🎰 Music Randomizer (音乐随机选)**
     *   *A serendipitous selector for music discovery, breaking decision paralysis.*

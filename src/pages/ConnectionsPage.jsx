@@ -117,7 +117,7 @@ const ConnectionsPage = () => {
          
          {/* 2. 动态星空 (固定不随页面滚动) */}
          <div className="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none">
-           <MusicUniverse isInteractive={false} showNavigation={false} highlightedTag={selectedTag} />
+           <MusicUniverse isInteractive={false} showNavigation={false} highlightedTag={selectedTag} disableAmbientSound={true} />
          </div>
          
          {/* 3. 宇宙光晕 (Vignette) - 柔和暗角，聚焦中心 */}
@@ -132,12 +132,12 @@ const ConnectionsPage = () => {
           // =================================================================
           // 重新设计的标签选择区域 (Music Tags)
           // =================================================================
-          <div className="pt-8 min-h-[60vh] flex flex-col justify-center">
-            <div className="text-center mb-16 relative">
+          <div className="pt-8 landscape:pt-4 min-h-[60vh] landscape:min-h-0 flex flex-col justify-center">
+            <div className="text-center mb-16 landscape:mb-8 relative">
               {/* 标题背后的装饰光晕 */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
               
-              <h1 className="text-6xl font-black mb-6 bg-gradient-to-r from-purple-400 via-indigo-400 to-violet-500 bg-clip-text text-transparent tracking-widest drop-shadow-[0_0_15px_rgba(99,102,241,0.4)]">
+              <h1 className="text-6xl landscape:text-4xl font-black mb-6 landscape:mb-2 bg-gradient-to-r from-purple-400 via-indigo-400 to-violet-500 bg-clip-text text-transparent tracking-widest drop-shadow-[0_0_15px_rgba(99,102,241,0.4)]">
                 风格图谱
               </h1>
               <p className="text-slate-300/80 text-lg max-w-2xl mx-auto font-light tracking-wide">
@@ -211,7 +211,7 @@ const ConnectionsPage = () => {
               })}
             </div>
 
-            <div className="text-center mt-20">
+            <div className="text-center mt-20 landscape:mt-8 pb-8 landscape:pb-16">
                {sortedTags.length > 20 && (
                   <button
                     onClick={() => setIsExpanded(!isExpanded)}

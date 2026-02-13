@@ -150,7 +150,7 @@ const EveningThemeControl = ({ currentConfig, onConfigChange, onClose }) => {
   return (
     <div 
       ref={containerRef}
-      className="fixed left-4 top-1/2 -translate-y-1/2 z-50 w-72 bg-gray-900/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 text-white"
+      className="fixed left-4 top-1/2 -translate-y-1/2 landscape:top-16 landscape:translate-y-0 z-50 w-72 bg-gray-900/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 text-white landscape:max-h-[85vh] landscape:overflow-y-auto"
     >
       {/* 标题栏 */}
       <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">

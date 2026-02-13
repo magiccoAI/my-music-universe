@@ -9,8 +9,8 @@
     "url": "https://mp.weixin.qq.com/f/P-UimdNlkT5cUGt572dBAQ",
     "note": "纯音乐",
     "cover": "covers/1.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8f/9d/40/8f9d408d-700b-80f1-1551-22231dce4d47/mzaf_13851583824867375354.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl":"//music.163.com/outchain/player?type=2&id=1468084892&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 2,
@@ -22,8 +22,8 @@
     "url": "https://mp.weixin.qq.com/s/t4-qJuHb40agUJ5LtKai3w",
     "note": "美声交响乐",
     "cover": "covers/2.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/62/d4/fe/62d4feea-af7e-4ece-a2e3-2a8f5b6497de/mzaf_14666770710780726159.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1954876081&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 3,
@@ -47,8 +47,8 @@
     "url": "https://mp.weixin.qq.com/s/TLorSY7HhaKnPz3a64LeEQ",
     "note": "原声带",
     "cover": "covers/4.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/86/be/77/86be7735-015e-1431-0dc9-df237d98bd3d/mzaf_16714532692321104215.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1923643450&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 5,
@@ -60,8 +60,8 @@
     "url": "https://mp.weixin.qq.com/s/SJhu3zNtZg3Lw2n2NL4JHQ",
     "note": "Fav",
     "cover": "covers/5.png",
-    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/30/54/ca/3054caec-4771-8ce3-cbe5-7534411d9694/mzaf_14057272363233286069.plus.aac.p.m4a",
-    "previewSource": "itunes"
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=//music.163.com/outchain/player?type=2&id=420154482&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 6,
@@ -125,7 +125,8 @@
     "url": "https://mp.weixin.qq.com/s/OwCeJiF9d7MBbyabeZqWaQ",
     "note": "循环",
     "cover": "covers/10.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=2610886658&auto=0&height=66"
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/1c/4f/77/1c4f7775-3f8c-1434-9eab-fc2f0c2efe6c/mzaf_12960927753995080477.plus.aac.p.m4a",
+    "previewSource": "itunes"
   },
   {
     "id": 11,
