@@ -81,22 +81,32 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
     };
   }, [term, directUrl]);
 
-  // AutoPlay logic
+  // AutoPlay logic - Refactored to handle promise rejections
   useEffect(() => {
-      if (autoPlay && audioUrl && audioRef.current) {
-          const playPromise = audioRef.current.play();
-          if (playPromise !== undefined) {
-              playPromise
-                  .then(() => setIsPlaying(true))
-                  .catch(error => {
-                    if (error.name === 'AbortError') {
-                        // Ignore abort errors (component unmounted during load)
-                        return;
-                    }
-                    console.warn("Auto-play prevented:", error);
-                  });
-          }
+    // Only attempt to play if:
+    // 1. autoPlay is true
+    // 2. We have a valid audioUrl
+    // 3. The audio element is ready
+    // 4. It's NOT a third-party iframe (NetEase/SoundCloud handles their own autoplay via URL params)
+    const isThirdParty = (audioUrl && (audioUrl.includes('music.163.com') || audioUrl.includes('soundcloud.com')));
+    
+    if (autoPlay && audioUrl && audioRef.current && !isThirdParty) {
+      const playPromise = audioRef.current.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(error => {
+            // Auto-play was prevented. This is expected behavior in many browsers
+            // especially if the user hasn't interacted with the document yet.
+            // We just log it as a debug info, not a warning, to keep console clean.
+            // console.debug("Auto-play prevented by browser policy:", error);
+            setIsPlaying(false);
+          });
       }
+    }
   }, [audioUrl, autoPlay]);
 
   const isNetEase = audioUrl && audioUrl.includes('music.163.com/outchain/player');
@@ -176,10 +186,11 @@ const AudioPreview = ({ term, previewUrl: directUrl, isMobile, autoPlay = false,
                   height={iframeHeight}
                   src={finalIframeUrl}
                   title={isSoundCloud ? "SoundCloud Player" : "Netease Music Player"}
-                  onLoad={() => setIframeLoaded(true)}
-                  className={`transition-opacity duration-500 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
-                  scrolling="no"
-              ></iframe>
+                onLoad={() => setIframeLoaded(true)}
+                className={`transition-opacity duration-500 ${iframeLoaded ? 'opacity-100' : 'opacity-0'}`}
+                scrolling="no"
+                allow="autoplay; encrypted-media" // Add encrypted-media for DRM content
+            ></iframe>
 
               <div className="flex justify-between items-center px-2 pb-1">
                 <div className={`text-[10px] ${darkMode ? 'text-slate-500' : 'text-gray-300'}`}>

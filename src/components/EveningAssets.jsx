@@ -596,6 +596,23 @@ const MobileBoat = ({ position }) => {
          <coneGeometry args={[0.8, 1.8, 4]} />
          <meshStandardMaterial color="#f1f5f9" roughness={0.4} />
       </mesh>
+
+      {/* 🏮 春节氛围装饰：暖色小灯笼/光点 */}
+      {/* 船头挂饰 */}
+      <mesh position={[0, 0.8, 1.2]}>
+        <sphereGeometry args={[0.15, 8, 8]} />
+        <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={2} />
+      </mesh>
+      {/* 桅杆顶部微光 */}
+      <mesh position={[0, 3.6, 0.3]}>
+        <sphereGeometry args={[0.08, 8, 8]} />
+        <meshStandardMaterial color="#fbbf24" emissive="#fbbf24" emissiveIntensity={3} />
+      </mesh>
+      {/* 船尾暖灯 */}
+      <mesh position={[0, 0.9, -1.0]}>
+        <sphereGeometry args={[0.12, 8, 8]} />
+        <meshStandardMaterial color="#f97316" emissive="#f97316" emissiveIntensity={1.5} />
+      </mesh>
     </group>
   );
 };
@@ -616,24 +633,97 @@ const Mountains = () => {
   );
 };
 
-// 🏝️ 新增：微型孤岛/礁石组件
-const MiniIsland = ({ position }) => {
+// 🏝️ 新增：微型孤岛/礁石组件 -> 升级为 🏮 灯塔组件
+const Lighthouse = ({ position }) => {
+  const beamRef = useRef();
+
+  useFrame(({ clock }) => {
+    if (beamRef.current) {
+      // 💡 灯光旋转动画：每4秒一圈，模拟灯塔扫射
+      beamRef.current.rotation.y = -clock.getElapsedTime() * 1.5;
+    }
+  });
+
   return (
     <group position={position}>
-      {/* 礁石底座 */}
+      {/* 礁石基座 */}
       <mesh position={[0, -0.5, 0]} rotation={[0, Math.PI / 4, 0]}>
-        <cylinderGeometry args={[4, 5, 1.5, 6]} />
-        <meshStandardMaterial color="#1e293b" roughness={1} />
+        <cylinderGeometry args={[4, 5, 3, 7]} />
+        <meshStandardMaterial color="#1e293b" roughness={0.9} />
       </mesh>
-      {/* 旁边的小石块 */}
-      <mesh position={[3, -0.8, 2]} scale={[0.8, 0.5, 0.8]}>
-        <dodecahedronGeometry args={[1.5, 0]} />
-        <meshStandardMaterial color="#334155" roughness={1} />
+      
+      {/* 塔身 - 经典的红白相间 */}
+      <mesh position={[0, 2.5, 0]}>
+        <cylinderGeometry args={[1.2, 1.8, 6, 8]} />
+        <meshStandardMaterial color="#e2e8f0" roughness={0.6} />
       </mesh>
-      <mesh position={[-2, -0.9, -3]} scale={[0.6, 0.4, 0.6]} rotation={[1, 0, 1]}>
-        <dodecahedronGeometry args={[2, 0]} />
-        <meshStandardMaterial color="#0f172a" roughness={1} />
+      {/* 红色条纹装饰 */}
+      <mesh position={[0, 4, 0]}>
+         <cylinderGeometry args={[1.22, 1.28, 1, 8]} />
+         <meshStandardMaterial color="#ef4444" roughness={0.6} />
       </mesh>
+       <mesh position={[0, 1.5, 0]}>
+         <cylinderGeometry args={[1.45, 1.55, 1, 8]} />
+         <meshStandardMaterial color="#ef4444" roughness={0.6} />
+      </mesh>
+
+      {/* 顶部灯室 */}
+      <group position={[0, 6, 0]}>
+        {/* 平台 */}
+        <mesh position={[0, -0.2, 0]}>
+           <cylinderGeometry args={[2, 1.8, 0.4, 8]} />
+           <meshStandardMaterial color="#334155" roughness={0.8} />
+        </mesh>
+        
+        {/* 玻璃房 */}
+        <mesh position={[0, 0.8, 0]}>
+          <cylinderGeometry args={[1.2, 1.2, 1.6, 8, 1, true]} /> {/* 空心圆柱模拟玻璃 */}
+          <meshStandardMaterial 
+            color="#fef08a" 
+            transparent 
+            opacity={0.6} 
+            side={THREE.DoubleSide}
+            emissive="#fef08a"
+            emissiveIntensity={0.5}
+          />
+        </mesh>
+
+        {/* 屋顶 */}
+        <mesh position={[0, 2.2, 0]}>
+          <coneGeometry args={[1.8, 1.5, 8]} />
+          <meshStandardMaterial color="#0f172a" roughness={0.8} />
+        </mesh>
+
+        {/* 💡 旋转的光束 */}
+        <group ref={beamRef} position={[0, 0.8, 0]}>
+            {/* 光源核心 */}
+            <pointLight color="#fef08a" intensity={8} distance={40} decay={2} />
+            
+            {/* 实体化光束 - 两个方向 */}
+            <mesh position={[0, 0, 8]} rotation={[Math.PI/2, 0, 0]}>
+                <coneGeometry args={[3, 16, 32, 1, true]} /> 
+                <meshBasicMaterial 
+                    color="#fef08a" 
+                    transparent 
+                    opacity={0.15} 
+                    side={THREE.DoubleSide} 
+                    depthWrite={false} 
+                    blending={THREE.AdditiveBlending}
+                />
+            </mesh>
+             <mesh position={[0, 0, -8]} rotation={[-Math.PI/2, 0, 0]}>
+                <coneGeometry args={[3, 16, 32, 1, true]} /> 
+                <meshBasicMaterial 
+                    color="#fef08a" 
+                    transparent 
+                    opacity={0.1} 
+                    side={THREE.DoubleSide} 
+                    depthWrite={false} 
+                    blending={THREE.AdditiveBlending}
+                />
+            </mesh>
+        </group>
+      </group>
     </group>
   );
 };
@@ -871,7 +961,11 @@ const EveningAssets = ({ isMobile, config }) => {
 
       {/* 🏝️ 桌面端：树与帆船的意境组合 */}
       {isMobile ? (
-        <MobileBoat position={[15, -5.2, -25]} />
+        <>
+          <MobileBoat position={[15, -5.2, -25]} />
+          {/* 🏮 灯塔指引 - 放置在左侧海面近景，完全避开山脉，成为前景焦点 */}
+          <Lighthouse position={[-18, -4.5, -28]} />
+        </>
       ) : (
         <group position={[25, -5, -40]}>
           

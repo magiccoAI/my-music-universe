@@ -14,6 +14,8 @@ import logger from './utils/logger';
 import { UniverseContext } from './UniverseContext';
 import Cover from './components/Cover';
 import InfoCard from './components/InfoCard';
+import CameraFocusController from './components/CameraFocusController';
+import MobileInfoDrawer from './components/MobileInfoDrawer';
 const Stars = React.lazy(() => import('./components/StarsOnly'));
 const Clouds = React.lazy(() => import('./components/CloudsOnly'));
 const PaperPlanes = React.lazy(() => import('./components/PaperPlanes'));
@@ -1004,16 +1006,25 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
                 dimmed={highlightedTag && !data.tags.includes(highlightedTag)}
                 globalBrightness={currentTheme === 'evening' ? 0.85 : 1}
               />
-          ))}
-          {hoveredMusic && <InfoCard data={hoveredMusic.data} position={hoveredMusic.position} onClose={() => setHoveredMusic(null)} isMobile={isMobile} />}
+            ))}
+          <CameraFocusController target={hoveredMusic} isMobile={isMobile} />
+          {hoveredMusic && !isMobile && <InfoCard data={hoveredMusic.data} position={hoveredMusic.position} onClose={() => setHoveredMusic(null)} isMobile={isMobile} />}
         </Canvas>
+      )}
+
+      {/* 移动端专属抽屉：在 Canvas 之外渲染，覆盖在顶层 */}
+      {isMobile && hoveredMusic && (
+        <MobileInfoDrawer 
+          data={hoveredMusic.data} 
+          onClose={() => setHoveredMusic(null)} 
+        />
       )}
 
       {!wallpaperMode && (
       <div className={`absolute z-50 transition-all duration-300 pointer-events-none ${isMobile ? 'inset-0' : 'bottom-4 right-4 flex flex-col items-end'}`}>
         <div className={`${isMobile ? 'w-full h-full' : 'flex items-center space-x-3 pointer-events-auto'}`}>
         {/* 主题切换组 */}
-        <div className={`${isMobile ? 'absolute bottom-[max(3rem,env(safe-area-inset-bottom))] landscape:bottom-[max(2rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
+        <div className={`${isMobile ? 'absolute bottom-[max(2rem,env(safe-area-inset-bottom))] landscape:bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
           {/* Snow Mountain Background Switcher */}
           {currentTheme === 'day' && dayMode === 'meadow' && (
             showBgMenu && (
