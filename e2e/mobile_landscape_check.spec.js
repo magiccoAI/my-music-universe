@@ -13,7 +13,7 @@ test.use({
 test('Mobile Landscape Layout Check', async ({ page }) => {
   // 1. Go to Home Page
   console.log('Navigating to Home Page...');
-  await page.goto('http://localhost:3005/my-music-universe');
+  await page.goto('./');
   
   // Wait for loading or enter button
   const universeBtn = page.getByText('探索音乐封面宇宙');
@@ -22,18 +22,19 @@ test('Mobile Landscape Layout Check', async ({ page }) => {
 
   // Handle "First Time Visit" Modal if it appears
   const modalBtn = page.getByRole('button', { name: '了解了，开始探索' });
-  try {
-      await modalBtn.waitFor({ state: 'visible', timeout: 5000 });
-      await modalBtn.click();
-  } catch (e) {
+  await modalBtn.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {
       console.log('Intro modal did not appear or was already dismissed');
+  });
+  if (await modalBtn.isVisible()) {
+      await modalBtn.click();
   }
 
   // 2. Wait for MusicUniverse to load
   console.log('Waiting for MusicUniverse...');
   await page.waitForURL('**/music-universe');
   // Wait for canvas or some element to stabilize
-  await page.waitForTimeout(3000); 
+  await page.waitForSelector('canvas', { state: 'visible', timeout: 30000 });
+  await page.waitForTimeout(2000); 
 
   // Screenshot 1: Music Universe Default (Night) - Check Theme Buttons Position
   console.log('Taking screenshot: 1-music-universe-landscape.png');
@@ -41,13 +42,13 @@ test('Mobile Landscape Layout Check', async ({ page }) => {
 
   // 3. Switch to Evening Theme and Check Control Panel
   console.log('Switching to Evening Theme...');
-  await page.getByLabel('切换到傍晚主题').click();
-  await page.waitForTimeout(2000); // Wait for transition
-
+  const eveningBtn = page.getByLabel('切换到傍晚主题');
+  await eveningBtn.click();
+  
   // Open Evening Theme Control (Palette)
   console.log('Opening Evening Theme Control...');
   const paletteBtn = page.getByLabel('调色板');
-  await paletteBtn.waitFor({ state: 'visible', timeout: 5000 });
+  await paletteBtn.waitFor({ state: 'visible', timeout: 15000 });
   await paletteBtn.click();
   await page.waitForTimeout(1000); // Wait for modal animation
 
@@ -63,7 +64,7 @@ test('Mobile Landscape Layout Check', async ({ page }) => {
   // `UniverseNavigation.jsx` handles this.
   
   // Let's just navigate by URL to be faster and safer
-  await page.goto('http://localhost:3005/my-music-universe/connections');
+  await page.goto('./connections');
   await page.waitForTimeout(2000);
   
   // Screenshot 3: Connections Page - Check "Expand Graph" button

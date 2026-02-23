@@ -9,7 +9,7 @@ module.exports = defineConfig({
   workers: 1,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3005',
+    baseURL: 'http://localhost:3005/my-music-universe/',
     trace: 'on-first-retry',
     video: {
       mode: 'on', 
@@ -41,7 +41,7 @@ module.exports = defineConfig({
   ],
   webServer: {
     command: 'npx cross-env PORT=3005 npm start',
-    url: 'http://localhost:3005',
+    url: 'http://localhost:3005/my-music-universe/',
     reuseExistingServer: true,
     timeout: 120 * 1000,
   },

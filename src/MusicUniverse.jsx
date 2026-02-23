@@ -1247,10 +1247,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </button>
             
             {/* Tooltip 提示 */}
-            <div className="absolute bottom-full right-0 mb-3 w-32 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-32 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center whitespace-nowrap z-50">
                 <span className="font-bold block mb-1 text-sky-400">重置视角</span>
                 回到初始位置
-                <div className="absolute bottom-[-6px] right-5 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
+                <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
             </div>
         </div>
 
@@ -1268,10 +1268,10 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
             </button>
             
             {/* Tooltip 提示 */}
-            <div className="absolute bottom-full right-0 mb-3 w-48 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none backdrop-blur-sm border border-white/10 text-center z-50">
                 <span className="font-bold block mb-1 text-sky-400">沉浸模式</span>
                 隐藏所有界面元素，享受纯净的视觉体验。适合截图或作为动态壁纸。
-                <div className="absolute bottom-[-6px] right-5 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
+                <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900/90 transform rotate-45 border-r border-b border-white/10"></div>
             </div>
         </div>
 
@@ -1342,7 +1342,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
             {/* 仅在非移动端显示提示框，并增加延迟防止误触 */}
             {!isMobile && (
-              <div className="absolute bottom-full right-0 mb-3 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-500 backdrop-blur-sm border border-white/10 z-10">
+              <div className="absolute bottom-full right-0 mb-5 w-56 p-2 bg-gray-900/90 text-white text-xs rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-500 backdrop-blur-sm border border-white/10 z-50">
                   <div className="font-bold mb-1 text-emerald-400">环境声</div>
                   <div className="text-[11px] mb-2">
                     {currentTheme === 'day' ? '舒缓氛围背景音。' : '傍晚海浪与风的声景。'}

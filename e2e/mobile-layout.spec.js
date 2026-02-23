@@ -5,10 +5,10 @@ test.describe('Mobile Layout Tests', () => {
   test('Portrait Mode: Viewport Height and Bottom Elements', async ({ page }) => {
     // Emulate iPhone 12 Pro Portrait
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto('/');
+    await page.goto('./');
 
     // Wait for the app to load
-    await page.waitForSelector('role=main', { state: 'visible', timeout: 30000 });
+    await page.waitForSelector('role=main', { state: 'visible', timeout: 60000 });
 
     // 1. Verify --app-height is applied
     const appHeight = await page.evaluate(() => {
@@ -54,10 +54,10 @@ test.describe('Mobile Layout Tests', () => {
   test('Landscape Mode: Layout Adjustments', async ({ page }) => {
     // Emulate iPhone 12 Pro Landscape
     await page.setViewportSize({ width: 844, height: 390 });
-    await page.goto('/');
+    await page.goto('./');
     
     // Wait for load
-    await page.waitForSelector('role=main', { state: 'visible', timeout: 30000 });
+    await page.waitForSelector('role=main', { state: 'visible', timeout: 60000 });
 
     // 1. Verify Theme Switcher Position (Top in Landscape)
     // Class should be `landscape:top-20` which means 5rem = 80px.

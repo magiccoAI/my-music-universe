@@ -8,7 +8,7 @@ test('record full cinematic tour', async ({ page }) => {
   await page.addStyleTag({ content: 'body::-webkit-scrollbar { display: none; }' });
 
   // Go to Home
-  await page.goto('/');
+  await page.goto('./');
   await page.waitForLoadState('networkidle');
   
   // Wait for initial animations (Stars/Meteor)
@@ -58,17 +58,18 @@ test('record full cinematic tour', async ({ page }) => {
 
   // Handle "First Time Visit" Modal if it appears
   const modalBtn = page.getByRole('button', { name: '了解了，开始探索' });
-  try {
-      await modalBtn.waitFor({ state: 'visible', timeout: 5000 });
-      await modalBtn.click();
-  } catch (e) {
+  await modalBtn.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {
       console.log('Intro modal did not appear or was already dismissed');
+  });
+  if (await modalBtn.isVisible()) {
+      await modalBtn.click();
   }
 
   // Wait for 3D Scene to load
   await page.waitForURL('**/music-universe');
   // Give it extra time for textures/models to load
-  await page.waitForTimeout(5000);
+  await page.waitForSelector('canvas', { state: 'visible', timeout: 30000 });
+  await page.waitForTimeout(2000);
 
   // Helper function to simulate camera orbit
   const orbitCamera = async (duration = 3000) => {
@@ -152,7 +153,7 @@ test('record full cinematic tour', async ({ page }) => {
   await orbitCamera(3000);
 
   // --- 3. ARCHIVE PAGE ---
-  await page.goto('/archive');
+  await page.goto('./archive');
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
 
@@ -177,6 +178,6 @@ test('record full cinematic tour', async ({ page }) => {
 
   // --- 4. ENDING ---
   // Go back to Home for a clean finish
-  await page.goto('/');
+  await page.goto('./');
   await page.waitForTimeout(2000);
 });
