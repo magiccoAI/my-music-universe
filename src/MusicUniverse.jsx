@@ -1058,7 +1058,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
           {/* 白天模式子选项 */}
           {currentTheme === 'day' && (
-            <div className="absolute bottom-full left-0 mb-4 flex gap-2 z-20">
+            <div className={`absolute flex gap-2 z-20 ${isMobile ? 'bottom-full left-0 mb-4' : 'right-full top-1/2 -translate-y-1/2 mr-4'}`}>
               <div className="relative group">
                 <button
                   onClick={() => handleDayModeSelect('normal')}
@@ -1127,7 +1127,7 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
 
           {/* 夜晚模式子选项 */}
           {currentTheme === 'night' && (
-            <div className="absolute bottom-full right-0 mb-4 flex gap-2 z-20 justify-end">
+            <div className={`absolute flex gap-2 z-20 ${isMobile ? 'bottom-full right-0 mb-4 justify-end' : 'right-full top-1/2 -translate-y-1/2 mr-4'}`}>
               <div className="relative group">
                 <button
                   onClick={() => setNightMode('stars')}
