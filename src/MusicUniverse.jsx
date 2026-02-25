@@ -1025,37 +1025,8 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
         <div className={`${isMobile ? 'w-full h-full' : 'flex items-center space-x-3 pointer-events-auto'}`}>
         {/* 主题切换组 */}
         <div className={`${isMobile ? 'absolute bottom-[max(2rem,env(safe-area-inset-bottom))] landscape:bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 pointer-events-auto' : 'relative z-30'}`}>
-          {/* Snow Mountain Background Switcher */}
-          {currentTheme === 'day' && dayMode === 'meadow' && (
-            showBgMenu && (
-              <div className="absolute bottom-full left-0 mb-16 flex flex-col gap-1 z-20 bg-black/30 p-2 rounded-lg backdrop-blur-md border border-white/10 w-32">
-                <button
-                  type="button"
-                  onClick={() => setShowBgMenu(false)}
-                  className="text-left text-white/80 text-[10px] font-bold mb-1 pl-1 hover:text-white"
-                  title="隐藏菜单（再点一次🏔️按钮可打开）"
-                >
-                  切换背景
-                </button>
-                <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
-                  {SNOW_BACKGROUNDS.map((bg) => (
-                    <button
-                      key={bg.path}
-                      onClick={() => {
-                        setSnowBg(bg.path);
-                        setShowBgMenu(false);
-                      }}
-                      className={`text-left px-2 py-1 rounded text-[10px] transition-colors truncate ${snowBg === bg.path ? 'bg-white/90 text-black font-medium' : 'text-white/70 hover:bg-white/20'}`}
-                      title={bg.name}
-                    >
-                      {bg.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )
-          )}
-
+          {/* Snow Mountain Background Switcher - Moved inside button group */}
+          
           {/* 白天模式子选项 */}
           {currentTheme === 'day' && (
             <div className={`absolute flex gap-2 z-20 ${isMobile ? 'bottom-full left-0 mb-4' : 'right-full top-1/2 -translate-y-1/2 mr-4'}`}>
@@ -1111,6 +1082,37 @@ const MusicUniverse = ({ isInteractive = true, showNavigation = true, highlighte
               </div>
 
               <div className="relative group">
+                {/* Snow Background Menu */}
+                {dayMode === 'meadow' && showBgMenu && (
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 flex flex-col gap-1 z-50 bg-black/80 p-2 rounded-lg backdrop-blur-md border border-white/10 w-32 shadow-xl">
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setShowBgMenu(false); }}
+                      className="text-left text-white/80 text-[10px] font-bold mb-1 pl-1 hover:text-white"
+                      title="隐藏菜单"
+                    >
+                      切换背景
+                    </button>
+                    <div className="flex flex-col gap-1 max-h-48 overflow-y-auto custom-scrollbar">
+                      {SNOW_BACKGROUNDS.map((bg) => (
+                        <button
+                          key={bg.path}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSnowBg(bg.path);
+                            setShowBgMenu(false);
+                          }}
+                          className={`text-left px-2 py-1 rounded text-[10px] transition-colors truncate ${snowBg === bg.path ? 'bg-white/90 text-black font-medium' : 'text-white/70 hover:bg-white/20'}`}
+                          title={bg.name}
+                        >
+                          {bg.name}
+                        </button>
+                      ))}
+                    </div>
+                    {/* Arrow indicator */}
+                    <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-black/80 transform rotate-45 border-r border-b border-white/10"></div>
+                  </div>
+                )}
                 <button
                   onClick={() => handleDayModeSelect('meadow')}
                   className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 ${dayMode === 'meadow' ? 'bg-white text-green-400 shadow-lg scale-110' : 'bg-black/20 text-white/70 hover:bg-black/30 hover:text-white'}`}
