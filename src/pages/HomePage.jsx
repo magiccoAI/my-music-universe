@@ -5,9 +5,9 @@
 // 3) Simplified trailing meteor effect (example hook usage shown)
 // 4) Calmer color palette; subtle motion
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import StarBackground from '../components/StarBackground';
+// import StarBackground from '../components/StarBackground'; // Removed static import
 import NetEaseCloudMusicIconWebP from '../assets/icons/netcloud-icon.webp';
 import WeChatIconWebP from '../assets/icons/wechat-icon.webp';
 import NetEaseCloudMusicIconPng from '../assets/icons/netcloud-icon.png';
@@ -16,6 +16,9 @@ import useMeteorTrail from '../hooks/useMeteorTrail';
 import useIsMobile from '../hooks/useIsMobile';
 import useMusicData from '../hooks/useMusicData'; // 引入数据钩子用于预取
 import { aboutContent } from '../data/aboutContent';
+
+const StarBackground = React.lazy(() => import('../components/StarBackground')); // Lazy load
+const SnowBgImage = process.env.PUBLIC_URL + '/images/stars-snow.jpg';
 const DataJsonImage = process.env.PUBLIC_URL + '/images/data-json-id1.webp';
 const BasicTableImage = process.env.PUBLIC_URL + '/images/Basic Music Data Table.webp';
 
@@ -53,11 +56,13 @@ const HomePage = () => {
 
   // Defer heavy visual components
   useEffect(() => {
+    // 桌面端延迟 0.5s 显示 3D 背景，移动端不显示（或显示静态图）
+    // 对于移动端，这里其实 showBackground 也会变 true，但渲染逻辑里我们会拦截
     const timer = setTimeout(() => {
       setShowBackground(true);
-    }, 500); // 增加延迟，确保文字 LCP 优先渲染
+    }, isMobile ? 50 : 500); // 移动端可以快一点显示静态背景
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMobile]);
 
   const handleMusicUniverseClick = (e) => {
     e.preventDefault();
@@ -79,8 +84,23 @@ const HomePage = () => {
       className="relative min-h-screen w-full text-white overflow-x-hidden flex flex-col"
       onMouseMove={!isMobile ? handleMouseMove : undefined}
     >
-      {showBackground && <StarBackground starCount={isMobile ? 500 : 5000} />}
-      {!isMobile && <MeteorRenderer />}
+      {isMobile ? (
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center opacity-60"
+          style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/stars-snow.jpg)` }}
+        >
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-black/50 to-black" />
+        </div>
+      ) : (
+        <>
+          {showBackground && (
+            <Suspense fallback={<div className="fixed inset-0 bg-black -z-10" />}>
+              <StarBackground starCount={5000} />
+            </Suspense>
+          )}
+          <MeteorRenderer />
+        </>
+      )}
 
       {/* top nav */}
       <nav className="fixed top-0 left-0 right-0 z-20 py-3 backdrop-blur-md bg-black/20 flex justify-center items-center gap-8 md:gap-12 border-b border-white/5 transition-all duration-300">
