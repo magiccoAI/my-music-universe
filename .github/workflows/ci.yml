@@ -2,25 +2,32 @@ name: CI
 
 on:
   push:
-    branches: ["main", "master", "mobile-optimize", "feature/1029-mobile-cover-optimization"]
+    branches: ["main", "master", "develop", "feature/*"]
   pull_request:
-    branches: ["main", "master", "mobile-optimize", "feature/1029-mobile-cover-optimization"]
+    branches: ["main", "master", "develop"]
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
         cache: 'npm'
+        
     - name: Install dependencies
       run: npm ci
-    - name: Build
+      
+    - name: Lint Code
+      run: npm run lint
+      continue-on-error: true
+      
+    - name: Build Project
       run: npm run build
       env:
         REACT_APP_NODE_ENV: production

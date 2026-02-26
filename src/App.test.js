@@ -8,6 +8,7 @@ test('renders app layout with global background', () => {
       <App />
     </MemoryRouter>
   );
+  // eslint-disable-next-line testing-library/no-node-access
   const bgElement = document.querySelector('.global-background');
   expect(bgElement).toBeInTheDocument();
 });

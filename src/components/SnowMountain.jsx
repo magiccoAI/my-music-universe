@@ -165,50 +165,46 @@ const SnowGroundShader = {
       
       // Colors
       float ambientK = clamp(uAmbientIntensity, 0.0, 2.0);
-      vec3 snowBase = mix(vec3(1.0), uShadowColor, 0.55) * (0.25 + 0.75 * ambientK);
+      // Reduce base white to prevent blowout (realistic snow albedo is high but not 1.0)
+      vec3 snowAlbedo = vec3(0.9, 0.92, 0.95); 
+      
+      // Ambient/Shadow Color - cool tint in shadows
+      vec3 ambientColor = mix(snowAlbedo, uShadowColor, 0.4) * (0.3 + 0.5 * ambientK);
       
       // Alpenglow Logic (日照金山)
       // Mask logic: High elevation + Far distance + Facing sun
       // vElevation is local Z height (0 to ~30)
-      // vPos.z is World Z depth (Camera at +12, background at -Z)
       
       // Strict height mask for "Golden Line" effect (only the peaks)
       float heightMask = smoothstep(18.0, 30.0, vElevation); 
       
       // Fix smoothstep order: edge0 must be < edge1
-      // We want 1.0 at far back (Z < -50) and 0.0 at near (Z > 0)
-      // vPos.z ranges from +100 to -100.
       float distMask = 1.0 - smoothstep(-90.0, -20.0, vPos.z); 
       
-      float slopeMask = smoothstep(0.7, 1.0, normal.y);     // Optional: Slope check, but normal.y is Up. Vertical faces are lower.
+      float alpenglow = pow(heightMask * distMask, 3.0);
       
-      float alpenglow = heightMask * distMask;
-      alpenglow = pow(alpenglow, 3.0); // Sharpen curve to confine to top edge
+      // Base Diffuse (Sunlight)
+      float baseIntensity = min(uSunIntensity, 1.2);
+      vec3 baseDiffuse = snowAlbedo * uSunColor * baseIntensity;
       
-      // Base Diffuse is White (Neutral)
-      // Cap base intensity to prevent blinding white snow in center
-      float baseIntensity = min(uSunIntensity, 1.1);
-      vec3 baseDiffuse = vec3(1.0) * baseIntensity;
-      
-      // Warm Glow Diffuse (Gold)
-      // Reduced multiplier to avoid overexposure
-      vec3 warmDiffuse = uSunColor * (uSunIntensity * 1.1);
+      // Warm Glow Diffuse (Gold) for Alpenglow
+      vec3 warmDiffuse = vec3(1.0, 0.65, 0.3) * (uSunIntensity * 1.5);
       
       // Mix them based on Alpenglow mask
-      vec3 effectiveSunColor = mix(baseDiffuse, warmDiffuse, alpenglow);
+      vec3 effectiveSunLight = mix(baseDiffuse, warmDiffuse, alpenglow);
       
-      // Mix Base
-      vec3 finalColor = snowBase + effectiveSunColor * directLight;
+      // Mix Base: Ambient + Diffuse * ShadowMask
+      vec3 finalColor = ambientColor + effectiveSunLight * directLight;
       
-      // Add texture detail (Snow grain)
+      // Add texture detail (Snow grain) - make it subtle
       vec4 texColor = texture2D(uTexture, vUv * 15.0);
-      finalColor *= (0.8 + texColor.r * 0.4);
+      finalColor *= (0.85 + texColor.r * 0.3);
       
       // Add Sparkles (White/Gold)
-      finalColor += sparkle * vec3(1.0, 0.9, 0.8) * 0.5;
+      finalColor += sparkle * vec3(1.0, 0.95, 0.9) * 0.6;
       
-      // Add Rim (Gold glowing edge) - Keep this warm for beauty
-      finalColor += rimIntensity * uSunColor * 0.35 * uSunIntensity;
+      // Add Rim (Gold glowing edge)
+      finalColor += rimIntensity * uSunColor * 0.25 * uSunIntensity;
 
       // Distance fog
       float dist = length(vPos.xy);
@@ -285,11 +281,11 @@ const ChristmasTree = ({ scale = 1, isMobile = false }) => {
     {/* Snow on top */}
     <mesh position={[0, 1.75, 0.05]} rotation={[-0.1,0,0]}>
        <coneGeometry args={[0.72, 0.4, segments]} />
-       <meshStandardMaterial color="#fff" roughness={1} />
+       <meshStandardMaterial color="#f2f4f6" roughness={1} />
     </mesh>
      <mesh position={[0, 1.15, 0.08]} rotation={[-0.1,0,0]}>
        <coneGeometry args={[1.12, 0.4, segments]} />
-       <meshStandardMaterial color="#fff" roughness={1} />
+       <meshStandardMaterial color="#f2f4f6" roughness={1} />
     </mesh>
   </group>
 );
@@ -399,13 +395,13 @@ const Snowman = ({ position, scale = 1, rotation = [0, 0, 0], scarfColor = "#ff4
       {/* Body Snowball */}
       <mesh position={[0, 1.0, 0]} castShadow receiveShadow>
         <sphereGeometry args={[1.1, sphereSegments, sphereSegments]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.5} />
+        <meshStandardMaterial color="#f2f4f6" roughness={0.9} />
       </mesh>
 
       {/* Head Snowball (Big & Cute) */}
       <mesh position={[0, 2.4, 0]} castShadow receiveShadow>
         <sphereGeometry args={[0.85, sphereSegments, sphereSegments]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.5} />
+        <meshStandardMaterial color="#f2f4f6" roughness={0.9} />
       </mesh>
 
       {/* --- Face --- */}
@@ -459,13 +455,13 @@ const Snowman = ({ position, scale = 1, rotation = [0, 0, 0], scarfColor = "#ff4
          {/* Left Arm */}
          <mesh position={[-1.05, 0, 0]} rotation={[0, 0, 2.0]} castShadow>
             <capsuleGeometry args={[0.2, 0.8, 4, smallSphereSegments]} />
-            <meshStandardMaterial color="#ffffff" roughness={0.5} />
+            <meshStandardMaterial color="#f2f4f6" roughness={0.9} />
          </mesh>
          
          {/* Right Arm */}
          <mesh position={[1.05, 0, 0]} rotation={[0, 0, -2.0]} castShadow>
             <capsuleGeometry args={[0.2, 0.8, 4, smallSphereSegments]} />
-            <meshStandardMaterial color="#ffffff" roughness={0.5} />
+            <meshStandardMaterial color="#f2f4f6" roughness={0.9} />
          </mesh>
       </group>
 

@@ -106,7 +106,7 @@ const Snowfall = ({ count = 1000 }) => {
   return (
     <instancedMesh ref={mesh} args={[null, null, count]}>
       <sphereGeometry args={[1, 8, 8]} />
-      <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
+      <meshBasicMaterial color="#e0f2fe" transparent opacity={0.7} />
     </instancedMesh>
   );
 };

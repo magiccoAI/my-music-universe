@@ -1,52 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { DevicePhoneMobileIcon, XMarkIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import useIsMobile from '../hooks/useIsMobile';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { DevicePhoneMobileIcon, XMarkIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+// import useIsMobile from '../hooks/useIsMobile';
+// import { useLocation } from 'react-router-dom';
 
 const OrientationHint = () => {
-  const isMobile = useIsMobile();
-  const location = useLocation();
-  const [isPortrait, setIsPortrait] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [isWeChat, setIsWeChat] = useState(false);
+  // const isMobile = useIsMobile();
+  // const location = useLocation();
+  // const [isPortrait, setIsPortrait] = useState(false);
+  // const [isVisible, setIsVisible] = useState(true);
+  // const [isWeChat, setIsWeChat] = useState(false);
 
-  useEffect(() => {
-    // 检测是否为微信浏览器
-    const ua = navigator.userAgent.toLowerCase();
-    setIsWeChat(ua.includes('micromessenger'));
+  // useEffect(() => {
+  //   // 检测是否为微信浏览器
+  //   const ua = navigator.userAgent.toLowerCase();
+  //   setIsWeChat(ua.includes('micromessenger'));
 
-    const checkOrientation = () => {
-      // 简单判断：高度大于宽度即为竖屏
-      setIsPortrait(window.innerHeight > window.innerWidth);
-    };
+  //   const checkOrientation = () => {
+  //     // 简单判断：高度大于宽度即为竖屏
+  //     setIsPortrait(window.innerHeight > window.innerWidth);
+  //   };
 
-    checkOrientation();
-    window.addEventListener('resize', checkOrientation);
-    return () => window.removeEventListener('resize', checkOrientation);
-  }, []);
+  //   checkOrientation();
+  //   window.addEventListener('resize', checkOrientation);
+  //   return () => window.removeEventListener('resize', checkOrientation);
+  // }, []);
 
-  // 只在音乐宇宙相关页面显示
-  const isMusicUniverse = location.pathname.startsWith('/music-universe');
+  // // 只在音乐宇宙相关页面显示
+  // const isMusicUniverse = location.pathname.startsWith('/music-universe');
 
-  // 进入该页面时重置显示状态 (如果之前被自动关闭了，重新进入应该再次提醒)
-  useEffect(() => {
-    if (isMusicUniverse) {
-      setIsVisible(true);
-    }
-  }, [isMusicUniverse]);
+  // // 进入该页面时重置显示状态 (如果之前被自动关闭了，重新进入应该再次提醒)
+  // useEffect(() => {
+  //   if (isMusicUniverse) {
+  //     setIsVisible(true);
+  //   }
+  // }, [isMusicUniverse]);
 
-  // 自动隐藏逻辑：8秒后自动消失
-  useEffect(() => {
-    if (isVisible && isMusicUniverse) {
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-      }, 8000);
-      return () => clearTimeout(timer);
-    }
-  }, [isVisible, isMusicUniverse]);
+  // // 自动隐藏逻辑：8秒后自动消失
+  // useEffect(() => {
+  //   if (isVisible && isMusicUniverse) {
+  //     const timer = setTimeout(() => {
+  //       setIsVisible(false);
+  //     }, 8000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [isVisible, isMusicUniverse]);
 
   // 如果不是移动端、或者不在音乐宇宙页面、或者不可见，则不渲染
+  // User feedback: "I worry that reminding mobile users to browse in landscape mode right from the start might not be the best browsing effect"
+  // So we disable this hint for now.
+  return null;
+
+  /*
   if (!isMobile || !isMusicUniverse || !isVisible) {
     return null;
   }
@@ -68,10 +73,8 @@ const OrientationHint = () => {
       >
         <div className="pointer-events-auto backdrop-blur-md border border-white/20 bg-black/60 text-white rounded-full p-3 pl-4 shadow-2xl flex items-center gap-4 relative overflow-hidden group transition-all duration-300">
           
-          {/* 动态背景光效 */}
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-          {/* 图标区 */}
           <div className="relative shrink-0 flex items-center justify-center">
              <motion.div
                 animate={{ rotate: [0, 90, 90, 0] }}
@@ -87,7 +90,6 @@ const OrientationHint = () => {
               </motion.div>
           </div>
 
-          {/* 文本内容 */}
           <div className="flex-1 min-w-0 flex flex-col justify-center">
             <h4 className="font-medium text-sm text-sky-100 whitespace-nowrap">
               建议横屏浏览
@@ -108,6 +110,7 @@ const OrientationHint = () => {
       </motion.div>
     </AnimatePresence>
   );
+  */
 };
 
 export default OrientationHint;

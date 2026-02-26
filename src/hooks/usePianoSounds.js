@@ -29,11 +29,17 @@ const usePianoSounds = () => {
 
   const audioContextRef = useRef(null);
   const audioBuffers = useRef({});
+  const loadedCount = useRef(0);
 
   const loadAudioOnDemand = useCallback(async (soundFile) => {
     if (!audioContextRef.current) {
-      logger.error("AudioContext not initialized. Cannot load audio.");
-      return null;
+      // Initialize AudioContext if not already done (lazy init)
+       try {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        logger.error("AudioContext is not supported on this browser.", e);
+        return null;
+      }
     }
 
     // If the audio is already buffered, return it.
@@ -50,6 +56,7 @@ const usePianoSounds = () => {
       const arrayBuffer = await response.arrayBuffer();
       const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
       audioBuffers.current[soundFile] = audioBuffer; // Cache the buffer
+      loadedCount.current += 1;
       return audioBuffer;
     } catch (error) {
       logger.error(`Failed to load or decode audio: ${soundFile}`, error);
@@ -69,13 +76,6 @@ const usePianoSounds = () => {
   }, []);
 
   const playPianoSound = useCallback(async (index) => {
-    if (!audioContextRef.current) return;
-
-    // 恢复音频上下文
-    if (audioContextRef.current.state === 'suspended') {
-      await audioContextRef.current.resume();
-    }
-
     let soundFile;
     if (index === undefined) {
       // Weighted random selection
@@ -89,7 +89,12 @@ const usePianoSounds = () => {
     }
 
     const audioBuffer = await loadAudioOnDemand(soundFile);
-    if (!audioBuffer) return;
+    if (!audioBuffer || !audioContextRef.current) return;
+
+    // 恢复音频上下文
+    if (audioContextRef.current.state === 'suspended') {
+      await audioContextRef.current.resume();
+    }
 
     try {
       const source = audioContextRef.current.createBufferSource();
@@ -122,24 +127,19 @@ const usePianoSounds = () => {
 
   const isSoundLoaded = useCallback((index) => {
     const soundFile = pianoSoundFiles[index % pianoSoundFiles.length];
-    return !!pianoSounds.current[soundFile];
+    return !!audioBuffers.current[soundFile];
   }, [pianoSoundFiles]);
 
   const cleanup = useCallback(() => {
     console.log('Cleaning up piano sounds...');
     
-    // 停止所有播放中的音频
-    Object.values(pianoSounds.current).forEach(audio => {
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-        // 注意：不要移除 src，这会导致错误
-      }
-    });
+    if (audioContextRef.current) {
+      audioContextRef.current.close().catch(e => console.error("Error closing AudioContext:", e));
+      audioContextRef.current = null;
+    }
     
-    // 重置状态
-    pianoSounds.current = {};
-    audioLoadPromises.current = {};
+    // Reset state
+    audioBuffers.current = {};
     loadedCount.current = 0;
   }, []);
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 self.onmessage = function(e) {
   // Worker logic will go here
   // For now, we'll just acknowledge the message

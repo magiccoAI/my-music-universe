@@ -49,6 +49,7 @@
   "scripts": {
     "start": "craco start",
     "fix-deps": "node scripts/fix-dependencies.js",
+    "lint": "eslint src",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "reset": "npm run clean-install && npm run build",
     "test": "craco test",

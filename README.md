@@ -56,7 +56,7 @@ While the code is open source, the design philosophy and the curated music data 
 
 *   **📱 Responsive Design (多端适配)**
     *   *Fully responsive architecture optimized for both desktop exploration and mobile interaction.*
-    *   全端响应式设计。针对桌面端与移动端差异化优化交互体验，并集成了设备方向自适应引导。
+    *   全端响应式设计。针对桌面端与移动端差异化优化交互体验。
 
 
 

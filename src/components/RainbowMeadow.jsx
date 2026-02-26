@@ -947,70 +947,128 @@ const Fish = ({ initialAngle, radius, speed, y, phase, color, scale }) => {
   );
 };
 
-const LowPolyCat = ({ position, rotation, scale = 1, color = "#333333" }) => {
+const VividCat = ({ position, rotation, scale = 1, color = "#222" }) => {
   const group = useRef();
+  const headRef = useRef();
   const tailRef = useRef();
-
+  const leftEyeRef = useRef();
+  const rightEyeRef = useRef();
+  
+  // Use ref for animation state to avoid re-renders
+  const blinkState = useRef({ isBlinking: false, timer: 0 });
+  
   useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    
+    // Breathing/Idle Body Movement
     if (group.current) {
-      // Breathing
-      group.current.scale.y = scale * (1 + Math.sin(state.clock.elapsedTime * 2) * 0.02);
+      // Bob up and down slightly
+      group.current.position.y = position[1] + Math.sin(t * 1.5) * 0.05 * scale;
+      // Subtle rocking
+      group.current.rotation.z = rotation[2] + Math.sin(t * 1) * 0.02; 
     }
+    
+    // Tail Sway - Compound sine waves for natural fluidity
     if (tailRef.current) {
-      // Tail sway
-      tailRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 3) * 0.2;
+      tailRef.current.rotation.z = Math.sin(t * 3) * 0.3 + Math.sin(t * 1) * 0.1;
+      tailRef.current.rotation.y = Math.cos(t * 2) * 0.2;
     }
+    
+    // Head Animation - Looking around naturally
+    if (headRef.current) {
+      // Look left/right slowly with some randomness
+      headRef.current.rotation.y = Math.sin(t * 0.5) * 0.3 + Math.sin(t * 0.1) * 0.2; 
+      // Subtle nod
+      headRef.current.rotation.x = Math.sin(t * 1.2) * 0.05; 
+    }
+
+    // Blinking logic using refs
+    if (!blinkState.current.isBlinking) {
+      if (Math.random() > 0.995) {
+        blinkState.current.isBlinking = true;
+        blinkState.current.timer = t;
+      }
+    } else {
+      // Blink duration ~0.15s
+      if (t - blinkState.current.timer > 0.15) {
+        blinkState.current.isBlinking = false;
+      }
+    }
+    
+    const eyeScale = blinkState.current.isBlinking ? 0.1 : 1;
+    if (leftEyeRef.current) leftEyeRef.current.scale.y = THREE.MathUtils.lerp(leftEyeRef.current.scale.y, eyeScale, 0.4);
+    if (rightEyeRef.current) rightEyeRef.current.scale.y = THREE.MathUtils.lerp(rightEyeRef.current.scale.y, eyeScale, 0.4);
   });
+
+  const bodyColor = color;
+  const eyeColor = "#FFFF00"; // Yellow eyes
+  const noseColor = "#FFC0CB"; // Pink nose
 
   return (
     <group ref={group} position={position} rotation={rotation} scale={[scale, scale, scale]}>
-       {/* Body */}
-       <mesh position={[0, 0.25, 0]}>
-         <boxGeometry args={[0.4, 0.4, 0.7]} />
-         <meshStandardMaterial color={color} roughness={0.8} />
-       </mesh>
+      {/* Body - Rounded Capsule */}
+      <mesh position={[0, 0.35, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
+        <capsuleGeometry args={[0.25, 0.6, 4, 8]} />
+        <meshStandardMaterial color={bodyColor} roughness={0.7} />
+      </mesh>
 
-       {/* Head */}
-       <mesh position={[0, 0.55, 0.45]}>
-         <boxGeometry args={[0.35, 0.35, 0.35]} />
-         <meshStandardMaterial color={color} roughness={0.8} />
-       </mesh>
+      {/* Head Group */}
+      <group ref={headRef} position={[0, 0.75, 0.45]}>
+        {/* Head Shape */}
+        <mesh scale={[1, 0.85, 0.9]} castShadow receiveShadow>
+          <sphereGeometry args={[0.26, 16, 16]} />
+          <meshStandardMaterial color={bodyColor} roughness={0.7} />
+        </mesh>
 
-       {/* Ears */}
-       <mesh position={[0.1, 0.75, 0.45]} rotation={[0, 0, 0.2]}>
-          <coneGeometry args={[0.08, 0.2, 4]} />
-          <meshStandardMaterial color={color} roughness={0.8} />
-       </mesh>
-       <mesh position={[-0.1, 0.75, 0.45]} rotation={[0, 0, -0.2]}>
-          <coneGeometry args={[0.08, 0.2, 4]} />
-          <meshStandardMaterial color={color} roughness={0.8} />
-       </mesh>
+        {/* Ears */}
+        <mesh position={[0.12, 0.22, 0]} rotation={[0, 0, 0.25]} castShadow>
+          <coneGeometry args={[0.08, 0.25, 16]} />
+          <meshStandardMaterial color={bodyColor} />
+        </mesh>
+        <mesh position={[-0.14, 0.22, 0]} rotation={[0, 0, -0.25]} castShadow>
+          <coneGeometry args={[0.08, 0.25, 16]} />
+          <meshStandardMaterial color={bodyColor} />
+        </mesh>
+        
+        {/* Eyes */}
+        <mesh ref={leftEyeRef} position={[0.1, 0.05, 0.22]} rotation={[0.1, 0.2, 0]}>
+          <sphereGeometry args={[0.035, 16, 16]} />
+          <meshStandardMaterial color={eyeColor} emissive={eyeColor} emissiveIntensity={0.6} />
+        </mesh>
+        <mesh ref={rightEyeRef} position={[-0.1, 0.05, 0.22]} rotation={[0.1, -0.2, 0]}>
+          <sphereGeometry args={[0.035, 16, 16]} />
+          <meshStandardMaterial color={eyeColor} emissive={eyeColor} emissiveIntensity={0.6} />
+        </mesh>
+        
+        {/* Nose */}
+        <mesh position={[0, -0.02, 0.25]}>
+          <sphereGeometry args={[0.015, 8, 8]} />
+          <meshStandardMaterial color={noseColor} />
+        </mesh>
+      </group>
 
-       {/* Legs */}
-       <mesh position={[0.12, 0.1, 0.25]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.2]} />
-          <meshStandardMaterial color={color} />
-       </mesh>
-       <mesh position={[-0.12, 0.1, 0.25]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.2]} />
-          <meshStandardMaterial color={color} />
-       </mesh>
-       <mesh position={[0.12, 0.1, -0.25]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.2]} />
-          <meshStandardMaterial color={color} />
-       </mesh>
-       <mesh position={[-0.12, 0.1, -0.25]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.2]} />
-          <meshStandardMaterial color={color} />
-       </mesh>
+      {/* Legs */}
+      {[
+        [0.15, 0.15, 0.2], [-0.15, 0.15, 0.2], // Front
+        [0.15, 0.15, -0.2], [-0.15, 0.15, -0.2] // Back
+      ].map((pos, i) => (
+        <mesh key={i} position={pos} castShadow>
+          <capsuleGeometry args={[0.07, 0.35, 4, 8]} />
+          <meshStandardMaterial color={bodyColor} />
+        </mesh>
+      ))}
 
-       {/* Tail */}
-       <group ref={tailRef} position={[0, 0.35, -0.35]}>
-         <mesh rotation={[0.5, 0, 0]} position={[0, 0.15, 0]}>
-           <cylinderGeometry args={[0.04, 0.04, 0.4]} />
-           <meshStandardMaterial color={color} />
+      {/* Tail - Curved Group */}
+      <group ref={tailRef} position={[0, 0.45, -0.3]}>
+         <mesh rotation={[-0.5, 0, 0]} position={[0, 0.1, -0.1]} castShadow>
+           <capsuleGeometry args={[0.05, 0.4, 4, 8]} />
+           <meshStandardMaterial color={bodyColor} />
          </mesh>
-       </group>
+         <mesh rotation={[0.2, 0, 0]} position={[0, 0.35, -0.25]} castShadow>
+            <sphereGeometry args={[0.05, 8, 8]} />
+            <meshStandardMaterial color={bodyColor} />
+         </mesh>
+      </group>
     </group>
   );
 };
@@ -1084,8 +1142,14 @@ const MeadowAnimals = () => {
   return (
     <group>
        {/* Cats */}
-       <LowPolyCat position={[48, -14.8, 20]} rotation={[0, -Math.PI / 4, 0]} scale={1.5} color="#333333" />
-       <LowPolyCat position={[52, -14.8, 18]} rotation={[0, -Math.PI / 3, 0]} scale={1.2} color="#FFFFFF" />
+       {/* Black Cat - Leader */}
+       <VividCat position={[48, -14.8, 20]} rotation={[0, -Math.PI / 4, 0]} scale={1.5} color="#1a1a1a" />
+       
+       {/* White Cat - Elegant */}
+       <VividCat position={[52, -14.8, 18]} rotation={[0, -Math.PI / 3, 0]} scale={1.2} color="#FFFFFF" />
+       
+       {/* Orange Cat - Playful */}
+       <VividCat position={[50, -14.8, 24]} rotation={[0, Math.PI / 6, 0]} scale={1.35} color="#FF9933" />
 
        {/* Rabbits */}
        <LowPolyRabbit position={[-50, -14.8, 30]} rotation={[0, Math.PI / 2, 0]} scale={1.0} />

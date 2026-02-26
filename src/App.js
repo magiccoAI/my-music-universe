@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { UniverseProvider } from './UniverseContext';
 import { LoadingScreen } from './components/LoadingScreen';
 import { GlobalSuspenseFallback } from './components/GlobalSuspenseFallback';
-import OrientationHint from './components/OrientationHint';
 import { motion, AnimatePresence } from 'framer-motion';
 import UniverseNavigation from './components/UniverseNavigation'; // 导入导航组件
 import './transitions.css';
@@ -72,9 +71,6 @@ function App() {
 
       {/* 全局渐变背景层 */}
       <div className="global-background"></div>
-      
-      {/* 移动端横屏提示 */}
-      <OrientationHint />
       
       {/* 2. 主应用内容 */}
       <div className={`App transition-all duration-700 ease-out ${isInitialLoading ? 'opacity-0 scale-[0.98] blur-sm' : 'opacity-100 blur-0'}`}>
