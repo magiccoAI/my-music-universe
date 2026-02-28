@@ -1295,7 +1295,8 @@
     "url": "https://mp.weixin.qq.com/s/dY4jwIfg5YF3NB1qBuDXlg",
     "note": "爵士/欢快",
     "cover": "covers/102.png",
-    "previewUrl": ""
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=562502983&auto=0&height=66",
+    "previewSource": "netease"
   },
   {
     "id": 103,
@@ -1665,8 +1666,8 @@
     "url": "https://mp.weixin.qq.com/s/-X16PJHUJ1k5QTs7lSxArQ",
     "note": "经典！林肯",
     "cover": "covers/131.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=16686386&auto=0&height=66",
-    "previewSource": "netease"
+    "previewUrl": "",
+    "previewSource": ""
   },
   {
     "id": 132,
@@ -2237,8 +2238,8 @@
     "url": "https://mp.weixin.qq.com/s/xLXzgWT__F5k8kmoPcFN6A",
     "note": "经典/抒情",
     "cover": "covers/176.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=27198691&auto=0&height=66",
-    "previewSource": "netease"
+    "previewUrl": "",
+    "previewSource": ""
   },
   {
     "id": 177,
@@ -2250,8 +2251,8 @@
     "url": "https://mp.weixin.qq.com/s/xLXzgWT__F5k8kmoPcFN6A",
     "note": "经典/摇滚",
     "cover": "covers/177.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=26857076&auto=0&height=66",
-    "previewSource": "netease"
+    "previewUrl": "",
+    "previewSource": ""
   },
   {
     "id": 178,
@@ -2275,7 +2276,8 @@
     "album": "21世纪中国音乐 民族器乐欣赏(三)",
     "url": "https://mp.weixin.qq.com/s/39Z2jxWn51oCaDDbJBx73Q",
     "note": "古筝/国风",
-    "previewUrl": "",
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=5273867&auto=0&height=66",
+    "previewSource": "netease",
     "cover": "covers/179.png"
   },
   {
@@ -2411,8 +2413,8 @@
     "url": "https://mp.weixin.qq.com/s/sYtU8u5APRWNaJnQQziRXw",
     "note": "民谣",
     "cover": "covers/190.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=28996922&auto=0&height=66",
-    "previewSource": "netease"
+    "previewUrl": "",
+    "previewSource": ""
   },
   {
     "id": 191,
@@ -3338,8 +3340,8 @@
     "url": "https://mp.weixin.qq.com/s/b7QrH2n_M_3cOKl1GJ1BkA",
     "note": "JohnMayer风格",
     "cover": "covers/265.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1475460&auto=0&height=66",
-    "previewSource": "netease"
+    "previewUrl": "",
+    "previewSource": ""
   },
   {
     "id": 266,
@@ -3631,8 +3633,8 @@
     "url": "https://mp.weixin.qq.com/s/MLWD2mngIvz612N8pXs5tg",
     "note": "日语",
     "cover": "covers/288.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=522631664&auto=0&height=66",
-    "previewSource": "netease"
+    "previewUrl": "",
+    "previewSource": ""
   },
   {
     "id": 289,
@@ -4665,7 +4667,7 @@
     "url": "",
     "note": "好听/循环/治愈/充满希望感",
     "cover": "covers/371.png",
-    "previewUrl": "//music.163.com/outchain/player?type=2&id=1409137716&auto=0&height=66",
+    "previewUrl": "//music.163.com/outchain/player?type=2&id=1846209641&auto=0&height=66",
     "previewSource": "netease"
   },
   {

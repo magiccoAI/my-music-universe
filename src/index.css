@@ -19,6 +19,13 @@ html, body, #root {
   position: fixed; /* Force fix to viewport to prevent iOS bounce/overscroll */
   top: 0;
   left: 0;
+  background: linear-gradient(
+    135deg,
+    #1e1b4b 0%,
+    #3b0764 30%,
+    #1e3a8a 70%,
+    #0c4a6e 100%
+  );
 }
 
 /* Ensure application container fills the screen but does NOT scroll itself */

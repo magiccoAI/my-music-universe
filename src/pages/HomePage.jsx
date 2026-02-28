@@ -103,7 +103,7 @@ const HomePage = () => {
       )}
 
       {/* top nav */}
-      <nav className="fixed top-0 left-0 right-0 z-20 py-3 backdrop-blur-md bg-black/20 flex justify-center items-center gap-8 md:gap-12 border-b border-white/5 transition-all duration-300">
+      {/* <nav className="fixed top-0 left-0 right-0 z-20 py-3 backdrop-blur-md bg-black/20 flex justify-center items-center gap-8 md:gap-12 border-b border-white/5 transition-all duration-300">
         <Link 
           to="/" 
           className="relative group py-2"
@@ -132,7 +132,7 @@ const HomePage = () => {
           <span className="font-sans font-medium text-xs md:text-sm tracking-widest text-gray-400 group-hover:text-purple-300 transition-colors duration-300">我的音乐时光机</span>
           <span className="absolute bottom-0 left-0 w-0 h-px bg-purple-300 transition-all duration-300 group-hover:w-full opacity-50"></span>
         </Link>
-      </nav>
+      </nav> */}
 
       {/* hero */}
       <header className="flex-1 flex flex-col items-center justify-center px-6 pt-32 pb-16 text-center z-10 max-w-2xl mx-auto">

@@ -124,6 +124,12 @@ async function processData() {
         const item = data[i];
         let modified = false;
 
+        // If previewUrl exists and is not from NetEase, skip it to protect manual overrides.
+        if (item.previewUrl && item.previewSource !== 'netease') {
+            console.log(`[${i+1}/${data.length}] Skipping: ${item.title} - ${item.music} (manual override)`);
+            continue;
+        }
+
         console.log(`[${i+1}/${data.length}] Processing: ${item.title} - ${item.music}`);
 
         let netEaseId = null;
